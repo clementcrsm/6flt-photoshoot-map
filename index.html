@@ -131,7 +131,7 @@ body.panel-open #view-label{right:calc(158px + var(--panel) + 14px)}
 .panel-actions{padding:16px 20px;display:flex;gap:10px;border-top:1px solid var(--border);flex-shrink:0}
 .btn-save{flex:1;background:var(--accent);border:none;border-radius:8px;color:#fff;font-family:'Inter',sans-serif;font-weight:700;font-size:13px;padding:11px;cursor:pointer;transition:opacity .15s;letter-spacing:.04em}
 .btn-save:hover{opacity:.85}
-.btn-delete{background:transparent;border:1px solid var(--border);border-radius:8px;color:var(--muted);font-family:'Inter',sans-serif;font-size:13px;padding:11px 14px;cursor:pointer;transition:all .15s}
+.btn-delete{background:transparent;border:1px solid var(--border);border-radius:8px;color:var(--muted);font-family:'Inter',sans-serif;font-size:13px;padding:11px 14px;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center}
 .btn-delete:hover{border-color:#e84040;color:#e84040}
 
 /* CUSTOM MARKER */
@@ -160,6 +160,10 @@ body.panel-open #view-label{right:calc(158px + var(--panel) + 14px)}
 .gallery-card-img{width:100%;height:160px;object-fit:cover;display:block;background:var(--bg)}
 .gallery-card-no-img{width:100%;height:160px;background:var(--surface2);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:32px}
 .gallery-card-info{padding:12px 14px}
+.gallery-del-badge{position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:50%;background:#e84040;border:2px solid #fff;display:none;align-items:center;justify-content:center;cursor:pointer;z-index:5;box-shadow:0 2px 8px rgba(0,0,0,.5)}
+.gallery-card.show-del .gallery-del-badge{display:flex;animation:badgePop .18s ease}
+@keyframes badgePop{from{transform:scale(0)}to{transform:scale(1)}}
+.gallery-del-badge svg{pointer-events:none}
 .gallery-card-title{font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .gallery-card-meta{font-size:11px;color:var(--muted);margin-top:4px;font-family:'Space Mono',monospace}
 
@@ -357,14 +361,23 @@ body{height:100vh;height:100dvh}
 nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-top))}
 .nav-tab,.nav-add,.tag,.season-btn,.verdict-opt,.color-chip,.match-card,button{-webkit-tap-highlight-color:transparent}
 @media (max-width:640px){
+  /* panneau spot plein ecran */
   :root{--panel:100vw}
   #spot-panel{width:100vw;border-left:none}
-  body.panel-open #btn-3d,body.panel-open #btn-sat,body.panel-open #btn-geo,body.panel-open #view-label{display:none}
-  nav{padding-left:12px;padding-right:12px}
-  .nav-tab{padding:6px 11px;font-size:12px}
-  .nav-logo-img{height:22px}
-  .nav-tabs{max-width:calc(100vw - 120px);overflow-x:auto;-webkit-overflow-scrolling:touch}
+  /* quand le panneau est ouvert, masquer TOUS les controles carte et la recherche */
+  body.panel-open #btn-3d,body.panel-open #btn-sat,body.panel-open #btn-geo,
+  body.panel-open #view-label,body.panel-open #search-wrap,
+  body.panel-open #filter-btn,body.panel-open #settings-btn{display:none}
+  /* nav compacte, ancrage a gauche (plus de centrage absolu qui deborde) */
+  nav{padding-left:10px;padding-right:10px;gap:8px;justify-content:flex-start}
+  .nav-logo-img{height:20px;flex-shrink:0}
+  .nav-tabs{position:static;transform:none;flex:1;min-width:0;overflow-x:auto;-webkit-overflow-scrolling:touch}
   .nav-tabs::-webkit-scrollbar{display:none}
+  .nav-tab{padding:7px 13px;font-size:12px;white-space:nowrap;flex-shrink:0}
+  .nav-add{flex-shrink:0}
+  /* recherche : ne plus centrer en largeur fixe, laisser la place au filtre a gauche */
+  #search-wrap{left:62px;transform:none;width:auto;right:14px}
+  #filter-btn{top:14px;left:14px}
 }
 </style>
 </head>
@@ -727,7 +740,7 @@ nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-
     </div>
     <div class="panel-actions">
       <button class="btn-save" onclick="saveSpot()">Enregistrer le spot</button>
-      <button class="btn-delete" id="btn-delete" onclick="deleteSpot()" style="display:none">Suppr.</button>
+      <button class="btn-delete" id="btn-delete" onclick="deleteSpot()" style="display:none" title="Supprimer ce spot" aria-label="Supprimer ce spot"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2.5 4h11M6 4V2.5h4V4M5 4l.5 9h5l.5-9M6.5 6.5v4M9.5 6.5v4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
     </div>
   </div>
 </div>
@@ -1229,9 +1242,17 @@ function saveSpot(){
   persist(); renderMarkers(); closePanel(); renderGallery(); showToast('Spot enregistre');
 }
 
-function deleteSpot(){
+function deleteSpot(id){
+  // depuis la galerie : id fourni, deja confirme par la pastille
+  if(id){
+    spots=spots.filter(function(s){return s.id!==id;});
+    persist(); renderMarkers(); renderGallery(); showToast('Spot supprime');
+    if(currentSpotId===id) closePanel();
+    return;
+  }
+  // depuis le panneau (bouton corbeille)
   if(!currentSpotId)return;
-  if(!confirm('Supprimer ce spot ?'))return;
+  if(!confirm('Supprimer ce spot ? Cette action est definitive.'))return;
   spots=spots.filter(function(s){return s.id!==currentSpotId;});
   persist(); renderMarkers(); closePanel(); renderGallery(); showToast('Spot supprime');
 }
@@ -1265,6 +1286,14 @@ function importJSON(e){
 
 function renderGallery(){
   var grid=document.getElementById('gallery-grid'), count=document.getElementById('gallery-count');
+  if(!grid._delDismissBound){
+    grid.addEventListener('click', function(e){
+      if(e.target===grid){
+        grid.querySelectorAll('.gallery-card.show-del').forEach(function(c){ c.classList.remove('show-del'); });
+      }
+    });
+    grid._delDismissBound=true;
+  }
   var sortBtn=document.getElementById('gallery-sort-btn');
   count.textContent=spots.length+' spot'+(spots.length>1?'s':'');
   if(sortBtn) sortBtn.textContent = gallerySort==='proximity' ? 'Trier par proximite' : 'Trier par date';
@@ -1289,6 +1318,7 @@ function renderGallery(){
     var miniUrl=staticMapUrl(spot.lng, spot.lat);
     var checked=selectedSpots.indexOf(spot.id)>-1;
     card.innerHTML=
+      '<div class="gallery-del-badge" data-del="'+spot.id+'"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 8h8" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg></div>'+
       '<div class="gallery-select'+(checked?' checked':'')+'" data-id="'+spot.id+'"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3.5 3.5L12 3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>'+
       imgHtml+
       '<div class="gallery-card-info"><div class="gallery-card-title">'+(spot.name||'Spot sans nom')+'</div><div class="gallery-card-meta">'+(spot.type||'')+' '+stars+dist+'</div></div>'+
@@ -1306,6 +1336,29 @@ function renderGallery(){
     card.querySelector('.gallery-select').addEventListener('click', function(e){
       e.stopPropagation();
       toggleSpotSelection(spot.id, this);
+    });
+    // appui long -> affiche la pastille de suppression
+    var pressTimer=null;
+    function startPress(){ pressTimer=setTimeout(function(){
+      // masque les autres pastilles ouvertes
+      document.querySelectorAll('.gallery-card.show-del').forEach(function(c){ if(c!==card) c.classList.remove('show-del'); });
+      card.classList.add('show-del');
+    },500); }
+    function cancelPress(){ if(pressTimer){ clearTimeout(pressTimer); pressTimer=null; } }
+    card.addEventListener('touchstart', startPress, {passive:true});
+    card.addEventListener('touchend', cancelPress);
+    card.addEventListener('touchmove', cancelPress);
+    card.addEventListener('mousedown', startPress);
+    card.addEventListener('mouseup', cancelPress);
+    card.addEventListener('mouseleave', cancelPress);
+    // clic sur la pastille -> confirmation puis suppression
+    card.querySelector('.gallery-del-badge').addEventListener('click', function(e){
+      e.stopPropagation();
+      if(confirm('Supprimer "'+(spot.name||'Spot sans nom')+'" ? Cette action est definitive.')){
+        deleteSpot(spot.id);
+      } else {
+        card.classList.remove('show-del');
+      }
     });
     grid.appendChild(card);
   });
