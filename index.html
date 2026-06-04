@@ -135,7 +135,8 @@ body.panel-open #view-label{right:calc(158px + var(--panel) + 14px)}
 .btn-delete:hover{background:#e84040;color:#fff}
 
 /* CUSTOM MARKER */
-.spot-marker{background:#fff;border-radius:10px;padding:3px;box-shadow:0 4px 20px rgba(0,0,0,.6);cursor:pointer;transition:transform .15s}
+.marker-wrap{display:inline-block;width:max-content;position:relative}
+.spot-marker{background:#fff;border-radius:10px;padding:3px;box-shadow:0 4px 20px rgba(0,0,0,.6);cursor:pointer;transition:transform .15s;width:max-content}
 .spot-marker:hover{transform:scale(1.08)}
 .spot-marker img{width:64px;height:64px;object-fit:cover;border-radius:7px;display:block}
 .spot-marker-empty{width:64px;height:64px;background:#1e2126;border-radius:7px;display:flex;align-items:center;justify-content:center;color:#7a7d85;font-size:22px}
@@ -1072,7 +1073,6 @@ function renderMarkers(){
 function addMarker(spot){
   var el = document.createElement('div');
   el.className = 'marker-wrap';
-  el.style.position = 'relative';
   var img = spot.images && spot.images.length > 0 ? spot.images[0] : null;
   var st = spot.status ? ' data-status="'+spot.status+'"' : '';
   el.innerHTML = '<div class="spot-marker"'+st+'>' +
