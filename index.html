@@ -68,7 +68,7 @@ body.panel-open #view-label{right:calc(158px + var(--panel) + 14px)}
 #view-label{position:absolute;bottom:34px;right:158px;z-index:600;font-family:'Space Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.06em;pointer-events:none}
 
 /* SEARCH */
-#search-wrap{position:absolute;top:14px;left:50%;transform:translateX(-50%);z-index:600;width:340px}
+#search-wrap{position:absolute;top:14px;left:50%;transform:translateX(-50%);z-index:600;width:260px}
 #search-input{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'Inter',sans-serif;font-size:13px;padding:10px 16px 10px 40px;outline:none;transition:border-color .15s;box-shadow:0 4px 20px rgba(0,0,0,.4)}
 #search-input:focus{border-color:var(--accent)}
 #search-input::placeholder{color:var(--muted)}
@@ -145,6 +145,11 @@ body.panel-open #view-label{right:calc(158px + var(--panel) + 14px)}
 .marker-del-badge{position:absolute;top:-8px;right:-8px;width:26px;height:26px;border-radius:50%;background:#e84040;border:2px solid #fff;display:none;align-items:center;justify-content:center;cursor:pointer;z-index:10;box-shadow:0 2px 6px rgba(0,0,0,.5)}
 .marker-wrap.show-del .marker-del-badge{display:flex;animation:badgePop .18s ease}
 .marker-del-badge svg{pointer-events:none}
+/* marqueur route (pastille au milieu du trace) */
+.route-marker-wrap{position:relative;width:max-content}
+.route-marker{width:28px;height:28px;border-radius:50%;background:var(--accent);border:2px solid #fff;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.5)}
+.route-marker:hover{transform:scale(1.08)}
+.route-marker-wrap.show-del .marker-del-badge{display:flex;animation:badgePop .18s ease}
 
 /* LIGHTBOX */
 #lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:9999;align-items:center;justify-content:center}
@@ -280,6 +285,13 @@ body.panel-open #view-label{right:calc(158px + var(--panel) + 14px)}
 #add-hint{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);background:var(--surface);border:1px solid var(--accent);border-radius:30px;padding:10px 22px;font-size:13px;font-weight:600;color:var(--accent2);z-index:600;display:none;pointer-events:none;letter-spacing:.04em;animation:pulse 1.5s ease-in-out infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
 #add-hint.visible{display:block}
+#add-mode-picker{position:absolute;top:64px;left:50%;transform:translateX(-50%);background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:6px;z-index:700;display:none;gap:6px;box-shadow:0 8px 24px rgba(0,0,0,.5)}
+#add-mode-picker.visible{display:flex}
+#add-mode-picker button{background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Inter',sans-serif;font-size:14px;font-weight:600;padding:12px 28px;cursor:pointer;transition:all .15s}
+#add-mode-picker button:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+#route-validate{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);z-index:700;display:none}
+#route-validate.visible{display:block}
+#route-validate button{background:var(--accent);color:#fff;border:none;border-radius:30px;padding:13px 32px;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,.5);letter-spacing:.03em}
 
 /* IMAGE STRIP */
 .img-strip{display:flex;gap:6px;padding:10px 20px 0;overflow-x:auto;flex-shrink:0}
@@ -365,9 +377,65 @@ option{background:var(--surface)}
 body{height:100vh;height:100dvh}
 nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-top))}
 .nav-tab,.nav-add,.tag,.season-btn,.verdict-opt,.color-chip,.match-card,button{-webkit-tap-highlight-color:transparent}
+/* ===== CLIENTS ===== */
+#view-clients{overflow-y:auto}
+.clients-wrap{max-width:760px;margin:0 auto;padding:28px 20px 60px;width:100%}
+.clients-header{display:flex;align-items:baseline;gap:12px;margin-bottom:20px}
+.clients-header h2{font-family:'Inter',sans-serif;font-size:26px;font-weight:800}
+.clients-count{font-family:'Space Mono',monospace;font-size:12px;color:var(--muted)}
+.client-add-btn{width:100%;background:var(--surface);border:1px dashed var(--border);border-radius:12px;color:var(--accent);font-family:'Inter',sans-serif;font-size:14px;font-weight:600;padding:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:14px;transition:all .15s}
+.client-add-btn:hover{border-color:var(--accent);background:var(--surface2)}
+.clients-list{display:flex;flex-direction:column;gap:10px}
+.client-card-wrap{position:relative;overflow:hidden;border-radius:12px}
+.client-card-delete{position:absolute;top:0;right:0;height:100%;width:72px;background:#e84040;display:flex;align-items:center;justify-content:center;color:#fff;cursor:pointer;border:none;z-index:1}
+.client-card{display:flex;align-items:stretch;gap:0;background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer;transition:transform .2s,border-color .15s;min-height:88px;position:relative;z-index:2}
+/* poubelle visible au survol sur PC */
+.client-card-trash{position:absolute;top:50%;right:14px;transform:translateY(-50%);background:transparent;border:none;color:#e84040;cursor:pointer;opacity:0;transition:opacity .15s;z-index:3;padding:6px}
+.client-card-wrap:hover .client-card-trash{opacity:1}
+.client-card.swiped{transform:translateX(-72px)}
+/* bloc corbeille en bas */
+.clients-trash-btn{width:100%;background:var(--surface);border:1px solid #e84040;border-radius:12px;color:#e84040;font-family:'Inter',sans-serif;font-size:14px;font-weight:600;padding:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:14px;min-height:60px;transition:all .15s}
+.clients-trash-btn:hover{background:#e84040;color:#fff}
+.trash-badge{font-family:'Space Mono',monospace;font-size:12px;opacity:.8}
+.client-card:hover{border-color:var(--accent)}
+.client-card-photo{width:88px;min-width:88px;background:var(--surface2);background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:24px}
+.client-card-body{flex:1;padding:12px 16px;display:flex;flex-direction:column;justify-content:center;gap:3px;min-width:0}
+.client-card-name{font-family:'Inter',sans-serif;font-size:16px;font-weight:700;color:var(--text)}
+.client-card-car{font-family:'Space Mono',monospace;font-size:12px;color:var(--accent)}
+.client-card-meta{font-family:'Inter',sans-serif;font-size:12px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* panneau client */
+#client-panel{position:fixed;top:0;right:0;height:100%;width:420px;max-width:100vw;background:var(--surface);border-left:1px solid var(--border);transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);z-index:1500;overflow-y:auto}
+#client-panel.open{transform:translateX(0)}
+.client-panel-inner{padding:24px 22px 60px}
+#client-panel-close{position:absolute;top:16px;right:16px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;width:34px;height:34px;color:var(--text);cursor:pointer;font-size:15px}
+.client-photo-zone{display:flex;flex-direction:column;align-items:center;gap:10px;margin:10px 0 20px}
+#client-photo-preview{width:120px;height:120px;border-radius:14px;object-fit:cover;background:var(--surface2);display:none}
+.client-photo-btn{background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Inter',sans-serif;font-size:12px;padding:8px 14px;cursor:pointer}
+.client-field-label{display:block;font-family:'Inter',sans-serif;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:14px 0 6px}
+.client-input{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Inter',sans-serif;font-size:14px;padding:11px 12px;resize:vertical}
+.client-extra-row{display:flex;gap:8px;margin-bottom:6px}
+.client-extra-row input{flex:1;min-width:0;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Inter',sans-serif;font-size:13px;padding:9px 10px}
+.client-extra-row .extra-key{max-width:40%}
+.client-extra-row button{background:transparent;border:1px solid var(--border);border-radius:8px;color:#e84040;width:38px;cursor:pointer;flex-shrink:0}
+.client-extra-add{background:transparent;border:1px dashed var(--border);border-radius:8px;color:var(--muted);font-family:'Inter',sans-serif;font-size:12px;padding:8px;cursor:pointer;width:100%;margin-top:4px}
+.client-panel-actions{display:flex;gap:10px;margin-top:24px}
+.client-save-btn{flex:1;background:var(--accent);color:#fff;border:none;border-radius:8px;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;padding:13px;cursor:pointer}
+.client-delete-btn{background:transparent;border:1px solid #e84040;border-radius:8px;color:#e84040;padding:11px 14px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+.client-delete-btn:hover{background:#e84040;color:#fff}
+/* overlay corbeille clients (regles globales, hors media query) */
+#clients-trash-view{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:1600;display:none;align-items:center;justify-content:center;padding:20px}
+#clients-trash-view.open{display:flex}
+.trash-overlay-inner{background:var(--surface);border:1px solid var(--border);border-radius:16px;width:100%;max-width:560px;max-height:80vh;overflow-y:auto;padding:24px}
+.trash-overlay-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+.trash-overlay-header h2{font-family:'Inter',sans-serif;font-size:20px;font-weight:800}
+.trash-overlay-close{background:var(--surface2);border:1px solid var(--border);border-radius:8px;width:34px;height:34px;color:var(--text);cursor:pointer}
+.trash-overlay-hint{font-family:'Inter',sans-serif;font-size:12px;color:var(--muted);margin-bottom:16px}
+#clients-trash-list{display:flex;flex-direction:column;gap:10px}
+.trash-restore{background:var(--accent);color:#fff;border:none;border-radius:6px;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;padding:7px 12px;cursor:pointer}
+.trash-destroy{background:transparent;color:#e84040;border:1px solid #e84040;border-radius:6px;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;padding:7px 12px;cursor:pointer}
+
 @media (max-width:640px){
-  /* panneau spot plein ecran */
-  :root{--panel:100vw}
+  #client-panel{width:100vw;border-left:none}
   #spot-panel{width:100vw;border-left:none}
   /* quand le panneau est ouvert, masquer TOUS les controles carte et la recherche */
   body.panel-open #btn-3d,body.panel-open #btn-sat,body.panel-open #btn-geo,
@@ -398,7 +466,7 @@ nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-
 <body>
 <div id="splash">
   <img id="splash-logo" src="data:image/png;base64,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" alt="6flt">
-  <div id="splash-credit">Créé par 6flt photographie et Claude<br><span style="opacity:.6">v1.0.1</span></div>
+  <div id="splash-credit">Créé par 6flt photographie et Claude<br><span style="opacity:.6">v1.2.1</span></div>
 </div>
 
 <nav>
@@ -407,6 +475,7 @@ nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-
     <button class="nav-tab active" onclick="switchView('map')">Carte</button>
     <button class="nav-tab" onclick="switchView('gallery')">Galerie</button>
     <button class="nav-tab" onclick="switchView('shotlist')">Shotlist</button>
+    <button class="nav-tab" onclick="switchView('clients')">Clients</button>
     <button class="nav-tab" onclick="window.open('https://6fltphotographie.mypixieset.com/','_blank')">Portfolio</button>
     <button class="nav-tab" onclick="openInstagram()">Instagram</button>
   </div>
@@ -419,6 +488,11 @@ nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-
 <div id="view-map" class="view active">
   <div id="map"></div>
   <div id="add-hint">Clique sur la carte pour placer le spot</div>
+  <div id="add-mode-picker">
+    <button onclick="startAddMode('spot')">Spot</button>
+    <button onclick="startAddMode('route')">Route</button>
+  </div>
+  <div id="route-validate"><button onclick="finishRoute()">Valide (<span id="route-pt-count">0</span> pts)</button></div>
 
   <!-- SEARCH -->
   <div id="search-wrap">
@@ -457,7 +531,16 @@ nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-
 
   <!-- Filter panel -->
   <div id="filter-panel">
-    <div class="settings-title">Filtrer les spots</div>
+    <div class="settings-title">Filtrer</div>
+    <div>
+      <div class="settings-section-title">Type d'element</div>
+      <div class="tag-row" id="filter-kind">
+        <div class="tag active" data-kind="all" onclick="setFilterKind(this)">Tout</div>
+        <div class="tag" data-kind="spot" onclick="setFilterKind(this)">Spots</div>
+        <div class="tag" data-kind="route" onclick="setFilterKind(this)">Routes</div>
+      </div>
+    </div>
+    <div class="settings-divider"></div>
     <div>
       <div class="settings-section-title">Statut</div>
       <div class="tag-row" id="filter-status"></div>
@@ -495,7 +578,12 @@ nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-
 
   <!-- Settings panel -->
   <div id="settings-panel">
-    <div class="settings-title">Apparence</div>
+    <div class="settings-title">Visibilite</div>
+    <div class="vis-toggles">
+      <label class="vis-toggle"><input type="checkbox" id="vis-spots" checked onchange="toggleVisibility()"> Spots</label>
+      <label class="vis-toggle"><input type="checkbox" id="vis-routes" checked onchange="toggleVisibility()"> Routes</label>
+    </div>
+    <div class="settings-title" style="margin-top:18px">Apparence</div>
     <div>
       <div class="settings-section-title">Couleur principale</div>
       <div class="color-presets">
@@ -814,7 +902,62 @@ nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-
   </div>
 </div>
 
-<div id="lightbox" onclick="closeLightbox()">
+<div id="view-clients" class="view">
+  <div class="clients-wrap">
+    <div class="clients-header">
+      <h2>Mes clients</h2>
+      <span class="clients-count" id="clients-count"></span>
+    </div>
+    <button class="client-add-btn" onclick="openNewClientPanel()">
+      <svg width="16" height="16" viewBox="0 0 14 14" fill="none"><path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      Ajouter un client
+    </button>
+    <div class="clients-list" id="clients-list"></div>
+    <button class="clients-trash-btn" onclick="openClientsTrash()">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2.5 4h11M6 4V2.5h4V4M5 4l.5 9h5l.5-9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      Corbeille <span class="trash-badge" id="trash-count"></span>
+    </button>
+  </div>
+</div>
+
+<div id="client-panel">
+  <div class="client-panel-inner">
+    <button id="client-panel-close" onclick="closeClientPanel()">&#x2715;</button>
+    <div class="client-photo-zone">
+      <img id="client-photo-preview" alt="">
+      <button class="client-photo-btn" onclick="document.getElementById('client-photo-input').click()">Ajouter une photo</button>
+      <input type="file" id="client-photo-input" accept="image/*" style="display:none" onchange="onClientPhotoSelected(event)">
+    </div>
+    <label class="client-field-label">Nom du client</label>
+    <input type="text" id="client-name" class="client-input" placeholder="Nom ou pseudo">
+    <label class="client-field-label">Voiture</label>
+    <input type="text" id="client-car" class="client-input" placeholder="Marque, modele">
+    <label class="client-field-label">Contact</label>
+    <input type="text" id="client-contact" class="client-input" placeholder="Tel, mail, Instagram...">
+    <label class="client-field-label">Lien galerie</label>
+    <input type="text" id="client-gallery" class="client-input" placeholder="https://...">
+    <label class="client-field-label">Notes</label>
+    <textarea id="client-notes" class="client-input" rows="3" placeholder="Notes libres..."></textarea>
+    <label class="client-field-label">Details supplementaires</label>
+    <div id="client-extras"></div>
+    <button class="client-extra-add" onclick="addClientExtraRow()">+ Ajouter un detail</button>
+    <div class="client-panel-actions">
+      <button class="client-save-btn" onclick="saveClient()">Enregistrer</button>
+      <button class="client-delete-btn" id="client-delete-btn" onclick="deleteClient()" style="display:none" title="Mettre a la corbeille" aria-label="Corbeille"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2.5 4h11M6 4V2.5h4V4M5 4l.5 9h5l.5-9M6.5 6.5v4M9.5 6.5v4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    </div>
+  </div>
+</div>
+
+<div id="clients-trash-view">
+  <div class="trash-overlay-inner">
+    <div class="trash-overlay-header">
+      <h2>Corbeille clients</h2>
+      <button onclick="closeClientsTrash()" class="trash-overlay-close">&#x2715;</button>
+    </div>
+    <p class="trash-overlay-hint">Restaure un client ou supprime le definitivement.</p>
+    <div id="clients-trash-list"></div>
+  </div>
+</div>
   <button id="lightbox-close" onclick="closeLightbox()">&#x2715;</button>
   <img id="lightbox-img" src="" alt="">
 </div>
@@ -888,12 +1031,237 @@ function syncDeleteFromCloud(id){
   if(!sb || !id) return;
   sb.from('spots').delete().eq('id', id).then(function(res){ if(res.error) console.warn('Supabase delete:', res.error.message); });
 }
+
+// ===== CLIENTS =====
+var clients = JSON.parse(localStorage.getItem('6flt_clients') || '[]');
+var currentClientId = null, currentClientPhoto = null;
+
+function persistClients(){
+  localStorage.setItem('6flt_clients', JSON.stringify(clients));
+  if(sb){
+    var rows = clients.map(function(c){ return {id:c.id, data:c, updated_at:new Date().toISOString()}; });
+    if(rows.length) sb.from('clients').upsert(rows).then(function(res){ if(res.error) console.warn('Supabase clients push:', res.error.message); });
+  }
+}
+function syncDeleteClientFromCloud(id){
+  if(!sb || !id) return;
+  sb.from('clients').delete().eq('id', id).then(function(res){ if(res.error) console.warn('Supabase clients delete:', res.error.message); });
+}
+function syncLoadClientsFromCloud(){
+  if(!sb) return Promise.resolve();
+  return sb.from('clients').select('id,data').then(function(res){
+    if(res.error){ console.warn('Supabase clients load:', res.error.message); return; }
+    var cloud = (res.data||[]).map(function(r){ return r.data; });
+    var cloudIds = {}; cloud.forEach(function(c){ cloudIds[c.id]=true; });
+    var toMigrate = clients.filter(function(c){ return !cloudIds[c.id]; });
+    clients = cloud.concat(toMigrate);
+    localStorage.setItem('6flt_clients', JSON.stringify(clients));
+    if(toMigrate.length){
+      var rows = toMigrate.map(function(c){ return {id:c.id, data:c, updated_at:new Date().toISOString()}; });
+      sb.from('clients').upsert(rows).then(function(){});
+    }
+    if(document.getElementById('view-clients').classList.contains('active')) renderClients();
+  });
+}
+
+function renderClients(){
+  var list = document.getElementById('clients-list');
+  var count = document.getElementById('clients-count');
+  var trashCount = document.getElementById('trash-count');
+  if(!list) return;
+  var active = clients.filter(function(c){ return !c.deleted; });
+  var trashed = clients.filter(function(c){ return c.deleted; });
+  count.textContent = active.length + (active.length>1 ? ' clients' : ' client');
+  if(trashCount) trashCount.textContent = trashed.length ? '('+trashed.length+')' : '';
+  list.innerHTML = '';
+  active.forEach(function(c){
+    var wrap = document.createElement('div');
+    wrap.className = 'client-card-wrap';
+    var photo = c.photo
+      ? '<div class="client-card-photo" style="background-image:url('+JSON.stringify(c.photo)+')"></div>'
+      : '<div class="client-card-photo">&#128100;</div>';
+    var meta = c.contact || (c.extras && c.extras.length ? c.extras[0].key+': '+c.extras[0].value : '') || '';
+    wrap.innerHTML =
+      '<button class="client-card-delete"><svg width="20" height="20" viewBox="0 0 16 16" fill="none"><path d="M2.5 4h11M6 4V2.5h4V4M5 4l.5 9h5l.5-9M6.5 6.5v4M9.5 6.5v4" stroke="#fff" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>' +
+      '<div class="client-card">' + photo +
+        '<div class="client-card-body">' +
+          '<div class="client-card-name">'+escapeHtml(c.name||'Client sans nom')+'</div>' +
+          (c.car ? '<div class="client-card-car">'+escapeHtml(c.car)+'</div>' : '') +
+          (meta ? '<div class="client-card-meta">'+escapeHtml(meta)+'</div>' : '') +
+        '</div>' +
+        '<button class="client-card-trash" title="Mettre a la corbeille"><svg width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M2.5 4h11M6 4V2.5h4V4M5 4l.5 9h5l.5-9M6.5 6.5v4M9.5 6.5v4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>' +
+      '</div>';
+    var card = wrap.querySelector('.client-card');
+    // clic ouvre la fiche
+    card.addEventListener('click', function(e){
+      if(card.classList.contains('swiped')){ card.classList.remove('swiped'); return; }
+      openExistingClientPanel(c.id);
+    });
+    // poubelle PC (au survol)
+    wrap.querySelector('.client-card-trash').addEventListener('click', function(e){
+      e.stopPropagation(); trashClient(c.id);
+    });
+    // bouton revele par le swipe
+    wrap.querySelector('.client-card-delete').addEventListener('click', function(e){
+      e.stopPropagation(); trashClient(c.id);
+    });
+    // swipe mobile
+    if(IS_TOUCH){
+      var startX=0, dx=0;
+      card.addEventListener('touchstart', function(ev){ startX=ev.touches[0].clientX; dx=0; }, {passive:true});
+      card.addEventListener('touchmove', function(ev){ dx=ev.touches[0].clientX-startX; }, {passive:true});
+      card.addEventListener('touchend', function(){
+        if(dx < -40) card.classList.add('swiped');
+        else if(dx > 40) card.classList.remove('swiped');
+      });
+    }
+    list.appendChild(wrap);
+  });
+}
+function escapeHtml(s){ return String(s).replace(/[&<>"]/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]; }); }
+
+// met un client a la corbeille (suppression reversible)
+function trashClient(id){
+  clients = clients.map(function(c){ return c.id===id ? Object.assign({}, c, {deleted:true}) : c; });
+  persistClients(); renderClients(); showToast('Client mis a la corbeille');
+}
+function restoreClient(id){
+  clients = clients.map(function(c){ return c.id===id ? Object.assign({}, c, {deleted:false}) : c; });
+  persistClients(); renderClientsTrash(); renderClients(); showToast('Client restaure');
+}
+function destroyClient(id){
+  if(!confirm('Supprimer definitivement ce client ? Irreversible.')) return;
+  clients = clients.filter(function(c){ return c.id!==id; });
+  persistClients(); syncDeleteClientFromCloud(id); renderClientsTrash(); renderClients(); showToast('Client supprime definitivement');
+}
+function openClientsTrash(){
+  document.getElementById('clients-trash-view').classList.add('open');
+  renderClientsTrash();
+}
+function closeClientsTrash(){ document.getElementById('clients-trash-view').classList.remove('open'); }
+function renderClientsTrash(){
+  var list = document.getElementById('clients-trash-list');
+  if(!list) return;
+  var trashed = clients.filter(function(c){ return c.deleted; });
+  if(!trashed.length){ list.innerHTML = '<p style="color:var(--muted);font-family:Inter,sans-serif;font-size:13px;text-align:center;padding:30px 0">Corbeille vide</p>'; return; }
+  list.innerHTML = '';
+  trashed.forEach(function(c){
+    var photo = c.photo
+      ? '<div class="client-card-photo" style="background-image:url('+JSON.stringify(c.photo)+')"></div>'
+      : '<div class="client-card-photo">&#128100;</div>';
+    var card = document.createElement('div');
+    card.className = 'client-card';
+    card.style.cursor = 'default';
+    card.innerHTML = photo +
+      '<div class="client-card-body">' +
+        '<div class="client-card-name">'+escapeHtml(c.name||'Client sans nom')+'</div>' +
+        (c.car ? '<div class="client-card-car">'+escapeHtml(c.car)+'</div>' : '') +
+      '</div>' +
+      '<div style="display:flex;flex-direction:column;gap:6px;padding:10px 12px;justify-content:center">' +
+        '<button class="trash-restore" data-id="'+c.id+'">Restaurer</button>' +
+        '<button class="trash-destroy" data-id="'+c.id+'">Supprimer</button>' +
+      '</div>';
+    card.querySelector('.trash-restore').onclick = function(){ restoreClient(c.id); };
+    card.querySelector('.trash-destroy').onclick = function(){ destroyClient(c.id); };
+    list.appendChild(card);
+  });
+}
+
+function openNewClientPanel(){
+  currentClientId = null; currentClientPhoto = null;
+  document.getElementById('client-name').value = '';
+  document.getElementById('client-car').value = '';
+  document.getElementById('client-contact').value = '';
+  document.getElementById('client-gallery').value = '';
+  document.getElementById('client-notes').value = '';
+  document.getElementById('client-extras').innerHTML = '';
+  var prev = document.getElementById('client-photo-preview');
+  prev.style.display = 'none'; prev.src = '';
+  document.getElementById('client-delete-btn').style.display = 'none';
+  document.getElementById('client-panel').classList.add('open');
+}
+function openExistingClientPanel(id){
+  var c = clients.find(function(x){ return x.id===id; });
+  if(!c) return;
+  currentClientId = id; currentClientPhoto = c.photo || null;
+  document.getElementById('client-name').value = c.name||'';
+  document.getElementById('client-car').value = c.car||'';
+  document.getElementById('client-contact').value = c.contact||'';
+  document.getElementById('client-gallery').value = c.gallery||'';
+  document.getElementById('client-notes').value = c.notes||'';
+  var ex = document.getElementById('client-extras'); ex.innerHTML = '';
+  (c.extras||[]).forEach(function(e){ addClientExtraRow(e.key, e.value); });
+  var prev = document.getElementById('client-photo-preview');
+  if(c.photo){ prev.src = c.photo; prev.style.display = 'block'; } else { prev.style.display='none'; prev.src=''; }
+  document.getElementById('client-delete-btn').style.display = '';
+  document.getElementById('client-panel').classList.add('open');
+}
+function closeClientPanel(){ document.getElementById('client-panel').classList.remove('open'); }
+
+function addClientExtraRow(key, value){
+  var wrap = document.getElementById('client-extras');
+  var row = document.createElement('div');
+  row.className = 'client-extra-row';
+  row.innerHTML = '<input class="extra-key" placeholder="Libelle" value="'+(key?escapeHtml(key):'')+'">' +
+                  '<input class="extra-val" placeholder="Valeur" value="'+(value?escapeHtml(value):'')+'">' +
+                  '<button title="Retirer">&#x2715;</button>';
+  row.querySelector('button').onclick = function(){ row.remove(); };
+  wrap.appendChild(row);
+}
+
+function onClientPhotoSelected(e){
+  var file = e.target.files[0]; if(!file) return;
+  var reader = new FileReader();
+  reader.onload = function(ev){
+    var img = new Image();
+    img.onload = function(){
+      var max = 800, w = img.width, h = img.height;
+      if(w>h && w>max){ h = h*max/w; w = max; } else if(h>max){ w = w*max/h; h = max; }
+      var canvas = document.createElement('canvas'); canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      currentClientPhoto = canvas.toDataURL('image/jpeg', 0.8);
+      var prev = document.getElementById('client-photo-preview');
+      prev.src = currentClientPhoto; prev.style.display = 'block';
+    };
+    img.src = ev.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function saveClient(){
+  var extras = [];
+  document.querySelectorAll('#client-extras .client-extra-row').forEach(function(row){
+    var k = row.querySelector('.extra-key').value.trim();
+    var v = row.querySelector('.extra-val').value.trim();
+    if(k || v) extras.push({key:k, value:v});
+  });
+  var c = {
+    id: currentClientId || ('c_'+Date.now()+'_'+Math.random().toString(36).slice(2,7)),
+    name: document.getElementById('client-name').value.trim(),
+    car: document.getElementById('client-car').value.trim(),
+    contact: document.getElementById('client-contact').value.trim(),
+    gallery: document.getElementById('client-gallery').value.trim(),
+    notes: document.getElementById('client-notes').value.trim(),
+    extras: extras,
+    photo: currentClientPhoto,
+    createdAt: currentClientId ? undefined : new Date().toISOString()
+  };
+  if(currentClientId){ clients = clients.map(function(x){ return x.id===currentClientId ? Object.assign({}, x, c) : x; }); }
+  else { clients.push(c); }
+  persistClients(); renderClients(); closeClientPanel(); showToast('Client enregistre');
+}
+function deleteClient(){
+  if(!currentClientId) return;
+  if(!confirm('Mettre ce client a la corbeille ?')) return;
+  trashClient(currentClientId);
+  closeClientPanel();
+}
 var addMode = false, currentSpotId = null, currentRating = 0;
 var currentImages = [], currentMainIdx = 0;
 var map, mbMarkers = {};
 var is3D = false, isSat = false;
 var owmKey = localStorage.getItem('6flt_owm_key') || '';
-var filters = {status:[], type:'', season:[], minStars:0};
+var filters = {status:[], type:'', season:[], minStars:0, kind:'all'};
 var currentChecklist = [], currentSessions = [], currentStatus = '';
 var SEASONS = ['Printemps','Ete','Automne','Hiver'];
 var STATUSES = [{k:'explore',l:'A explorer'},{k:'shot',l:'Shoote'},{k:'abandon',l:'Abandonne'},{k:'closed',l:'Saison fermee'}];
@@ -1057,6 +1425,7 @@ function initMap(){
   map.on('click', function(e){
     // referme les pastilles de suppression ouvertes
     document.querySelectorAll('.marker-wrap.show-del').forEach(function(w){ w.classList.remove('show-del'); });
+    if(routeMode){ onRouteMapClick(e.lngLat); return; }
     if(!addMode) return;
     openNewSpotPanel(e.lngLat.lat, e.lngLat.lng);
     toggleAddMode(false);
@@ -1115,6 +1484,9 @@ function toggleSatellite(){
 
 // MARKERS
 function spotPassesFilters(s){
+  // visibilite par type (toggles en bas a gauche)
+  if(s.kind==='route' && !routesVisible) return false;
+  if(s.kind!=='route' && !spotsVisible) return false;
   if(filters.status.length && filters.status.indexOf(s.status||'')===-1) return false;
   if(filters.type && (s.type||'')!==filters.type) return false;
   if(filters.season.length){
@@ -1122,6 +1494,10 @@ function spotPassesFilters(s){
     if(!filters.season.some(function(f){return ss.indexOf(f)>-1;})) return false;
   }
   if(filters.minStars && (s.rating||0)<filters.minStars) return false;
+  if(filters.kind && filters.kind!=='all'){
+    if(filters.kind==='route' && s.kind!=='route') return false;
+    if(filters.kind==='spot' && s.kind==='route') return false;
+  }
   return true;
 }
 
@@ -1129,7 +1505,83 @@ function renderMarkers(){
   if(typeof map==='undefined' || !map) return;
   Object.values(mbMarkers).forEach(function(m){m.remove();});
   mbMarkers={};
-  spots.forEach(function(s){ if(spotPassesFilters(s)) addMarker(s); });
+  spots.forEach(function(s){
+    if(!spotPassesFilters(s)) return;
+    if(s.kind==='route'){ addRouteToMap(s); }
+    else { addMarker(s); }
+  });
+  renderRouteLines();
+}
+
+// Trace toutes les lignes de route visibles dans une seule source GeoJSON
+function renderRouteLines(){
+  if(typeof map==='undefined' || !map || !map.isStyleLoaded()) {
+    if(map) map.once('idle', renderRouteLines);
+    return;
+  }
+  var features=spots.filter(function(s){ return s.kind==='route' && s.routeLine && spotPassesFilters(s) && routesVisible; })
+    .map(function(s){ return {type:'Feature',properties:{id:s.id},geometry:{type:'LineString',coordinates:s.routeLine}}; });
+  var geo={type:'FeatureCollection',features:features};
+  if(map.getSource('routes')){ map.getSource('routes').setData(geo); }
+  else {
+    map.addSource('routes',{type:'geojson',data:geo});
+    map.addLayer({id:'routes-line',type:'line',source:'routes',
+      layout:{'line-cap':'round','line-join':'round'},
+      paint:{'line-color':'#e8571a','line-width':5,'line-opacity':0.9}});
+    map.on('click','routes-line',function(e){
+      if(routeMode||addMode) return;
+      var id=e.features[0].properties.id;
+      openExistingSpotPanel(id);
+    });
+    map.on('mouseenter','routes-line',function(){ map.getCanvas().style.cursor='pointer'; });
+    map.on('mouseleave','routes-line',function(){ map.getCanvas().style.cursor=''; });
+  }
+}
+// place un petit marqueur au milieu de la route (pour l'ouvrir au tap, comme un spot)
+function addRouteToMap(s){
+  if(!s.routeLine || !s.routeLine.length || !routesVisible) return;
+  var mid=s.routeLine[Math.floor(s.routeLine.length/2)];  // [lng,lat]
+  var el=document.createElement('div');
+  el.className='route-marker-wrap';
+  el.innerHTML='<div class="route-marker" title="'+(s.name||'Route sans nom')+'">'+
+    '<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M3 13c3-1 2-5 5-6s4-5 5-6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'+
+    '</div>'+
+    '<div class="marker-del-badge"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M4 8h8" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg></div>';
+
+  var pressTimer=null, longPressed=false;
+  function startPress(){
+    longPressed=false;
+    pressTimer=setTimeout(function(){
+      longPressed=true;
+      document.querySelectorAll('.route-marker-wrap.show-del,.marker-wrap.show-del').forEach(function(w){ if(w!==el) w.classList.remove('show-del'); });
+      el.classList.add('show-del');
+    },500);
+  }
+  function cancelPress(){ if(pressTimer){ clearTimeout(pressTimer); pressTimer=null; } }
+
+  var rm=el.querySelector('.route-marker');
+  if(IS_TOUCH){
+    rm.addEventListener('touchstart', startPress, {passive:true});
+    rm.addEventListener('touchend', cancelPress);
+    rm.addEventListener('touchmove', cancelPress);
+  }
+  rm.addEventListener('click', function(e){
+    if(longPressed){ e.stopPropagation(); longPressed=false; return; }
+    openExistingSpotPanel(s.id);
+  });
+  el.querySelector('.marker-del-badge').addEventListener('click', function(e){
+    e.stopPropagation();
+    if(confirm('Supprimer "'+(s.name||'Route sans nom')+'" ? Cette action est definitive.')){
+      deleteSpot(s.id);
+    } else {
+      el.classList.remove('show-del');
+    }
+  });
+
+  var marker=new mapboxgl.Marker({element:el, anchor:'center'})
+    .setLngLat([mid[0], mid[1]])
+    .addTo(map);
+  mbMarkers[s.id]=marker;
 }
 
 function addMarker(spot){
@@ -1183,15 +1635,122 @@ function addMarker(spot){
 
 // ADD MODE
 function toggleAddMode(force){
-  addMode = (force !== undefined) ? force : !addMode;
-  document.getElementById('add-hint').classList.toggle('visible', addMode);
-  document.getElementById('btn-add-spot').style.opacity = addMode ? '0.5' : '1';
-  map.getCanvas().style.cursor = addMode ? 'crosshair' : '';
+  // le clic sur "+" ouvre le selecteur spot/route
+  var picker = document.getElementById('add-mode-picker');
+  if(force===false){ cancelAddModes(); return; }
+  var willOpen = !picker.classList.contains('visible') && !addMode && !routeMode;
+  cancelAddModes();
+  if(willOpen){ picker.classList.add('visible'); }
+}
+function cancelAddModes(){
+  addMode=false; routeMode=false;
+  document.getElementById('add-mode-picker').classList.remove('visible');
+  document.getElementById('add-hint').classList.remove('visible');
+  document.getElementById('route-validate').classList.remove('visible');
+  document.getElementById('btn-add-spot').style.opacity='1';
+  if(typeof map!=='undefined' && map) map.getCanvas().style.cursor='';
+  clearRouteDraft();
+}
+function startAddMode(kind){
+  document.getElementById('add-mode-picker').classList.remove('visible');
+  document.getElementById('btn-add-spot').style.opacity='0.5';
+  map.getCanvas().style.cursor='crosshair';
+  if(kind==='spot'){
+    addMode=true;
+    document.getElementById('add-hint').textContent='Clique sur la carte pour placer le spot';
+    document.getElementById('add-hint').classList.add('visible');
+  } else {
+    routeMode=true;
+    routeDraftPts=[];
+    document.getElementById('add-hint').textContent='Clique le depart, les points de passage, puis Valide (max 10)';
+    document.getElementById('add-hint').classList.add('visible');
+    updateRouteValidateBtn();
+  }
+}
+
+// ===== TRACE DE ROUTE =====
+var routeMode = false;
+var routeDraftPts = [];      // points cliques [lng,lat]
+var routeDraftMarkers = [];  // marqueurs temporaires
+var ROUTE_MAX_PTS = 10;
+var spotsVisible = true, routesVisible = true;
+function toggleVisibility(){
+  spotsVisible = document.getElementById('vis-spots').checked;
+  routesVisible = document.getElementById('vis-routes').checked;
+  renderMarkers(); renderGallery();
+  if(document.getElementById('view-shotlist').classList.contains('active')) renderMatchGrid();
+}
+
+function onRouteMapClick(lngLat){
+  if(routeDraftPts.length >= ROUTE_MAX_PTS){ showToast('Maximum '+ROUTE_MAX_PTS+' points'); return; }
+  routeDraftPts.push([lngLat.lng, lngLat.lat]);
+  var el=document.createElement('div');
+  el.style.cssText='width:14px;height:14px;border-radius:50%;background:var(--accent);border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.5)';
+  var m=new mapboxgl.Marker({element:el}).setLngLat(lngLat).addTo(map);
+  routeDraftMarkers.push(m);
+  updateRouteValidateBtn();
+  if(routeDraftPts.length>=2) drawRouteDraftLine();
+}
+function updateRouteValidateBtn(){
+  var v=document.getElementById('route-validate');
+  document.getElementById('route-pt-count').textContent=routeDraftPts.length;
+  v.classList.toggle('visible', routeDraftPts.length>=2);
+}
+function clearRouteDraft(){
+  routeDraftMarkers.forEach(function(m){m.remove();});
+  routeDraftMarkers=[]; routeDraftPts=[];
+  if(typeof map!=='undefined' && map && map.getLayer && map.getLayer('route-draft')){ map.removeLayer('route-draft'); map.removeSource('route-draft'); }
+}
+function drawRouteDraftLine(){
+  // trace provisoire en lignes droites entre les points clic (apercu instantane)
+  var geo={type:'Feature',geometry:{type:'LineString',coordinates:routeDraftPts}};
+  if(map.getSource('route-draft')){ map.getSource('route-draft').setData(geo); }
+  else {
+    map.addSource('route-draft',{type:'geojson',data:geo});
+    map.addLayer({id:'route-draft',type:'line',source:'route-draft',paint:{'line-color':'#888','line-width':3,'line-dasharray':[2,2]}});
+  }
+}
+
+// Recupere le trace reel suivant les voies via l'API Directions, puis ouvre le panneau
+function finishRoute(){
+  if(routeDraftPts.length<2) return;
+  var pts=routeDraftPts.slice();
+  document.getElementById('route-validate').classList.remove('visible');
+  showToast('Calcul du trace...');
+  var coordStr=pts.map(function(p){return p[0]+','+p[1];}).join(';');
+  var url='https://api.mapbox.com/directions/v5/mapbox/driving/'+coordStr+'?geometries=geojson&overview=full&access_token='+MAPBOX_TOKEN;
+  fetch(url).then(function(r){return r.json();}).then(function(data){
+    var line;
+    if(data.routes && data.routes.length){ line=data.routes[0].geometry.coordinates; }
+    else { line=pts; } // repli : lignes droites si Directions echoue
+    cancelAddModes();
+    openNewRoutePanel(line, pts);
+  }).catch(function(){
+    cancelAddModes();
+    openNewRoutePanel(pts, pts); // repli hors ligne
+  });
 }
 
 // PANEL
+var currentRouteLine = null;  // trace [[lng,lat],...] quand on edite une route
+var currentRoutePts = null;   // points de passage
+function openNewRoutePanel(line, pts){
+  currentSpotId=null; currentImages=[]; currentMainIdx=0; currentRating=0;
+  currentRouteLine=line; currentRoutePts=pts;
+  resetPanel();
+  // point representatif = milieu du trace, pour le centre/galerie
+  var mid=line[Math.floor(line.length/2)];
+  var coords=document.getElementById('panel-coords');
+  coords.textContent='Route ('+line.length+' points)';
+  coords.dataset.lat=mid[1]; coords.dataset.lng=mid[0];
+  document.getElementById('btn-delete').style.display='none';
+  openPanel();
+  loadSunTimes(mid[1], mid[0]);
+  loadWeather(mid[1], mid[0]);
+}
 function openNewSpotPanel(lat, lng){
   currentSpotId=null; currentImages=[]; currentMainIdx=0; currentRating=0;
+  currentRouteLine=null; currentRoutePts=null;
   resetPanel();
   document.getElementById('panel-coords').textContent = lat.toFixed(6)+', '+lng.toFixed(6);
   document.getElementById('panel-coords').dataset.lat = lat;
@@ -1206,11 +1765,19 @@ function openExistingSpotPanel(id){
   var spot = spots.find(function(s){return s.id===id;});
   if(!spot) return;
   currentSpotId=id; currentImages=spot.images?spot.images.slice():[]; currentMainIdx=0; currentRating=spot.rating||0;
+  currentRouteLine=null; currentRoutePts=null;
   resetPanel();
   document.getElementById('panel-name').value=spot.name||'';
-  document.getElementById('panel-coords').textContent=spot.lat.toFixed(6)+', '+spot.lng.toFixed(6);
-  document.getElementById('panel-coords').dataset.lat=spot.lat;
-  document.getElementById('panel-coords').dataset.lng=spot.lng;
+  if(spot.kind==='route' && spot.routeLine){
+    document.getElementById('panel-coords').textContent='Route ('+spot.routeLine.length+' points)';
+    var mid=spot.routeLine[Math.floor(spot.routeLine.length/2)];
+    document.getElementById('panel-coords').dataset.lat=mid[1];
+    document.getElementById('panel-coords').dataset.lng=mid[0];
+  } else {
+    document.getElementById('panel-coords').textContent=spot.lat.toFixed(6)+', '+spot.lng.toFixed(6);
+    document.getElementById('panel-coords').dataset.lat=spot.lat;
+    document.getElementById('panel-coords').dataset.lng=spot.lng;
+  }
   document.getElementById('panel-type').value=spot.type||'';
   setTags('panel-tonalite-tags', asArray(spot.tonalite));
   setTags('panel-environnement-tags', asArray(spot.environnement));
@@ -1257,7 +1824,7 @@ function resetPanel(){
 }
 
 function openPanel(){document.getElementById('spot-panel').classList.add('open'); document.body.classList.add('panel-open');}
-function closePanel(){document.getElementById('spot-panel').classList.remove('open'); document.body.classList.remove('panel-open'); currentSpotId=null;}
+function closePanel(){document.getElementById('spot-panel').classList.remove('open'); document.body.classList.remove('panel-open'); currentSpotId=null; currentRouteLine=null; currentRoutePts=null;}
 
 // IMAGES
 function handleMainImage(e){
@@ -1312,17 +1879,24 @@ function setRating(val){
   document.querySelectorAll('.star').forEach(function(s){s.classList.toggle('active',parseInt(s.dataset.val)<=val);});
 }
 
+var savingSpot=false;
 function saveSpot(){
+  if(savingSpot) return;                       // garde anti double clic (evite les doublons "Route sans nom")
   var coords=document.getElementById('panel-coords');
   var lat=parseFloat(coords.dataset.lat), lng=parseFloat(coords.dataset.lng);
-  if(isNaN(lat)||isNaN(lng))return;
+  if(isNaN(lat)||isNaN(lng)){ showToast('Coordonnees manquantes'); return; }
+  savingSpot=true;
+  var isRoute=!!currentRouteLine;
   var lightTags=[].map.call(document.querySelectorAll('#light-tags .tag.active'),function(t){return t.textContent;});
   var seasons=[].map.call(document.querySelectorAll('.season-btn.active'),function(b){return b.textContent;});
   var accessEl=document.querySelector('[onclick*="access"].active');
   var statusEl=document.querySelector('#status-tags .tag.active');
   var spot={
     id:currentSpotId||Date.now().toString(),
-    name:document.getElementById('panel-name').value||'Spot sans nom',
+    kind:currentRouteLine?'route':'spot',
+    routeLine:currentRouteLine||null,
+    routePts:currentRoutePts||null,
+    name:document.getElementById('panel-name').value||(currentRouteLine?'Route sans nom':'Spot sans nom'),
     lat:lat, lng:lng,
     type:document.getElementById('panel-type').value,
     tonalite:readTags('panel-tonalite-tags'),
@@ -1339,8 +1913,22 @@ function saveSpot(){
     rating:currentRating, images:currentImages.slice(),
     createdAt:currentSpotId?(spots.find(function(s){return s.id===currentSpotId;})||{}).createdAt||Date.now():Date.now()
   };
+  // conserve le trace existant si on edite une route sans le retracer
+  if(currentSpotId && !currentRouteLine){
+    var existing=spots.find(function(s){return s.id===currentSpotId;});
+    if(existing && existing.kind==='route'){ spot.kind='route'; spot.routeLine=existing.routeLine; spot.routePts=existing.routePts; }
+  }
   if(currentSpotId)spots=spots.map(function(s){return s.id===currentSpotId?spot:s;}); else spots.push(spot);
-  persist(); renderMarkers(); closePanel(); renderGallery(); showToast('Spot enregistre');
+  persist(); renderMarkers(); closePanel(); renderGallery();
+  // rendu route garanti : force un second passage apres repaint si la couche n'etait pas prete
+  if(spot.kind==='route'){
+    renderRouteLines();
+    if(typeof map!=='undefined' && map){ map.once('idle', renderRouteLines); }
+    showToast(currentSpotId?'Route mise a jour':'Route enregistree');
+  } else {
+    showToast(currentSpotId?'Spot mis a jour':'Spot enregistre');
+  }
+  setTimeout(function(){ savingSpot=false; }, 600);
 }
 
 function deleteSpot(id){
@@ -1397,14 +1985,15 @@ function renderGallery(){
     grid._delDismissBound=true;
   }
   var sortBtn=document.getElementById('gallery-sort-btn');
-  count.textContent=spots.length+' spot'+(spots.length>1?'s':'');
+  var visibleSpots=spots.filter(spotPassesFilters);
+  count.textContent=visibleSpots.length+' element'+(visibleSpots.length>1?'s':'');
   if(sortBtn) sortBtn.textContent = gallerySort==='proximity' ? 'Trier par proximite' : 'Trier par date';
-  if(spots.length===0){
-    grid.innerHTML='<div class="gallery-empty"><svg width="48" height="48" viewBox="0 0 48 48" fill="none" opacity="0.3"><rect x="4" y="10" width="40" height="28" rx="4" stroke="#7a7d85" stroke-width="2"/><circle cx="17" cy="22" r="4" stroke="#7a7d85" stroke-width="2"/><path d="M4 32l12-8 9 9 7-5 12 11" stroke="#7a7d85" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><p>Aucun spot enregistre</p></div>';
+  if(visibleSpots.length===0){
+    grid.innerHTML='<div class="gallery-empty"><svg width="48" height="48" viewBox="0 0 48 48" fill="none" opacity="0.3"><rect x="4" y="10" width="40" height="28" rx="4" stroke="#7a7d85" stroke-width="2"/><circle cx="17" cy="22" r="4" stroke="#7a7d85" stroke-width="2"/><path d="M4 32l12-8 9 9 7-5 12 11" stroke="#7a7d85" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><p>Aucun element a afficher</p></div>';
     return;
   }
   grid.innerHTML='';
-  var ordered=spots.slice();
+  var ordered=visibleSpots.slice();
   if(gallerySort==='proximity' && userLoc){
     ordered.sort(function(a,b){
       return distanceKm(userLoc.lat,userLoc.lng,a.lat,a.lng)-distanceKm(userLoc.lat,userLoc.lng,b.lat,b.lng);
@@ -1417,7 +2006,7 @@ function renderGallery(){
     var imgHtml=spot.images&&spot.images.length>0?'<img class="gallery-card-img" src="'+spot.images[0]+'" alt="">'  :'<div class="gallery-card-no-img">&#128205;</div>';
     var stars=spot.rating>0?'<span style="color:var(--accent)">&#9733;</span>'.repeat(spot.rating)+'<span style="color:var(--border)">&#9733;</span>'.repeat(5-spot.rating):'';
     var dist = userLoc ? ' <span class="gallery-card-dist">&middot; '+fmtDist(distanceKm(userLoc.lat,userLoc.lng,spot.lat,spot.lng))+'</span>' : '';
-    var miniUrl=staticMapUrl(spot.lng, spot.lat);
+    var miniUrl = spot.kind==='route' && spot.routeLine ? staticRouteUrl(spot.routeLine) : staticMapUrl(spot.lng, spot.lat);
     var checked=selectedSpots.indexOf(spot.id)>-1;
     card.innerHTML=
       '<div class="gallery-del-badge" data-del="'+spot.id+'"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 8h8" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg></div>'+
@@ -1470,6 +2059,19 @@ function staticMapUrl(lng, lat){
   var marker='pin-s+e8571a('+lng+','+lat+')';
   return 'https://api.mapbox.com/styles/v1/mapbox/dark-v11/static/'+marker+'/'+lng+','+lat+',12,0/300x90@2x?access_token='+MAPBOX_TOKEN;
 }
+function staticRouteUrl(line){
+  // simplifie le trace pour rester sous la limite d'URL, dessine un path colore
+  var pts=line;
+  if(pts.length>40){ var step=Math.ceil(pts.length/40); pts=pts.filter(function(_,i){return i%step===0;}); }
+  var enc=pts.map(function(p){return p[0].toFixed(4)+','+p[1].toFixed(4);}).join(';');
+  var path='path-4+e8571a-0.9('+enc+')';
+  try {
+    return 'https://api.mapbox.com/styles/v1/mapbox/dark-v11/static/'+path+'/auto/300x90@2x?access_token='+MAPBOX_TOKEN;
+  } catch(e){
+    var mid=line[Math.floor(line.length/2)];
+    return staticMapUrl(mid[0], mid[1]);
+  }
+}
 
 function openLightbox(){
   if(!currentImages[currentMainIdx])return;
@@ -1482,7 +2084,7 @@ function switchView(v){
   document.querySelectorAll('.view').forEach(function(el){el.classList.remove('active');});
   document.querySelectorAll('.nav-tab').forEach(function(el){el.classList.remove('active');});
   document.getElementById('view-'+v).classList.add('active');
-  var idx = {map:0, gallery:1, shotlist:2}[v];
+  var idx = {map:0, gallery:1, shotlist:2, clients:3}[v];
   if(idx!==undefined) document.querySelectorAll('.nav-tab')[idx].classList.add('active');
   if(v==='map'){
     setTimeout(function(){map.resize();},100);
@@ -1491,6 +2093,7 @@ function switchView(v){
     document.getElementById('btn-add-spot').style.display='none';
     if(v==='gallery') renderGallery();
     if(v==='shotlist'){ buildColorPicker(); renderMatchGrid(); renderInspirations(); }
+    if(v==='clients') renderClients();
   }
 }
 
@@ -1498,7 +2101,7 @@ function openInstagram(){
   document.querySelectorAll('.view').forEach(function(el){el.classList.remove('active');});
   document.querySelectorAll('.nav-tab').forEach(function(el){el.classList.remove('active');});
   document.getElementById('view-insta').classList.add('active');
-  document.querySelectorAll('.nav-tab')[4].classList.add('active');
+  document.querySelectorAll('.nav-tab')[5].classList.add('active');
   document.getElementById('btn-add-spot').style.display='none';
 }
 
@@ -2171,6 +2774,12 @@ function buildFilterPanel(){
   })(i);}
   document.getElementById('filter-type').onchange=function(){ filters.type=this.value; applyFilters(); };
 }
+function setFilterKind(el){
+  document.querySelectorAll('#filter-kind .tag').forEach(function(t){ t.classList.remove('active'); });
+  el.classList.add('active');
+  filters.kind = el.dataset.kind;
+  applyFilters();
+}
 function paintFilterStars(){
   document.querySelectorAll('#filter-stars .star').forEach(function(s,i){ s.classList.toggle('active', (i+1)<=filters.minStars); });
 }
@@ -2201,6 +2810,7 @@ initMap();
 renderGallery();
 // charge les spots depuis Supabase (et migre les locaux au premier lancement)
 if(typeof syncLoadFromCloud==='function'){ syncLoadFromCloud(); }
+if(typeof syncLoadClientsFromCloud==='function'){ syncLoadClientsFromCloud(); }
 </script>
 <script>
 if('serviceWorker' in navigator){
