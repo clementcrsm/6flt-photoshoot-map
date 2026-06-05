@@ -14,6 +14,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet">
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{--bg:#0e0f11;--surface:#16181c;--surface2:#1e2126;--border:#2a2d35;--accent:#e8571a;--accent2:#f0a070;--text:#f0ede8;--muted:#7a7d85;--panel:380px}
 *{margin:0;padding:0;box-sizing:border-box}
@@ -26,7 +27,7 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 24px
 .nav-tab{padding:6px 18px;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;color:var(--muted);background:none;border:none;border-radius:5px;cursor:pointer;transition:all .18s;letter-spacing:.04em}
 .nav-tab.active{background:var(--accent);color:#fff}
 .nav-tab:hover:not(.active){color:var(--text);background:var(--surface2)}
-.nav-add{background:var(--accent);color:#fff;border:none;border-radius:8px;width:38px;height:38px;padding:0;cursor:pointer;transition:opacity .15s;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.nav-add{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:8px 16px;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;cursor:pointer;letter-spacing:.04em;transition:opacity .15s;display:flex;align-items:center;gap:7px;flex-shrink:0}
 .nav-add:hover{opacity:.85}
 .view{display:none;flex:1;overflow:hidden}
 .view.active{display:flex}
@@ -378,6 +379,9 @@ nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-
   .nav-tabs{max-width:calc(100vw - 110px);overflow-x:auto;-webkit-overflow-scrolling:touch}
   .nav-tabs::-webkit-scrollbar{display:none}
   .nav-tab{padding:7px 14px;font-size:12px;white-space:nowrap;flex-shrink:0}
+  /* bouton add carre compact sur mobile */
+  .nav-add{width:38px;height:38px;padding:0;justify-content:center;gap:0}
+  .nav-add-label{display:none}
   /* recherche : ne plus centrer en largeur fixe, laisser la place au filtre a gauche */
   #search-wrap{left:62px;transform:none;width:auto;right:14px}
   #filter-btn{top:14px;left:14px}
@@ -407,7 +411,8 @@ nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-
     <button class="nav-tab" onclick="openInstagram()">Instagram</button>
   </div>
   <button class="nav-add" id="btn-add-spot" onclick="toggleAddMode()" title="Nouveau spot" aria-label="Nouveau spot">
-    <svg width="16" height="16" viewBox="0 0 14 14" fill="none"><path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    <span class="nav-add-label">Nouveau spot</span>
   </button>
 </nav>
 
@@ -838,6 +843,52 @@ var MAPBOX_TOKEN = 'pk.eyJ1IjoiY2xlbWVudGNyc20iLCJhIjoiY21weW1ic3o5MDVhZTJyc2lyN
 mapboxgl.accessToken = MAPBOX_TOKEN;
 
 var spots = JSON.parse(localStorage.getItem('6flt_spots') || '[]');
+// detection tactile : l'appui long pour supprimer n'est actif que sur appareils tactiles
+var IS_TOUCH = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+
+// ===== SYNCHRONISATION SUPABASE =====
+var SUPABASE_URL = 'https://gpirhmddoeokakikbjkr.supabase.co';
+var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdwaXJobWRkb2Vva2FraWtiamtyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA2NDI3MzAsImV4cCI6MjA5NjIxODczMH0.LghihUJQCtYBIMsRGXrjh2k4IcVYnf5CyD4lzlQNv6w';
+var sb = null;
+try { if(window.supabase){ sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY); } } catch(e){}
+
+// Charge les spots depuis Supabase, fusionne avec le local, migre les spots locaux absents
+function syncLoadFromCloud(){
+  if(!sb) return Promise.resolve();
+  return sb.from('spots').select('id,data').then(function(res){
+    if(res.error){ console.warn('Supabase load:', res.error.message); return; }
+    var cloud = (res.data||[]).map(function(r){ return r.data; });
+    var cloudIds = {}; cloud.forEach(function(s){ cloudIds[s.id]=true; });
+    // spots locaux absents du cloud -> a migrer
+    var toMigrate = spots.filter(function(s){ return !cloudIds[s.id]; });
+    // le cloud devient la base, on y ajoute les spots locaux non encore presents
+    spots = cloud.concat(toMigrate);
+    localStorage.setItem('6flt_spots', JSON.stringify(spots));
+    if(toMigrate.length){
+      // pousse les spots locaux vers le cloud
+      var rows = toMigrate.map(function(s){ return {id:s.id, data:s, updated_at:new Date().toISOString()}; });
+      sb.from('spots').upsert(rows).then(function(){});
+    }
+    if(typeof renderMarkers==='function') renderMarkers();
+    if(typeof renderGallery==='function') renderGallery();
+  });
+}
+
+// Pousse l'etat complet vers Supabase (upsert des presents + suppression des absents)
+function syncPushToCloud(){
+  if(!sb) return;
+  var rows = spots.map(function(s){ return {id:s.id, data:s, updated_at:new Date().toISOString()}; });
+  if(rows.length){
+    sb.from('spots').upsert(rows).then(function(res){ if(res.error) console.warn('Supabase push:', res.error.message); });
+  }
+  // supprime du cloud les spots qui ne sont plus en local
+  var localIds = spots.map(function(s){ return s.id; });
+  sb.from('spots').select('id').then(function(res){
+    if(res.error || !res.data) return;
+    var toDelete = res.data.filter(function(r){ return localIds.indexOf(r.id)===-1; }).map(function(r){ return r.id; });
+    if(toDelete.length){ sb.from('spots').delete().in('id', toDelete).then(function(){}); }
+  });
+}
 var addMode = false, currentSpotId = null, currentRating = 0;
 var currentImages = [], currentMainIdx = 0;
 var map, mbMarkers = {};
@@ -1076,6 +1127,7 @@ function spotPassesFilters(s){
 }
 
 function renderMarkers(){
+  if(typeof map==='undefined' || !map) return;
   Object.values(mbMarkers).forEach(function(m){m.remove();});
   mbMarkers={};
   spots.forEach(function(s){ if(spotPassesFilters(s)) addMarker(s); });
@@ -1104,12 +1156,11 @@ function addMarker(spot){
   function cancelPress(){ if(pressTimer){ clearTimeout(pressTimer); pressTimer=null; } }
 
   var sm = el.querySelector('.spot-marker');
-  sm.addEventListener('touchstart', startPress, {passive:true});
-  sm.addEventListener('touchend', cancelPress);
-  sm.addEventListener('touchmove', cancelPress);
-  sm.addEventListener('mousedown', startPress);
-  sm.addEventListener('mouseup', cancelPress);
-  sm.addEventListener('mouseleave', cancelPress);
+  if(IS_TOUCH){
+    sm.addEventListener('touchstart', startPress, {passive:true});
+    sm.addEventListener('touchend', cancelPress);
+    sm.addEventListener('touchmove', cancelPress);
+  }
   // tap normal -> ouvre la fiche, sauf si on vient de faire un appui long
   sm.addEventListener('click', function(e){
     if(longPressed){ e.stopPropagation(); longPressed=false; return; }
@@ -1308,7 +1359,7 @@ function deleteSpot(id){
   persist(); renderMarkers(); closePanel(); renderGallery(); showToast('Spot supprime');
 }
 
-function persist(){localStorage.setItem('6flt_spots',JSON.stringify(spots));}
+function persist(){localStorage.setItem('6flt_spots',JSON.stringify(spots));syncPushToCloud();}
 
 function exportJSON(){
   var blob=new Blob([JSON.stringify({version:1,spots:spots},null,2)],{type:'application/json'});
@@ -1396,12 +1447,11 @@ function renderGallery(){
       card.classList.add('show-del');
     },500); }
     function cancelPress(){ if(pressTimer){ clearTimeout(pressTimer); pressTimer=null; } }
-    card.addEventListener('touchstart', startPress, {passive:true});
-    card.addEventListener('touchend', cancelPress);
-    card.addEventListener('touchmove', cancelPress);
-    card.addEventListener('mousedown', startPress);
-    card.addEventListener('mouseup', cancelPress);
-    card.addEventListener('mouseleave', cancelPress);
+    if(IS_TOUCH){
+      card.addEventListener('touchstart', startPress, {passive:true});
+      card.addEventListener('touchend', cancelPress);
+      card.addEventListener('touchmove', cancelPress);
+    }
     // clic sur la pastille -> confirmation puis suppression
     card.querySelector('.gallery-del-badge').addEventListener('click', function(e){
       e.stopPropagation();
@@ -2149,6 +2199,8 @@ document.getElementById('owm-key').value = owmKey;
 initBackup();
 initMap();
 renderGallery();
+// charge les spots depuis Supabase (et migre les locaux au premier lancement)
+if(typeof syncLoadFromCloud==='function'){ syncLoadFromCloud(); }
 </script>
 <script>
 if('serviceWorker' in navigator){
