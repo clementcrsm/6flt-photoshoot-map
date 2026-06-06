@@ -159,6 +159,10 @@ body.panel-open #view-label{right:calc(158px + var(--panel) + 14px)}
 .route-marker{width:28px;height:28px;border-radius:50%;background:var(--accent);border:2px solid #fff;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.5)}
 .route-marker:hover{transform:scale(1.08)}
 .route-marker-wrap.show-del .marker-del-badge{display:flex;animation:badgePop .18s ease}
+/* marqueur emoji (musee / circuit / concession) : rond avec logo */
+.emoji-marker{width:34px;height:34px;border-radius:50%;background:var(--surface);border:2px solid #fff;display:flex;align-items:center;justify-content:center;font-size:17px;line-height:1;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.5)}
+.emoji-marker:hover{transform:scale(1.08)}
+.marker-wrap.show-del .marker-del-badge{display:flex;animation:badgePop .18s ease}
 
 /* LIGHTBOX */
 #lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:9999;align-items:center;justify-content:center}
@@ -301,9 +305,9 @@ body.panel-open #view-label{right:calc(158px + var(--panel) + 14px)}
 #add-hint{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);background:var(--surface);border:1px solid var(--accent);border-radius:30px;padding:10px 22px;font-size:13px;font-weight:600;color:var(--accent2);z-index:600;display:none;pointer-events:none;letter-spacing:.04em;animation:pulse 1.5s ease-in-out infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
 #add-hint.visible{display:block}
-#add-mode-picker{position:absolute;top:64px;left:50%;transform:translateX(-50%);background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:6px;z-index:700;display:none;gap:6px;box-shadow:0 8px 24px rgba(0,0,0,.5)}
+#add-mode-picker{position:absolute;top:64px;left:50%;transform:translateX(-50%);background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:6px;z-index:700;display:none;gap:6px;box-shadow:0 8px 24px rgba(0,0,0,.5);flex-wrap:wrap;justify-content:center;max-width:calc(100vw - 28px)}
 #add-mode-picker.visible{display:flex}
-#add-mode-picker button{background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Inter',sans-serif;font-size:14px;font-weight:600;padding:12px 28px;cursor:pointer;transition:all .15s}
+#add-mode-picker button{background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Inter',sans-serif;font-size:13px;font-weight:600;padding:11px 18px;cursor:pointer;transition:all .15s;white-space:nowrap}
 #add-mode-picker button:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
 #route-validate{position:absolute;bottom:30px;left:50%;transform:translateX(-50%);z-index:700;display:none}
 #route-validate.visible{display:block}
@@ -438,6 +442,22 @@ nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-
 .client-save-btn{flex:1;background:var(--accent);color:#fff;border:none;border-radius:8px;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;padding:13px;cursor:pointer}
 .client-delete-btn{background:transparent;border:1px solid #e84040;border-radius:8px;color:#e84040;padding:11px 14px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 .client-delete-btn:hover{background:#e84040;color:#fff}
+/* EVENTS : panneau (clone du panneau client) + cartes */
+#event-panel{position:fixed;top:0;right:0;height:100%;width:420px;max-width:100vw;background:var(--surface);border-left:1px solid var(--border);transform:translateX(100%);transition:transform .28s cubic-bezier(.4,0,.2,1);z-index:1500;overflow-y:auto}
+#event-panel.open{transform:translateX(0)}
+#event-panel-close{position:absolute;top:16px;right:16px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;width:34px;height:34px;color:var(--text);cursor:pointer;font-size:15px}
+#event-photo-preview{width:120px;height:120px;border-radius:14px;object-fit:cover;background:var(--surface2);display:none}
+.events-list{display:flex;flex-direction:column;gap:12px}
+.event-card{display:flex;gap:14px;background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:12px;cursor:pointer;transition:border-color .15s}
+.event-card:hover{border-color:var(--accent)}
+.event-card-photo{width:84px;height:84px;border-radius:10px;object-fit:cover;background:var(--bg);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:30px;background-size:cover;background-position:center}
+.event-card-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.event-card-date{font-family:'Space Mono',monospace;font-size:11px;font-weight:700;letter-spacing:.04em;color:var(--accent);text-transform:uppercase}
+.event-card-title{font-family:'Inter',sans-serif;font-size:16px;font-weight:800;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.event-card-place{font-family:'Inter',sans-serif;font-size:12px;color:var(--muted)}
+.event-card-desc{font-family:'Inter',sans-serif;font-size:12px;color:var(--text);opacity:.8;margin-top:2px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.event-card-link{font-family:'Inter',sans-serif;font-size:12px;color:var(--accent);text-decoration:none;margin-top:3px}
+.event-card-past{opacity:.55}
 /* overlay corbeille clients (regles globales, hors media query) */
 #clients-trash-view{position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:1600;display:none;align-items:center;justify-content:center;padding:20px}
 #clients-trash-view.open{display:flex}
@@ -452,6 +472,7 @@ nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-
 
 @media (max-width:640px){
   #client-panel{width:100vw;border-left:none}
+  #event-panel{width:100vw;border-left:none}
   #spot-panel{width:100vw;border-left:none}
   /* quand le panneau est ouvert, masquer TOUS les controles carte et la recherche */
   body.panel-open #btn-3d,body.panel-open #btn-sat,body.panel-open #btn-geo,
@@ -482,7 +503,7 @@ nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-
 <body>
 <div id="splash">
   <img id="splash-logo" src="data:image/png;base64,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" alt="6flt">
-  <div id="splash-credit">Créé par 6flt photographie et Claude<br><span style="opacity:.6">v1.3.1</span></div>
+  <div id="splash-credit">Créé par 6flt photographie et Claude<br><span style="opacity:.6">v1.4</span></div>
 </div>
 
 <nav>
@@ -492,6 +513,7 @@ nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-
     <button class="nav-tab" onclick="switchView('gallery')">Galerie</button>
     <button class="nav-tab" onclick="switchView('shotlist')">Shotlist</button>
     <button class="nav-tab" onclick="switchView('clients')">Clients</button>
+    <button class="nav-tab" onclick="switchView('events')">Evenements</button>
     <button class="nav-tab" onclick="window.open('https://6fltphotographie.mypixieset.com/','_blank')">Portfolio</button>
     <button class="nav-tab" onclick="openInstagram()">Instagram</button>
   </div>
@@ -507,6 +529,8 @@ nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-
   <div id="add-mode-picker">
     <button onclick="startAddMode('spot')">Spot</button>
     <button onclick="startAddMode('route')">Route</button>
+    <button onclick="startAddMode('long')">Trajet long</button>
+    <button onclick="startEventFromMap()">Event</button>
   </div>
   <div id="route-validate"><button onclick="finishRoute()">Valide (<span id="route-pt-count">0</span> pts)</button></div>
 
@@ -554,6 +578,10 @@ nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-
         <div class="tag active" data-kind="all" onclick="setFilterKind(this)">Tout</div>
         <div class="tag" data-kind="spot" onclick="setFilterKind(this)">Spots</div>
         <div class="tag" data-kind="route" onclick="setFilterKind(this)">Routes</div>
+        <div class="tag" data-kind="long" onclick="setFilterKind(this)">Trajets longs</div>
+        <div class="tag" data-kind="Circuit" onclick="setFilterKind(this)">Circuits</div>
+        <div class="tag" data-kind="Musee" onclick="setFilterKind(this)">Musees</div>
+        <div class="tag" data-kind="Concession" onclick="setFilterKind(this)">Concessions</div>
       </div>
     </div>
     <div class="settings-divider"></div>
@@ -779,6 +807,9 @@ nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-
           <option>Champ / Nature ouverte</option>
           <option>Circuit / Piste</option>
           <option>Parking / Zone industrielle</option>
+          <option>Musee</option>
+          <option>Circuit</option>
+          <option>Concession</option>
           <option>Autre</option>
         </select>
       </div>
@@ -1032,6 +1063,45 @@ nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-
   </div>
 </div>
 
+<div id="view-events" class="view">
+  <div class="clients-wrap">
+    <div class="clients-header">
+      <h2>Mes evenements</h2>
+      <span class="clients-count" id="events-count"></span>
+    </div>
+    <button class="client-add-btn" onclick="openNewEventPanel()">
+      <svg width="16" height="16" viewBox="0 0 14 14" fill="none"><path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      Ajouter un evenement
+    </button>
+    <div class="events-list" id="events-list"></div>
+  </div>
+</div>
+
+<div id="event-panel">
+  <div class="client-panel-inner">
+    <button id="event-panel-close" onclick="closeEventPanel()">&#x2715;</button>
+    <div class="client-photo-zone">
+      <img id="event-photo-preview" alt="">
+      <button class="client-photo-btn" onclick="document.getElementById('event-photo-input').click()">Ajouter une photo</button>
+      <input type="file" id="event-photo-input" accept="image/*" style="display:none" onchange="onEventPhotoSelected(event)">
+    </div>
+    <label class="client-field-label">Nom de l'evenement</label>
+    <input type="text" id="event-name" class="client-input" placeholder="Ex: MLBL Car Show">
+    <label class="client-field-label">Date</label>
+    <input type="date" id="event-date" class="client-input">
+    <label class="client-field-label">Lieu</label>
+    <input type="text" id="event-place" class="client-input" placeholder="Ville, circuit, adresse...">
+    <label class="client-field-label">Lien (site officiel)</label>
+    <input type="text" id="event-link" class="client-input" placeholder="https://...">
+    <label class="client-field-label">Description</label>
+    <textarea id="event-desc" class="client-input" rows="3" placeholder="Details de l'evenement..."></textarea>
+    <div class="client-panel-actions">
+      <button class="client-save-btn" onclick="saveEvent()">Enregistrer</button>
+      <button class="client-delete-btn" id="event-delete-btn" onclick="deleteEvent()" style="display:none" title="Supprimer" aria-label="Supprimer"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2.5 4h11M6 4V2.5h4V4M5 4l.5 9h5l.5-9M6.5 6.5v4M9.5 6.5v4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    </div>
+  </div>
+</div>
+
 <div id="clients-trash-view">
   <div class="trash-overlay-inner">
     <div class="trash-overlay-header">
@@ -1120,6 +1190,157 @@ function syncPushToCloud(){
 function syncDeleteFromCloud(id){
   if(!sb || !id) return;
   sb.from('spots').delete().eq('id', id).then(function(res){ if(res.error) console.warn('Supabase delete:', res.error.message); });
+}
+
+// ===== EVENEMENTS =====
+var events = JSON.parse(localStorage.getItem('6flt_events') || '[]');
+var currentEventId = null, currentEventPhoto = null;
+
+function persistEvents(){
+  localStorage.setItem('6flt_events', JSON.stringify(events));
+  if(sb){
+    var rows = events.map(function(e){ return {id:e.id, data:e, updated_at:new Date().toISOString()}; });
+    if(rows.length) sb.from('events').upsert(rows).then(function(res){ if(res.error) console.warn('Supabase events push:', res.error.message); });
+  }
+}
+function syncDeleteEventFromCloud(id){
+  if(!sb || !id) return;
+  sb.from('events').delete().eq('id', id).then(function(res){ if(res.error) console.warn('Supabase events delete:', res.error.message); });
+}
+function syncLoadEventsFromCloud(){
+  if(!sb) return Promise.resolve();
+  return sb.from('events').select('id,data').then(function(res){
+    if(res.error){ console.warn('Supabase events load:', res.error.message); return; }
+    var cloud = (res.data||[]).map(function(r){ return r.data; });
+    var cloudIds = {}; cloud.forEach(function(e){ cloudIds[e.id]=true; });
+    var toMigrate = events.filter(function(e){ return !cloudIds[e.id]; });
+    events = cloud.concat(toMigrate);
+    localStorage.setItem('6flt_events', JSON.stringify(events));
+    if(toMigrate.length){
+      var rows = toMigrate.map(function(e){ return {id:e.id, data:e, updated_at:new Date().toISOString()}; });
+      sb.from('events').upsert(rows).then(function(){});
+    }
+    if(document.getElementById('view-events').classList.contains('active')) renderEvents();
+  });
+}
+function fmtEventDate(d){
+  if(!d) return 'Date non definie';
+  var parts=d.split('-'); if(parts.length!==3) return d;
+  var mois=['jan','fev','mar','avr','mai','juin','juil','aout','sep','oct','nov','dec'];
+  return parseInt(parts[2],10)+' '+mois[parseInt(parts[1],10)-1]+' '+parts[0];
+}
+function safeUrl(u){
+  u=String(u||'').trim();
+  if(!u) return '';
+  if(/^https?:\/\//i.test(u)) return u;
+  if(/^[a-z][a-z0-9+.-]*:/i.test(u)) return ''; // bloque javascript:, data:, etc.
+  return 'https://'+u; // pas de schema -> prefixe https
+}
+function renderEvents(){
+  var list=document.getElementById('events-list');
+  var count=document.getElementById('events-count');
+  if(!list) return;
+  // tri : a venir d'abord (du plus proche au plus loin), puis passes (du plus recent au plus ancien)
+  var today=new Date(); today.setHours(0,0,0,0);
+  var sorted=events.slice().sort(function(a,b){
+    var da=a.date||'9999-99-99', db=b.date||'9999-99-99';
+    return da<db?-1:(da>db?1:0);
+  });
+  var upcoming=sorted.filter(function(e){ return (e.date||'')>=today.toISOString().slice(0,10); });
+  var past=sorted.filter(function(e){ return (e.date||'')<today.toISOString().slice(0,10); }).reverse();
+  var ordered=upcoming.concat(past);
+  count.textContent = events.length + (events.length>1?' evenements':' evenement');
+  list.innerHTML='';
+  if(!ordered.length){ list.innerHTML='<div style="color:var(--muted);font-size:13px;padding:20px 4px">Aucun evenement pour le moment.</div>'; return; }
+  ordered.forEach(function(e){
+    var isPast=(e.date||'')<today.toISOString().slice(0,10);
+    var card=document.createElement('div');
+    card.className='event-card'+(isPast?' event-card-past':'');
+    var photo = e.photo
+      ? '<div class="event-card-photo" style="background-image:url('+JSON.stringify(e.photo)+')"></div>'
+      : '<div class="event-card-photo">\uD83D\uDCC5</div>';
+    var safeLink = safeUrl(e.link);
+    var link = safeLink ? '<a class="event-card-link" href="'+escapeHtml(safeLink)+'" target="_blank" rel="noopener" onclick="event.stopPropagation()">Site officiel \u2197</a>' : '';
+    card.innerHTML = photo +
+      '<div class="event-card-body">' +
+        '<div class="event-card-date">'+fmtEventDate(e.date)+'</div>' +
+        '<div class="event-card-title">'+escapeHtml(e.name||'Evenement sans nom')+'</div>' +
+        (e.place?'<div class="event-card-place">'+escapeHtml(e.place)+'</div>':'') +
+        (e.desc?'<div class="event-card-desc">'+escapeHtml(e.desc)+'</div>':'') +
+        link +
+      '</div>';
+    card.addEventListener('click', function(){ openExistingEventPanel(e.id); });
+    list.appendChild(card);
+  });
+}
+function openNewEventPanel(){
+  switchView('events');
+  currentEventId=null; currentEventPhoto=null;
+  document.getElementById('event-name').value='';
+  document.getElementById('event-date').value='';
+  document.getElementById('event-place').value='';
+  document.getElementById('event-link').value='';
+  document.getElementById('event-desc').value='';
+  var prev=document.getElementById('event-photo-preview'); prev.style.display='none'; prev.src='';
+  document.getElementById('event-delete-btn').style.display='none';
+  document.getElementById('event-panel').classList.add('open');
+}
+function openExistingEventPanel(id){
+  var e=events.find(function(x){return x.id===id;}); if(!e) return;
+  currentEventId=id; currentEventPhoto=e.photo||null;
+  document.getElementById('event-name').value=e.name||'';
+  document.getElementById('event-date').value=e.date||'';
+  document.getElementById('event-place').value=e.place||'';
+  document.getElementById('event-link').value=e.link||'';
+  document.getElementById('event-desc').value=e.desc||'';
+  var prev=document.getElementById('event-photo-preview');
+  if(e.photo){ prev.src=e.photo; prev.style.display='block'; } else { prev.style.display='none'; prev.src=''; }
+  document.getElementById('event-delete-btn').style.display='';
+  document.getElementById('event-panel').classList.add('open');
+}
+function closeEventPanel(){ document.getElementById('event-panel').classList.remove('open'); }
+// entree depuis le picker "+" de la carte
+function startEventFromMap(){ cancelAddModes(); openNewEventPanel(); }
+
+function onEventPhotoSelected(ev){
+  var file=ev.target.files[0]; if(!file) return;
+  var reader=new FileReader();
+  reader.onload=function(e){
+    var img=new Image();
+    img.onload=function(){
+      var max=800, w=img.width, h=img.height;
+      if(w>h && w>max){ h=h*max/w; w=max; } else if(h>max){ w=w*max/h; h=max; }
+      var canvas=document.createElement('canvas'); canvas.width=w; canvas.height=h;
+      canvas.getContext('2d').drawImage(img,0,0,w,h);
+      currentEventPhoto=canvas.toDataURL('image/jpeg',0.8);
+      var prev=document.getElementById('event-photo-preview');
+      prev.src=currentEventPhoto; prev.style.display='block';
+    };
+    img.src=e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+function saveEvent(){
+  var e={
+    id: currentEventId || ('e_'+Date.now()+'_'+Math.random().toString(36).slice(2,7)),
+    name: document.getElementById('event-name').value.trim(),
+    date: document.getElementById('event-date').value,
+    place: document.getElementById('event-place').value.trim(),
+    link: document.getElementById('event-link').value.trim(),
+    desc: document.getElementById('event-desc').value.trim(),
+    photo: currentEventPhoto,
+    createdAt: currentEventId ? undefined : new Date().toISOString()
+  };
+  if(currentEventId){ events=events.map(function(x){ return x.id===currentEventId ? Object.assign({}, x, e) : x; }); }
+  else { events.push(e); }
+  persistEvents(); renderEvents(); closeEventPanel(); showToast('Evenement enregistre');
+}
+function deleteEvent(){
+  if(!currentEventId) return;
+  if(!confirm('Supprimer cet evenement ? Cette action est definitive.')) return;
+  var id=currentEventId;
+  events=events.filter(function(x){ return x.id!==id; });
+  persistEvents(); syncDeleteEventFromCloud(id); renderEvents(); closeEventPanel(); showToast('Evenement supprime');
 }
 
 // ===== CLIENTS =====
@@ -1575,6 +1796,12 @@ function toggleSatellite(){
 }
 
 // MARKERS
+// token de "type d'element" pour le filtre carte
+function elementKind(s){
+  if(s.kind==='route'){ return s.subkind==='long' ? 'long' : 'route'; }
+  if(EMOJI_TYPES[s.type]) return s.type; // Musee / Circuit / Concession
+  return 'spot';
+}
 function spotPassesFilters(s){
   // visibilite par type (toggles en bas a gauche)
   if(s.kind==='route' && !routesVisible) return false;
@@ -1587,8 +1814,7 @@ function spotPassesFilters(s){
   }
   if(filters.minStars && (s.rating||0)<filters.minStars) return false;
   if(filters.kind && filters.kind.length){
-    var k = s.kind==='route' ? 'route' : 'spot';
-    if(filters.kind.indexOf(k)===-1) return false;
+    if(filters.kind.indexOf(elementKind(s))===-1) return false;
   }
   // filtres specifiques aux routes : si actifs, n'affichent que les routes correspondantes
   if(filters.roadState){ if(s.kind!=='route' || (s.roadState||'')!==filters.roadState) return false; }
@@ -1684,15 +1910,26 @@ function addRouteToMap(s){
   mbMarkers[s.id]=marker;
 }
 
+// types de spot affiches en rond emoji (pas de bulle photo)
+var EMOJI_TYPES = { 'Musee':'\uD83C\uDFDB\uFE0F', 'Circuit':'\uD83C\uDFC1', 'Concession':'\uD83D\uDE97' };
+function spotEmoji(spot){ return EMOJI_TYPES[spot.type]||null; }
+
 function addMarker(spot){
   var el = document.createElement('div');
   el.className = 'marker-wrap';
-  var img = spot.images && spot.images.length > 0 ? spot.images[0] : null;
+  var emoji = spotEmoji(spot);
   var st = spot.status ? ' data-status="'+spot.status+'"' : '';
-  el.innerHTML = '<div class="spot-marker"'+st+'>' +
-    (img ? '<img src="'+img+'" alt="">' : '<div class="spot-marker-empty">&#128205;</div>') +
-    '</div><div class="marker-tail"></div>' +
-    '<div class="marker-del-badge"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M4 8h8" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg></div>';
+  if(emoji){
+    // rond simple avec logo emoji, pas de bulle photo ni de queue
+    el.innerHTML = '<div class="emoji-marker">'+emoji+'</div>' +
+      '<div class="marker-del-badge"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M4 8h8" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg></div>';
+  } else {
+    var img = spot.images && spot.images.length > 0 ? spot.images[0] : null;
+    el.innerHTML = '<div class="spot-marker"'+st+'>' +
+      (img ? '<img src="'+img+'" alt="">' : '<div class="spot-marker-empty">&#128205;</div>') +
+      '</div><div class="marker-tail"></div>' +
+      '<div class="marker-del-badge"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M4 8h8" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg></div>';
+  }
 
   var pressTimer=null, longPressed=false;
   function startPress(){
@@ -1706,7 +1943,7 @@ function addMarker(spot){
   }
   function cancelPress(){ if(pressTimer){ clearTimeout(pressTimer); pressTimer=null; } }
 
-  var sm = el.querySelector('.spot-marker');
+  var sm = el.querySelector('.spot-marker') || el.querySelector('.emoji-marker');
   if(IS_TOUCH){
     sm.addEventListener('touchstart', startPress, {passive:true});
     sm.addEventListener('touchend', cancelPress);
@@ -1743,7 +1980,7 @@ function toggleAddMode(force){
   if(willOpen){ picker.classList.add('visible'); }
 }
 function cancelAddModes(){
-  addMode=false; routeMode=false;
+  addMode=false; routeMode=false; isLongMode=false;
   document.getElementById('add-mode-picker').classList.remove('visible');
   document.getElementById('add-hint').classList.remove('visible');
   document.getElementById('route-validate').classList.remove('visible');
@@ -1761,8 +1998,10 @@ function startAddMode(kind){
     document.getElementById('add-hint').classList.add('visible');
   } else {
     routeMode=true;
+    isLongMode=(kind==='long');
     routeDraftPts=[];
-    document.getElementById('add-hint').textContent='Clique le depart, les points de passage, puis Valide (max 10)';
+    var maxp=isLongMode?ROUTE_MAX_PTS_LONG:ROUTE_MAX_PTS;
+    document.getElementById('add-hint').textContent='Clique le depart, les points de passage, puis Valide (max '+maxp+')';
     document.getElementById('add-hint').classList.add('visible');
     updateRouteValidateBtn();
   }
@@ -1813,6 +2052,8 @@ function analyzeRouteCurves(line){
 var routeDraftPts = [];      // points cliques [lng,lat]
 var routeDraftMarkers = [];  // marqueurs temporaires
 var ROUTE_MAX_PTS = 10;
+var ROUTE_MAX_PTS_LONG = 25;   // trajet long : plus de waypoints
+var isLongMode = false;        // true pendant la creation d'un trajet long
 var spotsVisible = true, routesVisible = true;
 function toggleVisibility(){
   spotsVisible = document.getElementById('vis-spots').checked;
@@ -1822,7 +2063,8 @@ function toggleVisibility(){
 }
 
 function onRouteMapClick(lngLat){
-  if(routeDraftPts.length >= ROUTE_MAX_PTS){ showToast('Maximum '+ROUTE_MAX_PTS+' points'); return; }
+  var maxp=isLongMode?ROUTE_MAX_PTS_LONG:ROUTE_MAX_PTS;
+  if(routeDraftPts.length >= maxp){ showToast('Maximum '+maxp+' points'); return; }
   routeDraftPts.push([lngLat.lng, lngLat.lat]);
   var el=document.createElement('div');
   el.style.cssText='width:14px;height:14px;border-radius:50%;background:var(--accent);border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.5)';
@@ -1855,6 +2097,7 @@ function drawRouteDraftLine(){
 function finishRoute(){
   if(routeDraftPts.length<2) return;
   var pts=routeDraftPts.slice();
+  var wasLong=isLongMode;
   document.getElementById('route-validate').classList.remove('visible');
   showToast('Calcul du trace...');
   var coordStr=pts.map(function(p){return p[0]+','+p[1];}).join(';');
@@ -1864,10 +2107,10 @@ function finishRoute(){
     if(data.routes && data.routes.length){ line=data.routes[0].geometry.coordinates; }
     else { line=pts; } // repli : lignes droites si Directions echoue
     cancelAddModes();
-    openNewRoutePanel(line, pts);
+    openNewRoutePanel(line, pts, wasLong);
   }).catch(function(){
     cancelAddModes();
-    openNewRoutePanel(pts, pts); // repli hors ligne
+    openNewRoutePanel(pts, pts, wasLong); // repli hors ligne
   });
 }
 
@@ -1875,6 +2118,7 @@ function finishRoute(){
 var currentRouteLine = null;  // trace [[lng,lat],...] quand on edite une route
 var currentRoutePts = null;   // points de passage
 var currentRouteCurves = null; // resultat analyzeRouteCurves de la route en cours
+var currentRouteIsLong = false; // true si la route en cours est un trajet long
 // affiche/cache le bloc detail route et remplit etat/circulation/courbes
 function showRouteDetails(isRoute, line, spot){
   var box=document.getElementById('route-details');
@@ -1887,14 +2131,14 @@ function showRouteDetails(isRoute, line, spot){
   document.getElementById('route-curve-info').innerHTML =
     '<strong>'+curves.level+'</strong> &middot; sinuosite '+curves.sinuosity+' &middot; '+curves.sharpTurns+' virage'+(curves.sharpTurns>1?'s':'')+' marque'+(curves.sharpTurns>1?'s':'');
 }
-function openNewRoutePanel(line, pts){
+function openNewRoutePanel(line, pts, isLong){
   currentSpotId=null; currentImages=[]; currentMainIdx=0; currentRating=0;
-  currentRouteLine=line; currentRoutePts=pts;
+  currentRouteLine=line; currentRoutePts=pts; currentRouteIsLong=!!isLong;
   resetPanel();
   // point representatif = milieu du trace, pour le centre/galerie
   var mid=line[Math.floor(line.length/2)];
   var coords=document.getElementById('panel-coords');
-  coords.textContent='Route ('+line.length+' points)';
+  coords.textContent=(isLong?'Trajet long (':'Route (')+line.length+' points)';
   coords.dataset.lat=mid[1]; coords.dataset.lng=mid[0];
   document.getElementById('btn-delete').style.display='none';
   showRouteDetails(true, line, null);
@@ -1904,7 +2148,7 @@ function openNewRoutePanel(line, pts){
 }
 function openNewSpotPanel(lat, lng){
   currentSpotId=null; currentImages=[]; currentMainIdx=0; currentRating=0;
-  currentRouteLine=null; currentRoutePts=null;
+  currentRouteLine=null; currentRoutePts=null; currentRouteIsLong=false;
   resetPanel();
   document.getElementById('panel-coords').textContent = lat.toFixed(6)+', '+lng.toFixed(6);
   document.getElementById('panel-coords').dataset.lat = lat;
@@ -1919,11 +2163,12 @@ function openExistingSpotPanel(id){
   var spot = spots.find(function(s){return s.id===id;});
   if(!spot) return;
   currentSpotId=id; currentImages=spot.images?spot.images.slice():[]; currentMainIdx=0; currentRating=spot.rating||0;
-  currentRouteLine=null; currentRoutePts=null;
+  currentRouteLine=null; currentRoutePts=null; currentRouteIsLong=(spot.subkind==='long');
   resetPanel();
   document.getElementById('panel-name').value=spot.name||'';
   if(spot.kind==='route' && spot.routeLine){
-    document.getElementById('panel-coords').textContent='Route ('+spot.routeLine.length+' points)';
+    var isLong=(spot.subkind==='long');
+    document.getElementById('panel-coords').textContent=(isLong?'Trajet long (':'Route (')+spot.routeLine.length+' points)';
     var mid=spot.routeLine[Math.floor(spot.routeLine.length/2)];
     document.getElementById('panel-coords').dataset.lat=mid[1];
     document.getElementById('panel-coords').dataset.lng=mid[0];
@@ -2053,9 +2298,10 @@ function saveSpot(){
   var spot={
     id:currentSpotId||Date.now().toString(),
     kind:currentRouteLine?'route':'spot',
+    subkind:currentRouteLine&&currentRouteIsLong?'long':null,
     routeLine:currentRouteLine||null,
     routePts:currentRoutePts||null,
-    name:document.getElementById('panel-name').value||(currentRouteLine?'Route sans nom':'Spot sans nom'),
+    name:document.getElementById('panel-name').value||(currentRouteLine?(currentRouteIsLong?'Trajet long sans nom':'Route sans nom'):'Spot sans nom'),
     lat:lat, lng:lng,
     type:document.getElementById('panel-type').value,
     tonalite:readTags('panel-tonalite-tags'),
@@ -2081,7 +2327,8 @@ function saveSpot(){
   if(currentSpotId && !currentRouteLine){
     var existing=spots.find(function(s){return s.id===currentSpotId;});
     if(existing && existing.kind==='route'){
-      spot.kind='route'; spot.routeLine=existing.routeLine; spot.routePts=existing.routePts;
+      spot.kind='route'; spot.subkind=existing.subkind||null;
+      spot.routeLine=existing.routeLine; spot.routePts=existing.routePts;
       spot.curves=existing.curves||analyzeRouteCurves(existing.routeLine);
     }
   }
@@ -2251,7 +2498,7 @@ function switchView(v){
   document.querySelectorAll('.view').forEach(function(el){el.classList.remove('active');});
   document.querySelectorAll('.nav-tab').forEach(function(el){el.classList.remove('active');});
   document.getElementById('view-'+v).classList.add('active');
-  var idx = {map:0, gallery:1, shotlist:2, clients:3}[v];
+  var idx = {map:0, gallery:1, shotlist:2, clients:3, events:4}[v];
   if(idx!==undefined) document.querySelectorAll('.nav-tab')[idx].classList.add('active');
   if(v==='map'){
     setTimeout(function(){map.resize();},100);
@@ -2261,6 +2508,7 @@ function switchView(v){
     if(v==='gallery') renderGallery();
     if(v==='shotlist'){ buildColorPicker(); renderMatchGrid(); renderInspirations(); }
     if(v==='clients') renderClients();
+    if(v==='events') renderEvents();
   }
 }
 
@@ -2268,7 +2516,7 @@ function openInstagram(){
   document.querySelectorAll('.view').forEach(function(el){el.classList.remove('active');});
   document.querySelectorAll('.nav-tab').forEach(function(el){el.classList.remove('active');});
   document.getElementById('view-insta').classList.add('active');
-  document.querySelectorAll('.nav-tab')[5].classList.add('active');
+  document.querySelectorAll('.nav-tab')[6].classList.add('active');
   document.getElementById('btn-add-spot').style.display='none';
 }
 
@@ -2958,7 +3206,7 @@ function buildFilterPanel(){
   var ftr=document.getElementById('filter-traffic'); if(ftr) ftr.onchange=function(){ filters.traffic=this.value; applyFilters(); };
 }
 function setFilterKind(el){
-  var ALL_KINDS=['spot','route']; // ajouter 'long' ici quand le type Long trajet existera
+  var ALL_KINDS=['spot','route','long','Circuit','Musee','Concession'];
   var k=el.dataset.kind;
   if(k==='all'){
     filters.kind=[]; // raccourci : aucun filtre = tout visible
@@ -3025,6 +3273,7 @@ renderGallery();
 // charge les spots depuis Supabase (et migre les locaux au premier lancement)
 if(typeof syncLoadFromCloud==='function'){ syncLoadFromCloud(); }
 if(typeof syncLoadClientsFromCloud==='function'){ syncLoadClientsFromCloud(); }
+if(typeof syncLoadEventsFromCloud==='function'){ syncLoadEventsFromCloud(); }
 </script>
 <script>
 if('serviceWorker' in navigator){
