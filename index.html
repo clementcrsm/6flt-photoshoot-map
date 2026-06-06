@@ -1207,6 +1207,26 @@ var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSI
 var sb = null;
 try { if(window.supabase){ sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY); } } catch(e){}
 
+// ===== UPLOAD PHOTO VERS SUPABASE STORAGE =====
+// Envoie un fichier image dans le bucket 'photos' et renvoie une Promise<string> = URL publique.
+// Les photos ne sont PLUS stockees en base64 dans localStorage : seule l'URL legere est conservee.
+var PHOTO_BUCKET = 'photos';
+function uploadPhoto(file){
+  if(!sb) return Promise.reject(new Error('Supabase indisponible'));
+  if(!file) return Promise.reject(new Error('Aucun fichier'));
+  var ext = (file.name && file.name.indexOf('.')>-1) ? file.name.split('.').pop().toLowerCase() : 'jpg';
+  var safeExt = /^(jpg|jpeg|png|gif|webp|avif|heic)$/.test(ext) ? ext : 'jpg';
+  var name = 'photo-' + Date.now() + '-' + Math.random().toString(36).slice(2,8) + '.' + safeExt;
+  return sb.storage.from(PHOTO_BUCKET).upload(name, file, { cacheControl:'3600', upsert:false })
+    .then(function(res){
+      if(res.error) throw res.error;
+      var pub = sb.storage.from(PHOTO_BUCKET).getPublicUrl(name);
+      var url = pub && pub.data ? pub.data.publicUrl : null;
+      if(!url) throw new Error('URL publique introuvable');
+      return url;
+    });
+}
+
 // Charge les spots depuis Supabase, fusionne avec le local, migre les spots locaux absents
 function syncLoadFromCloud(){
   if(!sb) return Promise.resolve();
@@ -2375,25 +2395,24 @@ function closePanel(){document.getElementById('spot-panel').classList.remove('op
 // IMAGES
 function handleMainImage(e){
   var file=e.target.files[0]; if(!file)return;
-  var reader=new FileReader();
-  reader.onload=function(ev){
-    if(currentImages.length===0)currentImages.push(ev.target.result); else currentImages[0]=ev.target.result;
+  e.target.value='';
+  uploadPhoto(file).then(function(url){
+    if(currentImages.length===0)currentImages.push(url); else currentImages[0]=url;
     currentMainIdx=0; renderImageStrip(); renderMainImage();
-  };
-  reader.readAsDataURL(file); e.target.value='';
+  }).catch(function(err){
+    alert('Echec de l\'upload de la photo : ' + (err.message||err));
+  });
 }
 
 function handleExtraImages(e){
-  var files=Array.from(e.target.files); var done=0;
+  var files=Array.from(e.target.files); e.target.value='';
   files.forEach(function(file){
-    var reader=new FileReader();
-    reader.onload=function(ev){
-      currentImages.push(ev.target.result); done++;
-      if(done===files.length){renderImageStrip(); renderMainImage();}
-    };
-    reader.readAsDataURL(file);
+    uploadPhoto(file).then(function(url){
+      currentImages.push(url); renderImageStrip(); renderMainImage();
+    }).catch(function(err){
+      alert('Echec de l\'upload d\'une photo : ' + (err.message||err));
+    });
   });
-  e.target.value='';
 }
 
 function renderMainImage(){
