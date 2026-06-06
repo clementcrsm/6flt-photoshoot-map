@@ -1,7 +1,7 @@
-// Service worker 6flt Spot Atlas
+// Service worker 6flt Spots
 // Met en cache la coquille de l'app (HTML + icones) pour demarrage rapide et ouverture hors ligne.
 // Les tuiles Mapbox et les API (meteo, golden hour) restent tributaires du reseau.
-const CACHE = '6flt-spot-atlas-v2';
+const CACHE = '6flt-spots-v3';
 const SHELL = [
   './',
   './index.html',
@@ -30,9 +30,8 @@ self.addEventListener('fetch', function(e){
      url.indexOf('openweathermap.org')>-1 || url.indexOf('sunrise-sunset.org')>-1 ||
      url.indexOf('googleapis.com')>-1 || url.indexOf('gstatic.com')>-1 ||
      url.indexOf('supabase.co')>-1 || url.indexOf('jsdelivr.net')>-1){
-    return; // laisse passer au reseau normalement
+    return;
   }
-  // Coquille : cache d'abord, reseau en repli
   e.respondWith(
     caches.match(e.request).then(function(cached){
       return cached || fetch(e.request).then(function(resp){
