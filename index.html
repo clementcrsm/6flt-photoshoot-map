@@ -90,6 +90,15 @@ body.panel-open #view-label{right:calc(158px + var(--panel) + 14px)}
 #settings-panel::-webkit-scrollbar-thumb{background:var(--border)}
 .settings-title{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding-bottom:12px;border-bottom:1px solid var(--border)}
 .settings-section-title{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+/* SWITCH reutilisable : pastille blanche, piste accent ON / fond+bordure OFF */
+.switch-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:6px 0}
+.switch-row .switch-label{font-family:'Inter',sans-serif;font-size:13px;color:var(--text)}
+.switch{position:relative;display:inline-block;width:44px;height:26px;flex-shrink:0}
+.switch input{opacity:0;width:0;height:0;position:absolute}
+.switch .track{position:absolute;inset:0;border-radius:30px;background:var(--bg);border:1.5px solid var(--border);transition:background .18s,border-color .18s;cursor:pointer}
+.switch .knob{position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.4);transition:transform .18s;pointer-events:none}
+.switch input:checked + .track{background:var(--accent);border-color:var(--accent)}
+.switch input:checked + .track .knob{transform:translateX(18px)}
 .color-presets{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
 .color-swatch{width:24px;height:24px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:transform .12s,border-color .12s;flex-shrink:0}
 .color-swatch:hover{transform:scale(1.2)}
@@ -187,10 +196,16 @@ body.panel-open #view-label{right:calc(158px + var(--panel) + 14px)}
 .gallery-select.checked svg{opacity:1}
 
 /* TRAJET FAB */
-#trajet-fab{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(120px);z-index:1500;background:var(--accent);color:#fff;border:none;border-radius:30px;padding:14px 26px;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 8px 30px rgba(0,0,0,.5);display:flex;align-items:center;gap:10px;transition:transform .3s cubic-bezier(.4,0,.2,1)}
-#trajet-fab.show{transform:translateX(-50%) translateY(0)}
+#gallery-fab-group{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);z-index:1500;display:flex;align-items:center;gap:10px;pointer-events:none}
+#gallery-fab-group > button{pointer-events:auto}
+#trajet-fab{background:var(--accent);color:#fff;border:none;border-radius:30px;padding:14px 26px;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 8px 30px rgba(0,0,0,.5);display:none;align-items:center;gap:10px;transition:transform .3s cubic-bezier(.4,0,.2,1),opacity .25s;opacity:0;transform:translateY(120px)}
+#trajet-fab.show{display:flex;opacity:1;transform:translateY(0)}
 #trajet-fab:hover{filter:brightness(1.08)}
 #trajet-fab .fab-count{background:rgba(255,255,255,.25);border-radius:12px;padding:2px 9px;font-size:12px}
+#gallery-del-fab{background:#e84040;color:#fff;border:none;border-radius:30px;padding:14px 18px;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;cursor:pointer;box-shadow:0 8px 30px rgba(0,0,0,.5);display:none;align-items:center;gap:8px;transition:transform .3s cubic-bezier(.4,0,.2,1),opacity .25s;opacity:0;transform:translateY(120px)}
+#gallery-del-fab.show{display:flex;opacity:1;transform:translateY(0)}
+#gallery-del-fab:hover{filter:brightness(1.08)}
+#gallery-del-fab .fab-count{background:rgba(255,255,255,.25);border-radius:12px;padding:2px 9px;font-size:12px}
 
 /* TRAJET OVERLAY */
 #trajet-overlay{position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;backdrop-filter:blur(3px)}
@@ -277,7 +292,8 @@ body.panel-open #view-label{right:calc(158px + var(--panel) + 14px)}
 .compat-color{display:flex;align-items:center;gap:6px;font-size:10px;padding:4px 8px;border-radius:6px;background:var(--bg);border:1px solid var(--border)}
 .compat-color .cc-dot{width:11px;height:11px;border-radius:50%;border:1px solid rgba(255,255,255,.3)}
 .gallery-empty{grid-column:1/-1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:80px 0;color:var(--muted);font-size:14px}
-.gallery-sort-btn{margin-left:auto;background:var(--surface);border:1px solid var(--border);border-radius:7px;color:var(--muted);font-family:'Inter',sans-serif;font-size:12px;font-weight:600;padding:7px 14px;cursor:pointer;transition:all .15s}
+.gallery-sort-btn{background:var(--surface);border:1px solid var(--border);border-radius:7px;color:var(--muted);font-family:'Inter',sans-serif;font-size:12px;font-weight:600;padding:7px 14px;cursor:pointer;transition:all .15s}
+#gallery-curve-filter{margin-left:auto}
 .gallery-sort-btn:hover{border-color:var(--accent);color:var(--accent)}
 .gallery-card-dist{color:var(--accent);font-weight:700}
 
@@ -466,7 +482,7 @@ nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-
 <body>
 <div id="splash">
   <img id="splash-logo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHMAAABOCAYAAAATpymVAAABCGlDQ1BJQ0MgUHJvZmlsZQAAeJxjYGA8wQAELAYMDLl5JUVB7k4KEZFRCuwPGBiBEAwSk4sLGHADoKpv1yBqL+viUYcLcKakFicD6Q9ArFIEtBxopAiQLZIOYWuA2EkQtg2IXV5SUAJkB4DYRSFBzkB2CpCtkY7ETkJiJxcUgdT3ANk2uTmlyQh3M/Ck5oUGA2kOIJZhKGYIYnBncAL5H6IkfxEDg8VXBgbmCQixpJkMDNtbGRgkbiHEVBYwMPC3MDBsO48QQ4RJQWJRIliIBYiZ0tIYGD4tZ2DgjWRgEL7AwMAVDQsIHG5TALvNnSEfCNMZchhSgSKeDHkMyQx6QJYRgwGDIYMZAKbWPz9HbOBQAAAH4UlEQVR42u2dT+gkRxXHP6+nZ7J/stmsiZo1xgg5KJKLHiRRMBJEggTxIHoRguhJLxEhIBIESU7mpkfNwXgQgoeAokFyEEVQNqI5BDQYFFY0RpM1f9b97W+6vx7m1U79+tczO1NdM/52qAdNz0x3V71+31dV772qeWX8H0mSAfGxClVACyh6TgNZCeVhZqLQ6gBKGvlhR4mv+Hwtkm1ZWJWZNZ3fzwJvBd4CTICbgOu8tSxqmX8F/gh8HGj8t5QWJWAE/Ar4cx9/hQ4DOZJU+ecbJH1W0uOSnpP0sqR9rUc/lXSf8tEXAp/XspzrLQBZmVkjaSLpQeBLwO3Lxq0l1HhLegPY9++tt8wUCuVd3oVGU28ByFbSLcAPgXv80rTTzdsagIz8XvPPNgBMojIO8Z5hGBKgbRlV9SaB9PMJ4EfAh4A9YLyNHmGoIWRmbc4ytwHoJoVamdlU0kMRkJNtGl1DeJf0HuDUEkNsVTfqBeCCpI27PfUGtbuRdAb4ogtkFPmGR9m6Nx/jvwvcnaHMT5nZU25cNddiywxGz53ArRGY6wKpzuemM85uRBf9vOd8ByMpJRBRbRrAbYAZBH1r9GL1mgIN1m0dlTnxz5MttdLgv6YaWNU2u5V6w9p9c2IrUtQapsB/3B15HTgWHPziwW+3ZZ7p6S5XAdKAvwFfAZ51IC9FRtR/gfsKfNsNGqSMb43z9ZiZPdlzfc+NrIJeF8yhgeWuud0JWN+U6MQDPC+p9u502rk+3aQ1m1lRLMwORT6suvLKIf86h+8TO8VmJkmtnydrdrOx6/KK+6nWeXl52ZuwZpsQLFA+RIMsmi6IZqac8q8lneTgrIPWbEV7wL6/e81sxqOWdMk/p3TLAMc8ejSWNI2sw7Gk1zbgG4+AGyQ13vKrTC7QMUnHgYmXjY/5rUfJJi43JfYkU2BPUmWSzjGbgmrWtBDD2PZ1M/uBC+Re4HHmAfC3Adez3uRzcGX+4YpSdeocAz8GngJ+Rp5A+2eAO4HPMwvgV877iQwW/UsOXpBBC9xvZs+7zJ4APuKgjBLk/30ze1hSXQN3ADcOYDp+9iSHZ0RSoj4GvGPJ9dsyO+ON13db5vFXwC091+Ie653AuwbUc8X9q5lN/7QJQp+6Zkw7QmmjiE9qNxUEoQUtaW8D4+XU+Q7vVWUEVJF8Q0Ak0OXESFPgcz92TeJIxzqCr5hPRXWjJjnGmr6uWT115o74VJkDEvE6pb71SqmRpkPyL1GUHaICZgGz0JGMAA2w/pqeMUCRIZFz/GkjI0FsZlop+JfTyIe2jLxrgWEX6m0YuASmTmRuFFlesZk96SmzHQioIqUIZZ/egBF0vZefM16tBQod13G6U68WBFGygxm065fAy8Bx4E/R9ReB7/l9+8BHgfcOALT1+n4D/M6VZQT8OrPQJ8BPvL5g6n+C2Xxs6uqIAMrTwF8i5Rfwr+i+J5mtAb4IfAC4KyGAcyWM9U9fO9qusL608fP7O2VUfbFSSd/x+/cT17OG577aU/YnOzyl0NTPD/SU//POPetS4OveBXKvwqK36Lcv+zOXV8AjyObb/uw4Vbuvc0ZGwDQKTlvUHU499JaDjnvstO6My9m6Q3+fcTQu51rNcMp5j9cAtZHMQr3TKHxoKb1B6lgmZ6aNo/4+C9Awm31oGP6Hnri+YHQ1OZdBRry3Ufk5eW9imfihbr1+z6D3Kq5J8TMLFTALFTALFTALmIUKmIUKmIUKmIUKmAXMQgXMQgXMQgXMQgXMAmahAmahAmahAmYBs1ABs1ABs1ABs1CXVMDcHTpRwNwdurGAuYPdbQGzGECFCpiFCpi74joUMK99Ol7A3J0WedrPtg0wte3u4IhT7oT+p+J8s5vcOC45Nakn9q27/8vfgdYU3ufVTC3z7f5P6ZA24EDC5vD3/ihRcvJYWydq4gUzi3Pm7GLLnA7ssUI590g6ZWav9940/3s/ki72PL8WmK8wy626DoOfk/SCD+6/NbNzYd+vHRrrLgzsbsOmPHcDz0n6A/Pcs4+Z2XkH8AHgg8xSx9w1xJY5kOJyRTAFfC367VvAOeY7zu5Ky/x3prIEvNuPQE8A5/3zp4H7cximdaLmNa4EY9e0XbRCX8yoHG2k6KJ/A4GQ5Xqr6dYsGsxHO+jeBDB/zzxDmAZ2uSEvbF++2TEH8/5u3c+Mkw7tmkvTuoX5rB/Vhg29bPIrQYMFyurW+sOdse9IUwHzMIpitl3k2MyeBr7JPM1byNx1JIGtOZgQft09u672TGrZ3eeH8LB2+Q7ovqSRmX1D0mXgkcj4aztDzSq57hYFZ7LJPxgy8f7Nqx519NwyXyu+1xLrsCXj9iix7KuV726gajN7FPgY8AuvLxgtsRF4tbqqBUZOqowOyb9mtgPem6yfEzZkrby05J5L7gzvJ1rOU2bZJfcWXLtIam7WeStb6Gv75uc4oM8Az0j6sAP7PvcdzzDfiOdkFCzoa0l9W2Fc9GPdTWqCbK5EjUzS7f5jSndVuXN9Iby8q3PQnpuZLTgakoZ7xCzZ7qtBGL631kngbIbxqwJeMrPXlm30vSzC5dsxm79rtQJP581sz+V01pWgTZTNm8Df89nWPcmDc88OLEpQnLH8lWY0JI0kZZlgyPU+QTaBqcE+Y59GR2UPaT29z0eJinP4a1rjPZsePmwFFyYG7kqe3oFKEeNm/wP2ZR5xTIanAgAAAABJRU5ErkJggg==" alt="6flt">
-  <div id="splash-credit">Créé par 6flt photographie et Claude<br><span style="opacity:.6">v1.2.1</span></div>
+  <div id="splash-credit">Créé par 6flt photographie et Claude<br><span style="opacity:.6">v1.3</span></div>
 </div>
 
 <nav>
@@ -571,6 +587,37 @@ nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-
       <div class="star-row" id="filter-stars"></div>
     </div>
     <div class="settings-divider"></div>
+    <div>
+      <div class="settings-section-title">Etat de la route</div>
+      <select class="field-input" id="filter-road-state">
+        <option value="">Tous</option>
+        <option>Excellente</option>
+        <option>Bonne</option>
+        <option>Degradee</option>
+        <option>Mauvaise</option>
+      </select>
+    </div>
+    <div class="settings-divider"></div>
+    <div>
+      <div class="settings-section-title">Niveau de circulation</div>
+      <select class="field-input" id="filter-traffic">
+        <option value="">Tous</option>
+        <option>Faible</option>
+        <option>Moderee</option>
+        <option>Dense</option>
+      </select>
+    </div>
+    <div class="settings-divider"></div>
+    <div>
+      <div class="settings-section-title">Courbes de la route</div>
+      <div class="tag-row" id="filter-curves">
+        <div class="tag active" data-curve="all" onclick="setFilterCurve(this)">Toutes</div>
+        <div class="tag" data-curve="Droite" onclick="setFilterCurve(this)">Droite</div>
+        <div class="tag" data-curve="Sinueuse" onclick="setFilterCurve(this)">Sinueuse</div>
+        <div class="tag" data-curve="Tres sinueuse" onclick="setFilterCurve(this)">Tres sinueuse</div>
+      </div>
+    </div>
+    <div class="settings-divider"></div>
     <div class="settings-actions">
       <button onclick="resetFilters()">Reinitialiser</button>
     </div>
@@ -580,8 +627,14 @@ nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-
   <div id="settings-panel">
     <div class="settings-title">Visibilite</div>
     <div class="vis-toggles">
-      <label class="vis-toggle"><input type="checkbox" id="vis-spots" checked onchange="toggleVisibility()"> Spots</label>
-      <label class="vis-toggle"><input type="checkbox" id="vis-routes" checked onchange="toggleVisibility()"> Routes</label>
+      <div class="switch-row">
+        <span class="switch-label">Spots</span>
+        <label class="switch"><input type="checkbox" id="vis-spots" checked onchange="toggleVisibility()"><span class="track"><span class="knob"></span></span></label>
+      </div>
+      <div class="switch-row">
+        <span class="switch-label">Routes</span>
+        <label class="switch"><input type="checkbox" id="vis-routes" checked onchange="toggleVisibility()"><span class="track"><span class="knob"></span></span></label>
+      </div>
     </div>
     <div class="settings-title" style="margin-top:18px">Apparence</div>
     <div>
@@ -689,6 +742,31 @@ nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 13s5-4.5 5-8A5 5 0 002 5c0 3.5 5 8 5 8z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><circle cx="7" cy="5" r="1.6" stroke="currentColor" stroke-width="1.5"/></svg>
           Y aller (Google Maps)
         </button>
+      </div>
+      <div id="route-details" style="display:none">
+        <div>
+          <div class="field-label">Etat de la route</div>
+          <select class="field-input" id="panel-road-state">
+            <option value="">Selectionner...</option>
+            <option>Excellente</option>
+            <option>Bonne</option>
+            <option>Degradee</option>
+            <option>Mauvaise</option>
+          </select>
+        </div>
+        <div style="margin-top:14px">
+          <div class="field-label">Niveau de circulation</div>
+          <select class="field-input" id="panel-traffic">
+            <option value="">Selectionner...</option>
+            <option>Faible</option>
+            <option>Moderee</option>
+            <option>Dense</option>
+          </select>
+        </div>
+        <div style="margin-top:14px">
+          <div class="field-label">Courbes (auto)</div>
+          <div class="info-box" id="route-curve-info">Trace la route pour analyser ses courbes.</div>
+        </div>
       </div>
       <div>
         <div class="field-label">Type de spot</div>
@@ -864,6 +942,12 @@ nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-
   <div class="gallery-header">
     <h2>Mes shootings</h2>
     <span class="gallery-count" id="gallery-count">0 spots</span>
+    <select class="gallery-sort-btn" id="gallery-curve-filter" onchange="setGalleryCurveFilter(this.value)" title="Filtrer par courbes (routes)">
+      <option value="all">Courbes : toutes</option>
+      <option value="Droite">Droite</option>
+      <option value="Sinueuse">Sinueuse</option>
+      <option value="Tres sinueuse">Tres sinueuse</option>
+    </select>
     <button class="gallery-sort-btn" id="gallery-sort-btn" onclick="toggleGallerySort()">Trier par date</button>
   </div>
   <div class="gallery-grid" id="gallery-grid"></div>
@@ -964,11 +1048,17 @@ nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-
 
 <div id="toast"></div>
 
-<button id="trajet-fab" onclick="openTrajet()">
-  <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 13c0-3 10-3 10-7a3 3 0 00-6 0c0 2 3 3 3 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="3" cy="13" r="1.4" fill="currentColor"/><circle cx="10" cy="3" r="1.4" fill="currentColor"/></svg>
-  Trajet ideal
-  <span class="fab-count" id="fab-count">0</span>
-</button>
+<div id="gallery-fab-group">
+  <button id="gallery-del-fab" onclick="deleteSelectedSpots()" title="Supprimer la selection" aria-label="Supprimer la selection">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2.5 4h11M6 4V2.5h4V4M5 4l.5 9h5l.5-9M6.5 6.5v4M9.5 6.5v4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span class="fab-count" id="del-fab-count">0</span>
+  </button>
+  <button id="trajet-fab" onclick="openTrajet()">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 13c0-3 10-3 10-7a3 3 0 00-6 0c0 2 3 3 3 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="3" cy="13" r="1.4" fill="currentColor"/><circle cx="10" cy="3" r="1.4" fill="currentColor"/></svg>
+    Trajet ideal
+    <span class="fab-count" id="fab-count">0</span>
+  </button>
+</div>
 
 <div id="trajet-overlay" onclick="if(event.target===this)closeTrajet()">
   <div class="trajet-modal">
@@ -1261,7 +1351,7 @@ var currentImages = [], currentMainIdx = 0;
 var map, mbMarkers = {};
 var is3D = false, isSat = false;
 var owmKey = localStorage.getItem('6flt_owm_key') || '';
-var filters = {status:[], type:'', season:[], minStars:0, kind:'all'};
+var filters = {status:[], type:'', season:[], minStars:0, kind:'all', roadState:'', traffic:'', curve:'all'};
 var currentChecklist = [], currentSessions = [], currentStatus = '';
 var SEASONS = ['Printemps','Ete','Automne','Hiver'];
 var STATUSES = [{k:'explore',l:'A explorer'},{k:'shot',l:'Shoote'},{k:'abandon',l:'Abandonne'},{k:'closed',l:'Saison fermee'}];
@@ -1498,6 +1588,14 @@ function spotPassesFilters(s){
     if(filters.kind==='route' && s.kind!=='route') return false;
     if(filters.kind==='spot' && s.kind==='route') return false;
   }
+  // filtres specifiques aux routes : si actifs, n'affichent que les routes correspondantes
+  if(filters.roadState){ if(s.kind!=='route' || (s.roadState||'')!==filters.roadState) return false; }
+  if(filters.traffic){ if(s.kind!=='route' || (s.traffic||'')!==filters.traffic) return false; }
+  if(filters.curve && filters.curve!=='all'){
+    if(s.kind!=='route') return false;
+    var lvl = (s.curves && s.curves.level) ? s.curves.level : (s.routeLine?analyzeRouteCurves(s.routeLine).level:'');
+    if(lvl!==filters.curve) return false;
+  }
   return true;
 }
 
@@ -1670,6 +1768,46 @@ function startAddMode(kind){
 
 // ===== TRACE DE ROUTE =====
 var routeMode = false;
+
+// --- Analyse geometrique des courbes d'un trace ---
+// distance haversine en metres entre deux [lng,lat]
+function haversine(a, b){
+  var R=6371000, toRad=Math.PI/180;
+  var dLat=(b[1]-a[1])*toRad, dLng=(b[0]-a[0])*toRad;
+  var la1=a[1]*toRad, la2=b[1]*toRad;
+  var h=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(la1)*Math.cos(la2)*Math.sin(dLng/2)*Math.sin(dLng/2);
+  return 2*R*Math.asin(Math.min(1,Math.sqrt(h)));
+}
+// cap (bearing) en degres entre deux points
+function bearing(a, b){
+  var toRad=Math.PI/180, toDeg=180/Math.PI;
+  var la1=a[1]*toRad, la2=b[1]*toRad, dLng=(b[0]-a[0])*toRad;
+  var y=Math.sin(dLng)*Math.cos(la2);
+  var x=Math.cos(la1)*Math.sin(la2)-Math.sin(la1)*Math.cos(la2)*Math.cos(dLng);
+  return (Math.atan2(y,x)*toDeg+360)%360;
+}
+// analyse un trace [[lng,lat],...] -> {sinuosity, sharpTurns, level}
+function analyzeRouteCurves(line){
+  if(!line || line.length<3) return {sinuosity:1, sharpTurns:0, level:'Droite'};
+  // longueur reelle
+  var real=0;
+  for(var i=1;i<line.length;i++){ real+=haversine(line[i-1], line[i]); }
+  // distance a vol d'oiseau depart -> arrivee
+  var straight=haversine(line[0], line[line.length-1]);
+  var sinuosity= straight>0 ? real/straight : 1;
+  // compte des virages marques (changement de cap > 30 deg entre segments consecutifs)
+  var sharp=0;
+  for(var j=2;j<line.length;j++){
+    var b1=bearing(line[j-2], line[j-1]);
+    var b2=bearing(line[j-1], line[j]);
+    var diff=Math.abs(b2-b1); if(diff>180) diff=360-diff;
+    if(diff>30) sharp++;
+  }
+  var level='Droite';
+  if(sinuosity>=1.30 || sharp>=8) level='Tres sinueuse';
+  else if(sinuosity>=1.10 || sharp>=3) level='Sinueuse';
+  return {sinuosity:Math.round(sinuosity*100)/100, sharpTurns:sharp, level:level};
+}
 var routeDraftPts = [];      // points cliques [lng,lat]
 var routeDraftMarkers = [];  // marqueurs temporaires
 var ROUTE_MAX_PTS = 10;
@@ -1734,6 +1872,19 @@ function finishRoute(){
 // PANEL
 var currentRouteLine = null;  // trace [[lng,lat],...] quand on edite une route
 var currentRoutePts = null;   // points de passage
+var currentRouteCurves = null; // resultat analyzeRouteCurves de la route en cours
+// affiche/cache le bloc detail route et remplit etat/circulation/courbes
+function showRouteDetails(isRoute, line, spot){
+  var box=document.getElementById('route-details');
+  if(!isRoute){ box.style.display='none'; currentRouteCurves=null; return; }
+  box.style.display='';
+  document.getElementById('panel-road-state').value = spot && spot.roadState ? spot.roadState : '';
+  document.getElementById('panel-traffic').value = spot && spot.traffic ? spot.traffic : '';
+  var curves = analyzeRouteCurves(line);
+  currentRouteCurves = curves;
+  document.getElementById('route-curve-info').innerHTML =
+    '<strong>'+curves.level+'</strong> &middot; sinuosite '+curves.sinuosity+' &middot; '+curves.sharpTurns+' virage'+(curves.sharpTurns>1?'s':'')+' marque'+(curves.sharpTurns>1?'s':'');
+}
 function openNewRoutePanel(line, pts){
   currentSpotId=null; currentImages=[]; currentMainIdx=0; currentRating=0;
   currentRouteLine=line; currentRoutePts=pts;
@@ -1744,6 +1895,7 @@ function openNewRoutePanel(line, pts){
   coords.textContent='Route ('+line.length+' points)';
   coords.dataset.lat=mid[1]; coords.dataset.lng=mid[0];
   document.getElementById('btn-delete').style.display='none';
+  showRouteDetails(true, line, null);
   openPanel();
   loadSunTimes(mid[1], mid[0]);
   loadWeather(mid[1], mid[0]);
@@ -1773,10 +1925,12 @@ function openExistingSpotPanel(id){
     var mid=spot.routeLine[Math.floor(spot.routeLine.length/2)];
     document.getElementById('panel-coords').dataset.lat=mid[1];
     document.getElementById('panel-coords').dataset.lng=mid[0];
+    showRouteDetails(true, spot.routeLine, spot);
   } else {
     document.getElementById('panel-coords').textContent=spot.lat.toFixed(6)+', '+spot.lng.toFixed(6);
     document.getElementById('panel-coords').dataset.lat=spot.lat;
     document.getElementById('panel-coords').dataset.lng=spot.lng;
+    showRouteDetails(false);
   }
   document.getElementById('panel-type').value=spot.type||'';
   setTags('panel-tonalite-tags', asArray(spot.tonalite));
@@ -1804,6 +1958,9 @@ function openExistingSpotPanel(id){
 
 function resetPanel(){
   document.getElementById('panel-name').value='';
+  var rd=document.getElementById('route-details'); if(rd) rd.style.display='none';
+  var rs=document.getElementById('panel-road-state'); if(rs) rs.value='';
+  var tr=document.getElementById('panel-traffic'); if(tr) tr.value='';
   document.getElementById('panel-type').value='';
   setTags('panel-tonalite-tags', []);
   setTags('panel-environnement-tags', []);
@@ -1911,12 +2068,20 @@ function saveSpot(){
     checklist:currentChecklist.slice(),
     sessions:currentSessions.slice(),
     rating:currentRating, images:currentImages.slice(),
+    roadState:(document.getElementById('panel-road-state')||{}).value||'',
+    traffic:(document.getElementById('panel-traffic')||{}).value||'',
+    curves:null,
     createdAt:currentSpotId?(spots.find(function(s){return s.id===currentSpotId;})||{}).createdAt||Date.now():Date.now()
   };
+  // courbes : depuis le trace courant si on vient de tracer, sinon recalcul depuis l'existant
+  if(currentRouteLine){ spot.curves=analyzeRouteCurves(currentRouteLine); }
   // conserve le trace existant si on edite une route sans le retracer
   if(currentSpotId && !currentRouteLine){
     var existing=spots.find(function(s){return s.id===currentSpotId;});
-    if(existing && existing.kind==='route'){ spot.kind='route'; spot.routeLine=existing.routeLine; spot.routePts=existing.routePts; }
+    if(existing && existing.kind==='route'){
+      spot.kind='route'; spot.routeLine=existing.routeLine; spot.routePts=existing.routePts;
+      spot.curves=existing.curves||analyzeRouteCurves(existing.routeLine);
+    }
   }
   if(currentSpotId)spots=spots.map(function(s){return s.id===currentSpotId?spot:s;}); else spots.push(spot);
   persist(); renderMarkers(); closePanel(); renderGallery();
@@ -2466,6 +2631,20 @@ function updateTrajetFab(){
   var fab=document.getElementById('trajet-fab'), count=document.getElementById('fab-count');
   count.textContent=selectedSpots.length;
   fab.classList.toggle('show', selectedSpots.length>=2);
+  var delFab=document.getElementById('gallery-del-fab'), delCount=document.getElementById('del-fab-count');
+  if(delFab){ delCount.textContent=selectedSpots.length; delFab.classList.toggle('show', selectedSpots.length>=1); }
+}
+function deleteSelectedSpots(){
+  if(!selectedSpots.length) return;
+  var ids=selectedSpots.slice();
+  var n=ids.length;
+  if(!confirm('Supprimer '+n+' element'+(n>1?'s':'')+' ? Cette action est definitive.')) return;
+  spots=spots.filter(function(s){ return ids.indexOf(s.id)===-1; });
+  selectedSpots=[];
+  persist();
+  ids.forEach(function(id){ syncDeleteFromCloud(id); });
+  renderMarkers(); renderGallery(); updateTrajetFab();
+  showToast(n+' element'+(n>1?'s supprimes':' supprime'));
 }
 function openTrajet(){
   if(selectedSpots.length<2){ showToast('Selectionne au moins 2 spots'); return; }
@@ -2773,6 +2952,8 @@ function buildFilterPanel(){
     stb.appendChild(s);
   })(i);}
   document.getElementById('filter-type').onchange=function(){ filters.type=this.value; applyFilters(); };
+  var frs=document.getElementById('filter-road-state'); if(frs) frs.onchange=function(){ filters.roadState=this.value; applyFilters(); };
+  var ftr=document.getElementById('filter-traffic'); if(ftr) ftr.onchange=function(){ filters.traffic=this.value; applyFilters(); };
 }
 function setFilterKind(el){
   document.querySelectorAll('#filter-kind .tag').forEach(function(t){ t.classList.remove('active'); });
@@ -2780,19 +2961,35 @@ function setFilterKind(el){
   filters.kind = el.dataset.kind;
   applyFilters();
 }
+function setFilterCurve(el){
+  document.querySelectorAll('#filter-curves .tag').forEach(function(t){ t.classList.remove('active'); });
+  el.classList.add('active');
+  filters.curve = el.dataset.curve;
+  var gcf=document.getElementById('gallery-curve-filter'); if(gcf) gcf.value=filters.curve;
+  applyFilters();
+}
+function setGalleryCurveFilter(val){
+  filters.curve = val;
+  document.querySelectorAll('#filter-curves .tag').forEach(function(t){ t.classList.toggle('active', t.dataset.curve===val); });
+  applyFilters();
+}
 function paintFilterStars(){
   document.querySelectorAll('#filter-stars .star').forEach(function(s,i){ s.classList.toggle('active', (i+1)<=filters.minStars); });
 }
 function toggleArr(arr, v){ var i=arr.indexOf(v); if(i>-1)arr.splice(i,1); else arr.push(v); }
-function filtersActive(){ return filters.status.length||filters.type||filters.season.length||filters.minStars; }
+function filtersActive(){ return filters.status.length||filters.type||filters.season.length||filters.minStars||(filters.kind&&filters.kind!=='all')||filters.roadState||filters.traffic||(filters.curve&&filters.curve!=='all'); }
 function applyFilters(){
   document.getElementById('filter-dot').classList.toggle('on', !!filtersActive());
-  renderMarkers();
+  renderMarkers(); renderGallery();
 }
 function resetFilters(){
-  filters={status:[], type:'', season:[], minStars:0};
+  filters={status:[], type:'', season:[], minStars:0, kind:'all', roadState:'', traffic:'', curve:'all'};
   document.querySelectorAll('#filter-status .tag, #filter-season .tag').forEach(function(t){t.classList.remove('active');});
+  document.querySelectorAll('#filter-kind .tag').forEach(function(t){ t.classList.toggle('active', t.dataset.kind==='all'); });
+  document.querySelectorAll('#filter-curves .tag').forEach(function(t){ t.classList.toggle('active', t.dataset.curve==='all'); });
   document.getElementById('filter-type').value='';
+  var frs=document.getElementById('filter-road-state'); if(frs) frs.value='';
+  var ftr=document.getElementById('filter-traffic'); if(ftr) ftr.value='';
   paintFilterStars();
   applyFilters();
 }
