@@ -9,7 +9,7 @@
 <meta name="theme-color" content="#0e0f12">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-180.png">
-<title>6flt — Spot Atlas</title>
+<title>6flt — Spots</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet">
@@ -86,6 +86,15 @@ body.panel-open #view-label{right:calc(158px + var(--panel) + 14px)}
 /* SETTINGS PANEL */
 #settings-panel{position:absolute;bottom:82px;left:14px;z-index:700;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;width:300px;box-shadow:0 8px 40px rgba(0,0,0,.6);display:none;flex-direction:column;gap:16px;max-height:calc(100vh - 180px);overflow-y:auto}
 #settings-panel.open{display:flex}
+/* PROFIL */
+.profile-head{display:flex;flex-direction:column;align-items:center;gap:10px;padding-bottom:4px}
+.profile-photo-wrap{position:relative;width:84px;height:84px;cursor:pointer}
+#profile-photo-img{width:84px;height:84px;border-radius:50%;object-fit:cover;display:none;border:2px solid var(--border)}
+.profile-photo-empty{width:84px;height:84px;border-radius:50%;background:var(--surface2);border:2px solid var(--border);display:flex;align-items:center;justify-content:center}
+.profile-photo-edit{position:absolute;bottom:0;right:0;width:26px;height:26px;border-radius:50%;background:var(--accent);border:2px solid var(--surface);display:flex;align-items:center;justify-content:center}
+.profile-email{font-family:'Inter',sans-serif;font-size:13px;font-weight:600;color:var(--text);word-break:break-all;text-align:center}
+.profile-settings-block{display:flex;flex-direction:column;gap:16px;border:1px solid var(--border);border-radius:12px;padding:16px;margin-top:4px}
+.profile-settings-block .settings-title:first-child{margin-top:0 !important}
 #settings-panel::-webkit-scrollbar{width:3px}
 #settings-panel::-webkit-scrollbar-thumb{background:var(--border)}
 .settings-title{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);padding-bottom:12px;border-bottom:1px solid var(--border)}
@@ -498,12 +507,37 @@ nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-
 #splash-credit{position:absolute;bottom:48px;bottom:calc(48px + env(safe-area-inset-bottom));left:0;right:0;text-align:center;font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.08em;color:var(--muted);opacity:0;animation:splashCreditIn .4s ease forwards .3s}
 @keyframes splashLogoIn{to{opacity:1;transform:scale(1)}}
 @keyframes splashCreditIn{to{opacity:1}}
+/* ECRAN DE CONNEXION */
+#login-screen{position:fixed;inset:0;z-index:9000;background:var(--bg);display:none;align-items:center;justify-content:center;padding:24px}
+#login-screen.show{display:flex}
+.login-box{width:100%;max-width:340px;display:flex;flex-direction:column;align-items:center;gap:14px}
+.login-logo{height:42px;margin-bottom:6px}
+.login-title{font-family:'Space Mono',monospace;font-size:22px;font-weight:700;letter-spacing:.04em;color:var(--text)}
+.login-sub{font-family:'Inter',sans-serif;font-size:13px;color:var(--muted);margin-top:-8px}
+.login-input{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'Inter',sans-serif;font-size:15px;padding:13px 14px}
+.login-input:focus{outline:none;border-color:var(--accent)}
+.login-submit{width:100%;background:var(--accent);color:#fff;border:none;border-radius:10px;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;padding:14px;cursor:pointer;transition:opacity .15s}
+.login-submit:hover{opacity:.88}
+.login-submit:disabled{opacity:.5;cursor:default}
+.login-error{font-family:'Inter',sans-serif;font-size:13px;color:#e84040;min-height:18px;text-align:center}
 </style>
 </head>
 <body>
 <div id="splash">
   <img id="splash-logo" src="data:image/png;base64,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" alt="6flt">
-  <div id="splash-credit">Créé par 6flt photographie et Claude<br><span style="opacity:.6">v1.4</span></div>
+  <div id="splash-credit">Créé par 6flt photographie et Claude<br><span style="opacity:.6">v1.6</span></div>
+</div>
+
+<div id="login-screen">
+  <div class="login-box">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHMAAABOCAYAAAATpymVAAABCGlDQ1BJQ0MgUHJvZmlsZQAAeJxjYGA8wQAELAYMDLl5JUVB7k4KEZFRCuwPGBiBEAwSk4sLGHADoKpv1yBqL+viUYcLcKakFicD6Q9ArFIEtBxopAiQLZIOYWuA2EkQtg2IXV5SUAJkB4DYRSFBzkB2CpCtkY7ETkJiJxcUgdT3ANk2uTmlyQh3M/Ck5oUGA2kOIJZhKGYIYnBncAL5H6IkfxEDg8VXBgbmCQixpJkMDNtbGRgkbiHEVBYwMPC3MDBsO48QQ4RJQWJRIliIBYiZ0tIYGD4tZ2DgjWRgEL7AwMAVDQsIHG5TALvNnSEfCNMZchhSgSKeDHkMyQx6QJYRgwGDIYMZAKbWPz9HbOBQAAAH4UlEQVR42u2dT+gkRxXHP6+nZ7J/stmsiZo1xgg5KJKLHiRRMBJEggTxIHoRguhJLxEhIBIESU7mpkfNwXgQgoeAokFyEEVQNqI5BDQYFFY0RpM1f9b97W+6vx7m1U79+tczO1NdM/52qAdNz0x3V71+31dV772qeWX8H0mSAfGxClVACyh6TgNZCeVhZqLQ6gBKGvlhR4mv+Hwtkm1ZWJWZNZ3fzwJvBd4CTICbgOu8tSxqmX8F/gh8HGj8t5QWJWAE/Ar4cx9/hQ4DOZJU+ecbJH1W0uOSnpP0sqR9rUc/lXSf8tEXAp/XspzrLQBZmVkjaSLpQeBLwO3Lxq0l1HhLegPY9++tt8wUCuVd3oVGU28ByFbSLcAPgXv80rTTzdsagIz8XvPPNgBMojIO8Z5hGBKgbRlV9SaB9PMJ4EfAh4A9YLyNHmGoIWRmbc4ytwHoJoVamdlU0kMRkJNtGl1DeJf0HuDUEkNsVTfqBeCCpI27PfUGtbuRdAb4ogtkFPmGR9m6Nx/jvwvcnaHMT5nZU25cNddiywxGz53ArRGY6wKpzuemM85uRBf9vOd8ByMpJRBRbRrAbYAZBH1r9GL1mgIN1m0dlTnxz5MttdLgv6YaWNU2u5V6w9p9c2IrUtQapsB/3B15HTgWHPziwW+3ZZ7p6S5XAdKAvwFfAZ51IC9FRtR/gfsKfNsNGqSMb43z9ZiZPdlzfc+NrIJeF8yhgeWuud0JWN+U6MQDPC+p9u502rk+3aQ1m1lRLMwORT6suvLKIf86h+8TO8VmJkmtnydrdrOx6/KK+6nWeXl52ZuwZpsQLFA+RIMsmi6IZqac8q8lneTgrIPWbEV7wL6/e81sxqOWdMk/p3TLAMc8ejSWNI2sw7Gk1zbgG4+AGyQ13vKrTC7QMUnHgYmXjY/5rUfJJi43JfYkU2BPUmWSzjGbgmrWtBDD2PZ1M/uBC+Re4HHmAfC3Adez3uRzcGX+4YpSdeocAz8GngJ+Rp5A+2eAO4HPMwvgV877iQwW/UsOXpBBC9xvZs+7zJ4APuKgjBLk/30ze1hSXQN3ADcOYDp+9iSHZ0RSoj4GvGPJ9dsyO+ON13db5vFXwC091+Ie653AuwbUc8X9q5lN/7QJQp+6Zkw7QmmjiE9qNxUEoQUtaW8D4+XU+Q7vVWUEVJF8Q0Ak0OXESFPgcz92TeJIxzqCr5hPRXWjJjnGmr6uWT115o74VJkDEvE6pb71SqmRpkPyL1GUHaICZgGz0JGMAA2w/pqeMUCRIZFz/GkjI0FsZlop+JfTyIe2jLxrgWEX6m0YuASmTmRuFFlesZk96SmzHQioIqUIZZ/egBF0vZefM16tBQod13G6U68WBFGygxm065fAy8Bx4E/R9ReB7/l9+8BHgfcOALT1+n4D/M6VZQT8OrPQJ8BPvL5g6n+C2Xxs6uqIAMrTwF8i5Rfwr+i+J5mtAb4IfAC4KyGAcyWM9U9fO9qusL608fP7O2VUfbFSSd/x+/cT17OG577aU/YnOzyl0NTPD/SU//POPetS4OveBXKvwqK36Lcv+zOXV8AjyObb/uw4Vbuvc0ZGwDQKTlvUHU499JaDjnvstO6My9m6Q3+fcTQu51rNcMp5j9cAtZHMQr3TKHxoKb1B6lgmZ6aNo/4+C9Awm31oGP6Hnri+YHQ1OZdBRry3Ufk5eW9imfihbr1+z6D3Kq5J8TMLFTALFTALFTALmIUKmIUKmIUKmIUKmAXMQgXMQgXMQgXMQgXMAmahAmahAmahAmYBs1ABs1ABs1ABs1CXVMDcHTpRwNwdurGAuYPdbQGzGECFCpiFCpi74joUMK99Ol7A3J0WedrPtg0wte3u4IhT7oT+p+J8s5vcOC45Nakn9q27/8vfgdYU3ufVTC3z7f5P6ZA24EDC5vD3/ihRcvJYWydq4gUzi3Pm7GLLnA7ssUI590g6ZWav9940/3s/ki72PL8WmK8wy626DoOfk/SCD+6/NbNzYd+vHRrrLgzsbsOmPHcDz0n6A/Pcs4+Z2XkH8AHgg8xSx9w1xJY5kOJyRTAFfC367VvAOeY7zu5Ky/x3prIEvNuPQE8A5/3zp4H7cximdaLmNa4EY9e0XbRCX8yoHG2k6KJ/A4GQ5Xqr6dYsGsxHO+jeBDB/zzxDmAZ2uSEvbF++2TEH8/5u3c+Mkw7tmkvTuoX5rB/Vhg29bPIrQYMFyurW+sOdse9IUwHzMIpitl3k2MyeBr7JPM1byNx1JIGtOZgQft09u672TGrZ3eeH8LB2+Q7ovqSRmX1D0mXgkcj4aztDzSq57hYFZ7LJPxgy8f7Nqx519NwyXyu+1xLrsCXj9iix7KuV726gajN7FPgY8AuvLxgtsRF4tbqqBUZOqowOyb9mtgPem6yfEzZkrby05J5L7gzvJ1rOU2bZJfcWXLtIam7WeStb6Gv75uc4oM8Az0j6sAP7PvcdzzDfiOdkFCzoa0l9W2Fc9GPdTWqCbK5EjUzS7f5jSndVuXN9Iby8q3PQnpuZLTgakoZ7xCzZ7qtBGL631kngbIbxqwJeMrPXlm30vSzC5dsxm79rtQJP581sz+V01pWgTZTNm8Df89nWPcmDc88OLEpQnLH8lWY0JI0kZZlgyPU+QTaBqcE+Y59GR2UPaT29z0eJinP4a1rjPZsePmwFFyYG7kqe3oFKEeNm/wP2ZR5xTIanAgAAAABJRU5ErkJggg==" alt="6flt" class="login-logo">
+    <h1 class="login-title">6flt Spots</h1>
+    <p class="login-sub">Connexion</p>
+    <input type="email" id="login-email" class="login-input" placeholder="Email" autocomplete="email">
+    <input type="password" id="login-pass" class="login-input" placeholder="Mot de passe" autocomplete="current-password">
+    <button id="login-btn" class="login-submit" onclick="doLogin()">Se connecter</button>
+    <div id="login-error" class="login-error"></div>
+  </div>
 </div>
 
 <nav>
@@ -558,8 +592,8 @@ nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-
   </button>
 
   <!-- Settings btn -->
-  <button id="settings-btn" class="map-btn" onclick="toggleSettings()" title="Parametres">
-    <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="2.5" stroke="currentColor" stroke-width="1.5"/><path d="M9 1v2M9 15v2M1 9h2M15 9h2M3.22 3.22l1.41 1.41M13.37 13.37l1.41 1.41M3.22 14.78l1.41-1.41M13.37 4.63l1.41-1.41" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+  <button id="settings-btn" class="map-btn" onclick="toggleProfile()" title="Profil">
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="6" r="3.2" stroke="currentColor" stroke-width="1.5"/><path d="M2.5 16c0-3.3 2.9-5.5 6.5-5.5s6.5 2.2 6.5 5.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
     <span id="backup-badge"></span>
   </button>
 
@@ -653,6 +687,18 @@ nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-
 
   <!-- Settings panel -->
   <div id="settings-panel">
+    <div class="profile-head">
+      <div class="profile-photo-wrap" onclick="document.getElementById('profile-photo-input').click()" title="Changer la photo">
+        <img id="profile-photo-img" alt="">
+        <div id="profile-photo-empty" class="profile-photo-empty">
+          <svg width="22" height="22" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="6" r="3.2" stroke="#7a7d85" stroke-width="1.5"/><path d="M2.5 16c0-3.3 2.9-5.5 6.5-5.5s6.5 2.2 6.5 5.5" stroke="#7a7d85" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <div class="profile-photo-edit"><svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M9.5 1.5l3 3L5 12l-3.5.5L2 9z" stroke="#fff" stroke-width="1.3" stroke-linejoin="round"/></svg></div>
+      </div>
+      <input type="file" id="profile-photo-input" accept="image/*" style="display:none" onchange="onProfilePhotoSelected(event)">
+      <div class="profile-email" id="profile-email">&nbsp;</div>
+    </div>
+    <div class="profile-settings-block">
     <div class="settings-title">Visibilite</div>
     <div class="vis-toggles">
       <div class="switch-row">
@@ -743,6 +789,12 @@ nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-
       <div class="settings-section-title">Cle API meteo (OpenWeatherMap)</div>
       <input type="text" class="field-input" id="owm-key" placeholder="Colle ta cle OpenWeatherMap" oninput="saveOwmKey(this.value)" style="font-family:'Space Mono',monospace;font-size:11px">
       <div style="font-size:10px;color:var(--muted);margin-top:6px;line-height:1.4">Sans cle, la meteo reste inactive. Cle gratuite sur openweathermap.org</div>
+    </div>
+    <div class="settings-divider"></div>
+    </div>
+    <div>
+      <div class="settings-section-title">Compte</div>
+      <button onclick="doLogout()" style="width:100%;background:transparent;border:1px solid #e84040;border-radius:8px;color:#e84040;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;padding:10px;cursor:pointer">Deconnexion</button>
     </div>
   </div>
 
@@ -1696,7 +1748,79 @@ function applyTheme(){
 
 function applyColor(el){theme[el.dataset.var]=el.dataset.color;localStorage.setItem('6flt_theme',JSON.stringify(theme));applyTheme();}
 function applyColorDirect(v,c){theme[v]=c;localStorage.setItem('6flt_theme',JSON.stringify(theme));applyTheme();}
-function toggleSettings(){var sp=document.getElementById('settings-panel');var open=sp.classList.toggle('open');if(open)document.getElementById('filter-panel').classList.remove('open');}
+function toggleProfile(){
+  var sp=document.getElementById('settings-panel');
+  var open=sp.classList.toggle('open');
+  if(open){
+    document.getElementById('filter-panel').classList.remove('open');
+    refreshProfileHeader();
+  }
+}
+// compat : d'anciens appels peuvent encore exister
+function toggleSettings(){ toggleProfile(); }
+function refreshProfileHeader(){
+  // email depuis la session Supabase
+  var emailEl=document.getElementById('profile-email');
+  if(sb && sb.auth && sb.auth.getUser){
+    sb.auth.getUser().then(function(res){
+      var em = res && res.data && res.data.user ? res.data.user.email : '';
+      if(emailEl) emailEl.textContent = em || 'Non connecte';
+    }).catch(function(){ if(emailEl) emailEl.textContent=''; });
+  }
+  // photo depuis le cache local (puis cloud via loadProfilePhoto au demarrage)
+  applyProfilePhoto(localStorage.getItem('6flt_profile_photo') || '');
+}
+function applyProfilePhoto(dataUrl){
+  var img=document.getElementById('profile-photo-img');
+  var empty=document.getElementById('profile-photo-empty');
+  if(dataUrl){ img.src=dataUrl; img.style.display='block'; if(empty)empty.style.display='none'; }
+  else { img.style.display='none'; img.src=''; if(empty)empty.style.display='flex'; }
+}
+function onProfilePhotoSelected(ev){
+  var file=ev.target.files[0]; if(!file) return;
+  var reader=new FileReader();
+  reader.onload=function(e){
+    var im=new Image();
+    im.onload=function(){
+      var max=400, w=im.width, h=im.height;
+      if(w>h && w>max){ h=h*max/w; w=max; } else if(h>max){ w=w*max/h; h=max; }
+      var canvas=document.createElement('canvas'); canvas.width=w; canvas.height=h;
+      canvas.getContext('2d').drawImage(im,0,0,w,h);
+      var dataUrl=canvas.toDataURL('image/jpeg',0.8);
+      localStorage.setItem('6flt_profile_photo', dataUrl);
+      applyProfilePhoto(dataUrl);
+      saveProfilePhotoToCloud(dataUrl);
+    };
+    im.src=e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+// enregistre la photo dans la ligne profiles de l'utilisateur connecte
+function saveProfilePhotoToCloud(dataUrl){
+  if(!sb || !sb.auth) return;
+  sb.auth.getUser().then(function(res){
+    var u = res && res.data ? res.data.user : null;
+    if(!u) return;
+    sb.from('profiles').update({ photo: dataUrl }).eq('id', u.id).then(function(r){
+      if(r.error) console.warn('profil photo push:', r.error.message);
+    });
+  });
+}
+// au demarrage : recupere la photo depuis le cloud si dispo
+function loadProfilePhoto(){
+  if(!sb || !sb.auth) return;
+  sb.auth.getUser().then(function(res){
+    var u = res && res.data ? res.data.user : null;
+    if(!u) return;
+    sb.from('profiles').select('photo').eq('id', u.id).maybeSingle().then(function(r){
+      if(r.error){ console.warn('profil photo load:', r.error.message); return; }
+      if(r.data && r.data.photo){
+        localStorage.setItem('6flt_profile_photo', r.data.photo);
+        applyProfilePhoto(r.data.photo);
+      }
+    });
+  });
+}
 document.addEventListener('click',function(e){
   var p=document.getElementById('settings-panel'), b=document.getElementById('settings-btn');
   if(p.classList.contains('open')&&!p.contains(e.target)&&!b.contains(e.target))p.classList.remove('open');
@@ -3268,12 +3392,54 @@ applyTheme();
 buildFilterPanel();
 document.getElementById('owm-key').value = owmKey;
 initBackup();
-initMap();
-renderGallery();
-// charge les spots depuis Supabase (et migre les locaux au premier lancement)
-if(typeof syncLoadFromCloud==='function'){ syncLoadFromCloud(); }
-if(typeof syncLoadClientsFromCloud==='function'){ syncLoadClientsFromCloud(); }
-if(typeof syncLoadEventsFromCloud==='function'){ syncLoadEventsFromCloud(); }
+
+// ===== BARRIERE DE CONNEXION =====
+var appBooted = false;
+function bootApp(){
+  if(appBooted) return;
+  appBooted = true;
+  initMap();
+  renderGallery();
+  if(typeof syncLoadFromCloud==='function'){ syncLoadFromCloud(); }
+  if(typeof syncLoadClientsFromCloud==='function'){ syncLoadClientsFromCloud(); }
+  if(typeof syncLoadEventsFromCloud==='function'){ syncLoadEventsFromCloud(); }
+  if(typeof loadProfilePhoto==='function'){ loadProfilePhoto(); }
+}
+function showLogin(){ document.getElementById('login-screen').classList.add('show'); }
+function hideLogin(){ document.getElementById('login-screen').classList.remove('show'); }
+function doLogin(){
+  var email=document.getElementById('login-email').value.trim();
+  var pass=document.getElementById('login-pass').value;
+  var err=document.getElementById('login-error');
+  var btn=document.getElementById('login-btn');
+  err.textContent='';
+  if(!email||!pass){ err.textContent='Email et mot de passe requis.'; return; }
+  if(!sb){ err.textContent='Connexion au serveur indisponible.'; return; }
+  btn.disabled=true; btn.textContent='Connexion...';
+  sb.auth.signInWithPassword({email:email, password:pass}).then(function(res){
+    btn.disabled=false; btn.textContent='Se connecter';
+    if(res.error){ err.textContent='Identifiants incorrects.'; return; }
+    hideLogin(); bootApp();
+  }).catch(function(){
+    btn.disabled=false; btn.textContent='Se connecter';
+    err.textContent='Erreur de connexion.';
+  });
+}
+function doLogout(){
+  if(!sb){ return; }
+  if(!confirm('Se deconnecter ?')) return;
+  sb.auth.signOut().then(function(){ location.reload(); }).catch(function(){ location.reload(); });
+}
+// au demarrage : verifie s'il existe deja une session sur cet appareil
+(function(){
+  var pass=document.getElementById('login-pass');
+  if(pass){ pass.addEventListener('keydown', function(e){ if(e.key==='Enter') doLogin(); }); }
+  if(!sb){ bootApp(); return; } // repli : si Supabase indispo, ne pas bloquer l'app
+  sb.auth.getSession().then(function(res){
+    if(res.data && res.data.session){ hideLogin(); bootApp(); }
+    else { showLogin(); }
+  }).catch(function(){ showLogin(); });
+})();
 </script>
 <script>
 if('serviceWorker' in navigator){
