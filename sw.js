@@ -1,7 +1,7 @@
 // Service worker 6flt Spots
 // Met en cache la coquille de l'app (HTML + icones) pour demarrage rapide et ouverture hors ligne.
 // Les tuiles Mapbox et les API (meteo, golden hour) restent tributaires du reseau.
-const CACHE = '6flt-spots-v3';
+const CACHE = '6flt-spots-v4';
 const SHELL = [
   './',
   './index.html',

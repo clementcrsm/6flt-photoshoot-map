@@ -1227,6 +1227,43 @@ function uploadPhoto(file){
     });
 }
 
+// Envoie un Blob deja compresse (issu d'un canvas) dans le bucket 'photos', renvoie l'URL publique.
+function uploadBlob(blob, ext){
+  if(!sb) return Promise.reject(new Error('Supabase indisponible'));
+  if(!blob) return Promise.reject(new Error('Aucune donnee'));
+  var safeExt = /^(jpg|jpeg|png|webp)$/.test(ext||'') ? ext : 'jpg';
+  var name = 'photo-' + Date.now() + '-' + Math.random().toString(36).slice(2,8) + '.' + safeExt;
+  return sb.storage.from(PHOTO_BUCKET).upload(name, blob, { cacheControl:'3600', upsert:false, contentType:'image/'+(safeExt==='jpg'?'jpeg':safeExt) })
+    .then(function(res){
+      if(res.error) throw res.error;
+      var pub = sb.storage.from(PHOTO_BUCKET).getPublicUrl(name);
+      var url = pub && pub.data ? pub.data.publicUrl : null;
+      if(!url) throw new Error('URL publique introuvable');
+      return url;
+    });
+}
+
+// Compresse un fichier image via canvas et renvoie une Promise<Blob> JPEG.
+function compressToBlob(file, max, quality){
+  return new Promise(function(resolve, reject){
+    var reader=new FileReader();
+    reader.onload=function(e){
+      var img=new Image();
+      img.onload=function(){
+        var w=img.width, h=img.height;
+        if(w>h && w>max){ h=h*max/w; w=max; } else if(h>max){ w=w*max/h; h=max; }
+        var canvas=document.createElement('canvas'); canvas.width=w; canvas.height=h;
+        canvas.getContext('2d').drawImage(img,0,0,w,h);
+        canvas.toBlob(function(blob){ blob?resolve(blob):reject(new Error('Compression echouee')); }, 'image/jpeg', quality||0.8);
+      };
+      img.onerror=reject;
+      img.src=e.target.result;
+    };
+    reader.onerror=reject;
+    reader.readAsDataURL(file);
+  });
+}
+
 // Charge les spots depuis Supabase, fusionne avec le local, migre les spots locaux absents
 function syncLoadFromCloud(){
   if(!sb) return Promise.resolve();
@@ -1394,21 +1431,14 @@ function startEventFromMap(){ cancelAddModes(); openNewEventPanel(); }
 
 function onEventPhotoSelected(ev){
   var file=ev.target.files[0]; if(!file) return;
-  var reader=new FileReader();
-  reader.onload=function(e){
-    var img=new Image();
-    img.onload=function(){
-      var max=800, w=img.width, h=img.height;
-      if(w>h && w>max){ h=h*max/w; w=max; } else if(h>max){ w=w*max/h; h=max; }
-      var canvas=document.createElement('canvas'); canvas.width=w; canvas.height=h;
-      canvas.getContext('2d').drawImage(img,0,0,w,h);
-      currentEventPhoto=canvas.toDataURL('image/jpeg',0.8);
-      var prev=document.getElementById('event-photo-preview');
-      prev.src=currentEventPhoto; prev.style.display='block';
-    };
-    img.src=e.target.result;
-  };
-  reader.readAsDataURL(file);
+  ev.target.value='';
+  compressToBlob(file, 800, 0.8).then(function(blob){
+    return uploadBlob(blob, 'jpg');
+  }).then(function(url){
+    currentEventPhoto=url;
+    var prev=document.getElementById('event-photo-preview');
+    prev.src=currentEventPhoto; prev.style.display='block';
+  }).catch(function(err){ alert('Echec upload photo : '+(err.message||err)); });
 }
 function saveEvent(){
   var e={
@@ -1612,21 +1642,14 @@ function addClientExtraRow(key, value){
 
 function onClientPhotoSelected(e){
   var file = e.target.files[0]; if(!file) return;
-  var reader = new FileReader();
-  reader.onload = function(ev){
-    var img = new Image();
-    img.onload = function(){
-      var max = 800, w = img.width, h = img.height;
-      if(w>h && w>max){ h = h*max/w; w = max; } else if(h>max){ w = w*max/h; h = max; }
-      var canvas = document.createElement('canvas'); canvas.width = w; canvas.height = h;
-      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-      currentClientPhoto = canvas.toDataURL('image/jpeg', 0.8);
-      var prev = document.getElementById('client-photo-preview');
-      prev.src = currentClientPhoto; prev.style.display = 'block';
-    };
-    img.src = ev.target.result;
-  };
-  reader.readAsDataURL(file);
+  e.target.value='';
+  compressToBlob(file, 800, 0.8).then(function(blob){
+    return uploadBlob(blob, 'jpg');
+  }).then(function(url){
+    currentClientPhoto = url;
+    var prev = document.getElementById('client-photo-preview');
+    prev.src = currentClientPhoto; prev.style.display = 'block';
+  }).catch(function(err){ alert('Echec upload photo : '+(err.message||err)); });
 }
 
 function saveClient(){
@@ -1816,22 +1839,14 @@ function applyProfilePhoto(dataUrl){
 }
 function onProfilePhotoSelected(ev){
   var file=ev.target.files[0]; if(!file) return;
-  var reader=new FileReader();
-  reader.onload=function(e){
-    var im=new Image();
-    im.onload=function(){
-      var max=400, w=im.width, h=im.height;
-      if(w>h && w>max){ h=h*max/w; w=max; } else if(h>max){ w=w*max/h; h=max; }
-      var canvas=document.createElement('canvas'); canvas.width=w; canvas.height=h;
-      canvas.getContext('2d').drawImage(im,0,0,w,h);
-      var dataUrl=canvas.toDataURL('image/jpeg',0.8);
-      localStorage.setItem('6flt_profile_photo', dataUrl);
-      applyProfilePhoto(dataUrl);
-      saveProfilePhotoToCloud(dataUrl);
-    };
-    im.src=e.target.result;
-  };
-  reader.readAsDataURL(file);
+  ev.target.value='';
+  compressToBlob(file, 400, 0.8).then(function(blob){
+    return uploadBlob(blob, 'jpg');
+  }).then(function(url){
+    localStorage.setItem('6flt_profile_photo', url);
+    applyProfilePhoto(url);
+    saveProfilePhotoToCloud(url);
+  }).catch(function(err){ alert('Echec upload photo : '+(err.message||err)); });
 }
 // enregistre la photo dans la ligne profiles de l'utilisateur connecte
 function saveProfilePhotoToCloud(dataUrl){
@@ -1884,7 +1899,7 @@ function initMap(){
       id: '3d-buildings',
       source: 'composite',
       'source-layer': 'building',
-      filter: ['=', 'extrude', 'true'],
+      filter: ['==', ['get', 'extrude'], 'true'],
       type: 'fill-extrusion',
       minzoom: 14,
       paint: {
@@ -1943,7 +1958,7 @@ function toggleSatellite(){
     if(!isSat){
       map.addLayer({
         id:'3d-buildings',source:'composite','source-layer':'building',
-        filter:['=','extrude','true'],type:'fill-extrusion',minzoom:14,
+        filter:['==',['get','extrude'],'true'],type:'fill-extrusion',minzoom:14,
         paint:{
           'fill-extrusion-color':'#1e2126',
           'fill-extrusion-height':['interpolate',['linear'],['zoom'],14,0,14.05,['get','height']],
@@ -2972,31 +2987,23 @@ function storageUsageMB(){
 function uploadInspirations(e){
   var files=Array.prototype.slice.call(e.target.files||[]);
   if(!files.length) return;
-  showToast('Compression de '+files.length+' image(s)...');
+  showToast('Envoi de '+files.length+' image(s)...');
   var note=document.getElementById('insp-note').value.trim();
-  Promise.all(files.map(function(f){ return compressImage(f, 1200, 0.8).catch(function(){return null;}); }))
+  Promise.all(files.map(function(f){
+    return compressToBlob(f, 1200, 0.8).then(function(blob){ return uploadBlob(blob, 'jpg'); }).catch(function(){ return null; });
+  }))
     .then(function(results){
       var added=0;
-      results.forEach(function(dataUrl){
-        if(!dataUrl) return;
-        inspirations.unshift({id:Date.now().toString()+Math.random().toString(36).slice(2,6), url:dataUrl, note:note, local:true});
+      results.forEach(function(url){
+        if(!url) return;
+        inspirations.unshift({id:Date.now().toString()+Math.random().toString(36).slice(2,6), url:url, note:note, local:false});
         added++;
       });
-      try{
-        persistInspirations();
-      }catch(err){
-        // quota depasse : on retire ce qu'on vient d'ajouter
-        inspirations.splice(0, added);
-        showToast('Stockage plein. Supprime des images ou exporte tes spots.');
-        renderInspirations();
-        return;
-      }
+      persistInspirations();
       document.getElementById('insp-note').value='';
       document.getElementById('insp-file').value='';
       renderInspirations();
-      var usage=storageUsageMB();
-      if(usage>4){ showToast('Attention : stockage a '+usage.toFixed(1)+' Mo (limite ~5 Mo)'); }
-      else { showToast(added+' image(s) ajoutee(s)'); }
+      showToast(added+' image(s) ajoutee(s)');
     });
 }
 function isImageUrl(u){ return /^data:image\//i.test(u) || /\.(jpg|jpeg|png|gif|webp|avif)(\?|$)/i.test(u); }
