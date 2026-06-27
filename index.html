@@ -154,24 +154,23 @@ body.panel-open #view-label{right:calc(158px + var(--panel) + 14px)}
 .btn-delete:hover{background:#e84040;color:#fff}
 
 /* CUSTOM MARKER */
-.marker-wrap{position:relative;display:table}
+.marker-wrap{display:block}
+.marker-inner{position:relative;display:table;margin:0 auto}
 .spot-marker{background:#fff;border-radius:10px;padding:3px;box-shadow:0 4px 20px rgba(0,0,0,.6);cursor:pointer;transition:transform .15s}
 .spot-marker:hover{transform:scale(1.08)}
 .spot-marker img{width:64px;height:64px;object-fit:cover;border-radius:7px;display:block}
 .spot-marker-empty{width:64px;height:64px;background:#1e2126;border-radius:7px;display:flex;align-items:center;justify-content:center;color:#7a7d85;font-size:22px}
 .marker-tail{width:0;height:0;border-left:8px solid transparent;border-right:8px solid transparent;border-top:10px solid #fff;margin:0 auto}
 .marker-del-badge{position:absolute;top:-8px;right:-8px;width:26px;height:26px;border-radius:50%;background:#e84040;border:2px solid #fff;display:none;align-items:center;justify-content:center;cursor:pointer;z-index:10;box-shadow:0 2px 6px rgba(0,0,0,.5)}
-.marker-wrap.show-del .marker-del-badge{display:flex;animation:badgePop .18s ease}
+.marker-inner.show-del .marker-del-badge{display:flex;animation:badgePop .18s ease}
 .marker-del-badge svg{pointer-events:none}
 /* marqueur route (pastille au milieu du trace) */
-.route-marker-wrap{position:relative;display:table}
+.route-marker-wrap{display:block}
 .route-marker{width:28px;height:28px;border-radius:50%;background:var(--accent);border:2px solid #fff;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.5)}
 .route-marker:hover{transform:scale(1.08)}
-.route-marker-wrap.show-del .marker-del-badge{display:flex;animation:badgePop .18s ease}
 /* marqueur emoji (musee / circuit / concession) : rond avec logo */
 .emoji-marker{width:34px;height:34px;border-radius:50%;background:var(--surface);border:2px solid #fff;display:flex;align-items:center;justify-content:center;font-size:17px;line-height:1;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.5)}
 .emoji-marker:hover{transform:scale(1.08)}
-.marker-wrap.show-del .marker-del-badge{display:flex;animation:badgePop .18s ease}
 
 /* LIGHTBOX */
 #lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:9999;align-items:center;justify-content:center}
@@ -591,7 +590,7 @@ nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-
 <body>
 <div id="splash">
   <img id="splash-logo" src="data:image/png;base64,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" alt="6flt">
-  <div id="splash-credit">Créé par 6flt photographie et Claude<br><span style="opacity:.6">v1.16</span></div>
+  <div id="splash-credit">Créé par 6flt photographie et Claude<br><span style="opacity:.6">v1.17</span></div>
 </div>
 
 <div id="login-screen">
@@ -2369,7 +2368,7 @@ function initMap(){
 
   map.on('click', function(e){
     // referme les pastilles de suppression ouvertes
-    document.querySelectorAll('.marker-wrap.show-del').forEach(function(w){ w.classList.remove('show-del'); });
+    document.querySelectorAll('.marker-inner.show-del').forEach(function(w){ w.classList.remove('show-del'); });
     if(routeMode){ onRouteMapClick(e.lngLat); return; }
     if(!addMode) return;
     openNewSpotPanel(e.lngLat.lat, e.lngLat.lng);
@@ -2500,8 +2499,10 @@ function addRouteToMap(s){
   if(!s.routeLine || !s.routeLine.length || !routesVisible) return;
   var mid=s.routeLine[Math.floor(s.routeLine.length/2)];  // [lng,lat]
   var el=document.createElement('div');
-  el.className='route-marker-wrap';
-  el.innerHTML='<div class="route-marker" title="'+(s.name||'Route sans nom')+'">'+
+  var inner=document.createElement('div');
+  inner.className='marker-inner';
+  el.appendChild(inner);
+  inner.innerHTML='<div class="route-marker" title="'+(s.name||'Route sans nom')+'">'+
     '<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M3 13c3-1 2-5 5-6s4-5 5-6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'+
     '</div>'+
     '<div class="marker-del-badge"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M4 8h8" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg></div>';
@@ -2511,13 +2512,13 @@ function addRouteToMap(s){
     longPressed=false;
     pressTimer=setTimeout(function(){
       longPressed=true;
-      document.querySelectorAll('.route-marker-wrap.show-del,.marker-wrap.show-del').forEach(function(w){ if(w!==el) w.classList.remove('show-del'); });
-      el.classList.add('show-del');
+      document.querySelectorAll('.marker-inner.show-del').forEach(function(w){ if(w!==inner) w.classList.remove('show-del'); });
+      inner.classList.add('show-del');
     },500);
   }
   function cancelPress(){ if(pressTimer){ clearTimeout(pressTimer); pressTimer=null; } }
 
-  var rm=el.querySelector('.route-marker');
+  var rm=inner.querySelector('.route-marker');
   if(IS_TOUCH){
     rm.addEventListener('touchstart', startPress, {passive:true});
     rm.addEventListener('touchend', cancelPress);
@@ -2527,12 +2528,12 @@ function addRouteToMap(s){
     if(longPressed){ e.stopPropagation(); longPressed=false; return; }
     openExistingSpotPanel(s.id);
   });
-  el.querySelector('.marker-del-badge').addEventListener('click', function(e){
+  inner.querySelector('.marker-del-badge').addEventListener('click', function(e){
     e.stopPropagation();
     if(confirm('Supprimer "'+(s.name||'Route sans nom')+'" ? Cette action est definitive.')){
       deleteSpot(s.id);
     } else {
-      el.classList.remove('show-del');
+      inner.classList.remove('show-del');
     }
   });
 
@@ -2548,16 +2549,18 @@ function spotEmoji(spot){ return EMOJI_TYPES[spot.type]||null; }
 
 function addMarker(spot){
   var el = document.createElement('div');
-  el.className = 'marker-wrap';
+  var inner = document.createElement('div');
+  inner.className = 'marker-inner';
+  el.appendChild(inner);
   var emoji = spotEmoji(spot);
   var st = spot.status ? ' data-status="'+spot.status+'"' : '';
   if(emoji){
     // rond simple avec logo emoji, pas de bulle photo ni de queue
-    el.innerHTML = '<div class="emoji-marker">'+emoji+'</div>' +
+    inner.innerHTML = '<div class="emoji-marker">'+emoji+'</div>' +
       '<div class="marker-del-badge"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M4 8h8" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg></div>';
   } else {
     var img = spot.images && spot.images.length > 0 ? spot.images[0] : null;
-    el.innerHTML = '<div class="spot-marker"'+st+'>' +
+    inner.innerHTML = '<div class="spot-marker"'+st+'>' +
       (img ? '<img src="'+img+'" alt="">' : '<div class="spot-marker-empty">&#128205;</div>') +
       '</div><div class="marker-tail"></div>' +
       '<div class="marker-del-badge"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M4 8h8" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg></div>';
@@ -2569,13 +2572,13 @@ function addMarker(spot){
     pressTimer=setTimeout(function(){
       longPressed=true;
       // masque les pastilles des autres marqueurs
-      document.querySelectorAll('.marker-wrap.show-del').forEach(function(w){ if(w!==el) w.classList.remove('show-del'); });
-      el.classList.add('show-del');
+      document.querySelectorAll('.marker-inner.show-del').forEach(function(w){ if(w!==inner) w.classList.remove('show-del'); });
+      inner.classList.add('show-del');
     },500);
   }
   function cancelPress(){ if(pressTimer){ clearTimeout(pressTimer); pressTimer=null; } }
 
-  var sm = el.querySelector('.spot-marker') || el.querySelector('.emoji-marker');
+  var sm = inner.querySelector('.spot-marker') || inner.querySelector('.emoji-marker');
   if(IS_TOUCH){
     sm.addEventListener('touchstart', startPress, {passive:true});
     sm.addEventListener('touchend', cancelPress);
@@ -2587,12 +2590,12 @@ function addMarker(spot){
     openExistingSpotPanel(spot.id);
   });
   // tap sur la pastille -> confirmation + suppression
-  el.querySelector('.marker-del-badge').addEventListener('click', function(e){
+  inner.querySelector('.marker-del-badge').addEventListener('click', function(e){
     e.stopPropagation();
     if(confirm('Supprimer "'+(spot.name||'Spot sans nom')+'" ? Cette action est definitive.')){
       deleteSpot(spot.id);
     } else {
-      el.classList.remove('show-del');
+      inner.classList.remove('show-del');
     }
   });
 
