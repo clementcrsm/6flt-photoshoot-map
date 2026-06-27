@@ -154,8 +154,9 @@ body.panel-open #view-label{right:calc(158px + var(--panel) + 14px)}
 .btn-delete:hover{background:#e84040;color:#fff}
 
 /* CUSTOM MARKER */
-.marker-wrap{display:block;width:max-content;position:relative;line-height:0}
-.spot-marker{background:#fff;border-radius:10px;padding:3px;box-shadow:0 4px 20px rgba(0,0,0,.6);cursor:pointer;transition:transform .15s;width:max-content}
+.marker-wrap{position:relative;text-align:center}
+.mk-bubble{position:relative;display:inline-block}
+.spot-marker{background:#fff;border-radius:10px;padding:3px;box-shadow:0 4px 20px rgba(0,0,0,.6);cursor:pointer;transition:transform .15s}
 .spot-marker:hover{transform:scale(1.08)}
 .spot-marker img{width:64px;height:64px;object-fit:cover;border-radius:7px;display:block}
 .spot-marker-empty{width:64px;height:64px;background:#1e2126;border-radius:7px;display:flex;align-items:center;justify-content:center;color:#7a7d85;font-size:22px}
@@ -164,7 +165,7 @@ body.panel-open #view-label{right:calc(158px + var(--panel) + 14px)}
 .marker-wrap.show-del .marker-del-badge{display:flex;animation:badgePop .18s ease}
 .marker-del-badge svg{pointer-events:none}
 /* marqueur route (pastille au milieu du trace) */
-.route-marker-wrap{position:relative;width:max-content;display:block;line-height:0}
+.route-marker-wrap{position:relative;text-align:center}
 .route-marker{width:28px;height:28px;border-radius:50%;background:var(--accent);border:2px solid #fff;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.5)}
 .route-marker:hover{transform:scale(1.08)}
 .route-marker-wrap.show-del .marker-del-badge{display:flex;animation:badgePop .18s ease}
@@ -2501,10 +2502,10 @@ function addRouteToMap(s){
   var mid=s.routeLine[Math.floor(s.routeLine.length/2)];  // [lng,lat]
   var el=document.createElement('div');
   el.className='route-marker-wrap';
-  el.innerHTML='<div class="route-marker" title="'+(s.name||'Route sans nom')+'">'+
+  el.innerHTML='<div class="mk-bubble"><div class="route-marker" title="'+(s.name||'Route sans nom')+'">'+
     '<svg width="13" height="13" viewBox="0 0 16 16" fill="none"><path d="M3 13c3-1 2-5 5-6s4-5 5-6" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>'+
     '</div>'+
-    '<div class="marker-del-badge"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M4 8h8" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg></div>';
+    '<div class="marker-del-badge"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M4 8h8" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg></div></div>';
 
   var pressTimer=null, longPressed=false;
   function startPress(){
@@ -2553,14 +2554,15 @@ function addMarker(spot){
   var st = spot.status ? ' data-status="'+spot.status+'"' : '';
   if(emoji){
     // rond simple avec logo emoji, pas de bulle photo ni de queue
-    el.innerHTML = '<div class="emoji-marker">'+emoji+'</div>' +
-      '<div class="marker-del-badge"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M4 8h8" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg></div>';
+    el.innerHTML = '<div class="mk-bubble"><div class="emoji-marker">'+emoji+'</div>' +
+      '<div class="marker-del-badge"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M4 8h8" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg></div></div>';
   } else {
     var img = spot.images && spot.images.length > 0 ? spot.images[0] : null;
-    el.innerHTML = '<div class="spot-marker"'+st+'>' +
+    el.innerHTML = '<div class="mk-bubble"><div class="spot-marker"'+st+'>' +
       (img ? '<img src="'+img+'" alt="">' : '<div class="spot-marker-empty">&#128205;</div>') +
-      '</div><div class="marker-tail"></div>' +
-      '<div class="marker-del-badge"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M4 8h8" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg></div>';
+      '</div>' +
+      '<div class="marker-del-badge"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M4 8h8" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg></div></div>' +
+      '<div class="marker-tail"></div>';
   }
 
   var pressTimer=null, longPressed=false;
