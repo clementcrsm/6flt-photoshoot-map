@@ -176,8 +176,15 @@ body.panel-open #view-label{right:calc(158px + var(--panel) + 14px)}
 /* LIGHTBOX */
 #lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:9999;align-items:center;justify-content:center}
 #lightbox.open{display:flex}
-#lightbox img{max-width:90vw;max-height:90vh;border-radius:10px;box-shadow:0 0 80px rgba(0,0,0,.8);object-fit:contain}
-#lightbox-close{position:absolute;top:24px;right:24px;background:var(--surface);border:1px solid var(--border);color:var(--text);width:40px;height:40px;border-radius:8px;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+#lightbox-frame{position:relative;display:flex;align-items:center;justify-content:center}
+#lightbox img{max-width:46vw;max-height:62vh;border-radius:10px;box-shadow:0 0 80px rgba(0,0,0,.8);object-fit:contain}
+@media(max-width:760px){#lightbox img{max-width:82vw;max-height:60vh}}
+#lightbox-close{position:absolute;top:-18px;right:-18px;background:var(--surface);border:1px solid var(--border);color:var(--text);width:40px;height:40px;border-radius:8px;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2}
+.lightbox-nav{position:absolute;top:50%;transform:translateY(-50%);background:var(--surface);border:1px solid var(--border);color:var(--text);width:40px;height:40px;border-radius:8px;font-size:22px;cursor:pointer;display:none;align-items:center;justify-content:center;z-index:2}
+.lightbox-nav.show{display:flex}
+#lightbox-prev{left:-58px}
+#lightbox-next{right:-58px}
+@media(max-width:760px){#lightbox-prev{left:6px}#lightbox-next{right:6px}}
 
 /* GALLERY */
 #view-gallery{flex-direction:column;overflow:hidden}
@@ -260,6 +267,7 @@ body.panel-open #view-label{right:calc(158px + var(--panel) + 14px)}
 .match-badge.good{background:#10b981;color:#fff}
 .match-badge.neutral{background:var(--surface2);color:var(--muted)}
 .match-badge.avoid{background:#ef4444;color:#fff}
+.client-state-badge{position:absolute;top:8px;left:8px;font-size:10px;font-weight:700;padding:3px 8px;border-radius:10px;font-family:'Inter',sans-serif;color:#fff;z-index:4}
 .match-empty{grid-column:1/-1;color:var(--muted);font-size:13px;padding:30px 0;text-align:center}
 .shotlist-insp-actions{margin-bottom:14px}
 .shotlist-btn{display:inline-flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Inter',sans-serif;font-size:12px;font-weight:600;padding:9px 16px;cursor:pointer;transition:all .15s}
@@ -447,6 +455,64 @@ nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-
 .client-extra-row .extra-key{max-width:40%}
 .client-extra-row button{background:transparent;border:1px solid var(--border);border-radius:8px;color:#e84040;width:38px;cursor:pointer;flex-shrink:0}
 .client-extra-add{background:transparent;border:1px dashed var(--border);border-radius:8px;color:var(--muted);font-family:'Inter',sans-serif;font-size:12px;padding:8px;cursor:pointer;width:100%;margin-top:4px}
+.client-car-row{display:flex;gap:8px;margin-bottom:6px;align-items:center}
+.client-car-row .car-model{flex:1;min-width:0;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Inter',sans-serif;font-size:13px;padding:9px 10px}
+.client-car-row .car-color{max-width:42%;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Inter',sans-serif;font-size:13px;padding:9px 8px}
+.client-car-row button{background:transparent;border:1px solid var(--border);border-radius:8px;width:38px;cursor:pointer;flex-shrink:0;padding:9px 0;font-size:13px}
+.client-car-row .car-del{color:#e84040}
+.client-car-row .car-shotlist{color:var(--accent)}
+.client-row2{display:flex;gap:10px}
+.client-row2-col{flex:1;min-width:0}
+.clients-subnav{display:flex;gap:6px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:5px;margin-bottom:18px}
+.clients-subnav-btn{flex:1;background:transparent;border:none;color:var(--muted);font-family:'Inter',sans-serif;font-size:13px;font-weight:700;padding:10px;border-radius:7px;cursor:pointer;transition:all .15s}
+.clients-subnav-btn.on{background:var(--accent);color:#fff}
+.cal{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px}
+.cal-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.cal-top .mn{font-size:15px;font-weight:700}
+.cal-nav{display:flex;gap:6px}
+.cal-nav button{width:34px;height:34px;border-radius:9px;background:var(--surface2);border:1px solid var(--border);color:var(--text);font-size:16px;cursor:pointer}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.cal-dow{text-align:center;font-size:10px;color:var(--muted);font-weight:700;padding:4px 0;text-transform:uppercase}
+.cal-day{aspect-ratio:1;border-radius:9px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:13px;cursor:pointer;position:relative;border:1px solid transparent;transition:all .12s;background:var(--surface2)}
+.cal-day.empty{background:transparent;cursor:default}
+.cal-day:not(.empty):active{border-color:var(--muted)}
+.cal-day.today{border-color:var(--accent)}
+.cal-day.selected{background:var(--accent);color:#fff;font-weight:700}
+.cal-day .pips{display:flex;gap:2px;position:absolute;bottom:5px}
+.cal-day .pips span{width:5px;height:5px;border-radius:50%}
+.cal-legend{display:flex;flex-wrap:wrap;gap:12px;margin-top:14px;font-size:11px;color:var(--muted)}
+.cal-legend span{display:flex;align-items:center;gap:5px}
+.cal-legend i{width:8px;height:8px;border-radius:50%;display:inline-block}
+.day-detail{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px;margin-top:16px}
+.day-detail .dh{font-weight:700;font-size:14px;margin-bottom:10px}
+.shoot-item{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:10px;margin-bottom:8px;cursor:pointer}
+.shoot-item .sc{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.shoot-item .si-nm{font-size:13px;font-weight:600}
+.shoot-item .si-meta{font-size:11px;color:var(--muted)}
+.add-shoot-btn{width:100%;background:var(--accent);color:#fff;border:none;border-radius:9px;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;padding:12px;cursor:pointer}
+.empty-day{font-size:12px;color:var(--muted);text-align:center;padding:14px 0}
+.mini-cal{padding:10px;margin-bottom:8px}
+.mini-cal .cal-day{font-size:12px}
+.mini-cal .cal-day.has-shoot{background:var(--accent);color:#fff;font-weight:700}
+.shoot-day-row{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px;margin-bottom:8px}
+.shoot-day-row .sd-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.shoot-day-row .sd-date{font-size:13px;font-weight:700;color:var(--accent)}
+.shoot-day-row .sd-del{background:transparent;border:1px solid var(--border);border-radius:7px;color:#e84040;padding:4px 9px;cursor:pointer;font-size:12px}
+.shoot-day-row .sd-fields{display:flex;flex-direction:column;gap:8px}
+.shoot-day-row input{background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Inter',sans-serif;font-size:13px;padding:9px}
+.client-select-btn{background:transparent;border:1px solid var(--border);border-radius:8px;color:var(--muted);font-family:'Inter',sans-serif;font-size:13px;font-weight:600;padding:8px 14px;cursor:pointer;margin-bottom:14px;margin-left:8px}
+.client-select-btn.on{border-color:var(--accent);color:var(--accent)}
+.client-card.selectable{cursor:pointer}
+.client-card.selected{border-color:var(--accent);box-shadow:inset 0 0 0 2px var(--accent)}
+.client-card-check{position:absolute;top:8px;left:8px;width:22px;height:22px;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-size:13px;z-index:4}
+#find-spot-fab{position:fixed;left:50%;bottom:28px;transform:translateX(-50%);background:var(--accent);color:#fff;border:none;border-radius:30px;font-family:'Inter',sans-serif;font-size:15px;font-weight:700;padding:14px 28px;box-shadow:0 6px 20px rgba(0,0,0,.4);cursor:pointer;z-index:1500;display:none}
+#find-spot-fab.show{display:block}
+.client-shoot-row{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:8px;margin-bottom:8px}
+.client-shoot-top{display:flex;gap:8px;align-items:center;margin-bottom:6px}
+.client-shoot-row .shoot-date{flex:1;min-width:0;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Inter',sans-serif;font-size:13px;padding:8px}
+.client-shoot-row .shoot-time{width:92px;flex-shrink:0;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Inter',sans-serif;font-size:13px;padding:8px}
+.client-shoot-row .shoot-place{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Inter',sans-serif;font-size:13px;padding:8px}
+.client-shoot-row button.shoot-del{background:transparent;border:1px solid var(--border);border-radius:8px;color:#e84040;width:38px;cursor:pointer;flex-shrink:0;padding:8px 0}
 .client-panel-actions{display:flex;gap:10px;margin-top:24px}
 .client-save-btn{flex:1;background:var(--accent);color:#fff;border:none;border-radius:8px;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;padding:13px;cursor:pointer}
 .client-delete-btn{background:transparent;border:1px solid #e84040;border-radius:8px;color:#e84040;padding:11px 14px;cursor:pointer;display:flex;align-items:center;justify-content:center}
@@ -525,7 +591,7 @@ nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-
 <body>
 <div id="splash">
   <img id="splash-logo" src="data:image/png;base64,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" alt="6flt">
-  <div id="splash-credit">Créé par 6flt photographie et Claude<br><span style="opacity:.6">v1.7</span></div>
+  <div id="splash-credit">Créé par 6flt photographie et Claude<br><span style="opacity:.6">v1.15</span></div>
 </div>
 
 <div id="login-screen">
@@ -1042,6 +1108,7 @@ nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-
       <h2>Matcher couleur voiture &times; spot</h2>
       <p class="shotlist-sub">Selectionne la couleur de la voiture. Les spots les plus propices remontent en haut, selon ta charte couleurs. Les moins compatibles restent visibles, estompes.</p>
       <div class="color-picker-row" id="color-picker-row"></div>
+      <div id="shotlist-group-banner"></div>
       <div class="shotlist-match-grid" id="shotlist-match-grid"></div>
     </div>
 
@@ -1071,21 +1138,52 @@ nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-
 
 <div id="view-clients" class="view">
   <div class="clients-wrap">
-    <div class="clients-header">
-      <h2>Mes clients</h2>
-      <span class="clients-count" id="clients-count"></span>
+    <div class="clients-subnav">
+      <button id="subnav-clients" class="clients-subnav-btn on" onclick="switchClientSub('clients')">Clients</button>
+      <button id="subnav-planning" class="clients-subnav-btn" onclick="switchClientSub('planning')">Planning</button>
     </div>
-    <button class="client-add-btn" onclick="openNewClientPanel()">
-      <svg width="16" height="16" viewBox="0 0 14 14" fill="none"><path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-      Ajouter un client
-    </button>
-    <div class="clients-list" id="clients-list"></div>
-    <button class="clients-trash-btn" onclick="openClientsTrash()">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2.5 4h11M6 4V2.5h4V4M5 4l.5 9h5l.5-9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      Corbeille <span class="trash-badge" id="trash-count"></span>
-    </button>
+    <div id="clientsub-clients">
+      <div class="clients-header">
+        <h2>Mes clients</h2>
+        <span class="clients-count" id="clients-count"></span>
+      </div>
+      <button class="client-add-btn" onclick="openNewClientPanel()">
+        <svg width="16" height="16" viewBox="0 0 14 14" fill="none"><path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        Ajouter un client
+      </button>
+      <button class="client-select-btn" id="client-select-btn" onclick="toggleClientSelectMode()">Selectionner</button>
+      <div class="clients-list" id="clients-list"></div>
+      <button class="clients-trash-btn" onclick="openClientsTrash()">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2.5 4h11M6 4V2.5h4V4M5 4l.5 9h5l.5-9" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        Corbeille <span class="trash-badge" id="trash-count"></span>
+      </button>
+    </div>
+    <div id="clientsub-planning" style="display:none">
+      <div class="clients-header"><h2>Planning</h2></div>
+      <div class="cal">
+        <div class="cal-top">
+          <div class="mn" id="plan-month">Mois</div>
+          <div class="cal-nav">
+            <button onclick="planPrev()">&#8249;</button>
+            <button onclick="planNext()">&#8250;</button>
+          </div>
+        </div>
+        <div class="cal-grid" id="plan-grid"></div>
+        <div class="cal-legend">
+          <span><i style="background:var(--blue)"></i>1 shoot</span>
+          <span><i style="background:#e0902a"></i>2 shoots</span>
+          <span><i style="background:#2d9e4f"></i>3+ shoots</span>
+        </div>
+      </div>
+      <div class="day-detail" id="plan-detail">
+        <div class="dh" id="plan-day-title">Selectionne un jour</div>
+        <div id="plan-shoots"></div>
+        <button class="add-shoot-btn" id="plan-add-btn" onclick="planAddShoot()" style="display:none">+ Planifier un shoot ce jour</button>
+      </div>
+    </div>
   </div>
 </div>
+<button id="find-spot-fab" onclick="findSpotForSelection()">Trouver un spot (<span id="fab-count">0</span>)</button>
 
 <div id="client-panel">
   <div class="client-panel-inner">
@@ -1097,10 +1195,41 @@ nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-
     </div>
     <label class="client-field-label">Nom du client</label>
     <input type="text" id="client-name" class="client-input" placeholder="Nom ou pseudo">
-    <label class="client-field-label">Voiture</label>
-    <input type="text" id="client-car" class="client-input" placeholder="Marque, modele">
+    <label class="client-field-label">Voitures</label>
+    <div id="client-cars"></div>
+    <button class="client-extra-add" onclick="addClientCarRow()">+ Ajouter une voiture</button>
+    <div class="client-row2">
+      <div class="client-row2-col">
+        <label class="client-field-label">Offre</label>
+        <select id="client-offre" class="client-input">
+          <option value="">--</option>
+          <option value="Essentiel">Essentiel</option>
+          <option value="Avance">Avance</option>
+          <option value="Premium">Premium</option>
+        </select>
+      </div>
+      <div class="client-row2-col">
+        <label class="client-field-label">Statut</label>
+        <select id="client-statut" class="client-input">
+          <option value="prospect">Prospect</option>
+          <option value="client">Client</option>
+        </select>
+      </div>
+    </div>
     <label class="client-field-label">Contact</label>
     <input type="text" id="client-contact" class="client-input" placeholder="Tel, mail, Instagram...">
+    <label class="client-field-label">Shootings planifies</label>
+    <div class="cal mini-cal">
+      <div class="cal-top">
+        <div class="mn" id="fc-month">Mois</div>
+        <div class="cal-nav">
+          <button type="button" onclick="fcPrev()">&#8249;</button>
+          <button type="button" onclick="fcNext()">&#8250;</button>
+        </div>
+      </div>
+      <div class="cal-grid" id="fc-grid"></div>
+    </div>
+    <div id="client-shoots"></div>
     <label class="client-field-label">Lien galerie</label>
     <input type="text" id="client-gallery" class="client-input" placeholder="https://...">
     <label class="client-field-label">Notes</label>
@@ -1164,8 +1293,14 @@ nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-
     <div id="clients-trash-list"></div>
   </div>
 </div>
-  <button id="lightbox-close" onclick="closeLightbox()">&#x2715;</button>
-  <img id="lightbox-img" src="" alt="">
+
+<div id="lightbox">
+  <div id="lightbox-frame">
+    <button id="lightbox-close" onclick="closeLightbox()">&#x2715;</button>
+    <button id="lightbox-prev" class="lightbox-nav" onclick="lightboxStep(-1)">&#x2039;</button>
+    <img id="lightbox-img" src="" alt="">
+    <button id="lightbox-next" class="lightbox-nav" onclick="lightboxStep(1)">&#x203A;</button>
+  </div>
 </div>
 
 <div id="toast"></div>
@@ -1495,6 +1630,118 @@ function syncLoadClientsFromCloud(){
   });
 }
 
+var PLAN_DOW=['L','M','M','J','V','S','D'];
+var PLAN_MONTHS=['Janvier','Fevrier','Mars','Avril','Mai','Juin','Juillet','Aout','Septembre','Octobre','Novembre','Decembre'];
+var planY, planMo, planSelDay=null;
+(function(){ var n=new Date(); planY=n.getFullYear(); planMo=n.getMonth(); })();
+
+function switchClientSub(sub){
+  var isP = sub==='planning';
+  document.getElementById('clientsub-clients').style.display = isP?'none':'';
+  document.getElementById('clientsub-planning').style.display = isP?'':'none';
+  document.getElementById('subnav-clients').classList.toggle('on', !isP);
+  document.getElementById('subnav-planning').classList.toggle('on', isP);
+  var fab=document.getElementById('find-spot-fab'); if(fab && isP) fab.classList.remove('show');
+  if(isP) planRender();
+}
+
+// agrege tous les shoots : { 'YYYY-MM-DD': [ {clientId, name, label, color} ] }
+function planCollect(){
+  var map={};
+  clients.forEach(function(c){
+    (Array.isArray(c.shoots)?c.shoots:[]).forEach(function(s){
+      if(!s.date) return;
+      if(!map[s.date]) map[s.date]=[];
+      var carName = (Array.isArray(c.cars)&&c.cars.length&&c.cars[0].model)?c.cars[0].model:(c.car||'');
+      var parts=[]; if(carName) parts.push(carName); if(s.time) parts.push(s.time); if(s.place) parts.push(s.place);
+      map[s.date].push({ clientId:c.id, name:c.name||'Client', label:parts.join(' \u00b7 ') });
+    });
+  });
+  return map;
+}
+
+function planRender(){
+  var map=planCollect();
+  document.getElementById('plan-month').textContent=PLAN_MONTHS[planMo]+' '+planY;
+  var g=document.getElementById('plan-grid'); g.innerHTML='';
+  PLAN_DOW.forEach(function(d){ var e=document.createElement('div'); e.className='cal-dow'; e.textContent=d; g.appendChild(e); });
+  var first=new Date(planY,planMo,1);
+  var startDow=(first.getDay()+6)%7;
+  var days=new Date(planY,planMo+1,0).getDate();
+  var todayStr=new Date().toISOString().slice(0,10);
+  for(var i=0;i<startDow;i++){ var e=document.createElement('div'); e.className='cal-day empty'; g.appendChild(e); }
+  for(var d=1;d<=days;d++){
+    (function(day){
+      var ds=planY+'-'+String(planMo+1).padStart(2,'0')+'-'+String(day).padStart(2,'0');
+      var cell=document.createElement('div'); cell.className='cal-day';
+      if(ds===todayStr) cell.classList.add('today');
+      if(planSelDay===ds) cell.classList.add('selected');
+      cell.innerHTML='<span>'+day+'</span>';
+      var sh=map[ds];
+      if(sh&&sh.length){
+        var col = sh.length>=3?'#2d9e4f':(sh.length===2?'#e0902a':'#2e6fd6');
+        var pips=document.createElement('div'); pips.className='pips';
+        for(var k=0;k<Math.min(sh.length,3);k++){ var p=document.createElement('span'); p.style.background=col; pips.appendChild(p); }
+        cell.appendChild(pips);
+      }
+      cell.onclick=function(){ planSelDay=ds; planRender(); planDetail(ds); };
+      g.appendChild(cell);
+    })(d);
+  }
+}
+
+function planDetail(ds){
+  var map=planCollect();
+  var sh=map[ds]||[];
+  var parts=ds.split('-');
+  var dObj=new Date(parts[0],parts[1]-1,parts[2]);
+  document.getElementById('plan-day-title').textContent=dObj.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  var box=document.getElementById('plan-shoots'); box.innerHTML='';
+  if(!sh.length){ box.innerHTML='<div class="empty-day">Aucun shoot ce jour. Jour libre.</div>'; }
+  else sh.forEach(function(s){
+    var el=document.createElement('div'); el.className='shoot-item';
+    el.innerHTML='<span class="sc" style="background:var(--blue)"></span><div><div class="si-nm">'+escapeHtml(s.name)+'</div>'+(s.label?'<div class="si-meta">'+escapeHtml(s.label)+'</div>':'')+'</div>';
+    el.onclick=function(){ openExistingClientPanel(s.clientId); };
+    box.appendChild(el);
+  });
+  document.getElementById('plan-add-btn').style.display='';
+}
+
+function planPrev(){ planMo--; if(planMo<0){planMo=11;planY--;} planRender(); }
+function planNext(){ planMo++; if(planMo>11){planMo=0;planY++;} planRender(); }
+
+// creation : choisir un client puis ouvrir sa fiche avec la date pre-remplie
+function planAddShoot(){
+  if(!planSelDay) return;
+  if(!clients.length){ alert('Aucun client. Cree d\'abord un client.'); return; }
+  var names=clients.map(function(c,i){ return (i+1)+'. '+(c.name||'Client'); }).join('\n');
+  var pick=prompt('Pour quel client planifier un shoot le '+planSelDay+' ?\n\n'+names+'\n\nTape le numero :');
+  if(!pick) return;
+  var idx=parseInt(pick,10)-1;
+  if(isNaN(idx)||idx<0||idx>=clients.length){ alert('Numero invalide.'); return; }
+  var c=clients[idx];
+  openExistingClientPanel(c.id);
+  addClientShootRow(planSelDay, '', '');
+  switchClientSub('clients');
+}
+
+function clientState(c){
+  var hasGallery = !!(c.gallery && c.gallery.trim());
+  var shoots = Array.isArray(c.shoots) ? c.shoots : [];
+  var today = new Date().toISOString().slice(0,10);
+  var hasFuture = shoots.some(function(s){ return s.date >= today; });
+  var hasPast = shoots.some(function(s){ return s.date < today; });
+  var relance = false;
+  if(hasPast && !hasGallery){
+    var fiveDaysAgo = new Date(Date.now() - 5*86400000).toISOString().slice(0,10);
+    relance = shoots.some(function(s){ return s.date < today && s.date <= fiveDaysAgo; });
+  }
+  if(hasGallery && hasPast) return {k:'livre', l:'Livre', c:'#2d9e4f', relance:false};
+  if(hasPast) return {k:'realise', l:'Realise', c:'#e0902a', relance:relance};
+  if(hasFuture) return {k:'planifie', l:'Planifie', c:'#2e6fd6', relance:false};
+  return {k:'prospect', l:'Prospect', c:'#7a7f87', relance:false};
+}
+
 function renderClients(){
   var list = document.getElementById('clients-list');
   var count = document.getElementById('clients-count');
@@ -1512,20 +1759,51 @@ function renderClients(){
       ? '<div class="client-card-photo" style="background-image:url('+JSON.stringify(c.photo)+')"></div>'
       : '<div class="client-card-photo">&#128100;</div>';
     var meta = c.contact || (c.extras && c.extras.length ? c.extras[0].key+': '+c.extras[0].value : '') || '';
+    var carDots = '';
+    if(Array.isArray(c.cars)){
+      c.cars.forEach(function(v){
+        if(v.color && COLOR_SWATCHES[v.color]) carDots += '<span class="color-dot" style="background:'+COLOR_SWATCHES[v.color]+';margin-right:4px"></span>';
+      });
+    }
+    var nextShoot = '';
+    if(Array.isArray(c.shoots) && c.shoots.length){
+      var today = new Date().toISOString().slice(0,10);
+      var upcoming = c.shoots.filter(function(s){ return s.date >= today; });
+      var s = upcoming.length ? upcoming[0] : c.shoots[c.shoots.length-1];
+      if(s){
+        var d = new Date(s.date+'T00:00:00');
+        var label = d.toLocaleDateString('fr-FR',{day:'2-digit',month:'short'}) + (s.time?' '+s.time:'');
+        var past = s.date < today;
+        nextShoot = '<div class="client-card-meta" style="color:'+(past?'var(--muted)':'var(--accent)')+'">'+(past?'Dernier shoot ':'Shoot ')+escapeHtml(label)+(s.place?' \u00b7 '+escapeHtml(s.place):'')+'</div>';
+      }
+    }
+    var st = clientState(c);
+    var stBadge = '<span class="client-state-badge" style="background:'+st.c+'">'+st.l+'</span>';
+    var relanceBadge = st.relance ? '<span style="display:inline-block;font-size:10px;font-weight:700;color:#e0902a;border:1px solid #e0902a;border-radius:5px;padding:1px 5px;margin-left:6px;vertical-align:middle">A livrer</span>' : '';
     wrap.innerHTML =
       '<button class="client-card-delete"><svg width="20" height="20" viewBox="0 0 16 16" fill="none"><path d="M2.5 4h11M6 4V2.5h4V4M5 4l.5 9h5l.5-9M6.5 6.5v4M9.5 6.5v4" stroke="#fff" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>' +
-      '<div class="client-card">' + photo +
+      '<div class="client-card">' + stBadge + photo +
         '<div class="client-card-body">' +
-          '<div class="client-card-name">'+escapeHtml(c.name||'Client sans nom')+'</div>' +
-          (c.car ? '<div class="client-card-car">'+escapeHtml(c.car)+'</div>' : '') +
+          '<div class="client-card-name">'+escapeHtml(c.name||'Client sans nom')+relanceBadge+'</div>' +
+          (c.car ? '<div class="client-card-car">'+carDots+escapeHtml(c.car)+'</div>' : '') +
+          nextShoot +
           (meta ? '<div class="client-card-meta">'+escapeHtml(meta)+'</div>' : '') +
         '</div>' +
         '<button class="client-card-trash" title="Mettre a la corbeille"><svg width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M2.5 4h11M6 4V2.5h4V4M5 4l.5 9h5l.5-9M6.5 6.5v4M9.5 6.5v4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>' +
       '</div>';
     var card = wrap.querySelector('.client-card');
-    // clic ouvre la fiche
+    if(clientSelectMode){
+      card.classList.add('selectable');
+      if(clientSelection.indexOf(c.id)>-1){
+        card.classList.add('selected');
+        var chk=document.createElement('div'); chk.className='client-card-check'; chk.innerHTML='&#10003;';
+        card.appendChild(chk);
+      }
+    }
+    // clic ouvre la fiche, ou coche en mode selection
     card.addEventListener('click', function(e){
       if(card.classList.contains('swiped')){ card.classList.remove('swiped'); return; }
+      if(clientSelectMode){ toggleClientPick(c.id); return; }
       openExistingClientPanel(c.id);
     });
     // poubelle PC (au survol)
@@ -1601,7 +1879,12 @@ function renderClientsTrash(){
 function openNewClientPanel(){
   currentClientId = null; currentClientPhoto = null;
   document.getElementById('client-name').value = '';
-  document.getElementById('client-car').value = '';
+  document.getElementById('client-cars').innerHTML = '';
+  addClientCarRow();
+  document.getElementById('client-offre').value = '';
+  document.getElementById('client-statut').value = 'prospect';
+  document.getElementById('client-shoots').innerHTML = '';
+  fcLoad([]);
   document.getElementById('client-contact').value = '';
   document.getElementById('client-gallery').value = '';
   document.getElementById('client-notes').value = '';
@@ -1616,7 +1899,14 @@ function openExistingClientPanel(id){
   if(!c) return;
   currentClientId = id; currentClientPhoto = c.photo || null;
   document.getElementById('client-name').value = c.name||'';
-  document.getElementById('client-car').value = c.car||'';
+  var carsWrap = document.getElementById('client-cars'); carsWrap.innerHTML = '';
+  var carList = Array.isArray(c.cars) ? c.cars : (c.car ? [{model:c.car, color:''}] : []);
+  if(carList.length){ carList.forEach(function(v){ addClientCarRow(v.model, v.color); }); }
+  else { addClientCarRow(); }
+  document.getElementById('client-offre').value = c.offre||'';
+  document.getElementById('client-statut').value = c.statut||'prospect';
+  var shootsWrap = document.getElementById('client-shoots'); shootsWrap.innerHTML = '';
+  fcLoad(Array.isArray(c.shoots) ? c.shoots : []);
   document.getElementById('client-contact').value = c.contact||'';
   document.getElementById('client-gallery').value = c.gallery||'';
   document.getElementById('client-notes').value = c.notes||'';
@@ -1628,6 +1918,108 @@ function openExistingClientPanel(id){
   document.getElementById('client-panel').classList.add('open');
 }
 function closeClientPanel(){ document.getElementById('client-panel').classList.remove('open'); }
+
+var fcY, fcMo, fcShoots=[]; // [{date,time,place}]
+(function(){ var n=new Date(); fcY=n.getFullYear(); fcMo=n.getMonth(); })();
+
+function fcSync(){
+  // lit les valeurs heure/lieu actuelles dans le DOM avant un re-render
+  document.querySelectorAll('#client-shoots .shoot-day-row').forEach(function(row){
+    var ds=row.getAttribute('data-date');
+    var s=fcShoots.find(function(x){return x.date===ds;});
+    if(s){ s.time=row.querySelector('.sd-time').value; s.place=row.querySelector('.sd-place').value; }
+  });
+}
+
+function fcRenderCal(){
+  document.getElementById('fc-month').textContent=PLAN_MONTHS[fcMo]+' '+fcY;
+  var g=document.getElementById('fc-grid'); g.innerHTML='';
+  PLAN_DOW.forEach(function(d){ var e=document.createElement('div'); e.className='cal-dow'; e.textContent=d; g.appendChild(e); });
+  var first=new Date(fcY,fcMo,1);
+  var startDow=(first.getDay()+6)%7;
+  var days=new Date(fcY,fcMo+1,0).getDate();
+  var todayStr=new Date().toISOString().slice(0,10);
+  for(var i=0;i<startDow;i++){ var e=document.createElement('div'); e.className='cal-day empty'; g.appendChild(e); }
+  for(var d=1;d<=days;d++){
+    (function(day){
+      var ds=fcY+'-'+String(fcMo+1).padStart(2,'0')+'-'+String(day).padStart(2,'0');
+      var cell=document.createElement('div'); cell.className='cal-day';
+      if(ds===todayStr) cell.classList.add('today');
+      if(fcShoots.some(function(s){return s.date===ds;})) cell.classList.add('has-shoot');
+      cell.innerHTML='<span>'+day+'</span>';
+      cell.onclick=function(){ fcToggleDay(ds); };
+      g.appendChild(cell);
+    })(d);
+  }
+}
+
+function fcToggleDay(ds){
+  fcSync();
+  var i=fcShoots.findIndex(function(s){return s.date===ds;});
+  if(i>-1) fcShoots.splice(i,1);
+  else fcShoots.push({date:ds, time:'', place:''});
+  fcRenderCal(); fcRenderRows();
+}
+
+function fcRenderRows(){
+  var wrap=document.getElementById('client-shoots'); wrap.innerHTML='';
+  fcShoots.slice().sort(function(a,b){return a.date.localeCompare(b.date);}).forEach(function(s){
+    var parts=s.date.split('-');
+    var dObj=new Date(parts[0],parts[1]-1,parts[2]);
+    var label=dObj.toLocaleDateString('fr-FR',{weekday:'short',day:'numeric',month:'long'});
+    var row=document.createElement('div'); row.className='shoot-day-row'; row.setAttribute('data-date',s.date);
+    row.innerHTML='<div class="sd-head"><span class="sd-date">'+label+'</span><button type="button" class="sd-del">Retirer</button></div>'+
+      '<div class="sd-fields"><input type="time" class="sd-time" value="'+(s.time?escapeHtml(s.time):'')+'"><input class="sd-place" placeholder="Lieu du shooting" value="'+(s.place?escapeHtml(s.place):'')+'"></div>';
+    row.querySelector('.sd-del').onclick=function(){ fcToggleDay(s.date); };
+    wrap.appendChild(row);
+  });
+}
+
+function fcPrev(){ fcSync(); fcMo--; if(fcMo<0){fcMo=11;fcY--;} fcRenderCal(); }
+function fcNext(){ fcSync(); fcMo++; if(fcMo>11){fcMo=0;fcY++;} fcRenderCal(); }
+
+// initialise le calendrier de la fiche a partir d'une liste de shoots
+function fcLoad(shoots){
+  fcShoots = (Array.isArray(shoots)?shoots:[]).map(function(s){ return {date:s.date, time:s.time||'', place:s.place||''}; });
+  if(fcShoots.length){ var p=fcShoots[0].date.split('-'); fcY=parseInt(p[0],10); fcMo=parseInt(p[1],10)-1; }
+  else { var n=new Date(); fcY=n.getFullYear(); fcMo=n.getMonth(); }
+  fcRenderCal(); fcRenderRows();
+}
+
+function addClientShootRow(date, time, place){
+  // compat planning : ajoute un jour au calendrier de la fiche
+  if(date && !fcShoots.some(function(s){return s.date===date;})){
+    fcShoots.push({date:date, time:time||'', place:place||''});
+    var p=date.split('-'); fcY=parseInt(p[0],10); fcMo=parseInt(p[1],10)-1;
+  }
+  fcRenderCal(); fcRenderRows();
+}
+
+function sendColorToShotlist(color){
+  if(!color || !COLOR_RULES[color]){ alert('Cette voiture n\'a pas de couleur de carrosserie definie.'); return; }
+  currentColor = color;
+  closeClientPanel();
+  switchView('shotlist');
+}
+
+function addClientCarRow(model, color){
+  var wrap = document.getElementById('client-cars');
+  var row = document.createElement('div');
+  row.className = 'client-car-row';
+  var opts = '<option value="">Couleur...</option>';
+  Object.keys(COLOR_RULES).forEach(function(col){
+    opts += '<option value="'+escapeHtml(col)+'"'+(color===col?' selected':'')+'>'+escapeHtml(col)+'</option>';
+  });
+  row.innerHTML = '<input class="car-model" placeholder="Marque, modele" value="'+(model?escapeHtml(model):'')+'">' +
+                  '<select class="car-color">'+opts+'</select>' +
+                  '<button class="car-shotlist" title="Voir spots compatibles">&#x1F4CD;</button>' +
+                  '<button class="car-del" title="Retirer">&#x2715;</button>';
+  row.querySelector('.car-del').onclick = function(){ row.remove(); };
+  row.querySelector('.car-shotlist').onclick = function(){
+    sendColorToShotlist(row.querySelector('.car-color').value);
+  };
+  wrap.appendChild(row);
+}
 
 function addClientExtraRow(key, value){
   var wrap = document.getElementById('client-extras');
@@ -1659,10 +2051,24 @@ function saveClient(){
     var v = row.querySelector('.extra-val').value.trim();
     if(k || v) extras.push({key:k, value:v});
   });
+  var cars = [];
+  document.querySelectorAll('#client-cars .client-car-row').forEach(function(row){
+    var m = row.querySelector('.car-model').value.trim();
+    var col = row.querySelector('.car-color').value;
+    if(m || col) cars.push({model:m, color:col});
+  });
+  var shoots = [];
+  fcSync();
+  fcShoots.forEach(function(s){ if(s.date) shoots.push({date:s.date, time:s.time||'', place:s.place||''}); });
+  shoots.sort(function(a,b){ return (a.date+(a.time||'')).localeCompare(b.date+(b.time||'')); });
   var c = {
     id: currentClientId || ('c_'+Date.now()+'_'+Math.random().toString(36).slice(2,7)),
     name: document.getElementById('client-name').value.trim(),
-    car: document.getElementById('client-car').value.trim(),
+    cars: cars,
+    car: cars.length ? cars.map(function(v){ return v.model; }).filter(Boolean).join(', ') : '',
+    offre: document.getElementById('client-offre').value,
+    statut: document.getElementById('client-statut').value,
+    shoots: shoots,
     contact: document.getElementById('client-contact').value.trim(),
     gallery: document.getElementById('client-gallery').value.trim(),
     notes: document.getElementById('client-notes').value.trim(),
@@ -1746,6 +2152,54 @@ function renderVerdictRows(){
     box.appendChild(row);
   });
 }
+function colorScoreMulti(spot, colors){
+  // compromis groupe : le maillon faible. un spot a eviter pour une seule voiture coule pour tout le groupe.
+  if(!colors || !colors.length) return 0;
+  var min = Infinity;
+  colors.forEach(function(col){
+    var s = colorScore(spot, col);
+    if(s < min) min = s;
+  });
+  return min===Infinity ? 0 : min;
+}
+var clientSelection = [];
+var clientSelectMode = false;
+var shotlistGroup = null; // {clientIds:[], colors:[]} quand on vient d'une selection groupee
+
+function toggleClientSelectMode(){
+  clientSelectMode = !clientSelectMode;
+  clientSelection = [];
+  document.getElementById('client-select-btn').classList.toggle('on', clientSelectMode);
+  document.getElementById('client-select-btn').textContent = clientSelectMode ? 'Annuler' : 'Selectionner';
+  updateFab();
+  renderClients();
+}
+function toggleClientPick(id){
+  var i = clientSelection.indexOf(id);
+  if(i>-1) clientSelection.splice(i,1); else clientSelection.push(id);
+  updateFab();
+  renderClients();
+}
+function updateFab(){
+  var fab = document.getElementById('find-spot-fab');
+  if(!fab) return;
+  document.getElementById('fab-count').textContent = clientSelection.length;
+  fab.classList.toggle('show', clientSelectMode && clientSelection.length>0);
+}
+function findSpotForSelection(){
+  var colors = [];
+  clientSelection.forEach(function(id){
+    var c = clients.find(function(x){ return x.id===id; });
+    if(c && Array.isArray(c.cars)){
+      c.cars.forEach(function(v){ if(v.color && COLOR_RULES[v.color] && colors.indexOf(v.color)===-1) colors.push(v.color); });
+    }
+  });
+  if(!colors.length){ alert('Aucune des voitures selectionnees n\'a de couleur de carrosserie definie.'); return; }
+  shotlistGroup = { clientIds: clientSelection.slice(), colors: colors };
+  switchView('shotlist');
+}
+
+
 function colorScore(spot, color){
   var rule=COLOR_RULES[color]; if(!rule) return 0;
   // override manuel par spot : surclasse totalement le moteur
@@ -1884,6 +2338,7 @@ function initMap(){
   map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/dark-v11',
+    projection: 'mercator',
     center: [5.38, 49.16],
     zoom: 11,
     pitch: 0,
@@ -2665,8 +3120,19 @@ function staticRouteUrl(line){
 
 function openLightbox(){
   if(!currentImages[currentMainIdx])return;
-  document.getElementById('lightbox-img').src=currentImages[currentMainIdx];
+  renderLightbox();
   document.getElementById('lightbox').classList.add('open');
+}
+function renderLightbox(){
+  document.getElementById('lightbox-img').src=currentImages[currentMainIdx];
+  var multi=currentImages.length>1;
+  document.getElementById('lightbox-prev').classList.toggle('show',multi);
+  document.getElementById('lightbox-next').classList.toggle('show',multi);
+}
+function lightboxStep(dir){
+  if(currentImages.length<2)return;
+  currentMainIdx=(currentMainIdx+dir+currentImages.length)%currentImages.length;
+  renderLightbox();
 }
 function closeLightbox(){document.getElementById('lightbox').classList.remove('open');}
 
@@ -2674,6 +3140,7 @@ function switchView(v){
   document.querySelectorAll('.view').forEach(function(el){el.classList.remove('active');});
   document.querySelectorAll('.nav-tab').forEach(function(el){el.classList.remove('active');});
   document.getElementById('view-'+v).classList.add('active');
+  var fab=document.getElementById('find-spot-fab'); if(fab && v!=='clients') fab.classList.remove('show');
   var idx = {map:0, gallery:1, shotlist:2, clients:3, events:4}[v];
   if(idx!==undefined) document.querySelectorAll('.nav-tab')[idx].classList.add('active');
   if(v==='map'){
@@ -2683,7 +3150,7 @@ function switchView(v){
     document.getElementById('btn-add-spot').style.display='none';
     if(v==='gallery') renderGallery();
     if(v==='shotlist'){ buildColorPicker(); renderMatchGrid(); renderInspirations(); }
-    if(v==='clients') renderClients();
+    if(v==='clients'){ switchClientSub('clients'); renderClients(); updateFab(); }
     if(v==='events') renderEvents();
   }
 }
@@ -2907,6 +3374,7 @@ function buildColorPicker(){
     var chip=document.createElement('div'); chip.className='color-chip'+(currentColor===color?' active':'');
     chip.innerHTML='<span class="color-dot" style="background:'+COLOR_SWATCHES[color]+'"></span>'+color;
     chip.onclick=function(){
+      shotlistGroup = null;
       currentColor = (currentColor===color? null : color);
       buildColorPicker(); renderMatchGrid();
     };
@@ -2915,19 +3383,35 @@ function buildColorPicker(){
 }
 function renderMatchGrid(){
   var grid=document.getElementById('shotlist-match-grid'); if(!grid) return;
+  var banner=document.getElementById('shotlist-group-banner');
+  var group = shotlistGroup;
+  if(banner){
+    if(group){
+      var names = group.clientIds.map(function(id){ var c=clients.find(function(x){return x.id===id;}); return c?escapeHtml(c.name||'Client'):null; }).filter(Boolean);
+      var chips = group.colors.map(function(col){ return '<span class="color-dot" style="background:'+(COLOR_SWATCHES[col]||'#888')+';margin-right:4px"></span>'+escapeHtml(col); }).join('  ');
+      banner.innerHTML = '<div style="background:var(--surface);border:1px solid var(--accent);border-radius:10px;padding:12px 14px;margin-bottom:18px">'+
+        '<div style="font-weight:700;font-size:14px;margin-bottom:6px">Shoot groupe : '+names.join(', ')+'</div>'+
+        '<div style="font-size:12px;color:var(--muted);margin-bottom:8px">Couleurs : '+chips+'</div>'+
+        '<div style="font-size:11px;color:var(--muted);line-height:1.5">Spots classes par compromis : seuls remontent ceux qui ne sont a eviter pour aucune voiture du groupe.</div>'+
+        '<button class="shotlist-btn" style="margin-top:10px;padding:6px 12px" onclick="clearShotlistGroup()">Quitter le mode groupe</button>'+
+        '</div>';
+    } else { banner.innerHTML=''; }
+  }
   if(spots.length===0){ grid.innerHTML='<div class="match-empty">Aucun spot enregistre.</div>'; return; }
   var list=spots.slice();
-  if(currentColor){
-    list.sort(function(a,b){ return colorScore(b,currentColor)-colorScore(a,currentColor); });
+  var scoreFn = group ? function(s){ return colorScoreMulti(s, group.colors); }
+                      : (currentColor ? function(s){ return colorScore(s, currentColor); } : null);
+  if(scoreFn){
+    list.sort(function(a,b){ return scoreFn(b)-scoreFn(a); });
   } else {
     list.sort(function(a,b){return b.createdAt-a.createdAt;});
   }
   grid.innerHTML='';
   list.forEach(function(spot){
-    var score = currentColor ? colorScore(spot, currentColor) : null;
+    var score = scoreFn ? scoreFn(spot) : null;
     var card=document.createElement('div'); card.className='match-card';
     var badge='';
-    if(currentColor){
+    if(scoreFn){
       if(score>=3){ badge='<span class="match-badge good">Propice</span>'; }
       else if(score<=-1){ badge='<span class="match-badge avoid">A eviter</span>'; card.className+=' dim'; }
       else { badge='<span class="match-badge neutral">Neutre</span>'; card.className+=' dim'; }
@@ -2942,6 +3426,7 @@ function renderMatchGrid(){
     grid.appendChild(card);
   });
 }
+function clearShotlistGroup(){ shotlistGroup=null; renderMatchGrid(); }
 
 // SHOTLIST - INSPIRATION
 function persistInspirations(){ localStorage.setItem('6flt_inspirations', JSON.stringify(inspirations)); }
