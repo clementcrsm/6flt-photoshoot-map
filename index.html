@@ -58,6 +58,16 @@ body.panel-open #btn-sat{right:calc(14px + var(--panel) + 14px)}
 body.panel-open #btn-geo{right:calc(110px + var(--panel) + 14px)}
 body.panel-open #view-label{right:calc(158px + var(--panel) + 14px)}
 #btn-3d,#btn-sat,#btn-geo,#view-label{transition:right .28s cubic-bezier(.4,0,.2,1)}
+/* SUN MODE */
+#btn-sun{bottom:78px;right:62px;display:none;transition:right .28s cubic-bezier(.4,0,.2,1)}
+body.panel-open #btn-sun{right:calc(62px + var(--panel) + 14px)}
+#sun-panel{display:none;position:absolute;bottom:126px;right:62px;z-index:600;width:250px;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px;font-family:'Space Mono',monospace}
+#sun-panel.open{display:block}
+#sun-panel .sun-row{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);margin-bottom:6px;letter-spacing:.05em}
+#sun-panel .sun-val{color:var(--text)}
+#sun-time{width:100%;accent-color:var(--accent);margin:8px 0}
+#sun-date{width:100%;background:var(--bg);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:6px 8px;font-family:'Space Mono',monospace;font-size:11px;margin-bottom:8px;color-scheme:dark}
+#sun-clock{font-size:18px;color:var(--accent);text-align:center;margin-bottom:4px}
 
 /* USER LOCATION DOT */
 .user-loc{width:18px;height:18px;border-radius:50%;background:#3b82f6;border:3px solid #fff;box-shadow:0 0 0 4px rgba(59,130,246,.3),0 2px 8px rgba(0,0,0,.5);position:relative}
@@ -650,6 +660,20 @@ nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-
   <button id="btn-3d" class="map-btn" onclick="toggle3D()" title="Vue 3D">
     <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M2 13L9 16L16 13M2 9L9 12L16 9M2 5L9 2L16 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
   </button>
+
+  <!-- SUN btn -->
+  <button id="btn-sun" class="map-btn" onclick="toggleSun()" title="Soleil / Ombres">
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="4" stroke="currentColor" stroke-width="1.5"/><path d="M9 1v2M9 15v2M1 9h2M15 9h2M3.3 3.3l1.4 1.4M13.3 13.3l1.4 1.4M14.7 3.3l-1.4 1.4M4.7 13.3l-1.4 1.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+  </button>
+  <div id="sun-panel">
+    <div id="sun-clock">12:00</div>
+    <input type="date" id="sun-date" onchange="updateSun()">
+    <input type="range" id="sun-time" min="0" max="1439" step="5" value="720" oninput="updateSun()">
+    <div class="sun-row"><span>AZIMUT</span><span class="sun-val" id="sun-az">&ndash;</span></div>
+    <div class="sun-row"><span>ELEVATION</span><span class="sun-val" id="sun-el">&ndash;</span></div>
+    <div class="sun-row"><span>LEVER</span><span class="sun-val" id="sun-rise">&ndash;</span></div>
+    <div class="sun-row"><span>COUCHER</span><span class="sun-val" id="sun-set">&ndash;</span></div>
+  </div>
 
   <!-- SAT btn -->
   <button id="btn-sat" class="map-btn" onclick="toggleSatellite()" title="Satellite">
@@ -2386,11 +2410,14 @@ function toggle3D(){
     map.setPaintProperty('3d-buildings','fill-extrusion-opacity',0.85);
     btn.classList.add('active');
     label.textContent = '3D';
+    document.getElementById('btn-sun').style.display = 'flex';
   } else {
     map.easeTo({pitch:0, bearing:0, duration:600});
     map.setPaintProperty('3d-buildings','fill-extrusion-opacity',0);
     btn.classList.remove('active');
     label.textContent = isSat ? 'SATELLITE' : 'CARTE';
+    if(sunMode) toggleSun();
+    document.getElementById('btn-sun').style.display = 'none';
   }
 }
 
@@ -2423,6 +2450,10 @@ function toggleSatellite(){
     }
     // re-render markers (DOM elements removed on style change, rebuild from state)
     renderMarkers();
+    if(sunMode){
+      if(map.getLayer('3d-buildings')) map.setPaintProperty('3d-buildings','fill-extrusion-opacity',1);
+      updateSun();
+    }
   });
 }
 
@@ -3972,6 +4003,112 @@ function doLogout(){
     else { showLogin(); }
   }).catch(function(){ showLogin(); });
 })();
+
+// ===== SUN MODE (position solaire NOAA + ombres Mapbox) =====
+var sunMode = false;
+
+function sunPosition(date, lat, lng){
+  var rad = Math.PI/180;
+  var n = date.getTime()/86400000 + 2440587.5 - 2451545.0;
+  var L = (280.460 + 0.9856474*n) % 360;
+  var g = ((357.528 + 0.9856003*n) % 360) * rad;
+  var lambda = (L + 1.915*Math.sin(g) + 0.020*Math.sin(2*g)) * rad;
+  var eps = (23.439 - 0.0000004*n) * rad;
+  var ra = Math.atan2(Math.cos(eps)*Math.sin(lambda), Math.cos(lambda));
+  var dec = Math.asin(Math.sin(eps)*Math.sin(lambda));
+  var gmst = ((18.697374558 + 24.06570982441908*n) % 24 + 24) % 24;
+  var H = (gmst*15 + lng)*rad - ra;
+  var latR = lat*rad;
+  var elev = Math.asin(Math.sin(latR)*Math.sin(dec) + Math.cos(latR)*Math.cos(dec)*Math.cos(H));
+  var az = Math.atan2(-Math.sin(H), Math.cos(latR)*Math.tan(dec) - Math.sin(latR)*Math.cos(H));
+  return { azimuth: ((az/rad)+360)%360, elevation: elev/rad };
+}
+
+function sunColorFor(elev){
+  if(elev <= 0) return '#1a2035';
+  if(elev < 5)  return '#ff6a2a';
+  if(elev < 12) return '#ffb35c';
+  if(elev < 25) return '#ffe0b0';
+  return '#ffffff';
+}
+
+function updateSun(){
+  if(!sunMode || !map) return;
+  var c = map.getCenter();
+  var dv = document.getElementById('sun-date').value;
+  var mins = +document.getElementById('sun-time').value;
+  var d = dv ? new Date(dv+'T00:00:00') : new Date();
+  d.setHours(0, mins, 0, 0);
+  document.getElementById('sun-clock').textContent =
+    String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+
+  var p = sunPosition(d, c.lat, c.lng);
+  document.getElementById('sun-az').textContent = Math.round(p.azimuth) + '\u00B0';
+  document.getElementById('sun-el').textContent = Math.round(p.elevation) + '\u00B0';
+
+  // lever / coucher par balayage de la journee
+  var rise='\u2013', set='\u2013', prev=null;
+  for(var m=0; m<1440; m+=4){
+    var t=new Date(d); t.setHours(0,m,0,0);
+    var e=sunPosition(t,c.lat,c.lng).elevation;
+    if(prev!==null){
+      if(prev<0 && e>=0) rise=String(t.getHours()).padStart(2,'0')+':'+String(t.getMinutes()).padStart(2,'0');
+      if(prev>=0 && e<0) set=String(t.getHours()).padStart(2,'0')+':'+String(t.getMinutes()).padStart(2,'0');
+    }
+    prev=e;
+  }
+  document.getElementById('sun-rise').textContent = rise;
+  document.getElementById('sun-set').textContent = set;
+
+  var night = p.elevation <= 0;
+  var polar = Math.min(90, Math.max(0, 90 - p.elevation));
+  map.setLights([
+    { id:'ambient', type:'ambient', properties:{
+        color: night ? '#0d1220' : '#9fb8d8',
+        intensity: night ? 0.25 : (0.35 + 0.25*Math.min(1, p.elevation/40))
+    }},
+    { id:'sun', type:'directional', properties:{
+        direction: [p.azimuth, night ? 90 : polar],
+        color: sunColorFor(p.elevation),
+        intensity: night ? 0.05 : (0.4 + 0.5*Math.min(1, p.elevation/30)),
+        'cast-shadows': true,
+        'shadow-intensity': night ? 0 : 1
+    }}
+  ]);
+}
+
+function applySunDefaults(){
+  if(!map) return;
+  map.setLights([
+    { id:'ambient', type:'ambient', properties:{ color:'#ffffff', intensity:0.5 }},
+    { id:'sun', type:'directional', properties:{ direction:[210,30], color:'#ffffff', intensity:0.5, 'cast-shadows': false }}
+  ]);
+}
+
+function toggleSun(){
+  sunMode = !sunMode;
+  var btn = document.getElementById('btn-sun');
+  var panel = document.getElementById('sun-panel');
+  if(sunMode){
+    if(!document.getElementById('sun-date').value){
+      var now = new Date();
+      document.getElementById('sun-date').value = now.toISOString().slice(0,10);
+      document.getElementById('sun-time').value = now.getHours()*60 + now.getMinutes();
+    }
+    btn.classList.add('active');
+    panel.classList.add('open');
+    if(map.getLayer('3d-buildings')) map.setPaintProperty('3d-buildings','fill-extrusion-opacity',1);
+    updateSun();
+    map.on('moveend', updateSun);
+  } else {
+    btn.classList.remove('active');
+    panel.classList.remove('open');
+    map.off('moveend', updateSun);
+    applySunDefaults();
+    if(map.getLayer('3d-buildings')) map.setPaintProperty('3d-buildings','fill-extrusion-opacity', is3D ? 0.85 : 0);
+  }
+}
+
 </script>
 <script>
 if('serviceWorker' in navigator){
