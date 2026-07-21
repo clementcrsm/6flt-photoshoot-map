@@ -42,6 +42,37 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 24px
 /* MAP CONTROLS */
 .map-btn{position:absolute;z-index:600;background:var(--surface);border:1px solid var(--border);border-radius:8px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:border-color .15s,color .15s;color:var(--muted)}
 .map-btn:hover,.map-btn.active{border-color:var(--accent);color:var(--accent)}
+/* ---- Filtrage intelligent ---- */
+#btn-discover{top:14px;left:62px;position:absolute}
+#btn-hourly{top:14px;left:110px;position:absolute}
+body.panel-open #btn-discover,body.panel-open #btn-hourly{display:none}
+/* Barre horaire */
+#hourly-bar{position:absolute;left:14px;right:14px;bottom:88px;z-index:650;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px 18px 16px;box-shadow:0 8px 40px rgba(0,0,0,.6);display:none;flex-direction:column;gap:8px}
+#hourly-bar.open{display:flex}
+@media(min-width:900px){#hourly-bar{left:50%;right:auto;transform:translateX(-50%);width:520px}}
+.hourly-head{display:flex;align-items:center;justify-content:space-between}
+.hourly-clock{font-family:'Space Mono',monospace;font-weight:700;font-size:17px;color:var(--accent)}
+.hourly-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+.hourly-close{background:transparent;border:none;color:var(--muted);font-size:18px;cursor:pointer;line-height:1}
+#hourly-range{width:100%;-webkit-appearance:none;appearance:none;height:6px;border-radius:3px;background:linear-gradient(90deg,#1b2536,#243247 30%,#e8571a 50%,#243247 70%,#1b2536);outline:none}
+#hourly-range::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--accent);border:3px solid #fff;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.5)}
+#hourly-range::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:var(--accent);border:3px solid #fff;cursor:pointer}
+.hourly-legend{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);font-family:'Space Mono',monospace}
+.hourly-hint{font-size:11px;color:var(--muted);text-align:center}
+/* Panneau découverte */
+#discover-panel{position:absolute;top:62px;left:14px;z-index:700;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;width:300px;box-shadow:0 8px 40px rgba(0,0,0,.6);display:none;flex-direction:column;gap:14px;max-height:calc(100vh - 120px);overflow-y:auto}
+#discover-panel.open{display:flex}
+#discover-panel::-webkit-scrollbar{width:3px}#discover-panel::-webkit-scrollbar-thumb{background:var(--border)}
+.disc-status{font-size:12px;color:var(--muted);min-height:16px}
+.disc-btn{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:12px;font-weight:700;font-size:13px;cursor:pointer;font-family:'Inter',sans-serif}
+.disc-btn:disabled{opacity:.4;cursor:default}
+.disc-btn.secondary{background:var(--surface2);color:var(--text);border:1px solid var(--border)}
+.disc-slider-row{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--muted)}
+.disc-slider-row input[type=range]{flex:1;accent-color:var(--accent)}
+.disc-slider-row b{color:var(--text);min-width:34px;text-align:right;font-family:'Space Mono',monospace}
+/* Rappel visuel zone de sélection */
+#discover-selecting-hint{position:absolute;top:14px;left:50%;transform:translateX(-50%);z-index:720;background:var(--accent);color:#fff;font-size:12px;font-weight:700;padding:8px 16px;border-radius:20px;box-shadow:0 4px 16px rgba(0,0,0,.5);display:none}
+#discover-selecting-hint.on{display:block}
 #btn-3d{bottom:30px;right:62px}
 #btn-sat{bottom:30px;right:14px}
 #btn-geo{bottom:30px;right:110px}
@@ -63,6 +94,8 @@ body.panel-open #view-label{right:calc(158px + var(--panel) + 14px)}
 #btn-3d,#btn-sat,#btn-geo,#view-label{transition:right .28s cubic-bezier(.4,0,.2,1)}
 #btn-street{bottom:78px;right:14px;transition:right .28s cubic-bezier(.4,0,.2,1)}
 body.panel-open #btn-street{right:calc(14px + var(--panel) + 14px)}
+#btn-model{bottom:126px;right:14px;transition:right .28s cubic-bezier(.4,0,.2,1)}
+body.panel-open #btn-model{right:calc(14px + var(--panel) + 14px)}
 #btn-street.active{border-color:var(--accent);color:var(--accent)}
 /* SUN MODE */
 #btn-sun{bottom:78px;right:62px;display:none;transition:right .28s cubic-bezier(.4,0,.2,1)}
@@ -700,7 +733,7 @@ nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-
 <body>
 <div id="splash">
   <img id="splash-logo" src="data:image/png;base64,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" alt="6flt">
-  <div id="splash-credit">Créé par 6flt photographie et Claude<br><span style="opacity:.6">v1.20</span></div>
+  <div id="splash-credit">Créé par 6flt photographie et Claude<br><span style="opacity:.6">v1.23</span></div>
 </div>
 
 <div id="login-screen">
@@ -743,8 +776,6 @@ nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-
     <button onclick="startAddMode('spot')">Spot</button>
     <button onclick="startAddMode('route')">Route</button>
     <button onclick="startAddMode('long')">Trajet long</button>
-    <button onclick="startAddMode('model3d')">Objet 3D</button>
-    <button onclick="startEventFromMap()">Event</button>
   </div>
   <div id="route-validate">
     <button class="route-tool-btn" onclick="undoRoutePoint()" title="Annuler dernier point">&#x21A9;</button>
@@ -768,6 +799,11 @@ nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-
   <!-- 3D btn -->
   <button id="btn-3d" class="map-btn" onclick="toggle3D()" title="Vue 3D">
     <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M2 13L9 16L16 13M2 9L9 12L16 9M2 5L9 2L16 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+
+  <!-- MODEL 3D place btn -->
+  <button id="btn-model" class="map-btn" onclick="startAddMode('model3d')" title="Placer un objet 3D">
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 1.5L15.5 5.25V12.75L9 16.5L2.5 12.75V5.25L9 1.5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M2.5 5.25L9 9M9 9L15.5 5.25M9 9V16.5" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
   </button>
 
   <!-- STREET pegman btn -->
@@ -820,6 +856,66 @@ nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-
     <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M1 3h16M4 9h10M7 15h4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
     <span id="filter-dot"></span>
   </button>
+
+  <!-- Discover btn (zone / routes inconnues) -->
+  <button id="btn-discover" class="map-btn" onclick="toggleDiscover()" title="Decouverte de routes">
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 1.5l2 5 5 .5-3.8 3.3 1.2 5L9 12.8 4.6 15.3l1.2-5L2 7l5-.5z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+  </button>
+
+  <!-- Hourly frequentation btn -->
+  <button id="btn-hourly" class="map-btn" onclick="toggleHourly()" title="Frequentation par heure">
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M9 5v4l2.5 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+
+  <!-- Hourly bar -->
+  <div id="hourly-bar">
+    <div class="hourly-head">
+      <span class="hourly-label">Frequentation estimee</span>
+      <span class="hourly-clock" id="hourly-clock">12h00</span>
+      <button class="hourly-close" onclick="toggleHourly()">&#x2715;</button>
+    </div>
+    <input type="range" id="hourly-range" min="0" max="1439" step="15" value="720" oninput="onHourlyChange()">
+    <div class="hourly-legend"><span>00h</span><span>06h</span><span>12h</span><span>18h</span><span>24h</span></div>
+    <div class="hourly-hint" id="hourly-hint">Routes colorees selon le trafic estime a cette heure</div>
+  </div>
+
+  <!-- Discover panel -->
+  <div id="discover-panel">
+    <div class="settings-title">Decouverte de routes</div>
+    <div class="settings-section-title">1. Zone</div>
+    <button class="disc-btn secondary" id="disc-select-btn" onclick="startZoneSelect()">Selectionner une zone sur la carte</button>
+    <div class="disc-status" id="disc-zone-status">Aucune zone selectionnee</div>
+    <div class="settings-divider"></div>
+    <div class="settings-section-title">2. Forme recherchee</div>
+    <div class="tag-row" id="disc-shape">
+      <div class="tag active" data-shape="all" onclick="setDiscShape(this)">Toutes</div>
+      <div class="tag" data-shape="sinueuse" onclick="setDiscShape(this)">Sinueuse</div>
+      <div class="tag" data-shape="droite" onclick="setDiscShape(this)">Ligne droite</div>
+    </div>
+    <div class="disc-slider-row" id="disc-sinuo-row">
+      <span>Sinuosite min</span>
+      <input type="range" id="disc-sinuo" min="1" max="80" value="15" oninput="document.getElementById('disc-sinuo-val').textContent=this.value+'%'">
+      <b id="disc-sinuo-val">15%</b>
+    </div>
+    <div class="disc-slider-row">
+      <span>Longueur min</span>
+      <input type="range" id="disc-length" min="200" max="8000" step="100" value="800" oninput="document.getElementById('disc-length-val').textContent=(this.value>=1000?(this.value/1000).toFixed(1)+'km':this.value+'m')">
+      <b id="disc-length-val">800m</b>
+    </div>
+    <div class="settings-divider"></div>
+    <div class="settings-section-title">3. Frequentation</div>
+    <select class="field-input" id="disc-traffic">
+      <option value="all">Tous niveaux</option>
+      <option value="low">Calme (peu frequentee)</option>
+      <option value="med">Moyenne</option>
+      <option value="high">Passante</option>
+    </select>
+    <div class="settings-divider"></div>
+    <button class="disc-btn" id="disc-run-btn" onclick="runDiscovery()" disabled>Chercher des routes</button>
+    <div class="disc-status" id="disc-result-status"></div>
+    <button class="disc-btn secondary" id="disc-clear-btn" onclick="clearDiscovery()" style="display:none">Effacer les resultats</button>
+  </div>
+  <div id="discover-selecting-hint">Trace un rectangle sur la carte (glisse)</div>
 
   <!-- Filter panel -->
   <div id="filter-panel">
@@ -1787,7 +1883,6 @@ function openExistingEventPanel(id){
 }
 function closeEventPanel(){ document.getElementById('event-panel').classList.remove('open'); }
 // entree depuis le picker "+" de la carte
-function startEventFromMap(){ cancelAddModes(); openNewEventPanel(); }
 
 function onEventPhotoSelected(ev){
   var file=ev.target.files[0]; if(!file) return;
@@ -2709,6 +2804,7 @@ function renderMarkers(){
   });
   renderRouteLines();
   if(typeof renderModels3D==='function') renderModels3D();
+  if(typeof hourlyOpen!=='undefined' && hourlyOpen && typeof applyHourlyColoring==='function') applyHourlyColoring();
 }
 
 // Trace toutes les lignes de route visibles dans une seule source GeoJSON
@@ -4711,6 +4807,7 @@ function ensureModels3DLayer(){
       m3dRenderer=new THREE.WebGLRenderer({canvas:m.getCanvas(),context:gl,antialias:true});
       m3dRenderer.autoClear=false;
       syncModels3D();
+      if(pendingModelPos) updateModelPreview();
     },
     render:function(gl,matrix){
       var pm=new THREE.Matrix4().fromArray(matrix);
@@ -4724,12 +4821,12 @@ function ensureModels3DLayer(){
         o.group.matrix=l; o.group.matrixAutoUpdate=false;
       });
       m3dCamera.projectionMatrix=pm;
-      m3dRenderer.state.reset();
+      if(m3dRenderer.resetState) m3dRenderer.resetState(); else m3dRenderer.state.reset();
       m3dRenderer.render(m3dScene,m3dCamera);
       map.triggerRepaint();
     }
   };
-  if(map.isStyleLoaded()){ map.addLayer(layer); models3dLayerAdded=true; }
+  if(map.isStyleLoaded()){ if(!map.getLayer('models-3d')) map.addLayer(layer); models3dLayerAdded=true; }
   else map.once('idle',function(){ if(!models3dLayerAdded && !map.getLayer('models-3d')){ map.addLayer(layer); models3dLayerAdded=true; } });
 }
 
@@ -4737,6 +4834,7 @@ function syncModels3D(){
   if(!m3dScene) return;
   // retire les objets supprimes
   Object.keys(m3dObjects).forEach(function(id){
+    if(id==='__preview') return;
     if(!spots.find(function(s){return s.id===id && s.kind==='model3d';})){
       m3dScene.remove(m3dObjects[id].group); delete m3dObjects[id];
     }
@@ -4773,6 +4871,32 @@ function hitTestModel3D(point){
   return best;
 }
 
+function updateModelPreview(){
+  if(!pendingModelPos) return;
+  ensureModels3DLayer();
+  if(!m3dScene) return; // onAdd rappellera updateModelPreview
+  var a=+document.getElementById('model-angle').value;
+  var sc=+document.getElementById('model-scale').value;
+  var d={lng:pendingModelPos.lng,lat:pendingModelPos.lat,angle:a,scale:sc,model:modelSelType};
+  var mc=mapboxgl.MercatorCoordinate.fromLngLat({lng:d.lng,lat:d.lat},0);
+  var o=m3dObjects['__preview'];
+  if(o){
+    if(o.type!==d.model){ m3dScene.remove(o.group); o.group=buildModelMesh(d.model); o.type=d.model; m3dScene.add(o.group); }
+    o.data=d; o.mc=mc; o.units=mc.meterInMercatorCoordinateUnits();
+  } else {
+    var g=buildModelMesh(d.model);
+    m3dScene.add(g);
+    m3dObjects['__preview']={group:g,data:d,type:d.model,mc:mc,units:mc.meterInMercatorCoordinateUnits()};
+  }
+  map.triggerRepaint();
+}
+function removeModelPreview(){
+  var o=m3dObjects['__preview'];
+  if(o && m3dScene) m3dScene.remove(o.group);
+  delete m3dObjects['__preview'];
+  if(map) map.triggerRepaint();
+}
+
 function placeModel3D(lngLat){
   cancelAddModes();
   pendingModelPos={lat:lngLat.lat,lng:lngLat.lng};
@@ -4785,6 +4909,7 @@ function placeModel3D(lngLat){
   document.getElementById('model-panel-title').textContent='Nouvel objet 3D';
   document.getElementById('model-panel').classList.add('open');
   if(!is3D) toggle3D(); // les objets se voient mieux en 3D
+  updateModelPreview();
 }
 
 function openModelPanel(id){
@@ -4815,7 +4940,7 @@ function onModelSlider(skipLive){
   if(editingModelId && m3dObjects[editingModelId]){
     var s=spots.find(function(x){return x.id===editingModelId;});
     if(s){ s.angle=a; s.scale=sc; s.model=modelSelType; syncModels3D(); }
-  }
+  } else if(pendingModelPos){ updateModelPreview(); }
 }
 function saveModel3D(){
   var a=+document.getElementById('model-angle').value;
@@ -4842,6 +4967,7 @@ function deleteModel3D(){
   persist(); syncDeleteFromCloud(delId); renderModels3D(); closeModelPanel(); showToast('Objet supprime');
 }
 function closeModelPanel(){
+  removeModelPreview();
   document.getElementById('model-panel').classList.remove('open');
   editingModelId=null; pendingModelPos=null;
 }
@@ -5317,6 +5443,387 @@ function openTitles(){
   document.getElementById('titles-modal').classList.add('open');
 }
 function closeTitles(){ document.getElementById('titles-modal').classList.remove('open'); }
+
+
+// ============================================================
+// ===== FILTRAGE INTELLIGENT : Frequentation horaire + Decouverte de routes
+// ============================================================
+
+// ---------- Modele de frequentation par type de route OSM ----------
+// Renvoie un facteur 0..1 selon l'heure (minutes 0..1439) et la classe de route.
+var TRAFFIC_PROFILES = {
+  // axes majeurs : gros pics domicile-travail
+  motorway:   {base:0.55, commute:0.45, night:0.15},
+  trunk:      {base:0.50, commute:0.45, night:0.12},
+  primary:    {base:0.45, commute:0.45, night:0.10},
+  secondary:  {base:0.35, commute:0.40, night:0.08},
+  tertiary:   {base:0.28, commute:0.35, night:0.06},
+  unclassified:{base:0.18, commute:0.25, night:0.05},
+  residential:{base:0.20, commute:0.30, night:0.06},
+  service:    {base:0.10, commute:0.15, night:0.04},
+  track:      {base:0.05, commute:0.05, night:0.02},
+  road:       {base:0.20, commute:0.25, night:0.06}
+};
+function trafficAt(minute, roadClass){
+  var p = TRAFFIC_PROFILES[roadClass] || TRAFFIC_PROFILES.road;
+  var h = minute/60;
+  // deux gaussiennes (8h et 18h) + plancher jour + creux nuit
+  function g(center,width){ var d=(h-center)/width; return Math.exp(-d*d); }
+  var commute = p.commute*(g(8,1.6)+g(18,1.8));
+  var day = h>6 && h<21 ? p.base : p.night;
+  var v = day + commute;
+  return Math.max(0, Math.min(1, v));
+}
+function trafficLabel(v){
+  if(v<0.18) return 'Tres calme';
+  if(v<0.35) return 'Calme';
+  if(v<0.55) return 'Modere';
+  if(v<0.75) return 'Passant';
+  return 'Tres passant';
+}
+function trafficColor(v){
+  // vert (calme) -> orange -> rouge (dense)
+  if(v<0.25) return '#3fb950';
+  if(v<0.45) return '#9acd32';
+  if(v<0.6)  return '#e8a317';
+  if(v<0.78) return '#e8571a';
+  return '#e03b3b';
+}
+
+// ---------- Analyse de forme d'une geometrie ----------
+function haversine(a,b){ // [lng,lat]
+  var R=6371000, toRad=Math.PI/180;
+  var dLat=(b[1]-a[1])*toRad, dLng=(b[0]-a[0])*toRad;
+  var la1=a[1]*toRad, la2=b[1]*toRad;
+  var x=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(la1)*Math.cos(la2)*Math.sin(dLng/2)*Math.sin(dLng/2);
+  return 2*R*Math.asin(Math.sqrt(x));
+}
+function polyLength(pts){ var d=0; for(var i=1;i<pts.length;i++) d+=haversine(pts[i-1],pts[i]); return d; }
+// sinuosite = longueur reelle / distance a vol d'oiseau - 1  (0 = ligne parfaite)
+function sinuosity(pts){
+  if(pts.length<2) return 0;
+  var real=polyLength(pts);
+  var straight=haversine(pts[0],pts[pts.length-1]);
+  if(straight<1) return 0;
+  return real/straight - 1;
+}
+// plus long segment quasi-droit (m) : on coupe des qu'un virage depasse ~18 deg
+function longestStraight(pts){
+  if(pts.length<2) return 0;
+  function bearing(a,b){ return Math.atan2(b[0]-a[0], b[1]-a[1]); }
+  var best=0, cur=0, prevB=null;
+  for(var i=1;i<pts.length;i++){
+    var b=bearing(pts[i-1],pts[i]);
+    if(prevB!==null){
+      var da=Math.abs(b-prevB); if(da>Math.PI) da=2*Math.PI-da;
+      if(da>0.31){ cur=0; } // ~18deg -> reset
+    }
+    cur+=haversine(pts[i-1],pts[i]);
+    if(cur>best) best=cur;
+    prevB=b;
+  }
+  return best;
+}
+
+// ============================================================
+// ===== FREQUENTATION HORAIRE (barre coulissante)
+// ============================================================
+var hourlyOpen=false, hourlyMinute=720;
+function toggleHourly(){
+  hourlyOpen=!hourlyOpen;
+  document.getElementById('hourly-bar').classList.toggle('open',hourlyOpen);
+  document.getElementById('btn-hourly').classList.toggle('active',hourlyOpen);
+  if(hourlyOpen){
+    if(discoverOpen) toggleDiscover();
+    onHourlyChange();
+  } else {
+    clearHourlyColoring();
+  }
+}
+function onHourlyChange(){
+  hourlyMinute = parseInt(document.getElementById('hourly-range').value,10);
+  var h=Math.floor(hourlyMinute/60), m=hourlyMinute%60;
+  document.getElementById('hourly-clock').textContent = (h<10?'0':'')+h+'h'+(m<10?'0':'')+m;
+  applyHourlyColoring();
+}
+// Colore les routes selon leur trafic estime a l'heure choisie.
+// Marche a la fois sur les routes discovery (avec roadClass) et tes propres routes (classe deduite).
+function applyHourlyColoring(){
+  if(!map || !map.isStyleLoaded()) return;
+  // 1) tes routes enregistrees
+  var feats = spots.filter(function(s){ return s.kind==='route' && s.routeLine && routesVisible; })
+    .map(function(s){
+      var cls = deduceClassFromSpot(s);
+      var v = trafficAt(hourlyMinute, cls);
+      return {type:'Feature',properties:{id:s.id,tcolor:trafficColor(v),tval:v},geometry:{type:'LineString',coordinates:s.routeLine}};
+    });
+  setHourlyLayer('hourly-mine', feats);
+  // 2) routes discovery si presentes
+  if(discoveredFeatures && discoveredFeatures.length){
+    var df = discoveredFeatures.map(function(f){
+      var v=trafficAt(hourlyMinute, f.properties.roadClass);
+      var nf=JSON.parse(JSON.stringify(f));
+      nf.properties.tcolor=trafficColor(v); nf.properties.tval=v;
+      return nf;
+    });
+    setHourlyLayer('hourly-disc', df);
+  }
+  var hint=document.getElementById('hourly-hint');
+  var avg = feats.concat(discoveredFeatures||[]).length;
+  hint.textContent = avg? 'Vert = calme, rouge = passant. '+trafficLabel(trafficAt(hourlyMinute,'secondary'))+' sur les axes secondaires' : 'Aucune route a afficher';
+}
+function setHourlyLayer(id, feats){
+  var geo={type:'FeatureCollection',features:feats};
+  if(map.getSource(id)){ map.getSource(id).setData(geo); }
+  else{
+    map.addSource(id,{type:'geojson',data:geo});
+    map.addLayer({id:id+'-line',type:'line',source:id,
+      layout:{'line-cap':'round','line-join':'round'},
+      paint:{'line-color':['get','tcolor'],'line-width':5,'line-opacity':0.95}});
+  }
+  // masque la couche routes normale pour eviter le double trait
+  if(map.getLayer('routes-line')) map.setLayoutProperty('routes-line','visibility','none');
+}
+function clearHourlyColoring(){
+  ['hourly-mine','hourly-disc'].forEach(function(id){
+    if(map.getLayer(id+'-line')) map.setLayoutProperty(id+'-line','visibility','none');
+  });
+  if(map.getLayer('routes-line')) map.setLayoutProperty('routes-line','visibility','visible');
+}
+// devine une classe de trafic pour une route perso a partir de ses champs
+function deduceClassFromSpot(s){
+  var t=(s.traffic||s.circulation||'').toLowerCase();
+  if(t.indexOf('dense')>=0) return 'primary';
+  if(t.indexOf('mod')>=0) return 'secondary';
+  if(t.indexOf('faible')>=0) return 'tertiary';
+  return 'secondary';
+}
+
+// ============================================================
+// ===== DECOUVERTE DE ROUTES (zone + Overpass OSM)
+// ============================================================
+var discoverOpen=false, discShape='all';
+var zoneSelectMode=false, zoneBox=null; // {minLng,minLat,maxLng,maxLat}
+var zoneStart=null, zoneDrawEl=null;
+var discoveredFeatures=null;
+
+function toggleDiscover(){
+  discoverOpen=!discoverOpen;
+  document.getElementById('discover-panel').classList.toggle('open',discoverOpen);
+  document.getElementById('btn-discover').classList.toggle('active',discoverOpen);
+  if(discoverOpen){
+    if(hourlyOpen) toggleHourly();
+    document.getElementById('filter-panel').classList.remove('open');
+    document.getElementById('settings-panel').classList.remove('open');
+  } else {
+    cancelZoneSelect();
+  }
+}
+function setDiscShape(el){
+  document.querySelectorAll('#disc-shape .tag').forEach(function(t){t.classList.remove('active');});
+  el.classList.add('active');
+  discShape=el.getAttribute('data-shape');
+  document.getElementById('disc-sinuo-row').style.display = (discShape==='droite')?'none':'flex';
+}
+
+// --- Selection de zone : on desactive le drag de la carte et on trace un rectangle ---
+function startZoneSelect(){
+  if(!map) return;
+  zoneSelectMode=true;
+  document.getElementById('discover-selecting-hint').classList.add('on');
+  document.getElementById('disc-select-btn').textContent='Annuler la selection';
+  document.getElementById('disc-select-btn').onclick=cancelZoneSelect;
+  map.dragPan.disable();
+  map.getCanvas().style.cursor='crosshair';
+  var c=map.getCanvasContainer();
+  c.addEventListener('mousedown', zoneDown);
+  c.addEventListener('touchstart', zoneTouchStart, {passive:false});
+}
+function cancelZoneSelect(){
+  zoneSelectMode=false;
+  document.getElementById('discover-selecting-hint').classList.remove('on');
+  var btn=document.getElementById('disc-select-btn');
+  btn.textContent = zoneBox? 'Modifier la zone' : 'Selectionner une zone sur la carte';
+  btn.onclick=startZoneSelect;
+  if(map){ map.dragPan.enable(); map.getCanvas().style.cursor=''; }
+  var c=map.getCanvasContainer();
+  c.removeEventListener('mousedown', zoneDown);
+  c.removeEventListener('touchstart', zoneTouchStart);
+  removeZoneDrawEl();
+}
+function mkZoneDrawEl(){
+  removeZoneDrawEl();
+  zoneDrawEl=document.createElement('div');
+  zoneDrawEl.style.cssText='position:absolute;border:2px solid #e8571a;background:rgba(232,87,26,.15);pointer-events:none;z-index:5;border-radius:4px';
+  map.getCanvasContainer().appendChild(zoneDrawEl);
+}
+function removeZoneDrawEl(){ if(zoneDrawEl&&zoneDrawEl.parentNode){ zoneDrawEl.parentNode.removeChild(zoneDrawEl); } zoneDrawEl=null; }
+function ptFromEvent(e){ var r=map.getCanvasContainer().getBoundingClientRect(); return {x:e.clientX-r.left,y:e.clientY-r.top}; }
+function zoneDown(e){ e.preventDefault(); zoneStart=ptFromEvent(e); mkZoneDrawEl();
+  window.addEventListener('mousemove',zoneMove); window.addEventListener('mouseup',zoneUp); }
+function zoneMove(e){ if(!zoneStart)return; drawZone(ptFromEvent(e)); }
+function zoneUp(e){ window.removeEventListener('mousemove',zoneMove); window.removeEventListener('mouseup',zoneUp); finishZone(ptFromEvent(e)); }
+function zoneTouchStart(e){ e.preventDefault(); zoneStart=ptFromEvent(e.touches[0]); mkZoneDrawEl();
+  window.addEventListener('touchmove',zoneTouchMove,{passive:false}); window.addEventListener('touchend',zoneTouchEnd); }
+function zoneTouchMove(e){ e.preventDefault(); if(!zoneStart)return; drawZone(ptFromEvent(e.touches[0])); }
+function zoneTouchEnd(e){ window.removeEventListener('touchmove',zoneTouchMove); window.removeEventListener('touchend',zoneTouchEnd);
+  var t=(e.changedTouches&&e.changedTouches[0]); if(t) finishZone(ptFromEvent(t)); }
+function drawZone(p){ if(!zoneDrawEl)return;
+  var x=Math.min(p.x,zoneStart.x), y=Math.min(p.y,zoneStart.y), w=Math.abs(p.x-zoneStart.x), h=Math.abs(p.y-zoneStart.y);
+  zoneDrawEl.style.left=x+'px'; zoneDrawEl.style.top=y+'px'; zoneDrawEl.style.width=w+'px'; zoneDrawEl.style.height=h+'px'; }
+function finishZone(p){
+  if(!zoneStart) return;
+  var a=map.unproject([zoneStart.x,zoneStart.y]), b=map.unproject([p.x,p.y]);
+  zoneStart=null;
+  if(Math.abs(p.x-a.x)<8 && Math.abs(p.y-a.y)<8){ removeZoneDrawEl(); return; }
+  zoneBox={ minLng:Math.min(a.lng,b.lng), minLat:Math.min(a.lat,b.lat), maxLng:Math.max(a.lng,b.lng), maxLat:Math.max(a.lat,b.lat) };
+  // garde le rectangle visible via une source geojson
+  drawZonePersist();
+  var wkm=(haversine([zoneBox.minLng,zoneBox.minLat],[zoneBox.maxLng,zoneBox.minLat])/1000).toFixed(1);
+  var hkm=(haversine([zoneBox.minLng,zoneBox.minLat],[zoneBox.minLng,zoneBox.maxLat])/1000).toFixed(1);
+  document.getElementById('disc-zone-status').textContent='Zone : '+wkm+' x '+hkm+' km';
+  document.getElementById('disc-run-btn').disabled=false;
+  if(wkm*hkm>400) document.getElementById('disc-zone-status').textContent+=' (zone large, requete plus lente)';
+  cancelZoneSelect();
+}
+function drawZonePersist(){
+  var poly={type:'Feature',geometry:{type:'Polygon',coordinates:[[
+    [zoneBox.minLng,zoneBox.minLat],[zoneBox.maxLng,zoneBox.minLat],
+    [zoneBox.maxLng,zoneBox.maxLat],[zoneBox.minLng,zoneBox.maxLat],[zoneBox.minLng,zoneBox.minLat]]]}};
+  if(map.getSource('disc-zone')){ map.getSource('disc-zone').setData(poly); }
+  else{
+    map.addSource('disc-zone',{type:'geojson',data:poly});
+    map.addLayer({id:'disc-zone-fill',type:'fill',source:'disc-zone',paint:{'fill-color':'#e8571a','fill-opacity':0.08}});
+    map.addLayer({id:'disc-zone-line',type:'line',source:'disc-zone',paint:{'line-color':'#e8571a','line-width':1.5,'line-dasharray':[2,2]}});
+  }
+}
+
+// --- Requete Overpass ---
+async function runDiscovery(){
+  if(!zoneBox) return;
+  var btn=document.getElementById('disc-run-btn');
+  var st=document.getElementById('disc-result-status');
+  btn.disabled=true; btn.textContent='Recherche en cours...';
+  st.textContent='Interrogation d\'OpenStreetMap...';
+  var bbox=zoneBox.minLat+','+zoneBox.minLng+','+zoneBox.maxLat+','+zoneBox.maxLng;
+  var q='[out:json][timeout:25];(way["highway"~"^(motorway|trunk|primary|secondary|tertiary|unclassified|residential|road|track|service)$"]('+bbox+'););out geom;';
+  var endpoints=['https://overpass-api.de/api/interpreter','https://overpass.kumi.systems/api/interpreter'];
+  var data=null, err=null;
+  for(var i=0;i<endpoints.length && !data;i++){
+    try{
+      var res=await fetch(endpoints[i],{method:'POST',body:'data='+encodeURIComponent(q)});
+      if(res.ok) data=await res.json();
+    }catch(e){ err=e; }
+  }
+  if(!data){ st.textContent='Echec de la requete. Reessaie dans un instant.'; btn.disabled=false; btn.textContent='Chercher des routes'; return; }
+  processOverpass(data);
+}
+
+function processOverpass(data){
+  var st=document.getElementById('disc-result-status');
+  var sinuoMin = parseInt(document.getElementById('disc-sinuo').value,10)/100;
+  var lenMin = parseInt(document.getElementById('disc-length').value,10);
+  var trafficWant = document.getElementById('disc-traffic').value;
+  var refMinute = hourlyOpen? hourlyMinute : 720;
+  // ids de mes routes existantes -> pour ecarter les routes deja connues (chevauchement approx)
+  var feats=[];
+  (data.elements||[]).forEach(function(el){
+    if(el.type!=='way' || !el.geometry || el.geometry.length<2) return;
+    var pts=el.geometry.map(function(g){ return [g.lon,g.lat]; });
+    var len=polyLength(pts);
+    if(len<lenMin) return;
+    var sinuo=sinuosity(pts);
+    var straight=longestStraight(pts);
+    var cls=el.tags && el.tags.highway || 'road';
+    var tv=trafficAt(refMinute, cls);
+    // filtre forme
+    if(discShape==='sinueuse' && sinuo<sinuoMin) return;
+    if(discShape==='droite' && straight<Math.max(lenMin,400)) return;
+    if(discShape==='all' && sinuo<sinuoMin && straight<600) return;
+    // filtre trafic
+    if(trafficWant==='low' && tv>=0.35) return;
+    if(trafficWant==='med' && (tv<0.3||tv>0.6)) return;
+    if(trafficWant==='high' && tv<0.55) return;
+    // ecarte routes deja enregistrees (proximite du milieu)
+    if(isKnownRoute(pts)) return;
+    var score = (discShape==='droite')? straight : sinuo*1000 + len*0.05;
+    feats.push({type:'Feature',
+      properties:{osmid:el.id, name:(el.tags&&el.tags.name)||'', roadClass:cls,
+        sinuo:Math.round(sinuo*100), len:Math.round(len), straight:Math.round(straight),
+        tval:tv, tcolor:trafficColor(tv), score:score},
+      geometry:{type:'LineString',coordinates:pts}});
+  });
+  feats.sort(function(a,b){ return b.properties.score-a.properties.score; });
+  feats=feats.slice(0,120);
+  discoveredFeatures=feats;
+  renderDiscovered();
+  var btn=document.getElementById('disc-run-btn'); btn.disabled=false; btn.textContent='Chercher des routes';
+  if(!feats.length){ st.textContent='Aucune route ne correspond. Elargis la zone ou baisse les criteres.'; }
+  else{ st.textContent=feats.length+' route'+(feats.length>1?'s':'')+' trouvee'+(feats.length>1?'s':'')+'. Tape une route pour la sauver en spot.'; }
+  document.getElementById('disc-clear-btn').style.display = feats.length? 'block':'none';
+}
+
+function isKnownRoute(pts){
+  var mid=pts[Math.floor(pts.length/2)];
+  return spots.some(function(s){
+    if(s.kind!=='route'||!s.routeLine||!s.routeLine.length) return false;
+    var m2=s.routeLine[Math.floor(s.routeLine.length/2)];
+    return haversine(mid,m2)<120;
+  });
+}
+
+function renderDiscovered(){
+  var geo={type:'FeatureCollection',features:discoveredFeatures};
+  if(map.getSource('discovered')){ map.getSource('discovered').setData(geo); }
+  else{
+    map.addSource('discovered',{type:'geojson',data:geo});
+    map.addLayer({id:'discovered-line',type:'line',source:'discovered',
+      layout:{'line-cap':'round','line-join':'round'},
+      paint:{'line-color':'#38bdf8','line-width':4,'line-opacity':0.9}});
+    map.addLayer({id:'discovered-hit',type:'line',source:'discovered',
+      paint:{'line-color':'#000','line-opacity':0,'line-width':18}});
+    map.on('click','discovered-hit', onDiscoveredClick);
+    map.on('mouseenter','discovered-hit',function(){ map.getCanvas().style.cursor='pointer'; });
+    map.on('mouseleave','discovered-hit',function(){ map.getCanvas().style.cursor=''; });
+  }
+  map.setLayoutProperty('discovered-line','visibility','visible');
+  map.setLayoutProperty('discovered-hit','visibility','visible');
+}
+
+function onDiscoveredClick(e){
+  var f=e.features[0]; var p=f.properties;
+  // on relit la geometrie d'origine depuis discoveredFeatures via osmid (Mapbox serialise les props)
+  var src=(discoveredFeatures||[]).find(function(x){ return x.properties.osmid==p.osmid; });
+  var line = src? src.geometry.coordinates : null;
+  var nm = p.name || 'Route decouverte';
+  var msg = nm+'\nSinuosite '+p.sinuo+'% | '+(p.len>=1000?(p.len/1000).toFixed(1)+'km':p.len+'m')+' | '+trafficLabel(p.tval)+'\n\nSauver comme nouveau spot route ?';
+  if(confirm(msg) && line){ saveDiscoveredAsRoute(nm, line, p); }
+}
+
+function saveDiscoveredAsRoute(name, line, p){
+  var id='route_'+Date.now()+'_'+Math.floor(Math.random()*1000);
+  var s={ id:id, kind:'route', name:name, routeLine:line,
+    lat:line[Math.floor(line.length/2)][1], lng:line[Math.floor(line.length/2)][0],
+    status:'A explorer', notes:'Decouverte OSM. Sinuosite '+p.sinuo+'%, '+(p.len>=1000?(p.len/1000).toFixed(1)+'km':p.len+'m')+'.',
+    images:[], noPhotos:true, createdAt:Date.now() };
+  if(p.sinuo>=25) s.curve='Tres sinueuse'; else if(p.sinuo>=10) s.curve='Sinueuse'; else s.curve='Droite';
+  spots.push(s);
+  if(typeof persist==='function') persist();
+  if(typeof renderMarkers==='function') renderMarkers();
+  if(typeof showToast==='function') showToast('Route sauvee : '+name);
+  // retire cette feature des resultats
+  discoveredFeatures=discoveredFeatures.filter(function(x){ return x.properties.osmid!=p.osmid; });
+  renderDiscovered();
+}
+
+function clearDiscovery(){
+  discoveredFeatures=null;
+  if(map.getSource('discovered')){ map.getSource('discovered').setData({type:'FeatureCollection',features:[]}); }
+  if(map.getLayer('discovered-line')){ map.setLayoutProperty('discovered-line','visibility','none'); map.setLayoutProperty('discovered-hit','visibility','none'); }
+  if(map.getLayer('hourly-disc-line')) map.setLayoutProperty('hourly-disc-line','visibility','none');
+  document.getElementById('disc-result-status').textContent='';
+  document.getElementById('disc-clear-btn').style.display='none';
+}
 
 </script>
 <script>
