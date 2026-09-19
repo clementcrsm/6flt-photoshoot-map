@@ -596,6 +596,17 @@ nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-
 .client-extra-row .extra-key{max-width:40%}
 .client-extra-row button{background:transparent;border:1px solid var(--border);border-radius:8px;color:#e84040;width:38px;cursor:pointer;flex-shrink:0}
 .client-extra-add{background:transparent;border:1px dashed var(--border);border-radius:8px;color:var(--muted);font-family:'Inter',sans-serif;font-size:12px;padding:8px;cursor:pointer;width:100%;margin-top:4px}
+.client-spot-row{display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:8px;margin-top:6px}
+.client-spot-row img{width:38px;height:38px;border-radius:6px;object-fit:cover;flex-shrink:0;background:var(--surface2)}
+.client-spot-row .csr-noimg{width:38px;height:38px;border-radius:6px;flex-shrink:0;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--muted)}
+.client-spot-row .csr-body{flex:1;min-width:0}
+.client-spot-row .csr-name{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.client-spot-row .csr-type{font-size:11px;color:var(--muted)}
+.client-spot-row .csr-del{background:none;border:none;color:var(--muted);cursor:pointer;font-size:15px;flex-shrink:0}
+.client-spot-row .csr-del:hover{color:#e84040}
+#client-spot-pick-banner{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;font-size:13px;font-weight:600;padding:11px 18px;border-radius:24px;box-shadow:0 8px 30px rgba(0,0,0,.5);z-index:2000;display:none;align-items:center;gap:12px}
+#client-spot-pick-banner.show{display:flex}
+#client-spot-pick-banner button{background:rgba(255,255,255,.25);border:none;color:#fff;border-radius:16px;padding:5px 12px;font-size:12px;font-weight:600;cursor:pointer}
 .client-car-row{display:flex;gap:8px;margin-bottom:6px;align-items:center}
 .client-car-row .car-model{flex:1;min-width:0;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Inter',sans-serif;font-size:13px;padding:9px 10px}
 .client-car-row .car-color{max-width:42%;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Inter',sans-serif;font-size:13px;padding:9px 8px}
@@ -740,12 +751,85 @@ nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-
 .login-submit:hover{opacity:.88}
 .login-submit:disabled{opacity:.5;cursor:default}
 .login-error{font-family:'Inter',sans-serif;font-size:13px;color:#e84040;min-height:18px;text-align:center}
+/* ===== PLANNING (onglet test) ===== */
+#view-planning{overflow:hidden}
+.pl-wrap{display:flex;width:100%;height:100%;overflow:hidden}
+/* colonne gauche : source de donnees piochable */
+.pl-side{width:300px;flex-shrink:0;border-right:1px solid var(--border);display:flex;flex-direction:column;background:var(--surface)}
+.pl-side-head{padding:14px;border-bottom:1px solid var(--border);display:flex;flex-direction:column;gap:10px;flex-shrink:0}
+.pl-source-tabs{display:flex;gap:4px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:4px}
+.pl-source-tab{flex:1;padding:7px 8px;font-size:12px;font-weight:600;color:var(--muted);background:none;border:none;border-radius:5px;cursor:pointer;transition:all .15s}
+.pl-source-tab.active{background:var(--accent);color:#fff}
+.pl-search{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Inter',sans-serif;font-size:13px;padding:9px 12px;outline:none}
+.pl-search:focus{border-color:var(--accent)}
+.pl-list{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px}
+.pl-list::-webkit-scrollbar{width:4px}
+.pl-list::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.pl-item{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px;cursor:pointer;display:flex;gap:10px;align-items:center;transition:border-color .15s}
+.pl-item:hover{border-color:var(--accent)}
+.pl-item.armed{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.pl-item-thumb{width:44px;height:44px;border-radius:7px;object-fit:cover;flex-shrink:0;background:var(--surface2)}
+.pl-item-noimg{width:44px;height:44px;border-radius:7px;flex-shrink:0;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:18px;color:var(--muted)}
+.pl-item-body{flex:1;min-width:0}
+.pl-item-title{font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pl-item-sub{font-size:11px;color:var(--muted);font-family:'Space Mono',monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pl-blocks-lib{padding:12px;border-top:1px solid var(--border);display:flex;flex-wrap:wrap;gap:6px;flex-shrink:0}
+.pl-block-chip{background:var(--bg);border:1px solid var(--border);border-radius:20px;padding:6px 12px;font-size:11px;font-weight:600;color:var(--text);cursor:pointer;transition:all .15s}
+.pl-block-chip:hover{border-color:var(--accent);color:var(--accent)}
+/* centre : le document */
+.pl-doc-zone{flex:1;overflow-y:auto;background:var(--bg);display:flex;justify-content:center;padding:24px 20px 80px}
+.pl-doc-zone::-webkit-scrollbar{width:6px}
+.pl-doc-zone::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+.pl-doc{width:100%;max-width:720px;display:flex;flex-direction:column;gap:14px}
+.pl-doc-empty{text-align:center;color:var(--muted);font-size:13px;padding:60px 20px;line-height:1.6}
+.pl-block{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px;position:relative;transition:border-color .15s}
+.pl-block.armed-target{border-color:var(--accent);box-shadow:0 0 0 2px rgba(232,87,26,.3)}
+.pl-block-tools{position:absolute;top:10px;right:10px;display:flex;gap:4px;opacity:0;transition:opacity .15s}
+.pl-block:hover .pl-block-tools{opacity:1}
+.pl-block-tools button{width:26px;height:26px;border-radius:6px;background:var(--bg);border:1px solid var(--border);color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:13px;line-height:1}
+.pl-block-tools button:hover{color:var(--text);border-color:var(--accent)}
+.pl-block-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.pl-field{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Inter',sans-serif;font-size:14px;padding:10px 12px;outline:none;resize:vertical}
+.pl-field:focus{border-color:var(--accent)}
+.pl-field-lg{font-size:20px;font-weight:800;border:none;border-bottom:1px solid var(--border);border-radius:0;padding:6px 0;background:transparent}
+.pl-field-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+.pl-field-row .pl-field{flex:1;min-width:130px}
+.pl-hint{font-size:11px;color:var(--muted);margin-top:8px;font-style:italic}
+/* bloc spots conseilles */
+.pl-spot-line{display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)}
+.pl-spot-line:last-child{border-bottom:none}
+.pl-spot-thumb{width:52px;height:52px;border-radius:8px;object-fit:cover;flex-shrink:0;background:var(--surface2)}
+.pl-spot-info{flex:1;min-width:0}
+.pl-spot-name{font-size:14px;font-weight:700}
+.pl-spot-meta{font-size:12px;color:var(--muted);margin-top:2px}
+.pl-badge{font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;letter-spacing:.03em;flex-shrink:0}
+.pl-badge.good{background:rgba(60,160,90,.18);color:#5fc07f}
+.pl-badge.neutral{background:var(--surface2);color:var(--muted)}
+.pl-badge.avoid{background:rgba(220,70,70,.15);color:#e46464}
+.pl-spot-remove{background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;flex-shrink:0;padding:4px}
+.pl-spot-remove:hover{color:#e84040}
+.pl-mini-map{width:100%;border-radius:10px;display:block;margin-top:6px;border:1px solid var(--border)}
+.pl-color-note{font-size:12px;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.pl-armed-banner{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--accent);color:#fff;font-size:13px;font-weight:600;padding:10px 18px;border-radius:24px;box-shadow:0 8px 30px rgba(0,0,0,.5);z-index:1600;display:none;align-items:center;gap:10px}
+.pl-armed-banner.show{display:flex}
+.pl-armed-banner button{background:rgba(255,255,255,.25);border:none;color:#fff;border-radius:16px;padding:4px 12px;font-size:12px;font-weight:600;cursor:pointer}
+.pl-actions{padding:12px 14px;border-top:1px solid var(--border);display:flex;gap:8px;flex-shrink:0}
+.pl-actions button{flex:1;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:12px;font-weight:600;padding:10px;cursor:pointer;transition:all .15s}
+.pl-actions button:hover{border-color:var(--accent);color:var(--accent)}
+.pl-actions .pl-btn-primary{background:var(--accent);border-color:var(--accent);color:#fff}
+@media (max-width:760px){
+  .pl-wrap{flex-direction:column}
+  .pl-side{width:100%;height:44%;border-right:none;border-bottom:1px solid var(--border)}
+  .pl-doc-zone{padding:16px 12px 90px}
+  .pl-block{padding:14px}
+  .pl-blocks-lib{max-height:96px;overflow-y:auto}
+}
 </style>
 </head>
 <body>
 <div id="splash">
   <img id="splash-logo" src="data:image/png;base64,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" alt="6flt">
-  <div id="splash-credit">Créé par 6flt photographie et Claude<br><span style="opacity:.6">v1.24</span></div>
+  <div id="splash-credit">Créé par 6flt photographie et Claude<br><span style="opacity:.6">v1.26</span></div>
 </div>
 
 <div id="login-screen">
@@ -770,6 +854,7 @@ nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-
     <button class="nav-tab active" onclick="switchView('map')">Carte</button>
     <button class="nav-tab" onclick="switchView('gallery')">Galerie</button>
     <button class="nav-tab" onclick="switchView('shotlist')">Shotlist</button>
+    <button class="nav-tab" onclick="switchView('planning')">Planning</button>
     <button class="nav-tab" onclick="switchView('clients')">Clients</button>
     <button class="nav-tab" onclick="switchView('events')">Evenements</button>
     <button class="nav-tab" onclick="window.open('https://6fltphotographie.mypixieset.com/','_blank')">Portfolio</button>
@@ -1419,6 +1504,33 @@ nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-
   </div>
 </div>
 
+<div id="view-planning" class="view">
+  <div class="pl-wrap">
+    <div class="pl-side">
+      <div class="pl-side-head">
+        <div class="pl-source-tabs">
+          <button class="pl-source-tab active" id="pl-src-spots" onclick="plSetSource('spots')">Spots</button>
+          <button class="pl-source-tab" id="pl-src-clients" onclick="plSetSource('clients')">Clients</button>
+        </div>
+        <input type="text" class="pl-search" id="pl-search" placeholder="Rechercher..." oninput="plRenderList()">
+      </div>
+      <div class="pl-list" id="pl-list"></div>
+      <div class="pl-blocks-lib" id="pl-blocks-lib"></div>
+      <div class="pl-actions">
+        <button onclick="plClearDoc()">Vider</button>
+        <button class="pl-btn-primary" onclick="plExportPDF()">Export PDF</button>
+      </div>
+    </div>
+    <div class="pl-doc-zone">
+      <div class="pl-doc" id="pl-doc"></div>
+    </div>
+  </div>
+  <div class="pl-armed-banner" id="pl-armed-banner">
+    <span id="pl-armed-text">Element arme</span>
+    <button onclick="plDisarm()">Annuler</button>
+  </div>
+</div>
+
 <div id="view-clients" class="view">
   <div class="clients-wrap">
     <div class="clients-subnav">
@@ -1481,6 +1593,9 @@ nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-
     <label class="client-field-label">Voitures</label>
     <div id="client-cars"></div>
     <button class="client-extra-add" onclick="addClientCarRow()">+ Ajouter une voiture</button>
+    <label class="client-field-label">Spots associes</label>
+    <div id="client-spots"></div>
+    <button class="client-extra-add" onclick="startClientSpotPick()">+ Choisir un spot sur la carte</button>
     <div class="client-row2">
       <div class="client-row2-col">
         <label class="client-field-label">Offre</label>
@@ -1525,6 +1640,11 @@ nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-
       <button class="client-delete-btn" id="client-delete-btn" onclick="deleteClient()" style="display:none" title="Mettre a la corbeille" aria-label="Corbeille"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2.5 4h11M6 4V2.5h4V4M5 4l.5 9h5l.5-9M6.5 6.5v4M9.5 6.5v4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
     </div>
   </div>
+</div>
+
+<div id="client-spot-pick-banner">
+  <span>Tape un spot sur la carte pour l'associer</span>
+  <button onclick="cancelClientSpotPick()">Terminer</button>
 </div>
 
 <div id="view-events" class="view">
@@ -2210,6 +2330,7 @@ function renderClientsTrash(){
 
 function openNewClientPanel(){
   currentClientId = null; currentClientPhoto = null;
+  clientSpotIds = []; clientSpotPickMode = false;
   document.getElementById('client-name').value = '';
   document.getElementById('client-cars').innerHTML = '';
   addClientCarRow();
@@ -2221,6 +2342,7 @@ function openNewClientPanel(){
   document.getElementById('client-gallery').value = '';
   document.getElementById('client-notes').value = '';
   document.getElementById('client-extras').innerHTML = '';
+  clientSpotIds = []; renderClientSpots();
   var prev = document.getElementById('client-photo-preview');
   prev.style.display = 'none'; prev.src = '';
   document.getElementById('client-delete-btn').style.display = 'none';
@@ -2230,6 +2352,8 @@ function openExistingClientPanel(id){
   var c = clients.find(function(x){ return x.id===id; });
   if(!c) return;
   currentClientId = id; currentClientPhoto = c.photo || null;
+  clientSpotIds = Array.isArray(c.spotIds) ? c.spotIds.slice() : [];
+  clientSpotPickMode = false;
   document.getElementById('client-name').value = c.name||'';
   var carsWrap = document.getElementById('client-cars'); carsWrap.innerHTML = '';
   var carList = Array.isArray(c.cars) ? c.cars : (c.car ? [{model:c.car, color:''}] : []);
@@ -2244,6 +2368,7 @@ function openExistingClientPanel(id){
   document.getElementById('client-notes').value = c.notes||'';
   var ex = document.getElementById('client-extras'); ex.innerHTML = '';
   (c.extras||[]).forEach(function(e){ addClientExtraRow(e.key, e.value); });
+  renderClientSpots();
   var prev = document.getElementById('client-photo-preview');
   if(c.photo){ prev.src = c.photo; prev.style.display = 'block'; } else { prev.style.display='none'; prev.src=''; }
   document.getElementById('client-delete-btn').style.display = '';
@@ -2353,6 +2478,49 @@ function addClientCarRow(model, color){
   wrap.appendChild(row);
 }
 
+/* ---- spots associes a un client (selection sur la carte) ---- */
+var clientSpotIds = [];        // ids des spots associes au client en cours d'edition
+var clientSpotPickMode = false;
+function renderClientSpots(){
+  var wrap = document.getElementById('client-spots'); if(!wrap) return;
+  wrap.innerHTML = '';
+  clientSpotIds.forEach(function(sid){
+    var s = spots.find(function(x){ return x.id===sid; });
+    if(!s) return;
+    var row = document.createElement('div');
+    row.className = 'client-spot-row';
+    var thumb = s.images && s.images.length ? '<img src="'+s.images[0]+'">' : '<div class="csr-noimg">&#128205;</div>';
+    row.innerHTML = thumb +
+      '<div class="csr-body"><div class="csr-name">'+escapeHtml(s.name||'Spot')+'</div><div class="csr-type">'+escapeHtml(s.type||'')+'</div></div>' +
+      '<button class="csr-del" title="Retirer">&#x2715;</button>';
+    row.querySelector('.csr-del').onclick = function(){
+      clientSpotIds = clientSpotIds.filter(function(x){ return x!==sid; });
+      renderClientSpots();
+    };
+    wrap.appendChild(row);
+  });
+}
+function startClientSpotPick(){
+  clientSpotPickMode = true;
+  document.getElementById('client-panel').classList.remove('open');   // masque la fiche, laisse voir la carte
+  switchView('map');
+  document.getElementById('client-spot-pick-banner').classList.add('show');
+  showToast('Tape un spot sur la carte');
+}
+function cancelClientSpotPick(){
+  clientSpotPickMode = false;
+  document.getElementById('client-spot-pick-banner').classList.remove('show');
+  document.getElementById('client-panel').classList.add('open');      // rouvre la fiche
+  renderClientSpots();
+}
+/* appele par openExistingSpotPanel quand le mode est actif */
+function clientSpotPickHandle(id){
+  if(clientSpotIds.indexOf(id)===-1) clientSpotIds.push(id);
+  var s = spots.find(function(x){ return x.id===id; });
+  showToast((s&&s.name?s.name:'Spot')+' associe');
+  // on reste en mode pick pour en ajouter plusieurs ; la fiche se rouvre via "Terminer"
+}
+
 function addClientExtraRow(key, value){
   var wrap = document.getElementById('client-extras');
   var row = document.createElement('div');
@@ -2405,6 +2573,7 @@ function saveClient(){
     gallery: document.getElementById('client-gallery').value.trim(),
     notes: document.getElementById('client-notes').value.trim(),
     extras: extras,
+    spotIds: clientSpotIds.slice(),
     photo: currentClientPhoto,
     createdAt: currentClientId ? undefined : new Date().toISOString()
   };
@@ -3221,6 +3390,7 @@ function openNewSpotPanel(lat, lng){
 }
 
 function openExistingSpotPanel(id){
+  if(clientSpotPickMode){ clientSpotPickHandle(id); return; }
   var spot = spots.find(function(s){return s.id===id;});
   if(!spot) return;
   currentSpotId=id; currentImages=spot.images?spot.images.slice():[]; currentMainIdx=0; currentRating=spot.rating||0;
@@ -3671,7 +3841,7 @@ function switchView(v){
   document.querySelectorAll('.nav-tab').forEach(function(el){el.classList.remove('active');});
   document.getElementById('view-'+v).classList.add('active');
   var fab=document.getElementById('find-spot-fab'); if(fab && v!=='clients') fab.classList.remove('show');
-  var idx = {map:0, gallery:1, shotlist:2, clients:3, events:4}[v];
+  var idx = {map:0, gallery:1, shotlist:2, planning:3, clients:4, events:5}[v];
   if(idx!==undefined) document.querySelectorAll('.nav-tab')[idx].classList.add('active');
   if(v==='map'){
     setTimeout(function(){map.resize();},100);
@@ -3680,6 +3850,7 @@ function switchView(v){
     document.getElementById('btn-add-spot').style.display='none';
     if(v==='gallery') renderGallery();
     if(v==='shotlist'){ buildColorPicker(); renderMatchGrid(); renderInspirations(); }
+    if(v==='planning') initPlanning();
     if(v==='clients'){ switchClientSub('clients'); renderClients(); updateFab(); }
     if(v==='events') renderEvents();
   }
@@ -3689,7 +3860,7 @@ function openInstagram(){
   document.querySelectorAll('.view').forEach(function(el){el.classList.remove('active');});
   document.querySelectorAll('.nav-tab').forEach(function(el){el.classList.remove('active');});
   document.getElementById('view-insta').classList.add('active');
-  document.querySelectorAll('.nav-tab')[6].classList.add('active');
+  document.querySelectorAll('.nav-tab')[7].classList.add('active');
   document.getElementById('btn-add-spot').style.display='none';
 }
 
@@ -3960,6 +4131,279 @@ function renderMatchGrid(){
   });
 }
 function clearShotlistGroup(){ shotlistGroup=null; renderMatchGrid(); }
+
+/* ===================== PLANNING (onglet test, 100% local) ===================== */
+/* Modele du document : pile de blocs. Chaque bloc = {id, type, data} */
+var plDoc = null;               // {blocks:[...]}
+var plSource = 'spots';         // colonne gauche : 'spots' | 'clients'
+var plArmed = null;             // element arme pour insertion au 2e clic : {kind, id}
+var PL_BLOCKS = [
+  {type:'header',   label:'En-tete'},
+  {type:'car',      label:'Voiture(s)'},
+  {type:'spots',    label:'Spots conseilles'},
+  {type:'sun',      label:'Planning soleil'},
+  {type:'inspi',    label:'Inspirations'},
+  {type:'text',     label:'Texte libre'},
+  {type:'price',    label:'Tarif / conditions'}
+];
+
+function initPlanning(){
+  if(!plDoc){
+    plDoc = { blocks:[ mkBlock('header'), mkBlock('spots') ] };
+  }
+  plBuildBlocksLib();
+  plSetSource(plSource);
+  plRenderDoc();
+}
+function mkBlock(type){
+  var id = 'b'+Date.now()+Math.floor(Math.random()*1000);
+  var data = {};
+  if(type==='spots') data.spotIds = [];
+  if(type==='inspi') data.spotIds = [];  // reutilise les images des spots pour l'instant
+  return { id:id, type:type, data:data };
+}
+
+/* --- colonne gauche : bibliotheque de blocs --- */
+function plBuildBlocksLib(){
+  var lib=document.getElementById('pl-blocks-lib'); if(!lib) return;
+  lib.innerHTML='';
+  PL_BLOCKS.forEach(function(b){
+    var chip=document.createElement('button'); chip.className='pl-block-chip';
+    chip.textContent='+ '+b.label;
+    chip.onclick=function(){ plAddBlock(b.type); };
+    lib.appendChild(chip);
+  });
+}
+function plAddBlock(type){
+  plDoc.blocks.push(mkBlock(type));
+  plRenderDoc();
+  var zone=document.querySelector('.pl-doc-zone'); if(zone) zone.scrollTop=zone.scrollHeight;
+}
+
+/* --- colonne gauche : source piochable (spots ou clients) --- */
+function plSetSource(src){
+  plSource=src;
+  document.getElementById('pl-src-spots').classList.toggle('active', src==='spots');
+  document.getElementById('pl-src-clients').classList.toggle('active', src==='clients');
+  document.getElementById('pl-search').value='';
+  plRenderList();
+}
+function plRenderList(){
+  var host=document.getElementById('pl-list'); if(!host) return;
+  var q=(document.getElementById('pl-search').value||'').toLowerCase().trim();
+  host.innerHTML='';
+  if(plSource==='spots'){
+    var list=spots.filter(function(s){ return !q || (s.name||'').toLowerCase().indexOf(q)>-1 || (s.type||'').toLowerCase().indexOf(q)>-1; });
+    if(!list.length){ host.innerHTML='<div style="color:var(--muted);font-size:12px;padding:10px">Aucun spot</div>'; return; }
+    list.forEach(function(s){
+      var thumb = s.images&&s.images.length ? '<img class="pl-item-thumb" src="'+s.images[0]+'">' : '<div class="pl-item-noimg">&#128205;</div>';
+      var el=document.createElement('div'); el.className='pl-item'+(plArmed&&plArmed.kind==='spot'&&plArmed.id===s.id?' armed':'');
+      el.innerHTML=thumb+'<div class="pl-item-body"><div class="pl-item-title">'+esc(s.name||'Spot')+'</div><div class="pl-item-sub">'+esc(s.type||'')+'</div></div>';
+      el.onclick=function(){ plArm('spot', s.id, s.name||'Spot'); };
+      host.appendChild(el);
+    });
+  } else {
+    var cl=clients.filter(function(c){ return !q || (c.name||'').toLowerCase().indexOf(q)>-1; });
+    if(!cl.length){ host.innerHTML='<div style="color:var(--muted);font-size:12px;padding:10px">Aucun client</div>'; return; }
+    cl.forEach(function(c){
+      var cars=Array.isArray(c.cars)?c.cars:[];
+      var sub=cars.map(function(v){return v.model;}).filter(Boolean).join(', ')||'Pas de voiture';
+      var el=document.createElement('div'); el.className='pl-item'+(plArmed&&plArmed.kind==='client'&&plArmed.id===c.id?' armed':'');
+      el.innerHTML='<div class="pl-item-noimg">&#128100;</div><div class="pl-item-body"><div class="pl-item-title">'+esc(c.name||'Client')+'</div><div class="pl-item-sub">'+esc(sub)+'</div></div>';
+      el.onclick=function(){ plArm('client', c.id, c.name||'Client'); };
+      host.appendChild(el);
+    });
+  }
+}
+
+/* --- mecanisme "arme puis clique la cible" --- */
+function plArm(kind, id, name){
+  if(plArmed && plArmed.kind===kind && plArmed.id===id){ plDisarm(); return; }
+  plArmed={ kind:kind, id:id };
+  var banner=document.getElementById('pl-armed-banner');
+  document.getElementById('pl-armed-text').textContent=(kind==='spot'?'Spot arme : ':'Client arme : ')+name+' - choisis un bloc';
+  banner.classList.add('show');
+  plRenderList(); plRenderDoc();
+}
+function plDisarm(){
+  plArmed=null;
+  document.getElementById('pl-armed-banner').classList.remove('show');
+  plRenderList(); plRenderDoc();
+}
+/* cible = un bloc du doc qui accepte l'element arme */
+function plDropInto(blockId){
+  if(!plArmed) return;
+  var blk=plDoc.blocks.find(function(b){return b.id===blockId;}); if(!blk) return;
+  if(plArmed.kind==='spot'){
+    if((blk.type==='spots'||blk.type==='inspi')){
+      blk.data.spotIds=blk.data.spotIds||[];
+      if(blk.data.spotIds.indexOf(plArmed.id)===-1) blk.data.spotIds.push(plArmed.id);
+    } else { showToast('Ce bloc n\'accepte pas un spot'); return; }
+  } else if(plArmed.kind==='client'){
+    if(blk.type==='header'||blk.type==='car'){
+      blk.data.clientId=plArmed.id;
+    } else { showToast('Ce bloc n\'accepte pas un client'); return; }
+  }
+  plDisarm();
+  plRenderDoc();
+}
+
+/* --- bloc : monter/descendre/supprimer --- */
+function plMoveBlock(id, dir){
+  var i=plDoc.blocks.findIndex(function(b){return b.id===id;});
+  var j=i+dir;
+  if(i<0||j<0||j>=plDoc.blocks.length) return;
+  var tmp=plDoc.blocks[i]; plDoc.blocks[i]=plDoc.blocks[j]; plDoc.blocks[j]=tmp;
+  plRenderDoc();
+}
+function plRemoveBlock(id){
+  plDoc.blocks=plDoc.blocks.filter(function(b){return b.id!==id;});
+  plRenderDoc();
+}
+function plRemoveSpotFromBlock(blockId, spotId){
+  var blk=plDoc.blocks.find(function(b){return b.id===blockId;}); if(!blk) return;
+  blk.data.spotIds=(blk.data.spotIds||[]).filter(function(x){return x!==spotId;});
+  plRenderDoc();
+}
+function plSetField(blockId, key, val){
+  var blk=plDoc.blocks.find(function(b){return b.id===blockId;}); if(!blk) return;
+  blk.data[key]=val;
+}
+
+/* --- couleurs du client, pour scorer les spots --- */
+function plClientColors(clientId){
+  var c=clients.find(function(x){return x.id===clientId;});
+  if(!c||!Array.isArray(c.cars)) return [];
+  var cols=[];
+  c.cars.forEach(function(v){ if(v.color && COLOR_RULES[v.color] && cols.indexOf(v.color)===-1) cols.push(v.color); });
+  return cols;
+}
+/* cherche le clientId renseigne dans un bloc header/car du doc, pour teinter les spots */
+function plActiveClientId(){
+  var b=plDoc.blocks.find(function(x){return (x.type==='header'||x.type==='car')&&x.data.clientId;});
+  return b?b.data.clientId:null;
+}
+function plBadgeFor(spot, colors){
+  if(!colors||!colors.length) return null;
+  var sc=colorScoreMulti(spot, colors);
+  if(sc>=3) return {cls:'good', t:'Propice'};
+  if(sc<=-1) return {cls:'avoid', t:'A eviter'};
+  return {cls:'neutral', t:'Neutre'};
+}
+
+/* --- rendu du document --- */
+function plRenderDoc(){
+  var host=document.getElementById('pl-doc'); if(!host) return;
+  host.innerHTML='';
+  if(!plDoc.blocks.length){
+    host.innerHTML='<div class="pl-doc-empty">Document vide.<br>Ajoute des blocs depuis la bibliotheque en bas a gauche,<br>puis pioche spots et clients dans la liste.</div>';
+    return;
+  }
+  var activeColors = plActiveClientId() ? plClientColors(plActiveClientId()) : [];
+  plDoc.blocks.forEach(function(blk){
+    var el=document.createElement('div'); el.className='pl-block';
+    if(plArmed) el.className+=' armed-target';
+    el.innerHTML=plBlockInner(blk, activeColors);
+    // clic sur le bloc quand un element est arme = insertion
+    if(plArmed){ el.addEventListener('click', function(e){
+      if(e.target.closest('input,textarea,button')) return;
+      plDropInto(blk.id);
+    }); }
+    host.appendChild(el);
+  });
+}
+function plBlockTools(id){
+  return '<div class="pl-block-tools">'+
+    '<button title="Monter" onclick="plMoveBlock(\''+id+'\',-1)">&#8593;</button>'+
+    '<button title="Descendre" onclick="plMoveBlock(\''+id+'\',1)">&#8595;</button>'+
+    '<button title="Retirer" onclick="plRemoveBlock(\''+id+'\')">&times;</button>'+
+    '</div>';
+}
+function plBlockInner(blk, colors){
+  var d=blk.data, id=blk.id, tools=plBlockTools(id);
+  if(blk.type==='header'){
+    var c=d.clientId?clients.find(function(x){return x.id===d.clientId;}):null;
+    var name=c?(c.name||''):(d.name||'');
+    return tools+'<div class="pl-block-label">Briefing shooting</div>'+
+      '<input class="pl-field pl-field-lg" placeholder="Nom du client" value="'+esc(name)+'" oninput="plSetField(\''+id+'\',\'name\',this.value)">'+
+      '<div class="pl-field-row">'+
+        '<input class="pl-field" type="date" value="'+esc(d.date||'')+'" oninput="plSetField(\''+id+'\',\'date\',this.value)">'+
+        '<input class="pl-field" placeholder="Lieu / ville" value="'+esc(d.place||'')+'" oninput="plSetField(\''+id+'\',\'place\',this.value)">'+
+      '</div>'+
+      (c?'':'<div class="pl-hint">Arme un client a gauche puis clique ce bloc pour le lier.</div>');
+  }
+  if(blk.type==='car'){
+    var cc=d.clientId?clients.find(function(x){return x.id===d.clientId;}):null;
+    var cars=cc&&Array.isArray(cc.cars)?cc.cars:[];
+    var body='';
+    if(cars.length){
+      body=cars.map(function(v){
+        var dot=v.color&&COLOR_SWATCHES[v.color]?'<span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:'+COLOR_SWATCHES[v.color]+';margin-right:6px;vertical-align:middle"></span>':'';
+        return '<div style="font-size:14px;padding:6px 0">'+dot+esc(v.model||'Voiture')+(v.color?' <span style="color:var(--muted);font-size:12px">('+esc(v.color)+')</span>':'')+'</div>';
+      }).join('');
+    } else {
+      body='<div class="pl-hint">Arme un client a gauche puis clique ce bloc.</div>';
+    }
+    return tools+'<div class="pl-block-label">Voiture(s)</div>'+body;
+  }
+  if(blk.type==='spots'){
+    var note='';
+    if(colors.length){
+      var chips=colors.map(function(col){return '<span style="display:inline-flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:50%;background:'+(COLOR_SWATCHES[col]||'#888')+';display:inline-block"></span>'+esc(col)+'</span>';}).join(' &middot; ');
+      note='<div class="pl-color-note">Conseil couleur actif : '+chips+'</div>';
+    } else {
+      note='<div class="pl-color-note">Lie un client (bloc en-tete ou voiture) pour activer le conseil couleur.</div>';
+    }
+    var ids=d.spotIds||[];
+    var lines='';
+    if(ids.length){
+      lines=ids.map(function(sid){
+        var s=spots.find(function(x){return x.id===sid;}); if(!s) return '';
+        var thumb=s.images&&s.images.length?'<img class="pl-spot-thumb" src="'+s.images[0]+'">':'<div class="pl-spot-thumb" style="display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--muted)">&#128205;</div>';
+        var badge=plBadgeFor(s, colors);
+        var bhtml=badge?'<span class="pl-badge '+badge.cls+'">'+badge.t+'</span>':'';
+        var env=asArray(s.environnement).concat(asArray(s.tonalite)).join(' &middot; ')||(s.type||'');
+        return '<div class="pl-spot-line">'+thumb+
+          '<div class="pl-spot-info"><div class="pl-spot-name">'+esc(s.name||'Spot')+'</div><div class="pl-spot-meta">'+env+'</div></div>'+
+          bhtml+
+          '<button class="pl-spot-remove" onclick="plRemoveSpotFromBlock(\''+id+'\',\''+sid+'\')">&times;</button>'+
+        '</div>';
+      }).join('');
+    } else {
+      lines='<div class="pl-hint">Arme un spot a gauche puis clique ce bloc pour l\'ajouter.</div>';
+    }
+    return tools+'<div class="pl-block-label">Spots conseilles</div>'+note+lines;
+  }
+  if(blk.type==='sun'){
+    return tools+'<div class="pl-block-label">Planning soleil</div>'+
+      '<div class="pl-hint">Bloc a brancher plus tard sur le module soleil (golden hour calculee par spot et date). Placeholder pour l\'instant.</div>'+
+      '<textarea class="pl-field" rows="2" placeholder="Notes horaires (ex: RDV 18h, golden hour ~19h30)" oninput="plSetField(\''+id+'\',\'notes\',this.value)">'+esc(d.notes||'')+'</textarea>';
+  }
+  if(blk.type==='inspi'){
+    var iids=d.spotIds||[];
+    var imgs='';
+    iids.forEach(function(sid){ var s=spots.find(function(x){return x.id===sid;}); if(s&&s.images&&s.images.length){ imgs+='<img src="'+s.images[0]+'" style="width:100%;border-radius:8px;margin-bottom:6px">'; } });
+    return tools+'<div class="pl-block-label">Inspirations</div>'+
+      (imgs||'<div class="pl-hint">Arme un spot a gauche et clique ce bloc pour reprendre sa photo comme reference.</div>');
+  }
+  if(blk.type==='text'){
+    return tools+'<div class="pl-block-label">Consignes</div>'+
+      '<textarea class="pl-field" rows="4" placeholder="Consignes libres : tenue, ambiance recherchee, deroule..." oninput="plSetField(\''+id+'\',\'text\',this.value)">'+esc(d.text||'')+'</textarea>';
+  }
+  if(blk.type==='price'){
+    return tools+'<div class="pl-block-label">Tarif / conditions</div>'+
+      '<textarea class="pl-field" rows="3" placeholder="Formule, tarif, duree, livraison..." oninput="plSetField(\''+id+'\',\'text\',this.value)">'+esc(d.text||'')+'</textarea>';
+  }
+  return tools+'<div class="pl-block-label">Bloc</div>';
+}
+
+function plClearDoc(){
+  if(confirm('Vider le document ?')){ plDoc={blocks:[]}; plDisarm(); plRenderDoc(); }
+}
+function plExportPDF(){
+  showToast('Export PDF a brancher a la validation de la structure');
+}
+/* ===================== FIN PLANNING ===================== */
 
 // SHOTLIST - INSPIRATION
 function persistInspirations(){ localStorage.setItem('6flt_inspirations', JSON.stringify(inspirations)); }
