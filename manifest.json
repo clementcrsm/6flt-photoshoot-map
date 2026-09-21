@@ -1,6 +1,6 @@
 {
-  "name": "6flt Spots",
-  "short_name": "6flt Spots",
+  "name": "Spoties",
+  "short_name": "Spoties",
   "description": "Cartographie de spots photo automobile",
   "start_url": "/6flt-photoshoot-map/",
   "scope": "/6flt-photoshoot-map/",

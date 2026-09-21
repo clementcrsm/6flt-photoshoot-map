@@ -1,8 +1,6 @@
 // Service worker 6flt Spots
-// Coquille en cache pour demarrage rapide et hors ligne.
-// HTML : reseau d'abord (toujours la derniere version en ligne, cache en secours hors ligne).
-// Icones/manifest : cache d'abord (rapides, changent rarement).
-// Tuiles Mapbox et API : toujours reseau, jamais en cache.
+// Met en cache la coquille de l'app (HTML + icones) pour demarrage rapide et ouverture hors ligne.
+// Les tuiles Mapbox et les API (meteo, golden hour) restent tributaires du reseau.
 const CACHE = '6flt-spots-v5';
 const SHELL = [
   './',
@@ -10,6 +8,7 @@ const SHELL = [
   './icon-180.png',
   './icon-192.png',
   './icon-512.png',
+  './icon-512-maskable.png',
   './manifest.json'
 ];
 
@@ -26,35 +25,35 @@ self.addEventListener('activate', function(e){
 });
 
 self.addEventListener('fetch', function(e){
-  var req = e.request;
-  var url = req.url;
-  // APIs distantes et tuiles : toujours reseau, pas de cache
+  var url = e.request.url;
+  // Ne jamais mettre en cache les API distantes ni les tuiles : toujours reseau
   if(url.indexOf('api.mapbox.com')>-1 || url.indexOf('mapbox.com')>-1 ||
      url.indexOf('openweathermap.org')>-1 || url.indexOf('sunrise-sunset.org')>-1 ||
      url.indexOf('googleapis.com')>-1 || url.indexOf('gstatic.com')>-1 ||
      url.indexOf('supabase.co')>-1 || url.indexOf('jsdelivr.net')>-1){
     return;
   }
-  // HTML / navigation : reseau d'abord, cache en secours
-  var isHTML = req.mode==='navigate' ||
-               (req.headers.get('accept')||'').indexOf('text/html')>-1 ||
-               url.indexOf('index.html')>-1 || url.endsWith('/');
+  // Coquille HTML : reseau d'abord pour que les mises a jour (logo, features) apparaissent
+  // immediatement, avec repli sur le cache hors ligne.
+  var isHTML = e.request.mode === 'navigate' || url.indexOf('index.html') > -1 || url.slice(-1) === '/';
   if(isHTML){
     e.respondWith(
-      fetch(req).then(function(resp){
+      fetch(e.request).then(function(resp){
         var copy = resp.clone();
-        caches.open(CACHE).then(function(c){ c.put(req, copy); });
+        caches.open(CACHE).then(function(c){ c.put(e.request, copy); });
         return resp;
       }).catch(function(){
-        return caches.match(req).then(function(c){ return c || caches.match('./index.html'); });
+        return caches.match(e.request).then(function(cached){ return cached || caches.match('./index.html'); });
       })
     );
     return;
   }
-  // Reste (icones, manifest) : cache d'abord
+  // Assets statiques (icones, manifest) : cache d'abord
   e.respondWith(
-    caches.match(req).then(function(cached){
-      return cached || fetch(req);
+    caches.match(e.request).then(function(cached){
+      return cached || fetch(e.request).then(function(resp){
+        return resp;
+      }).catch(function(){ return caches.match('./index.html'); });
     })
   );
 });
