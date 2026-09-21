@@ -329,20 +329,21 @@ body.panel-open #btn-sun{right:calc(62px + var(--panel) + 14px)}
 .gallery-header{padding:24px 32px 16px;border-bottom:1px solid var(--border);flex-shrink:0;display:flex;align-items:baseline;gap:16px}
 .gallery-header h2{font-size:22px;font-weight:800;letter-spacing:-.01em}
 .gallery-count{font-family:'Space Mono',monospace;font-size:12px;color:var(--muted)}
-.gallery-grid{flex:1;overflow-y:auto;padding:24px 32px;display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;align-content:start}
+.gallery-grid{flex:1;overflow-y:auto;padding:24px 32px;display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;align-content:start;grid-auto-rows:max-content}
 .gallery-grid::-webkit-scrollbar{width:4px}
 .gallery-grid::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
-.gallery-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer;transition:transform .18s,border-color .18s}
+.gallery-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;cursor:pointer;transition:transform .18s,border-color .18s;align-self:start}
 .gallery-card:hover{transform:translateY(-3px);border-color:var(--accent)}
-.gallery-card-img{width:100%;height:160px;object-fit:cover;display:block;background:var(--bg)}
-.gallery-card-no-img{width:100%;height:160px;background:var(--surface2);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:32px}
-.gallery-card-info{padding:12px 14px}
+.gallery-card-img{width:100%;height:120px;object-fit:cover;display:block;background:var(--bg)}
+.gallery-card-no-img{width:100%;height:120px;background:var(--surface2);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:28px}
+.gallery-card-info{padding:10px 12px}
 .gallery-del-badge{position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:50%;background:#e84040;border:2px solid #fff;display:none;align-items:center;justify-content:center;cursor:pointer;z-index:5;box-shadow:0 2px 8px rgba(0,0,0,.5)}
 .gallery-card.show-del .gallery-del-badge{display:flex;animation:badgePop .18s ease}
+.gallery-card.show-del{border-color:#e84040}
 @keyframes badgePop{from{transform:scale(0)}to{transform:scale(1)}}
 .gallery-del-badge svg{pointer-events:none}
 .gallery-card-title{font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.gallery-card-meta{font-size:11px;color:var(--muted);margin-top:4px;font-family:'Space Mono',monospace}
+.gallery-card-meta{font-size:11px;color:var(--muted);margin-top:4px;font-family:'Space Mono',monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
 /* MINI MAP + SELECTION (TRAJET) */
 .gallery-card{position:relative}
@@ -782,20 +783,21 @@ nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-
 .pl-types::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
 .pl-type-chip{flex-shrink:0;background:var(--bg);border:1px solid var(--border);border-radius:16px;padding:6px 13px;font-size:11px;font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap;transition:all .15s}
 .pl-type-chip.active{background:var(--accent);border-color:var(--accent);color:#fff}
-.pl-list{flex:1;min-height:0;overflow-y:auto;padding:14px;display:grid;grid-template-columns:1fr 1fr;gap:12px;align-content:start}
-.pl-item{background:var(--bg);border:1px solid var(--border);border-radius:11px;overflow:hidden;cursor:pointer;transition:border-color .15s;display:flex;flex-direction:column}
+.pl-list{flex:1;min-height:0;overflow-y:auto;padding:14px;display:grid;grid-template-columns:1fr 1fr;gap:12px;align-content:start;grid-auto-rows:max-content}
+.pl-item{background:var(--bg);border:1px solid var(--border);border-radius:11px;overflow:hidden;cursor:pointer;transition:border-color .15s;display:flex;flex-direction:column;min-width:0;align-self:start}
 .pl-item:hover{border-color:var(--accent)}
 .pl-item.armed{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
-.pl-item-img{width:100%;aspect-ratio:1;object-fit:cover;display:block;background:var(--surface2)}
-.pl-item-blank{width:100%;aspect-ratio:1;background:var(--surface2);display:flex;align-items:center;justify-content:center;color:var(--border)}
-.pl-item-blank svg{width:26px;height:26px;stroke:currentColor;fill:none;stroke-width:1.6}
+.pl-item-thumb{position:relative;width:100%;padding-top:100%;background:var(--surface2);flex-shrink:0}
+.pl-item-thumb img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;display:block}
+.pl-item-thumb .pl-thumb-ico{position:absolute;top:0;left:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:var(--border)}
+.pl-item-thumb .pl-thumb-ico svg{width:26px;height:26px;stroke:currentColor;fill:none;stroke-width:1.6}
 .pl-item-cap{padding:9px 10px;min-width:0}
 .pl-item-title{font-size:12.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pl-item-sub{font-size:10.5px;color:var(--muted);font-family:'Space Mono',monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
 .pl-list.rows{grid-template-columns:1fr}
 .pl-list.rows .pl-item{flex-direction:row;align-items:center;gap:13px;padding:10px}
-.pl-list.rows .pl-item-img,.pl-list.rows .pl-item-blank{width:46px;height:46px;flex-shrink:0;border-radius:9px;aspect-ratio:auto}
-.pl-list.rows .pl-item-blank svg{width:20px;height:20px}
+.pl-list.rows .pl-item-thumb{width:46px;height:46px;padding-top:0;flex-shrink:0;border-radius:9px;overflow:hidden}
+.pl-list.rows .pl-item-thumb .pl-thumb-ico svg{width:20px;height:20px}
 .pl-list.rows .pl-item-cap{padding:0;flex:1}
 .pl-list.rows .pl-item-title{font-size:14px}
 .pl-list.rows .pl-item-sub{font-size:11.5px}
@@ -834,7 +836,7 @@ nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-
 .pl-badge.avoid{background:rgba(220,70,70,.15);color:#e46464}
 /* colonne droite 25% */
 .pl-panel{width:25%;flex-shrink:0;border-left:1px solid var(--border);background:var(--surface);display:flex;flex-direction:column;min-width:0}
-.pl-panel-top{display:flex;gap:7px;justify-content:flex-end;padding:14px 14px 10px;flex-shrink:0}
+.pl-panel-top{display:flex;gap:7px;justify-content:center;padding:14px 14px 10px;flex-shrink:0}
 .pl-panel-top button{width:36px;height:36px;border-radius:10px;background:var(--bg);border:1px solid var(--border);color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center}
 .pl-panel-top button svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .pl-panel-top button:hover{color:var(--text);border-color:var(--accent)}
@@ -879,7 +881,7 @@ body.pl-preview .pl-cell-empty{opacity:0}
 <body>
 <div id="splash">
   <img id="splash-logo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHMAAABOCAYAAAATpymVAAABCGlDQ1BJQ0MgUHJvZmlsZQAAeJxjYGA8wQAELAYMDLl5JUVB7k4KEZFRCuwPGBiBEAwSk4sLGHADoKpv1yBqL+viUYcLcKakFicD6Q9ArFIEtBxopAiQLZIOYWuA2EkQtg2IXV5SUAJkB4DYRSFBzkB2CpCtkY7ETkJiJxcUgdT3ANk2uTmlyQh3M/Ck5oUGA2kOIJZhKGYIYnBncAL5H6IkfxEDg8VXBgbmCQixpJkMDNtbGRgkbiHEVBYwMPC3MDBsO48QQ4RJQWJRIliIBYiZ0tIYGD4tZ2DgjWRgEL7AwMAVDQsIHG5TALvNnSEfCNMZchhSgSKeDHkMyQx6QJYRgwGDIYMZAKbWPz9HbOBQAAAH4UlEQVR42u2dT+gkRxXHP6+nZ7J/stmsiZo1xgg5KJKLHiRRMBJEggTxIHoRguhJLxEhIBIESU7mpkfNwXgQgoeAokFyEEVQNqI5BDQYFFY0RpM1f9b97W+6vx7m1U79+tczO1NdM/52qAdNz0x3V71+31dV772qeWX8H0mSAfGxClVACyh6TgNZCeVhZqLQ6gBKGvlhR4mv+Hwtkm1ZWJWZNZ3fzwJvBd4CTICbgOu8tSxqmX8F/gh8HGj8t5QWJWAE/Ar4cx9/hQ4DOZJU+ecbJH1W0uOSnpP0sqR9rUc/lXSf8tEXAp/XspzrLQBZmVkjaSLpQeBLwO3Lxq0l1HhLegPY9++tt8wUCuVd3oVGU28ByFbSLcAPgXv80rTTzdsagIz8XvPPNgBMojIO8Z5hGBKgbRlV9SaB9PMJ4EfAh4A9YLyNHmGoIWRmbc4ytwHoJoVamdlU0kMRkJNtGl1DeJf0HuDUEkNsVTfqBeCCpI27PfUGtbuRdAb4ogtkFPmGR9m6Nx/jvwvcnaHMT5nZU25cNddiywxGz53ArRGY6wKpzuemM85uRBf9vOd8ByMpJRBRbRrAbYAZBH1r9GL1mgIN1m0dlTnxz5MttdLgv6YaWNU2u5V6w9p9c2IrUtQapsB/3B15HTgWHPziwW+3ZZ7p6S5XAdKAvwFfAZ51IC9FRtR/gfsKfNsNGqSMb43z9ZiZPdlzfc+NrIJeF8yhgeWuud0JWN+U6MQDPC+p9u502rk+3aQ1m1lRLMwORT6suvLKIf86h+8TO8VmJkmtnydrdrOx6/KK+6nWeXl52ZuwZpsQLFA+RIMsmi6IZqac8q8lneTgrIPWbEV7wL6/e81sxqOWdMk/p3TLAMc8ejSWNI2sw7Gk1zbgG4+AGyQ13vKrTC7QMUnHgYmXjY/5rUfJJi43JfYkU2BPUmWSzjGbgmrWtBDD2PZ1M/uBC+Re4HHmAfC3Adez3uRzcGX+4YpSdeocAz8GngJ+Rp5A+2eAO4HPMwvgV877iQwW/UsOXpBBC9xvZs+7zJ4APuKgjBLk/30ze1hSXQN3ADcOYDp+9iSHZ0RSoj4GvGPJ9dsyO+ON13db5vFXwC091+Ie653AuwbUc8X9q5lN/7QJQp+6Zkw7QmmjiE9qNxUEoQUtaW8D4+XU+Q7vVWUEVJF8Q0Ak0OXESFPgcz92TeJIxzqCr5hPRXWjJjnGmr6uWT115o74VJkDEvE6pb71SqmRpkPyL1GUHaICZgGz0JGMAA2w/pqeMUCRIZFz/GkjI0FsZlop+JfTyIe2jLxrgWEX6m0YuASmTmRuFFlesZk96SmzHQioIqUIZZ/egBF0vZefM16tBQod13G6U68WBFGygxm065fAy8Bx4E/R9ReB7/l9+8BHgfcOALT1+n4D/M6VZQT8OrPQJ8BPvL5g6n+C2Xxs6uqIAMrTwF8i5Rfwr+i+J5mtAb4IfAC4KyGAcyWM9U9fO9qusL608fP7O2VUfbFSSd/x+/cT17OG577aU/YnOzyl0NTPD/SU//POPetS4OveBXKvwqK36Lcv+zOXV8AjyObb/uw4Vbuvc0ZGwDQKTlvUHU499JaDjnvstO6My9m6Q3+fcTQu51rNcMp5j9cAtZHMQr3TKHxoKb1B6lgmZ6aNo/4+C9Awm31oGP6Hnri+YHQ1OZdBRry3Ufk5eW9imfihbr1+z6D3Kq5J8TMLFTALFTALFTALmIUKmIUKmIUKmIUKmAXMQgXMQgXMQgXMQgXMAmahAmahAmahAmYBs1ABs1ABs1ABs1CXVMDcHTpRwNwdurGAuYPdbQGzGECFCpiFCpi74joUMK99Ol7A3J0WedrPtg0wte3u4IhT7oT+p+J8s5vcOC45Nakn9q27/8vfgdYU3ufVTC3z7f5P6ZA24EDC5vD3/ihRcvJYWydq4gUzi3Pm7GLLnA7ssUI590g6ZWav9940/3s/ki72PL8WmK8wy626DoOfk/SCD+6/NbNzYd+vHRrrLgzsbsOmPHcDz0n6A/Pcs4+Z2XkH8AHgg8xSx9w1xJY5kOJyRTAFfC367VvAOeY7zu5Ky/x3prIEvNuPQE8A5/3zp4H7cximdaLmNa4EY9e0XbRCX8yoHG2k6KJ/A4GQ5Xqr6dYsGsxHO+jeBDB/zzxDmAZ2uSEvbF++2TEH8/5u3c+Mkw7tmkvTuoX5rB/Vhg29bPIrQYMFyurW+sOdse9IUwHzMIpitl3k2MyeBr7JPM1byNx1JIGtOZgQft09u672TGrZ3eeH8LB2+Q7ovqSRmX1D0mXgkcj4aztDzSq57hYFZ7LJPxgy8f7Nqx519NwyXyu+1xLrsCXj9iix7KuV726gajN7FPgY8AuvLxgtsRF4tbqqBUZOqowOyb9mtgPem6yfEzZkrby05J5L7gzvJ1rOU2bZJfcWXLtIam7WeStb6Gv75uc4oM8Az0j6sAP7PvcdzzDfiOdkFCzoa0l9W2Fc9GPdTWqCbK5EjUzS7f5jSndVuXN9Iby8q3PQnpuZLTgakoZ7xCzZ7qtBGL631kngbIbxqwJeMrPXlm30vSzC5dsxm79rtQJP581sz+V01pWgTZTNm8Df89nWPcmDc88OLEpQnLH8lWY0JI0kZZlgyPU+QTaBqcE+Y59GR2UPaT29z0eJinP4a1rjPZsePmwFFyYG7kqe3oFKEeNm/wP2ZR5xTIanAgAAAABJRU5ErkJggg==" alt="6flt">
-  <div id="splash-credit">Créé par 6flt photographie et Claude<br><span style="opacity:.6">v1.27</span></div>
+  <div id="splash-credit">Créé par 6flt photographie et Claude<br><span style="opacity:.6">v1.29</span></div>
 </div>
 
 <div id="login-screen">
@@ -902,8 +904,7 @@ body.pl-preview .pl-cell-empty{opacity:0}
   <div class="nav-logo"><img src="data:image/png;base64,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" alt="6flt" class="nav-logo-img"></div>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="switchView('map')">Carte</button>
-    <button class="nav-tab" onclick="switchView('gallery')">Galerie</button>
-    <button class="nav-tab" onclick="switchView('shotlist')">Shotlist</button>
+    <button class="nav-tab" onclick="switchView('gallery')">Spots</button>
     <button class="nav-tab" onclick="switchView('planning')">Planning</button>
     <button class="nav-tab" onclick="switchView('clients')">Clients</button>
     <button class="nav-tab" onclick="switchView('events')">Evenements</button>
@@ -1273,6 +1274,11 @@ body.pl-preview .pl-cell-empty{opacity:0}
     <div class="settings-divider"></div>
     </div>
     <div>
+      <div class="settings-section-title">Inspiration</div>
+      <div style="font-size:11px;color:var(--muted);line-height:1.5">Section a reconstruire ici. Les inspirations enregistrees sont conservees.</div>
+    </div>
+    <div class="settings-divider"></div>
+    <div>
       <div class="settings-section-title">Compte</div>
       <button onclick="doLogout()" style="width:100%;background:transparent;border:1px solid #e84040;border-radius:8px;color:#e84040;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;padding:10px;cursor:pointer">Deconnexion</button>
     </div>
@@ -1507,7 +1513,7 @@ body.pl-preview .pl-cell-empty{opacity:0}
 
 <div id="view-gallery" class="view">
   <div class="gallery-header">
-    <h2>Mes shootings</h2>
+    <h2>Mes spots</h2>
     <span class="gallery-count" id="gallery-count">0 spots</span>
     <select class="gallery-sort-btn" id="gallery-curve-filter" onchange="setGalleryCurveFilter(this.value)" title="Filtrer par courbes (routes)">
       <option value="all">Courbes : toutes</option>
@@ -1518,40 +1524,6 @@ body.pl-preview .pl-cell-empty{opacity:0}
     <button class="gallery-sort-btn" id="gallery-sort-btn" onclick="toggleGallerySort()">Trier par date</button>
   </div>
   <div class="gallery-grid" id="gallery-grid"></div>
-</div>
-
-<div id="view-shotlist" class="view">
-  <div class="shotlist-wrap">
-    <div class="shotlist-section">
-      <h2>Matcher couleur voiture &times; spot</h2>
-      <p class="shotlist-sub">Selectionne la couleur de la voiture. Les spots les plus propices remontent en haut, selon ta charte couleurs. Les moins compatibles restent visibles, estompes.</p>
-      <div class="color-picker-row" id="color-picker-row"></div>
-      <div id="shotlist-group-banner"></div>
-      <div class="shotlist-match-grid" id="shotlist-match-grid"></div>
-    </div>
-
-    <div class="shotlist-section">
-      <h2>Inspiration</h2>
-      <p class="shotlist-sub">Colle des liens ou images d'inspiration (references de cadrage, lumiere, ambiance). Pour tes contenus mymind, ouvre ton espace dans un onglet.</p>
-      <div class="shotlist-insp-actions">
-        <button class="shotlist-btn" onclick="window.open('https://access.mymind.com/everything','_blank')">
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M6 2H2v10h10V8M9 1h4v4M13 1L7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          Ouvrir mymind
-        </button>
-      </div>
-      <div class="insp-add">
-        <input type="text" class="field-input" id="insp-url" placeholder="Colle une URL d'image ou de reference..." onkeydown="if(event.key==='Enter')addInspiration()">
-        <input type="text" class="field-input" id="insp-note" placeholder="Note (optionnel)">
-        <button class="shotlist-btn" onclick="addInspiration()">Ajouter URL</button>
-        <button class="shotlist-btn" onclick="document.getElementById('insp-file').click()">
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 9V1M4 4l3-3 3 3M1 11h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          Uploader
-        </button>
-        <input type="file" id="insp-file" accept="image/*" multiple style="display:none" onchange="uploadInspirations(event)">
-      </div>
-      <div class="insp-grid" id="insp-grid"></div>
-    </div>
-  </div>
 </div>
 
 <div id="view-planning" class="view">
@@ -2518,13 +2490,6 @@ function addClientShootRow(date, time, place){
   fcRenderCal(); fcRenderRows();
 }
 
-function sendColorToShotlist(color){
-  if(!color || !COLOR_RULES[color]){ alert('Cette voiture n\'a pas de couleur de carrosserie definie.'); return; }
-  currentColor = color;
-  closeClientPanel();
-  switchView('shotlist');
-}
-
 function addClientCarRow(model, color){
   var wrap = document.getElementById('client-cars');
   var row = document.createElement('div');
@@ -2535,12 +2500,8 @@ function addClientCarRow(model, color){
   });
   row.innerHTML = '<input class="car-model" placeholder="Marque, modele" value="'+(model?escapeHtml(model):'')+'">' +
                   '<select class="car-color">'+opts+'</select>' +
-                  '<button class="car-shotlist" title="Voir spots compatibles">&#x1F4CD;</button>' +
                   '<button class="car-del" title="Retirer">&#x2715;</button>';
   row.querySelector('.car-del').onclick = function(){ row.remove(); };
-  row.querySelector('.car-shotlist').onclick = function(){
-    sendColorToShotlist(row.querySelector('.car-color').value);
-  };
   wrap.appendChild(row);
 }
 
@@ -2754,18 +2715,8 @@ function updateFab(){
   fab.classList.toggle('show', clientSelectMode && clientSelection.length>0);
 }
 function findSpotForSelection(){
-  var colors = [];
-  clientSelection.forEach(function(id){
-    var c = clients.find(function(x){ return x.id===id; });
-    if(c && Array.isArray(c.cars)){
-      c.cars.forEach(function(v){ if(v.color && COLOR_RULES[v.color] && colors.indexOf(v.color)===-1) colors.push(v.color); });
-    }
-  });
-  if(!colors.length){ alert('Aucune des voitures selectionnees n\'a de couleur de carrosserie definie.'); return; }
-  shotlistGroup = { clientIds: clientSelection.slice(), colors: colors };
-  switchView('shotlist');
+  showToast('Match couleur temporairement retire, a retravailler');
 }
-
 
 function colorScore(spot, color){
   var rule=COLOR_RULES[color]; if(!rule) return 0;
@@ -3292,7 +3243,6 @@ function toggleVisibility(){
   routesVisible = document.getElementById('vis-routes').checked;
   photosVisible = document.getElementById('vis-photos') ? document.getElementById('vis-photos').checked : true;
   renderMarkers(); renderGallery();
-  if(document.getElementById('view-shotlist').classList.contains('active')) renderMatchGrid();
 }
 
 function onRouteMapClick(lngLat){
@@ -3751,19 +3701,19 @@ function renderGallery(){
   ordered.forEach(function(spot){
     var card=document.createElement('div'); card.className='gallery-card';
     var imgHtml=spot.images&&spot.images.length>0?'<img class="gallery-card-img" src="'+spot.images[0]+'" alt="">'  :'<div class="gallery-card-no-img">&#128205;</div>';
-    var stars=spot.rating>0?'<span style="color:var(--accent)">&#9733;</span>'.repeat(spot.rating)+'<span style="color:var(--border)">&#9733;</span>'.repeat(5-spot.rating):'';
-    var dist = userLoc ? ' <span class="gallery-card-dist">&middot; '+fmtDist(distanceKm(userLoc.lat,userLoc.lng,spot.lat,spot.lng))+'</span>' : '';
-    var miniUrl = spot.kind==='route' && spot.routeLine ? staticRouteUrl(spot.routeLine) : staticMapUrl(spot.lng, spot.lat);
+    var stars=spot.rating>0?' <span style="color:var(--accent)">&#9733;</span>'.repeat(spot.rating):'';
+    var dist = userLoc ? ' &middot; <span class="gallery-card-dist">'+fmtDist(distanceKm(userLoc.lat,userLoc.lng,spot.lat,spot.lng))+'</span>' : '';
+    var env = asArray(spot.environnement).concat(asArray(spot.tonalite)).join(' &middot; ')||'Decor non defini';
     var checked=selectedSpots.indexOf(spot.id)>-1;
     card.innerHTML=
       '<div class="gallery-del-badge" data-del="'+spot.id+'"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 8h8" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/></svg></div>'+
       '<div class="gallery-select'+(checked?' checked':'')+'" data-id="'+spot.id+'"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7l3.5 3.5L12 3" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>'+
       imgHtml+
-      '<div class="gallery-card-info"><div class="gallery-card-title">'+(spot.name||'Spot sans nom')+'</div><div class="gallery-card-meta">'+(spot.type||'')+' '+stars+dist+'</div></div>'+
-      '<img class="gallery-mini-map" src="'+miniUrl+'" alt="" loading="lazy">';
+      '<div class="gallery-card-info"><div class="gallery-card-title">'+(spot.name||'Spot sans nom')+'</div><div class="gallery-card-meta">'+env+stars+dist+'</div></div>';
     // clic carte -> fly to (sauf sur la checkbox)
     card.addEventListener('click', function(e){
       if(e.target.closest('.gallery-select')) return;
+      if(card._swiped || card.classList.contains('show-del')) return;
       switchView('map');
       setTimeout(function(){
         map.flyTo({center:[spot.lng,spot.lat],zoom:14,speed:1.2});
@@ -3775,18 +3725,28 @@ function renderGallery(){
       e.stopPropagation();
       toggleSpotSelection(spot.id, this);
     });
-    // appui long -> affiche la pastille de suppression
-    var pressTimer=null;
-    function startPress(){ pressTimer=setTimeout(function(){
-      // masque les autres pastilles ouvertes
-      document.querySelectorAll('.gallery-card.show-del').forEach(function(c){ if(c!==card) c.classList.remove('show-del'); });
-      card.classList.add('show-del');
-    },500); }
-    function cancelPress(){ if(pressTimer){ clearTimeout(pressTimer); pressTimer=null; } }
+    // mobile : slide horizontal sur la carte -> pastille de suppression
     if(IS_TOUCH){
-      card.addEventListener('touchstart', startPress, {passive:true});
-      card.addEventListener('touchend', cancelPress);
-      card.addEventListener('touchmove', cancelPress);
+      var swX=0, swY=0, swActive=false;
+      card.addEventListener('touchstart', function(e){
+        swX=e.touches[0].clientX; swY=e.touches[0].clientY; swActive=true;
+      }, {passive:true});
+      card.addEventListener('touchmove', function(e){
+        if(!swActive) return;
+        var dx=e.touches[0].clientX-swX, dy=e.touches[0].clientY-swY;
+        if(Math.abs(dy)>Math.abs(dx)){ swActive=false; return; }   // scroll vertical
+        if(dx<-45){
+          document.querySelectorAll('.gallery-card.show-del').forEach(function(c){ if(c!==card) c.classList.remove('show-del'); });
+          card.classList.add('show-del');
+          swActive=false;
+          card._swiped=true;
+        } else if(dx>45){
+          card.classList.remove('show-del');
+          swActive=false;
+          card._swiped=true;
+        }
+      }, {passive:true});
+      card.addEventListener('touchend', function(){ swActive=false; setTimeout(function(){ card._swiped=false; },300); });
     }
     // clic sur la pastille -> confirmation puis suppression
     card.querySelector('.gallery-del-badge').addEventListener('click', function(e){
@@ -3907,7 +3867,7 @@ function switchView(v){
   document.querySelectorAll('.nav-tab').forEach(function(el){el.classList.remove('active');});
   document.getElementById('view-'+v).classList.add('active');
   var fab=document.getElementById('find-spot-fab'); if(fab && v!=='clients') fab.classList.remove('show');
-  var idx = {map:0, gallery:1, shotlist:2, planning:3, clients:4, events:5}[v];
+  var idx = {map:0, gallery:1, planning:2, clients:3, events:4}[v];
   if(idx!==undefined) document.querySelectorAll('.nav-tab')[idx].classList.add('active');
   if(v==='map'){
     setTimeout(function(){map.resize();},100);
@@ -3915,7 +3875,6 @@ function switchView(v){
   } else {
     document.getElementById('btn-add-spot').style.display='none';
     if(v==='gallery') renderGallery();
-    if(v==='shotlist'){ buildColorPicker(); renderMatchGrid(); renderInspirations(); }
     if(v==='planning') initPlanning();
     if(v==='clients'){ switchClientSub('clients'); renderClients(); updateFab(); }
     if(v==='events') renderEvents();
@@ -4137,67 +4096,6 @@ var COLOR_SWATCHES = {
   'Rouge / Orange / Jaune':'#e23d1a', 'Bleu':'#1a4fd6',
   'Vert':'#2d6a3e', 'Or / Bronze / Marron':'#b8860b'
 };
-function buildColorPicker(){
-  var row=document.getElementById('color-picker-row'); if(!row) return;
-  row.innerHTML='';
-  Object.keys(COLOR_RULES).forEach(function(color){
-    var chip=document.createElement('div'); chip.className='color-chip'+(currentColor===color?' active':'');
-    chip.innerHTML='<span class="color-dot" style="background:'+COLOR_SWATCHES[color]+'"></span>'+color;
-    chip.onclick=function(){
-      shotlistGroup = null;
-      currentColor = (currentColor===color? null : color);
-      buildColorPicker(); renderMatchGrid();
-    };
-    row.appendChild(chip);
-  });
-}
-function renderMatchGrid(){
-  var grid=document.getElementById('shotlist-match-grid'); if(!grid) return;
-  var banner=document.getElementById('shotlist-group-banner');
-  var group = shotlistGroup;
-  if(banner){
-    if(group){
-      var names = group.clientIds.map(function(id){ var c=clients.find(function(x){return x.id===id;}); return c?escapeHtml(c.name||'Client'):null; }).filter(Boolean);
-      var chips = group.colors.map(function(col){ return '<span class="color-dot" style="background:'+(COLOR_SWATCHES[col]||'#888')+';margin-right:4px"></span>'+escapeHtml(col); }).join('  ');
-      banner.innerHTML = '<div style="background:var(--surface);border:1px solid var(--accent);border-radius:10px;padding:12px 14px;margin-bottom:18px">'+
-        '<div style="font-weight:700;font-size:14px;margin-bottom:6px">Shoot groupe : '+names.join(', ')+'</div>'+
-        '<div style="font-size:12px;color:var(--muted);margin-bottom:8px">Couleurs : '+chips+'</div>'+
-        '<div style="font-size:11px;color:var(--muted);line-height:1.5">Spots classes par compromis : seuls remontent ceux qui ne sont a eviter pour aucune voiture du groupe.</div>'+
-        '<button class="shotlist-btn" style="margin-top:10px;padding:6px 12px" onclick="clearShotlistGroup()">Quitter le mode groupe</button>'+
-        '</div>';
-    } else { banner.innerHTML=''; }
-  }
-  if(spots.length===0){ grid.innerHTML='<div class="match-empty">Aucun spot enregistre.</div>'; return; }
-  var list=spots.slice();
-  var scoreFn = group ? function(s){ return colorScoreMulti(s, group.colors); }
-                      : (currentColor ? function(s){ return colorScore(s, currentColor); } : null);
-  if(scoreFn){
-    list.sort(function(a,b){ return scoreFn(b)-scoreFn(a); });
-  } else {
-    list.sort(function(a,b){return b.createdAt-a.createdAt;});
-  }
-  grid.innerHTML='';
-  list.forEach(function(spot){
-    var score = scoreFn ? scoreFn(spot) : null;
-    var card=document.createElement('div'); card.className='match-card';
-    var badge='';
-    if(scoreFn){
-      if(score>=3){ badge='<span class="match-badge good">Propice</span>'; }
-      else if(score<=-1){ badge='<span class="match-badge avoid">A eviter</span>'; card.className+=' dim'; }
-      else { badge='<span class="match-badge neutral">Neutre</span>'; card.className+=' dim'; }
-    }
-    var img=spot.images&&spot.images.length>0?'<img class="match-card-img" src="'+spot.images[0]+'" alt="">':'<div class="match-card-no-img">&#128205;</div>';
-    var env=asArray(spot.environnement).concat(asArray(spot.tonalite)).join(' &middot; ')||'Decor non defini';
-    card.innerHTML=badge+img+'<div class="match-card-body"><div class="match-card-title">'+esc(spot.name||'Spot')+'</div><div class="match-card-env">'+env+'</div></div>';
-    card.onclick=function(){
-      switchView('map');
-      setTimeout(function(){ map.flyTo({center:[spot.lng,spot.lat],zoom:14,speed:1.2}); setTimeout(function(){openExistingSpotPanel(spot.id);},1000); },100);
-    };
-    grid.appendChild(card);
-  });
-}
-function clearShotlistGroup(){ shotlistGroup=null; renderMatchGrid(); }
-
 /* ===================== PLANNING (editeur grille) ===================== */
 /* Document = grille 20 colonnes x 25 rangees mini, marge 1 carreau.
    Chaque case = {id, type, x, y, w, h, data}. Types : photo, color, text, map, spots. */
@@ -4316,7 +4214,7 @@ function plRenderList(){
   list.forEach(function(o){
     var isSpot = plSource==='spots';
     var src = isSpot ? (o.images && o.images.length ? o.images[0] : null) : (o.photo||null);
-    var im = src ? '<img class="pl-item-img" src="'+src+'">' : '<div class="pl-item-blank">'+(isSpot?pinSvg:usrSvg)+'</div>';
+    var im = '<div class="pl-item-thumb">'+(src ? '<img src="'+src+'" alt="">' : '<div class="pl-thumb-ico">'+(isSpot?pinSvg:usrSvg)+'</div>')+'</div>';
     var sub = isSpot ? (o.type||'') : ((Array.isArray(o.cars)?o.cars:[]).map(function(v){return v.model;}).filter(Boolean).join(', ')||'Pas de voiture');
     var el=document.createElement('div');
     el.className='pl-item'+(plArmed && plArmed.kind===(isSpot?'spot':'client') && plArmed.id===o.id ? ' armed':'');
