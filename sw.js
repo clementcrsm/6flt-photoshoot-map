@@ -1,8 +1,8 @@
-// Service worker 6flt Spots v1.30
+// Service worker Spoties v1.30
 // HTML en reseau d'abord (toujours la derniere version en ligne, cache en secours hors ligne).
 // Icones et manifest en cache d'abord. Les API (Mapbox, meteo, Supabase...) restent en reseau direct.
-const CACHE = '6flt-spots-v1-30';
-const SHELL = ['./', './index.html', './manifest.json', './icon-180.png', './icon-192.png', './icon-512.png'];
+const CACHE = 'spoties-v1-30';
+const SHELL = ['./', './index.html', './manifest.json?v=1.30', './icon-180.png?v=1.30', './icon-192.png?v=1.30', './icon-512.png?v=1.30'];
 
 self.addEventListener('install', function(e){
   // chaque fichier est mis en cache separement : un fichier absent ne bloque plus l'installation
