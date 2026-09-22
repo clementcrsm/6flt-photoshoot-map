@@ -7,9 +7,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Spoties">
 <meta name="theme-color" content="#0e0f12">
-<link rel="manifest" href="manifest.json?v=1.33">
-<link rel="apple-touch-icon" href="icon-180.png?v=1.33">
-<link rel="icon" type="image/png" href="icon-192.png?v=1.33">
+<link rel="manifest" href="manifest.json?v=1.34">
+<link rel="apple-touch-icon" href="icon-180.png?v=1.34">
+<link rel="icon" type="image/png" href="icon-192.png?v=1.34">
 <title>Spoties</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -851,7 +851,8 @@ nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-
 .bf-zoom button:hover:not(:disabled){background:var(--surface2)}
 .bf-zoom button:disabled{opacity:.4;cursor:default}
 .bf-zoom .bf-zoom-val{width:auto;min-width:44px;font-family:'Space Mono',monospace;font-size:11px;color:var(--muted)}
-.bf-send{background:var(--accent);color:#fff;border:none;border-radius:9px;padding:9px 15px;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;opacity:.4;cursor:not-allowed;white-space:nowrap}
+.bf-send{background:var(--accent);color:#fff;border:none;border-radius:9px;padding:9px 15px;font-family:'Inter',sans-serif;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap}
+.bf-send:disabled{opacity:.4;cursor:default}
 .bf-canvas{flex:1;min-height:0;overflow:auto;padding:34px 28px 110px;display:flex;flex-direction:column;align-items:center}
 .bf-shell{width:100%;max-width:760px;position:relative}
 .bf-shell-label{font-size:11.5px;color:var(--muted);margin:0 0 10px;text-align:center}
@@ -1115,6 +1116,33 @@ select.bf-field{appearance:none;-webkit-appearance:none;background-image:linear-
 .bf-modal-foot{display:flex;justify-content:flex-end;gap:8px;padding:12px 18px 16px;border-top:1px solid var(--border)}
 
 #bf-print{display:none}
+.bf-shlink{display:flex;gap:6px}
+.bf-shlink input{flex:1;min-width:0}
+.bf-shbtns{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.bf-shbtns button,.bf-shghost{background:var(--surface2);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:9px 8px;font:600 12.5px 'Inter',sans-serif;cursor:pointer}
+.bf-shbtns button:hover,.bf-shghost:hover{border-color:var(--muted)}
+.bf-shstat{font-size:12.5px;color:var(--muted);line-height:1.6;background:var(--surface2);border-radius:8px;padding:9px 11px}
+.bf-shstat b{color:var(--text)}
+.bf-shdanger{background:none;border:none;color:#e5534b;font:600 12px 'Inter',sans-serif;cursor:pointer;padding:6px 0;align-self:flex-start}
+/* ===== vue client (lien partage) v1.34 ===== */
+#cv-root{position:fixed;inset:0;z-index:100000;background:#0e0f11;overflow-y:auto;-webkit-overflow-scrolling:touch;color:#f3f2ee;font-family:'Inter',sans-serif}
+#cv-root .cv-wrap{max-width:560px;margin:0 auto;padding:18px 14px 110px}
+#cv-root .cv-brand{display:flex;align-items:center;gap:10px;font-size:12px;color:#a5a49d;margin:4px 4px 16px}
+#cv-root .cv-brand img{width:28px;height:28px;border-radius:7px}
+#cv-root .bf-doc{border:none;border-radius:16px;padding:26px 18px 28px}
+#cv-root .cv-banner{background:#17181b;border:1px solid rgba(255,255,255,.09);border-left:3px solid #e8571a;border-radius:12px;padding:12px 14px;margin:0 0 14px;font-size:13px;line-height:1.5;color:#a5a49d}
+#cv-root .cv-banner b{display:block;font-size:14px;margin-bottom:2px;color:#f3f2ee}
+#cv-root .cv-count{font-variant-numeric:tabular-nums;color:#f2a93b;font-weight:700}
+#cv-root .cv-gl{width:100%;aspect-ratio:16/10;border-radius:12px;overflow:hidden;background:#17181b}
+#cv-root .cv-bar{position:fixed;left:0;right:0;bottom:0;z-index:2;display:flex;gap:8px;justify-content:center;padding:14px 14px calc(12px + env(safe-area-inset-bottom));background:linear-gradient(rgba(14,15,17,0),rgba(14,15,17,.96) 35%)}
+#cv-root .cv-bar button,#cv-root .cv-bar a{flex:1;max-width:180px;background:#17181b;border:1px solid rgba(255,255,255,.12);color:#f3f2ee;border-radius:12px;padding:12px 8px;font:700 13px 'Inter',sans-serif;text-align:center;text-decoration:none;cursor:pointer}
+#cv-root .cv-bar .cv-main{background:#e8571a;border-color:#e8571a;color:#fff}
+#cv-root .cv-bar .cv-done{background:#1f3a2a;border-color:#2f6b45;color:#9be0b1}
+#cv-root .cv-bar [disabled]{opacity:.45}
+#cv-root .cv-msg{text-align:center;padding:90px 20px;color:#a5a49d;font-size:14px;line-height:1.6}
+#cv-root .cv-msg b{display:block;color:#f3f2ee;font-size:18px;margin-bottom:6px}
+.cv-pin{width:26px;height:26px;border-radius:50%;background:#e8571a;color:#fff;font:800 12px 'Inter',sans-serif;display:flex;align-items:center;justify-content:center;border:2px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.5)}
+
 @media print{
   @page{size:A4;margin:12mm 12mm 14mm}
   html,body{height:auto!important;overflow:visible!important;background:#fff!important;display:block!important}
@@ -1132,13 +1160,13 @@ select.bf-field{appearance:none;-webkit-appearance:none;background-image:linear-
 </head>
 <body>
 <div id="splash">
-  <img id="splash-logo" src="icon-512.png?v=1.33" alt="Spoties">
+  <img id="splash-logo" src="icon-512.png?v=1.34" alt="Spoties">
   <div id="splash-credit">Créé par 6flt photographie et Claude<br><span style="opacity:.6">v1.34</span></div>
 </div>
 
 <div id="login-screen">
   <div class="login-box">
-    <img src="icon-192.png?v=1.33" alt="Spoties" class="login-logo">
+    <img src="icon-192.png?v=1.34" alt="Spoties" class="login-logo">
     <h1 class="login-title">Spoties</h1>
     <p class="login-sub" id="login-sub">Connexion</p>
     <input type="email" id="login-email" class="login-input" placeholder="Email" autocomplete="email">
@@ -1153,7 +1181,7 @@ select.bf-field{appearance:none;-webkit-appearance:none;background-image:linear-
 </div>
 
 <nav>
-  <button type="button" class="nav-logo" id="nav-logo" onclick="refreshApp()" title="Actualiser l'app" aria-label="Actualiser l'app"><img src="icon-192.png?v=1.33" alt="Spoties" class="nav-logo-img"></button>
+  <button type="button" class="nav-logo" id="nav-logo" onclick="refreshApp()" title="Actualiser l'app" aria-label="Actualiser l'app"><img src="icon-192.png?v=1.34" alt="Spoties" class="nav-logo-img"></button>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="switchView('map')">Carte</button>
     <button class="nav-tab" onclick="switchView('gallery')">Spots</button>
@@ -1825,7 +1853,7 @@ select.bf-field{appearance:none;-webkit-appearance:none;background-image:linear-
           <button data-z="0" class="bf-zoom-val" id="bf-zoom-val" title="Taille réelle (Ctrl 0)">100%</button>
           <button data-z="1" title="Zoomer (Ctrl +)" aria-label="Zoomer">+</button>
         </div>
-        <button class="bf-send" title="Publication : prochaine étape">Envoyer</button>
+        <button class="bf-send" id="bf-send" title="Partager le briefing avec le client">Partager</button>
       </div>
       <div class="bf-canvas bf-sb" id="bf-canvas">
         <div class="bf-shell" id="bf-shell">
@@ -1844,6 +1872,12 @@ select.bf-field{appearance:none;-webkit-appearance:none;background-image:linear-
         <button id="bf-save-tpl"><svg class="bf-ic" viewBox="0 0 24 24"><path d="M5 3h11l3 3v15H5z"/><path d="M8 3v6h8"/><rect x="8" y="13" width="8" height="5"/></svg>Enregistrer en gabarit</button>
         <button id="bf-pdf"><svg class="bf-ic" viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M8 11l4 4 4-4"/><path d="M4 19h16"/></svg>PDF</button>
       </div>
+    </div>
+  </div>
+  <div class="bf-modal-bg" id="bf-share" hidden>
+    <div class="bf-modal" role="dialog" aria-modal="true" aria-labelledby="bf-share-h" style="width:min(480px,100%)">
+      <div class="bf-modal-head"><h3 id="bf-share-h">Partager avec le client</h3><button class="bf-mini" data-sact="close" aria-label="Fermer">×</button></div>
+      <div class="bf-modal-body" id="bf-share-body" style="padding-bottom:18px"></div>
     </div>
   </div>
   <div class="bf-modal-bg" id="bf-modal" hidden>
@@ -2114,6 +2148,7 @@ select.bf-field{appearance:none;-webkit-appearance:none;background-image:linear-
 </div>
 
 <script>
+var SHARE_TOKEN = (function(){ try{ return new URLSearchParams(location.search).get('b') || ''; }catch(e){ return ''; } })();
 var MAPBOX_TOKEN = 'pk.eyJ1IjoiY2xlbWVudGNyc20iLCJhIjoiY21xMnM0cWs1MDdlZDJxcXZqejloN3B3bCJ9.lZDSeltYs2XN-8K1wmITIA';
 mapboxgl.accessToken = MAPBOX_TOKEN;
 
@@ -4544,7 +4579,8 @@ function activeClients(){ return allClients().filter(function(c){ return !c.dele
 function getClient(id){ if(!id) return null; return allClients().filter(function(c){ return c.id===id; })[0] || null; }
 function allSpots(){ return (typeof spots!=='undefined' && spots) ? spots : []; }
 function realSpots(){ return allSpots().filter(function(s){ return s.kind!=='route' && isFinite(+s.lat) && isFinite(+s.lng); }); }
-function getSpot(id){ return allSpots().filter(function(s){ return s.id===id; })[0] || null; }
+var SPOT_MASK = null;
+function getSpot(id){ var s = allSpots().filter(function(x){ return x.id===id; })[0] || null; return s && SPOT_MASK ? Object.assign({}, s, {name:SPOT_MASK}) : s; }
 function rs(){ return doc ? doc.route.map(getSpot).filter(function(s){ return s && isFinite(+s.lat); }) : []; }
 function firstName(c){ return c ? String(c.name||'').trim().split(/\s+/)[0] : ''; }
 function carOf(c){ if(!c) return ''; return (c.cars && c.cars[0] && c.cars[0].model) || c.car || ''; }
@@ -4711,6 +4747,7 @@ function pushDoc(){
   if(!sb || !currentUserId){ setSaved('Hors ligne', 'Enregistré sur l\'appareil, pas encore dans ton compte'); return; }
   sb.from('briefings').upsert({id:copy.id, user_id:currentUserId, client_id:copy.clientId||null, title:docTitle(), status:copy.status||'draft', data:copy, updated_at:new Date().toISOString()})
     .then(function(res){ if(res.error){ console.warn('Supabase briefings:', res.error.message); setSaved('Hors ligne', 'Enregistré sur l\'appareil, synchronisation impossible : '+res.error.message); } else setSaved('Enregistré'); });
+  shareSoon();
 }
 function flushSave(){ if(saveT){ clearTimeout(saveT); pushDoc(); } }
 function loadCloud(){
@@ -4764,6 +4801,7 @@ function deleteDoc(id){
   if(doc && doc.id===id){ clearTimeout(saveT); saveT = null; doc = null; }
   briefings = briefings.filter(function(b){ return b.id!==id; }); saveLocal();
   if(sb && currentUserId) sb.from('briefings').delete().eq('id', id).then(function(res){ if(res.error) console.warn('Supabase briefings delete:', res.error.message); });
+  if(sb && currentUserId && d.share && d.share.token) sb.from('shared_briefings').delete().eq('token', d.share.token).then(function(){});
   if(!doc && briefings.length) openDoc(briefings[0].id, true); else renderAll();
   toast('Briefing supprimé');
 }
@@ -5133,6 +5171,7 @@ function renderToolbar(){
   $('bf-undo').disabled = !doc || HP<=0; $('bf-redo').disabled = !doc || HP>=HIST.length-1;
   document.querySelectorAll('#bf-modes button').forEach(function(b){ b.classList.toggle('on', b.dataset.mode===S.mode); b.disabled = !doc; });
   document.querySelectorAll('#bf-zoom button').forEach(function(b){ b.disabled = !doc; });
+  var sendB = document.querySelector('.bf-send'); if(sendB){ sendB.disabled = !doc; sendB.textContent = doc && doc.share && doc.share.token && !doc.share.revoked ? 'Partagé' : 'Partager'; }
   if(!doc) setSaved('');
 }
 function renderAll(){ renderToolbar(); renderList(); renderDoc(); renderPanel(); }
@@ -5302,15 +5341,29 @@ function exportPDF(){
     var J = window.jspdf.jsPDF, pdf = new J({unit:'mm', format:'a4', orientation:'portrait', compress:true});
     var mX = 12, mT = 12, mB = 14, wMM = 210 - mX*2, hMM = 297 - mT - mB;
     var pxPerMM = cv.width / wMM, pageH = Math.floor(hMM * pxPerMM);
-    var y = 0, first = true;
+    var y = 0, first = true, ctx = cv.getContext('2d');
+    var gaps = [];
+    for(var gi=0; gi<cuts.length-1; gi++){ if(cuts[gi+1].t > cuts[gi].b) gaps.push((cuts[gi].b + cuts[gi+1].t)/2); }
+    function blankCut(lo, hi){
+      lo = Math.max(0, Math.floor(lo)); hi = Math.min(cv.height, Math.floor(hi)); if(hi - lo < 12) return 0;
+      var w = cv.width, data = ctx.getImageData(0, lo, w, hi - lo).data, run = 0, need = 10;
+      for(var r = hi - lo - 1; r >= 0; r--){
+        var o = r*w*4, edges = 0;
+        for(var x = 4; x < w*4; x += 8){
+          if(Math.abs(data[o+x]-data[o+x-4]) + Math.abs(data[o+x+1]-data[o+x-3]) + Math.abs(data[o+x+2]-data[o+x-2]) > 60){ if(++edges > 8) break; }
+        }
+        if(edges <= 8){ if(++run >= need) return lo + r + Math.floor(need/2); } else run = 0;
+      }
+      return 0;
+    }
     while(y < cv.height - 2){
-      var lim = y + pageH, end = lim;
-      if(lim < cv.height){
-        var best = 0;
-        cuts.forEach(function(c){ if(c.b <= lim && c.b > y + 10 && c.b > best) best = c.b; });
-        var nxt = cuts.filter(function(c){ return c.t >= best - 1 && c.t <= lim; })[0];
-        if(best > y + pageH*0.25) end = Math.min(lim, Math.ceil(nxt ? nxt.t : best));
-      } else end = cv.height;
+      var lim = y + pageH, end;
+      if(lim >= cv.height) end = cv.height;
+      else {
+        var g1 = gaps.filter(function(g){ return g > y + pageH*0.4 && g <= lim - 2; }).pop();
+        end = g1 || blankCut(y + pageH*0.4, lim - 2) || gaps.filter(function(g){ return g > y + pageH*0.15 && g <= lim - 2; }).pop() || blankCut(y + pageH*0.1, y + pageH*0.4) || lim;
+        end = Math.round(end);
+      }
       var h = Math.max(1, Math.round(end - y));
       var pc = document.createElement('canvas'); pc.width = cv.width; pc.height = h;
       var g = pc.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, pc.width, h); g.drawImage(cv, 0, y, cv.width, h, 0, 0, cv.width, h);
@@ -5340,6 +5393,137 @@ function printDoc(){
     document.title = old;
     setTimeout(function(){ host.innerHTML = ''; }, 800);
   });
+}
+
+/* ---------- partage client (lien interactif) v1.34 ---------- */
+var SHARE_BASE = location.origin + location.pathname.replace(/[^\/]*$/, '');
+var shareT = null;
+function shareOn(){ return !!(doc && doc.share && doc.share.token && !doc.share.revoked); }
+function shareUrl(){ return SHARE_BASE + '?b=' + doc.share.token; }
+function newToken(){ var a = new Uint8Array(18), c = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789', t = ''; crypto.getRandomValues(a); for(var i=0;i<a.length;i++) t += c[a[i] % c.length]; return t; }
+function hashN(str){ var h = 2166136261; for(var i=0;i<str.length;i++){ h ^= str.charCodeAt(i); h = Math.imul(h, 16777619); } return (h>>>0) / 4294967295; }
+function localIso(dateIso, min){ var d = new Date(dateIso+'T00:00:00'); d.setMinutes(d.getMinutes() + Math.round(min)); return d.toISOString(); }
+function whenLbl(m){ return m==='day' ? 'le jour J' : 'la veille'; }
+function staticRows(){
+  var h = '';
+  doc.rows.forEach(function(row){
+    if(row.slots.every(function(x){ return !x; })) return;
+    h += '<div class="bf-row" data-layout="'+row.layout+'">';
+    row.slots.forEach(function(b){
+      if(!b || !TYPES[b.type]){ h += '<div class="bf-slot"></div>'; return; }
+      h += '<div class="bf-slot"><div class="bf-blk" data-type="'+b.type+'">'+blockBody(b)+'</div></div>';
+    });
+    h += '</div>';
+  });
+  return h;
+}
+function buildShare(){
+  var mode = doc.share.reveal || '24h', oldMode = S.mode, oldNotes = doc.spotNotes, oldPlace = doc.place, out = {};
+  S.mode = 'phone';
+  try{
+    var list = rs(), sc = schedule(), car = carColor(getClient(doc.clientId));
+    var startMin = sc ? sc.accueil : toMin(doc.startTime||'14:00'), endMin = sc ? sc.fin : startMin + 120;
+    var base = {title:docTitle(), date:doc.date||null, car:car, start:doc.date ? localIso(doc.date, startMin) : null, end:doc.date ? localIso(doc.date, endMin) : null, handle:''};
+    allBlocks().forEach(function(b){ if(b.type==='contact' && b.props.handle) base.handle = String(b.props.handle).replace(/^@/, ''); });
+    var info = list.length>1 ? routeInfo(list) : null;
+    out.html_exact = staticRows();
+    out.data_exact = Object.assign({}, base, {revealed:true, place:doc.place || (list[0] ? list[0].name : ''), geometry:(info && info.geometry) || null,
+      spots:list.map(function(s, k){ return {n:k+1, name:s.name||'', lat:+(+s.lat).toFixed(6), lng:+(+s.lng).toFixed(6)}; })});
+    var auto = {}; if(sc) list.forEach(function(s, k){ auto[s.id] = lightPhase(sc, sc.starts[k]); });
+    doc.spotNotes = auto; doc.place = '\u00a7PLACE\u00a7'; SPOT_MASK = '\u00a7HIDE\u00a7';
+    var w = whenLbl(mode);
+    out.html_public = staticRows()
+      .replace(/<a[^>]*google\.com\/maps[^>]*>[\s\S]*?<\/a>/g, '')
+      .replace(/<img src="https:\/\/api\.mapbox\.com[^"]*"[^>]*>/g, '')
+      .replace(/<dd>\u00a7(PLACE|HIDE)\u00a7<\/dd>/g, '<dd>Communiqué '+w+'</dd>')
+      .replace(/, \u00a7HIDE\u00a7/g, '')
+      .replace(/\u00a7HIDE\u00a7/g, 'Lieu communiqué '+w)
+      .replace(/\u00a7PLACE\u00a7/g, 'lieu communiqué '+w);
+    out.data_public = Object.assign({}, base, {revealed:false, place:null, geometry:null,
+      zones:list.map(function(s, k){ var a = hashN(s.id+'a')*Math.PI*2, d = 700 + hashN(s.id+'d')*900; return {n:k+1, lat:+(+s.lat + d*Math.cos(a)/111320).toFixed(4), lng:+(+s.lng + d*Math.sin(a)/(111320*Math.cos(s.lat*Math.PI/180))).toFixed(4), r:2000}; })});
+    out.reveal_at = mode==='now' ? null : doc.date ? (mode==='day' ? localIso(doc.date, 0) : localIso(doc.date, startMin - 1440)) : '2999-01-01T00:00:00Z';
+    var exp = doc.date ? new Date(doc.date+'T00:00:00') : new Date(); exp.setDate(exp.getDate() + (doc.date ? 30 : 90));
+    out.expires_at = exp.toISOString();
+  } finally { S.mode = oldMode; doc.spotNotes = oldNotes; doc.place = oldPlace; SPOT_MASK = null; }
+  return out;
+}
+function publishShare(){
+  if(!shareOn() || !sb || !currentUserId) return Promise.reject(new Error('hors ligne'));
+  var p = buildShare();
+  return sb.from('shared_briefings').upsert(Object.assign({token:doc.share.token, user_id:currentUserId, briefing_id:doc.id, title:docTitle(), revoked:false, updated_at:new Date().toISOString()}, p))
+    .then(function(r){ if(r.error) throw r.error; return r; });
+}
+function shareSoon(){ if(!shareOn()) return; clearTimeout(shareT); shareT = setTimeout(function(){ publishShare().catch(function(e){ console.warn('Partage :', e.message||e); }); }, 3000); }
+function shareStats(){
+  if(!shareOn() || !sb) return;
+  sb.from('shared_briefings').select('views,confirmed_at,reveal_at').eq('token', doc.share.token).maybeSingle().then(function(r){
+    var el = $('bf-sh-stat'); if(!el) return;
+    if(!r.data){ el.textContent = 'Statistiques indisponibles'; return; }
+    var d = r.data, v = d.views||0, t = [];
+    t.push('<b>'+v+'</b> ouverture'+(v>1?'s':'')+' par le client');
+    t.push(d.confirmed_at ? 'Confirmé le <b>'+new Date(d.confirmed_at).toLocaleString('fr-FR', {day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'})+'</b>' : 'Pas encore confirmé');
+    t.push(!d.reveal_at ? 'Adresses visibles' : new Date(d.reveal_at).getFullYear()>2900 ? 'Adresses masquées tant que la date n\'est pas fixée' : 'Adresses révélées le <b>'+new Date(d.reveal_at).toLocaleString('fr-FR', {weekday:'short', day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'})+'</b>');
+    el.innerHTML = t.join('<br>');
+  });
+}
+function renderShare(){
+  var b = $('bf-share-body'), on = shareOn(), m = (doc.share && doc.share.reveal) || '24h';
+  var seg = '<div class="bf-set-label">Révéler l\'adresse exacte des spots</div><div class="bf-seg bf-sm">'+[['24h','24h avant'],['day','Jour J'],['now','Tout de suite']].map(function(o){ return '<button data-sact="reveal" data-val="'+o[0]+'" class="'+(m===o[0]?'on':'')+'">'+o[1]+'</button>'; }).join('')+'</div>'+
+    '<p class="bf-set-hint">Avant la révélation, le client voit une zone approximative, les horaires et le reste du briefing. Les photos des spots restent visibles.</p>';
+  if(!on){
+    b.innerHTML = seg + '<p class="bf-set-hint">Le lien reste à jour : chaque modification du briefing est republiée automatiquement. Il expire 30 jours après le shooting.</p>'+
+      '<button class="bf-primary" data-sact="create">Créer le lien client</button>';
+    return;
+  }
+  b.innerHTML = '<div class="bf-shlink"><input class="bf-field" id="bf-sh-url" readonly value="'+esc(shareUrl())+'"><button class="bf-shghost" data-sact="copy">Copier</button></div>'+
+    '<div class="bf-shbtns"><button data-sact="native">Partager…</button><button data-sact="mail">E-mail</button><button data-sact="open">Aperçu</button></div>'+
+    '<div class="bf-shstat" id="bf-sh-stat">Chargement…</div>' + seg +
+    '<button class="bf-shdanger" data-sact="revoke">Désactiver le lien</button>';
+  shareStats();
+}
+function openShare(){
+  if(!doc) return;
+  if(!sb || !currentUserId){ toast('Connexion requise pour partager'); return; }
+  flushSave(); renderShare(); $('bf-share').hidden = false;
+}
+function shareMsg(){ var c = getClient(doc.clientId); return 'Bonjour'+(c ? ' '+firstName(c) : '')+',\n\nVoici ton briefing pour la séance'+(doc.date ? ' du '+fdate(doc.date).toLowerCase() : '')+' : horaires, parcours et préparation de la voiture.\n\n'+shareUrl()+'\n\nÀ très vite,\n6flt Photographies'; }
+function copyText(t){
+  if(navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(t);
+  var ta = document.createElement('textarea'); ta.value = t; document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); }catch(e){} ta.remove(); return Promise.resolve();
+}
+function shareAct(e){
+  if(e.target===$('bf-share')){ $('bf-share').hidden = true; return; }
+  var a = e.target.closest('[data-sact]'); if(!a || !doc) return;
+  var act = a.dataset.sact;
+  if(act==='close'){ $('bf-share').hidden = true; return; }
+  if(act==='reveal'){
+    doc.share = Object.assign(doc.share||{}, {reveal:a.dataset.val}); commit(); renderShare();
+    if(shareOn()) publishShare().then(shareStats).catch(function(){ toast('Mise à jour du lien impossible'); });
+    return;
+  }
+  if(act==='create'){
+    a.disabled = true;
+    doc.share = Object.assign(doc.share||{}, {token:newToken(), revoked:false, reveal:(doc.share && doc.share.reveal) || '24h', createdAt:Date.now()});
+    publishShare().then(function(){ commit(); renderShare(); toast('Lien client créé'); })
+      .catch(function(err){ console.warn(err); doc.share.token = null; a.disabled = false; toast('Création impossible : '+((err && err.message) || 'erreur')); });
+    return;
+  }
+  if(!shareOn()) return;
+  if(act==='copy'){ copyText(shareUrl()).then(function(){ toast('Lien copié'); }); return; }
+  if(act==='open'){ window.open(shareUrl(), '_blank'); return; }
+  if(act==='mail'){ var c = getClient(doc.clientId), m = c && String(c.contact||'').match(/[^\s,;:]+@[^\s,;]+\.[a-z]{2,}/i); location.href = 'mailto:'+(m ? encodeURIComponent(m[0]) : '')+'?subject='+encodeURIComponent(docTitle())+'&body='+encodeURIComponent(shareMsg()); return; }
+  if(act==='native'){
+    if(navigator.share) navigator.share({title:docTitle(), text:shareMsg().replace(shareUrl(), '').replace(/\n{3,}/g, '\n\n').trim(), url:shareUrl()}).catch(function(){});
+    else copyText(shareMsg()).then(function(){ toast('Message et lien copiés, colle-les dans ta conversation'); });
+    return;
+  }
+  if(act==='revoke'){
+    if(!confirm('Désactiver ce lien ? Le client ne pourra plus ouvrir le briefing.')) return;
+    sb.from('shared_briefings').update({revoked:true}).eq('token', doc.share.token).then(function(r){
+      if(r.error){ toast('Désactivation impossible'); return; }
+      doc.share = {reveal:doc.share.reveal}; commit(); renderShare(); toast('Lien désactivé');
+    });
+  }
 }
 
 /* ---------- modale nouveau briefing ---------- */
@@ -5614,6 +5798,8 @@ function bind(){
     S.tab = 'gabarits'; S.sel = null; markSel(); renderPanel(); toast('Structure enregistrée dans Mes gabarits');
   });
   $('bf-pdf').addEventListener('click', exportPDF);
+  $('bf-send').addEventListener('click', openShare);
+  $('bf-share').addEventListener('click', shareAct);
 
   $('bf-modal').addEventListener('click', function(e){
     if(e.target.id==='bf-modal'){ closeModal(); return; }
@@ -6384,6 +6570,7 @@ function doLogout(){
 (function(){
   var pass=document.getElementById('login-pass');
   if(pass){ pass.addEventListener('keydown', function(e){ if(e.key==='Enter') doLogin(); }); }
+  if(SHARE_TOKEN) return; // lien client : pas de connexion ni d'app
   if(!sb){ bootApp(); return; } // repli : si Supabase indispo, ne pas bloquer l'app
   sb.auth.getSession().then(function(res){
     if(authMode==='recovery') return; // arrivée via lien de reset : on laisse le formulaire nouveau mdp
@@ -7622,6 +7809,109 @@ function clearDiscovery(){
   document.getElementById('disc-clear-btn').style.display='none';
 }
 
+</script>
+<script>
+/* ===== VUE CLIENT : lien partagé ?b=jeton (v1.34) ===== */
+(function(){
+  var tok = SHARE_TOKEN; if(!tok) return;
+  var root = document.createElement('div'); root.id = 'cv-root'; document.body.appendChild(root);
+  document.title = 'Ton briefing, 6flt Photographies';
+  function e(s){ return String(s==null?'':s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+  function msg(t, p){ root.innerHTML = '<div class="cv-msg"><b>'+t+'</b>'+(p||'')+'</div>'; }
+  function fail(){ msg('Ce lien n\'est plus disponible', 'Il a peut-être expiré ou été désactivé.<br>Contacte ton photographe pour en recevoir un nouveau.'); }
+  msg('Chargement de ton briefing…');
+  if(!sb){ fail(); return; }
+  var D = null, tick = null, MAPS = [];
+  function load(){
+    sb.rpc('get_shared_brief', {p_token:tok}).then(function(r){
+      if(r.error || !r.data || r.data.error){ if(r.error) console.warn(r.error.message); fail(); return; }
+      D = r.data; render();
+    }, fail);
+  }
+  function fdt(iso, o){ return new Date(iso).toLocaleString('fr-FR', o); }
+  function decode(str){ var i = 0, lat = 0, lng = 0, out = []; while(i < str.length){ var b, sh = 0, res = 0; do{ b = str.charCodeAt(i++) - 63; res |= (b & 31) << sh; sh += 5; } while(b >= 32); lat += (res & 1) ? ~(res >> 1) : (res >> 1); sh = 0; res = 0; do{ b = str.charCodeAt(i++) - 63; res |= (b & 31) << sh; sh += 5; } while(b >= 32); lng += (res & 1) ? ~(res >> 1) : (res >> 1); out.push([lng/1e5, lat/1e5]); } return out; }
+  function circle(lng, lat, r){ var pts = []; for(var k=0;k<=48;k++){ var a = k/48*Math.PI*2; pts.push([lng + r*Math.sin(a)/(111320*Math.cos(lat*Math.PI/180)), lat + r*Math.cos(a)/111320]); } return pts; }
+  function icsDate(iso){ return iso.replace(/[-:]/g, '').replace(/\.\d+/, ''); }
+  function icsTx(s){ return String(s||'').replace(/\\/g, '\\\\').replace(/([,;])/g, '\\$1').replace(/\n/g, '\\n'); }
+  function ics(d){
+    var loc = d.revealed ? (d.place || '') : 'Lieu communiqué avant la séance';
+    return ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//6flt Photographies//Briefing//FR','BEGIN:VEVENT','UID:'+tok+'@6flt','DTSTAMP:'+icsDate(new Date().toISOString()),
+      'DTSTART:'+icsDate(d.start),'DTEND:'+icsDate(d.end),'SUMMARY:'+icsTx('Shooting photo 6flt'),'LOCATION:'+icsTx(loc),'DESCRIPTION:'+icsTx('Ton briefing : '+location.href),
+      'BEGIN:VALARM','ACTION:DISPLAY','DESCRIPTION:Shooting 6flt','TRIGGER:-PT3H','END:VALARM','END:VEVENT','END:VCALENDAR'].join('\r\n');
+  }
+  function navUrl(sp){
+    if(!sp || !sp.length) return '';
+    var dest = sp[sp.length-1], wp = sp.slice(0, -1).map(function(s){ return s.lat+','+s.lng; }).join('|');
+    return 'https://www.google.com/maps/dir/?api=1&travelmode=driving&destination='+dest.lat+','+dest.lng+(wp ? '&waypoints='+encodeURIComponent(wp) : '');
+  }
+  function render(){
+    MAPS.forEach(function(m){ try{ m.remove(); }catch(x){} }); MAPS = [];
+    var d = D.data || {}, rev = !!D.revealed, h = '<div class="cv-wrap">';
+    h += '<div class="cv-brand"><img src="icon-192.png" alt="">6flt Photographies, briefing de séance</div>';
+    if(!rev){
+      var at = D.reveal_at ? new Date(D.reveal_at) : null;
+      if(!d.date || !at || at.getFullYear()>2900) h += '<div class="cv-banner"><b>Adresses des spots bientôt disponibles</b>Elles apparaîtront ici dès que la date de la séance sera fixée.</div>';
+      else h += '<div class="cv-banner"><b>Adresses exactes le '+e(fdt(D.reveal_at, {weekday:'long', day:'numeric', month:'long'}))+' à '+e(fdt(D.reveal_at, {hour:'2-digit', minute:'2-digit'}))+'</b>En attendant, la carte montre la zone de chaque spot. Révélation dans <span class="cv-count" id="cv-count"></span></div>';
+    }
+    h += '<div class="bf-doc bf-m-phone" style="--car:'+e(d.car||'#e8571a')+'">'+(D.html||'')+'</div></div>';
+    var conf = !!D.confirmed_at;
+    h += '<div class="cv-bar">'+
+      (rev && d.spots && d.spots.length ? '<a class="cv-main" href="'+e(navUrl(d.spots))+'" target="_blank" rel="noopener">Itinéraire</a>' : '<button disabled>Itinéraire '+(rev ? '' : 'bientôt')+'</button>')+
+      (d.start ? '<a href="data:text/calendar;charset=utf-8,'+encodeURIComponent(ics(Object.assign({revealed:rev}, d)))+'" download="shooting-6flt.ics">Calendrier</a>' : '')+
+      '<button id="cv-conf" class="'+(conf ? 'cv-done' : (rev ? '' : 'cv-main'))+'"'+(conf ? ' disabled' : '')+'>'+(conf ? 'Confirmé' : 'Je confirme')+'</button></div>';
+    root.innerHTML = h;
+    root.querySelectorAll('.bf-blk[data-type="map"] .bf-map').forEach(function(box){ glMap(box, d, rev); });
+    var cb = document.getElementById('cv-conf');
+    if(cb && !conf) cb.onclick = function(){
+      cb.disabled = true;
+      sb.rpc('confirm_shared_brief', {p_token:tok}).then(function(r){
+        if(r.error || !r.data){ cb.disabled = false; alert('Confirmation impossible, réessaie dans un instant.'); return; }
+        D.confirmed_at = new Date().toISOString(); cb.className = 'cv-done'; cb.textContent = 'Confirmé';
+      }, function(){ cb.disabled = false; });
+    };
+    clearInterval(tick);
+    if(!rev && D.reveal_at && new Date(D.reveal_at).getFullYear()<2900){
+      var upd = function(){
+        var ms = new Date(D.reveal_at) - Date.now(), el = document.getElementById('cv-count');
+        if(ms <= 0){ clearInterval(tick); load(); return; }
+        var dd = Math.floor(ms/864e5), hh = Math.floor(ms%864e5/36e5), mm = Math.floor(ms%36e5/6e4);
+        if(el) el.textContent = (dd ? dd+' j ' : '')+hh+' h '+(mm<10?'0':'')+mm+' min';
+      };
+      upd(); tick = setInterval(upd, 20000);
+    }
+  }
+  function glMap(box, d, rev){
+    var pts = rev ? (d.spots||[]) : (d.zones||[]); if(!pts.length || !window.mapboxgl) return;
+    var fallback = box.innerHTML;
+    box.innerHTML = ''; box.className = 'cv-gl';
+    try{
+      var m = new mapboxgl.Map({container:box, style:'mapbox://styles/mapbox/dark-v11', center:[pts[0].lng, pts[0].lat], zoom:10, attributionControl:false, cooperativeGestures:true});
+      MAPS.push(m);
+      m.addControl(new mapboxgl.NavigationControl({showCompass:false}), 'top-right');
+      var bb = new mapboxgl.LngLatBounds();
+      m.on('load', function(){
+        if(rev){
+          var line = d.geometry ? decode(d.geometry) : (pts.length>1 ? pts.map(function(p){ return [p.lng, p.lat]; }) : null);
+          if(line){ m.addSource('cv-route', {type:'geojson', data:{type:'Feature', geometry:{type:'LineString', coordinates:line}}}); m.addLayer({id:'cv-route', type:'line', source:'cv-route', layout:{'line-cap':'round','line-join':'round'}, paint:{'line-color':'#e8571a','line-width':4,'line-opacity':.85}}); line.forEach(function(c){ bb.extend(c); }); }
+        } else {
+          m.addSource('cv-zones', {type:'geojson', data:{type:'FeatureCollection', features:pts.map(function(z){ return {type:'Feature', geometry:{type:'Polygon', coordinates:[circle(z.lng, z.lat, z.r)]}}; })}});
+          m.addLayer({id:'cv-zf', type:'fill', source:'cv-zones', paint:{'fill-color':'#e8571a','fill-opacity':.16}});
+          m.addLayer({id:'cv-zl', type:'line', source:'cv-zones', paint:{'line-color':'#e8571a','line-width':1.5,'line-dasharray':[2,2]}});
+          pts.forEach(function(z){ circle(z.lng, z.lat, z.r).forEach(function(c){ bb.extend(c); }); });
+        }
+        pts.forEach(function(p){
+          var el = document.createElement('div'), inn = document.createElement('div'); inn.className = 'cv-pin'; inn.textContent = p.n; el.appendChild(inn);
+          var mk = new mapboxgl.Marker({element:el}).setLngLat([p.lng, p.lat]);
+          if(rev && p.name) mk.setPopup(new mapboxgl.Popup({offset:16, closeButton:false}).setHTML('<b style="color:#111">'+e(p.name)+'</b><br><a href="https://www.google.com/maps/dir/?api=1&destination='+p.lat+','+p.lng+'" target="_blank" rel="noopener">Y aller</a>'));
+          mk.addTo(m); bb.extend([p.lng, p.lat]);
+        });
+        if(!bb.isEmpty()) m.fitBounds(bb, {padding:40, maxZoom:14, duration:0});
+      });
+      m.on('error', function(ev){ console.warn('carte client', ev && ev.error); });
+    } catch(err){ console.warn(err); box.className = 'bf-map'; box.innerHTML = fallback; }
+  }
+  load();
+})();
 </script>
 <script>
 if('serviceWorker' in navigator){
