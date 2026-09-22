@@ -7,9 +7,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Spoties">
 <meta name="theme-color" content="#0e0f12">
-<link rel="manifest" href="manifest.json?v=1.32">
-<link rel="apple-touch-icon" href="icon-180.png?v=1.32">
-<link rel="icon" type="image/png" href="icon-192.png?v=1.32">
+<link rel="manifest" href="manifest.json?v=1.34">
+<link rel="apple-touch-icon" href="icon-180.png?v=1.34">
+<link rel="icon" type="image/png" href="icon-192.png?v=1.34">
 <title>Spoties</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -20,7 +20,7 @@
 <link href="https://unpkg.com/mapillary-js@4.1.2/dist/mapillary.css" rel="stylesheet"/>
 <script src="https://unpkg.com/mapillary-js@4.1.2/dist/mapillary.js"></script>
 <style>
-:root{--bg:#0e0f11;--surface:#16181c;--surface2:#1e2126;--border:#2a2d35;--accent:#e8571a;--accent2:#f0a070;--text:#f0ede8;--muted:#7a7d85;--panel:380px}
+:root{--c-prospect:#e0902a;--c-acte:#2d9e4f;--bg:#0e0f11;--surface:#16181c;--surface2:#1e2126;--border:#2a2d35;--accent:#e8571a;--accent2:#f0a070;--text:#f0ede8;--muted:#7a7d85;--panel:380px}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);height:100vh;overflow:hidden;display:flex;flex-direction:column}
 nav{display:flex;align-items:center;justify-content:space-between;padding:0 24px;height:52px;background:var(--bg);border-bottom:1px solid var(--border);z-index:1000;flex-shrink:0;position:relative}
@@ -651,7 +651,7 @@ nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-
 .empty-day{font-size:12px;color:var(--muted);text-align:center;padding:14px 0}
 .mini-cal{padding:10px;margin-bottom:8px}
 .mini-cal .cal-day{font-size:12px}
-.mini-cal .cal-day.has-shoot{background:var(--accent);color:#fff;font-weight:700}
+.mini-cal .cal-day.has-shoot{background:var(--fc-col,var(--accent));color:#fff;font-weight:700}
 .shoot-day-row{background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:10px;margin-bottom:8px}
 .shoot-day-row .sd-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
 .shoot-day-row .sd-date{font-size:13px;font-weight:700;color:var(--accent)}
@@ -671,6 +671,16 @@ nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-
 .client-shoot-row .shoot-time{width:92px;flex-shrink:0;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Inter',sans-serif;font-size:13px;padding:8px}
 .client-shoot-row .shoot-place{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Inter',sans-serif;font-size:13px;padding:8px}
 .client-shoot-row button.shoot-del{background:transparent;border:1px solid var(--border);border-radius:8px;color:#e84040;width:38px;cursor:pointer;flex-shrink:0;padding:8px 0}
+.client-docs{margin-top:22px}
+.client-docs-btn{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;color:var(--text);font-family:'Inter',sans-serif;font-size:13px;font-weight:600;padding:11px 12px;cursor:pointer}
+.client-docs-btn:hover{border-color:var(--accent)}
+.client-docs-btn .cd-count{font-family:'Space Mono',monospace;font-size:11px;font-weight:400;color:var(--muted)}
+.client-docs-list{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+.client-docs-list[hidden]{display:none}
+.client-doc-item{display:block;width:100%;text-align:left;background:var(--surface);border:1px solid var(--border);border-radius:9px;padding:10px 12px;cursor:pointer;font-family:'Inter',sans-serif;color:var(--text)}
+.client-doc-item:hover{border-color:var(--accent)}
+.client-doc-item .cdi-t{font-size:13px;font-weight:600}
+.client-doc-item .cdi-d{font-size:11px;color:var(--muted);margin-top:2px}
 .client-panel-actions{display:flex;gap:10px;margin-top:24px}
 .client-save-btn{flex:1;background:var(--accent);color:#fff;border:none;border-radius:8px;font-family:'Inter',sans-serif;font-size:14px;font-weight:700;padding:13px;cursor:pointer}
 .client-delete-btn{background:transparent;border:1px solid #e84040;border-radius:8px;color:#e84040;padding:11px 14px;cursor:pointer;display:flex;align-items:center;justify-content:center}
@@ -765,8 +775,6 @@ nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-
 .bf-sb::-webkit-scrollbar-track{background:transparent}
 .bf-sb::-webkit-scrollbar-thumb{background:var(--border);border-radius:6px;border:2px solid var(--surface)}
 .bf-ic{stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.bf-mobile{display:none;flex:1;align-items:center;justify-content:center;text-align:center;padding:30px;color:var(--muted);font-size:14px;line-height:1.6}
-.bf-mobile b{display:block;color:var(--text);font-size:16px;margin-bottom:6px}
 
 /* rail + liste */
 .bf-rail{width:52px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;align-items:center;padding:12px 0;gap:9px}
@@ -783,14 +791,15 @@ nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-
 .bf-chip{flex-shrink:0;background:var(--bg);border:1px solid var(--border);border-radius:16px;padding:6px 13px;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;color:var(--muted);cursor:pointer}
 .bf-chip.active{background:var(--accent);border-color:var(--accent);color:#fff}
 .bf-hint{font-size:11.5px;color:var(--muted);line-height:1.45;margin:0}
-.bf-list{flex:1;min-height:0;overflow-y:auto;padding:14px;display:grid;grid-template-columns:1fr 1fr;gap:12px;align-content:start}
+.bf-list{flex:1;min-height:0;overflow-y:auto;padding:14px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-auto-rows:max-content;gap:12px;align-content:start;align-items:start}
 .bf-list.bf-rows{grid-template-columns:1fr;gap:8px}
 .bf-lgrp{grid-column:1/-1;font-size:11.5px;color:var(--muted);font-weight:600;margin-top:4px}
 .bf-item{background:var(--bg);border:1px solid var(--border);border-radius:11px;overflow:hidden;cursor:grab;display:flex;flex-direction:column;position:relative;user-select:none;min-width:0}
 .bf-item:hover{border-color:var(--accent)}
 .bf-item.cur{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
 .bf-item.bf-click{cursor:pointer}
-.bf-thumb{position:relative;width:100%;aspect-ratio:1/1;background:var(--surface2);overflow:hidden}
+.bf-thumb{position:relative;display:block;width:100%;height:auto;flex:none;background:var(--surface2);overflow:hidden}
+.bf-thumb::before{content:"";display:block;padding-top:100%}
 .bf-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
 .bf-thumb .bf-noimg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--border)}
 .bf-thumb .bf-noimg svg{width:24px;height:24px}
@@ -798,7 +807,8 @@ nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-
 .bf-ititle{font-size:12.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .bf-isub{font-size:10.5px;color:var(--muted);font-family:'Space Mono',monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px}
 .bf-rows .bf-item{flex-direction:row;align-items:center;gap:13px;padding:10px}
-.bf-rows .bf-thumb{width:46px;height:46px;aspect-ratio:auto;flex-shrink:0;border-radius:9px}
+.bf-rows .bf-thumb{width:46px;height:46px;flex-shrink:0;border-radius:9px}
+.bf-rows .bf-thumb::before,.bf-mlist .bf-thumb::before{display:none}
 .bf-rows .bf-cap{padding:0;flex:1}
 .bf-rows .bf-ititle{font-size:14px}
 .bf-rows .bf-isub{font-size:11.5px}
@@ -1083,9 +1093,23 @@ select.bf-field{appearance:none;-webkit-appearance:none;background-image:linear-
 .bf-modal-body{padding:0 18px 12px;overflow-y:auto;display:flex;flex-direction:column;gap:9px;min-height:0}
 .bf-mlist{display:grid;grid-template-columns:1fr 1fr;gap:8px;max-height:230px;overflow-y:auto;padding:2px}
 .bf-mlist .bf-item{flex-direction:row;align-items:center;gap:10px;padding:8px;cursor:pointer}
-.bf-mlist .bf-thumb{width:36px;height:36px;aspect-ratio:auto;border-radius:8px;flex-shrink:0}
+.bf-mlist .bf-thumb{width:36px;height:36px;border-radius:8px;flex-shrink:0}
 .bf-mlist .bf-cap{padding:0}
 .bf-mtpls{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.bf-mstep{display:flex;flex-direction:column;gap:9px}
+.bf-mhead{display:flex;align-items:center;gap:10px;font-size:13px}
+.bf-mhead .bf-thumb{width:36px;height:36px;border-radius:8px;flex-shrink:0}
+.bf-mhead .bf-thumb::before{display:none}
+.bf-mhead b{display:block;font-size:14px}
+.bf-mhead span{color:var(--muted);font-size:11.5px}
+.bf-mcal{padding:12px}
+.bf-mcal .cal-day{font-size:12px}
+.bf-mcal .cal-day.mine{box-shadow:inset 0 0 0 1.5px var(--muted)}
+.bf-mday{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px 12px;font-size:12.5px;display:flex;flex-direction:column;gap:6px}
+.bf-mday b{font-size:13px}
+.bf-mday .bf-mshoot{display:flex;align-items:center;gap:8px;color:var(--text)}
+.bf-mday .bf-mshoot i{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.bf-mday .bf-mfree{color:var(--muted)}
 .bf-modal-foot{display:flex;justify-content:flex-end;gap:8px;padding:12px 18px 16px;border-top:1px solid var(--border)}
 
 #bf-print{display:none}
@@ -1098,21 +1122,116 @@ select.bf-field{appearance:none;-webkit-appearance:none;background-image:linear-
   #bf-print .bf-row{break-inside:avoid;page-break-inside:avoid}
   #bf-print *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 }
-@media (max-width:900px){
-  .bf-wrap{display:none}
-  .bf-mobile{display:flex}
-}
+/* ===== PLANNING MOBILE portrait v1.34 ===== */
+.bf-mbar,.bf-mtop,.bf-shead,.bf-scrim,.bf-menu,.bf-bt-set{display:none}
+#view-planning.bf-mob{--mbar:calc(58px + env(safe-area-inset-bottom))}
+.bf-mob .bf-rail,.bf-mob .bf-pfoot{display:none}
+.bf-mob .bf-side{width:100%;border-right:none}
+.bf-mob:not(.bf-ed) .bf-center,.bf-mob:not(.bf-ed) .bf-panel{display:none}
+.bf-mob .bf-side-head{padding:12px 14px}
+.bf-mob .bf-search{font-size:16px;padding:11px 12px}
+.bf-mob .bf-idel{display:flex;width:34px;height:34px}
+.bf-mob .bf-idel svg{width:15px;height:15px}
+.bf-mob .bf-list{padding:12px 12px calc(20px + env(safe-area-inset-bottom))}
+.bf-mob .bf-rows .bf-item{padding:12px}
+.bf-mob .bf-new{padding:16px;font-size:14px}
+.bf-mob .bf-hint{font-size:12.5px}
+.bf-mob.bf-ed .bf-center{width:100%}
+.bf-mob .bf-toolbar{height:auto;min-height:52px;padding:calc(6px + env(safe-area-inset-top)) 6px 6px;display:grid;grid-template-columns:40px minmax(0,1fr) 38px 38px 38px;column-gap:2px;align-items:center}
+.bf-mob .bf-toolbar>.bf-sep,.bf-mob .bf-toolbar>.bf-seg,.bf-mob .bf-toolbar>.bf-zoom,.bf-mob .bf-toolbar>.bf-send{display:none}
+.bf-mob .bf-mtop{display:flex;align-items:center;justify-content:center;width:38px;height:38px;border:none;background:none;color:var(--text);border-radius:10px;padding:0;cursor:pointer}
+.bf-mob .bf-mtop svg{width:22px;height:22px}
+.bf-mob .bf-mtop.dots svg{fill:currentColor;stroke:none}
+#bf-back{grid-column:1;grid-row:1/3}
+#bf-more{grid-column:5;grid-row:1/3}
+.bf-mob .bf-title{grid-column:2;grid-row:1;font-size:15px;min-width:0;padding:4px 6px}
+.bf-mob .bf-saved{grid-column:2;grid-row:2;padding:0 7px;font-size:10.5px;overflow:hidden;text-overflow:ellipsis}
+.bf-mob #bf-undo{grid-column:3;grid-row:1/3}
+.bf-mob #bf-redo{grid-column:4;grid-row:1/3}
+.bf-mob .bf-ibtn{width:38px;height:38px;border:none;background:none;justify-self:center}
+.bf-mob .bf-ibtn svg{width:19px;height:19px}
+.bf-mob .bf-canvas{padding:14px 10px 28px;display:block}
+.bf-mob .bf-shell,.bf-mob .bf-shell.phone,.bf-mob .bf-shell.a4{width:100%;max-width:none}
+.bf-mob .bf-doc,.bf-mob .bf-shell.phone .bf-doc{padding:24px 16px 22px;border:1px solid var(--border);border-radius:14px;min-height:0}
+.bf-mob .bf-shell.phone .bf-doc::before{display:none}
+.bf-mob .bf-row{grid-template-columns:minmax(0,1fr)!important;gap:22px}
+.bf-mob .bf-cover-main{flex-direction:column;align-items:flex-start;gap:16px}
+.bf-mob .bf-cover h1{font-size:26px}
+.bf-mob .bf-empty{min-height:72px}
+.bf-mob .bf-rrail,.bf-mob .bf-bt.grip{display:none!important}
+.bf-mob .bf-m-edit .bf-row:hover{outline:none}
+.bf-mob .bf-m-edit .bf-blk:hover:not(.sel){outline:none}
+.bf-mob .bf-m-edit .bf-et:hover{background:none}
+.bf-mob .bf-m-edit .bf-gap{height:40px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.bf-mob .bf-m-edit .bf-gap::before{content:"+";width:26px;height:26px;border-radius:50%;border:1px dashed rgba(255,255,255,.22);color:var(--muted);display:flex;align-items:center;justify-content:center;font-size:17px;line-height:1}
+.bf-mob .bf-btools{top:-46px;left:auto;right:-6px;padding:3px 3px 3px 10px;border-radius:10px;font-size:12.5px;gap:2px}
+.bf-mob .bf-bt{width:34px;height:34px;border-radius:8px}
+.bf-mob .bf-btools svg{width:17px;height:17px}
+.bf-mob .bf-bt-set{display:flex}
+.bf-mob.bf-ed .bf-mbar{display:flex;flex-shrink:0;height:var(--mbar);padding:0 4px env(safe-area-inset-bottom);border-top:1px solid var(--border);background:var(--surface);position:relative;z-index:45;box-sizing:border-box}
+.bf-mbar button{flex:1;background:none;border:none;color:var(--muted);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-family:'Inter',sans-serif;font-size:10.5px;font-weight:600;padding:0;cursor:pointer}
+.bf-mbar svg{width:22px;height:22px}
+.bf-mbar button.on{color:var(--accent)}
+.bf-mbar .bf-mb-plus{width:30px;height:24px;border-radius:8px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center}
+.bf-mbar .bf-mb-plus svg{width:18px;height:18px}
+.bf-mob.bf-ed .bf-side,.bf-mob.bf-ed .bf-panel,.bf-mob.bf-ed .bf-menu{position:absolute;left:0;right:0;bottom:var(--mbar);width:auto;z-index:40;background:var(--surface);border:1px solid var(--border);border-bottom:none;border-radius:18px 18px 0 0;box-shadow:0 -12px 40px rgba(0,0,0,.45);transform:translateY(calc(100% + var(--mbar)));visibility:hidden;transition:transform .24s cubic-bezier(.2,.8,.2,1),visibility 0s .24s}
+.bf-mob.bf-ed .bf-side.open,.bf-mob.bf-ed .bf-panel.open,.bf-mob.bf-ed .bf-menu.open{transform:none;visibility:visible;transition:transform .24s cubic-bezier(.2,.8,.2,1)}
+.bf-mob.bf-ed .bf-menu{display:block;padding:0 12px 14px}
+.bf-mob.bf-ed .bf-side{height:74%}
+.bf-mob.bf-ed .bf-panel{max-height:74%}
+.bf-mob.bf-ed .bf-panel:not(.bf-has-sel){height:74%}
+.bf-mob.bf-ed .bf-panel.bf-has-sel{padding-top:10px}
+.bf-mob.bf-ed .bf-panel.bf-has-sel .bf-shead,.bf-mob.bf-ed .bf-panel.bf-has-sel .bf-ptabs{display:none}
+.bf-mob.bf-ed .bf-side-head{border-bottom:none;padding:6px 14px 10px}
+.bf-mob.bf-ed .bf-list{padding-bottom:18px}
+.bf-mob.bf-ed .bf-list:not(.bf-rows){grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.bf-mob.bf-ed .bf-list:not(.bf-rows) .bf-cap{padding:7px 8px}
+.bf-mob.bf-ed .bf-shead{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:18px 14px 4px;position:relative;flex-shrink:0}
+.bf-shead::before{content:"";position:absolute;top:7px;left:50%;width:38px;height:4px;margin-left:-19px;border-radius:2px;background:var(--border)}
+.bf-shead b{font-size:15px;font-weight:700}
+.bf-shead .bf-mini{width:32px;height:32px;font-size:16px}
+.bf-mob.bf-ed.bf-sh .bf-scrim{display:block;position:absolute;left:0;right:0;top:0;bottom:var(--mbar);background:rgba(0,0,0,.4);z-index:35}
+.bf-menu>button{width:100%;display:flex;align-items:center;gap:12px;background:var(--bg);border:1px solid var(--border);border-radius:12px;color:var(--text);font-family:'Inter',sans-serif;font-size:14.5px;font-weight:600;padding:14px;margin-top:8px;cursor:pointer;text-align:left}
+.bf-menu>button svg{width:18px;height:18px;flex-shrink:0}
+.bf-menu>button.danger{color:#ff8a7a}
+.bf-mob .bf-pbody{flex:1 1 auto;padding:4px 14px 18px}
+.bf-mob .bf-ptabs{padding:8px 14px 10px}
+.bf-mob .bf-ptabs button{padding:11px 6px;font-size:13.5px}
+.bf-mob .bf-field{font-size:16px;padding:11px 12px}
+.bf-mob .bf-sbtn{padding:12px;font-size:14px}
+.bf-mob .bf-pal{padding:11px 12px}
+.bf-mob .bf-tog{font-size:14px;padding:7px 0}
+.bf-mob .bf-seg.bf-sm button{padding:9px 4px;font-size:13px}
+.bf-mob .bf-chk{font-size:14px;padding:10px}
+.bf-mob .bf-rlist .bf-mini{width:32px;height:32px;font-size:14px}
+.bf-mob .bf-set-title{font-size:16px}
+.bf-mob .bf-set-label{font-size:12.5px;margin-top:8px}
+.bf-mob .bf-set-hint{font-size:12.5px}
+.bf-mob .bf-modal-bg{padding:0;align-items:stretch}
+.bf-mob .bf-modal{width:100%;max-height:none;height:100%;border-radius:0;border:none}
+.bf-mob .bf-modal-foot{padding:12px 14px calc(12px + env(safe-area-inset-bottom))}
+.bf-mob .bf-modal-foot button{flex:1;padding:13px}
+.bf-mob .bf-mlist{grid-template-columns:1fr;max-height:38vh}
+.bf-mob .bf-mtpls{grid-template-columns:1fr}
+.bf-mob .bf-toolbar{padding-left:calc(6px + env(safe-area-inset-left));padding-right:calc(6px + env(safe-area-inset-right))}
+.bf-mob.bf-ed .bf-mbar{padding-left:calc(4px + env(safe-area-inset-left));padding-right:calc(4px + env(safe-area-inset-right))}
+.bf-mob .bf-canvas{padding-left:calc(10px + env(safe-area-inset-left));padding-right:calc(10px + env(safe-area-inset-right))}
+.bf-mob.bf-ed .bf-side,.bf-mob.bf-ed .bf-panel{padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
+.bf-mob.bf-ed .bf-menu{padding:0 calc(12px + env(safe-area-inset-right)) 14px calc(12px + env(safe-area-inset-left))}
+.bf-mob:not(.bf-ed) .bf-side{padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
+body.bf-focus nav{display:none}
+body.bf-focus #toast{bottom:calc(74px + env(safe-area-inset-bottom))}
 </style>
 </head>
 <body>
 <div id="splash">
-  <img id="splash-logo" src="icon-512.png?v=1.32" alt="Spoties">
-  <div id="splash-credit">Créé par 6flt photographie et Claude<br><span style="opacity:.6">v1.32</span></div>
+  <img id="splash-logo" src="icon-512.png?v=1.34" alt="Spoties">
+  <div id="splash-credit">Créé par 6flt photographie et Claude<br><span style="opacity:.6">v1.34</span></div>
 </div>
 
 <div id="login-screen">
   <div class="login-box">
-    <img src="icon-192.png?v=1.32" alt="Spoties" class="login-logo">
+    <img src="icon-192.png?v=1.34" alt="Spoties" class="login-logo">
     <h1 class="login-title">Spoties</h1>
     <p class="login-sub" id="login-sub">Connexion</p>
     <input type="email" id="login-email" class="login-input" placeholder="Email" autocomplete="email">
@@ -1127,7 +1246,7 @@ select.bf-field{appearance:none;-webkit-appearance:none;background-image:linear-
 </div>
 
 <nav>
-  <button type="button" class="nav-logo" id="nav-logo" onclick="refreshApp()" title="Actualiser l'app" aria-label="Actualiser l'app"><img src="icon-192.png?v=1.32" alt="Spoties" class="nav-logo-img"></button>
+  <button type="button" class="nav-logo" id="nav-logo" onclick="refreshApp()" title="Actualiser l'app" aria-label="Actualiser l'app"><img src="icon-192.png?v=1.34" alt="Spoties" class="nav-logo-img"></button>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="switchView('map')">Carte</button>
     <button class="nav-tab" onclick="switchView('gallery')">Spots</button>
@@ -1473,6 +1592,18 @@ select.bf-field{appearance:none;-webkit-appearance:none;background-image:linear-
     </div>
     <div class="settings-divider"></div>
     <div>
+      <div class="settings-section-title">Planning clients</div>
+      <div class="color-picker-wrap">
+        <input type="color" id="pick-prospect" value="#e0902a" oninput="applyColorDirect('prospect',this.value)">
+        <span class="color-picker-label">Prospect</span>
+      </div>
+      <div class="color-picker-wrap" style="margin-top:8px">
+        <input type="color" id="pick-acte" value="#2d9e4f" oninput="applyColorDirect('acte',this.value)">
+        <span class="color-picker-label">Acté (client)</span>
+      </div>
+    </div>
+    <div class="settings-divider"></div>
+    <div>
       <div class="settings-section-title">Donnees</div>
       <div class="settings-actions">
         <button onclick="exportJSON()">
@@ -1753,7 +1884,6 @@ select.bf-field{appearance:none;-webkit-appearance:none;background-image:linear-
 </div>
 
 <div id="view-planning" class="view">
-  <div class="bf-mobile"><div><b>Éditeur de briefing</b>Prévu pour ordinateur pour l'instant. Une version mobile simplifiée arrive plus tard.</div></div>
   <div class="bf-wrap">
     <div class="bf-rail" id="bf-rail">
       <button class="bf-rail-btn" data-src="briefings" title="Mes briefings" aria-label="Mes briefings"><svg class="bf-ic" viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/><path d="M9 12h6M9 16h6"/></svg></button>
@@ -1762,7 +1892,8 @@ select.bf-field{appearance:none;-webkit-appearance:none;background-image:linear-
       <button class="bf-rail-btn" data-src="spots" title="Spots" aria-label="Spots"><svg class="bf-ic" viewBox="0 0 24 24"><path d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></button>
       <button class="bf-rail-btn" data-src="photos" title="Photos" aria-label="Photos"><svg class="bf-ic" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.8"/><path d="M21 16l-5-5-9 8"/></svg></button>
     </div>
-    <div class="bf-side">
+    <div class="bf-side" id="bf-side">
+      <div class="bf-shead"><b id="bf-side-t"></b><button class="bf-mini" data-sclose aria-label="Fermer">×</button></div>
       <div class="bf-side-head">
         <input type="text" class="bf-search" id="bf-search" placeholder="Rechercher...">
         <div class="bf-chips bf-sb" id="bf-chips"></div>
@@ -1772,6 +1903,7 @@ select.bf-field{appearance:none;-webkit-appearance:none;background-image:linear-
     </div>
     <div class="bf-center">
       <div class="bf-toolbar">
+        <button class="bf-mtop" id="bf-back" aria-label="Retour aux briefings"><svg class="bf-ic" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
         <input type="text" class="bf-title" id="bf-title" aria-label="Titre du briefing">
         <span class="bf-saved" id="bf-saved"></span>
         <div class="bf-sep"></div>
@@ -1788,6 +1920,7 @@ select.bf-field{appearance:none;-webkit-appearance:none;background-image:linear-
           <button data-z="1" title="Zoomer (Ctrl +)" aria-label="Zoomer">+</button>
         </div>
         <button class="bf-send" title="Publication : prochaine étape">Envoyer</button>
+        <button class="bf-mtop dots" id="bf-more" aria-label="Plus d'options"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg></button>
       </div>
       <div class="bf-canvas bf-sb" id="bf-canvas">
         <div class="bf-shell" id="bf-shell">
@@ -1795,8 +1928,16 @@ select.bf-field{appearance:none;-webkit-appearance:none;background-image:linear-
           <div class="bf-doc" id="bf-doc"></div>
         </div>
       </div>
+      <div class="bf-mbar" id="bf-mbar">
+        <button data-mb="clients"><svg class="bf-ic" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c0-3.6 3.1-6 7-6s7 2.4 7 6"/></svg>Client</button>
+        <button data-mb="spots"><svg class="bf-ic" viewBox="0 0 24 24"><path d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>Spots</button>
+        <button data-mb="add"><span class="bf-mb-plus"><svg class="bf-ic" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span>Bloc</button>
+        <button data-mb="photos"><svg class="bf-ic" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.8"/><path d="M21 16l-5-5-9 8"/></svg>Photos</button>
+        <button data-mb="prev"><svg class="bf-ic" viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg><span id="bf-mb-prev-l">Aperçu</span></button>
+      </div>
     </div>
-    <div class="bf-panel">
+    <div class="bf-panel" id="bf-pwrap">
+      <div class="bf-shead"><b>Ajouter au briefing</b><button class="bf-mini" data-sclose aria-label="Fermer">×</button></div>
       <div class="bf-ptabs" id="bf-ptabs">
         <button data-tab="blocs" class="on">Blocs</button>
         <button data-tab="gabarits">Gabarits</button>
@@ -1808,18 +1949,28 @@ select.bf-field{appearance:none;-webkit-appearance:none;background-image:linear-
       </div>
     </div>
   </div>
+  <div class="bf-scrim" id="bf-scrim"></div>
+  <div class="bf-menu" id="bf-menu">
+    <div class="bf-shead"><b>Briefing</b><button class="bf-mini" data-sclose aria-label="Fermer">×</button></div>
+    <button data-mm="tpl"><svg class="bf-ic" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M10 10v10"/></svg>Appliquer un gabarit</button>
+    <button data-mm="savetpl"><svg class="bf-ic" viewBox="0 0 24 24"><path d="M5 3h11l3 3v15H5z"/><path d="M8 3v6h8"/><rect x="8" y="13" width="8" height="5"/></svg>Enregistrer en gabarit</button>
+    <button data-mm="del" class="danger"><svg class="bf-ic" viewBox="0 0 24 24"><path d="M4 7h16M10 7V4h4v3M6 7l1 13h10l1-13"/></svg>Supprimer ce briefing</button>
+  </div>
   <div class="bf-modal-bg" id="bf-modal" hidden>
     <div class="bf-modal" role="dialog" aria-modal="true" aria-labelledby="bf-modal-h">
       <div class="bf-modal-head"><h3 id="bf-modal-h">Nouveau briefing</h3><button class="bf-mini" data-mact="close" aria-label="Fermer">×</button></div>
       <div class="bf-modal-body">
+       <div class="bf-mstep" id="bf-m-step1">
         <div class="bf-set-label">Client</div>
         <input type="text" class="bf-search" id="bf-m-search" placeholder="Rechercher un client...">
         <div class="bf-mlist bf-sb" id="bf-m-clients"></div>
         <div class="bf-set-label">Gabarit</div>
         <div class="bf-mtpls" id="bf-m-tpls"></div>
-        <p class="bf-set-hint">Sa voiture, ses spots liés et la date de son prochain shooting sont repris automatiquement.</p>
+        <p class="bf-set-hint">Sa voiture et ses spots liés sont repris automatiquement. Étape suivante : la date du shooting.</p>
+       </div>
+       <div class="bf-mstep" id="bf-m-step2" hidden></div>
       </div>
-      <div class="bf-modal-foot"><button class="bf-sbtn" data-mact="close">Annuler</button><button class="bf-primary" data-mact="create">Créer le briefing</button></div>
+      <div class="bf-modal-foot"><button class="bf-sbtn" data-mact="close">Annuler</button><button class="bf-sbtn" data-mact="back" hidden>Retour</button><button class="bf-primary" data-mact="next">Suivant</button><button class="bf-primary" data-mact="create" hidden>Créer le briefing</button></div>
     </div>
   </div>
   <input type="file" id="bf-file" accept="image/*" multiple hidden>
@@ -1860,9 +2011,8 @@ select.bf-field{appearance:none;-webkit-appearance:none;background-image:linear-
         </div>
         <div class="cal-grid" id="plan-grid"></div>
         <div class="cal-legend">
-          <span><i style="background:var(--blue)"></i>1 shoot</span>
-          <span><i style="background:#e0902a"></i>2 shoots</span>
-          <span><i style="background:#2d9e4f"></i>3+ shoots</span>
+          <span><i style="background:var(--c-prospect)"></i>Prospect</span>
+          <span><i style="background:var(--c-acte)"></i>Acté</span>
         </div>
       </div>
       <div class="day-detail" id="plan-detail">
@@ -1903,7 +2053,7 @@ select.bf-field{appearance:none;-webkit-appearance:none;background-image:linear-
       </div>
       <div class="client-row2-col">
         <label class="client-field-label">Statut</label>
-        <select id="client-statut" class="client-input">
+        <select id="client-statut" class="client-input" onchange="fcRenderCal()">
           <option value="prospect">Prospect</option>
           <option value="client">Client</option>
         </select>
@@ -1930,6 +2080,10 @@ select.bf-field{appearance:none;-webkit-appearance:none;background-image:linear-
     <label class="client-field-label">Details supplementaires</label>
     <div id="client-extras"></div>
     <button class="client-extra-add" onclick="addClientExtraRow()">+ Ajouter un detail</button>
+    <div class="client-docs" id="client-docs" style="display:none">
+      <button type="button" class="client-docs-btn" onclick="toggleClientDocs()"><span>Documents client</span><span class="cd-count" id="client-docs-count"></span></button>
+      <div class="client-docs-list" id="client-docs-list" hidden onclick="onClientDocsClick(event)"></div>
+    </div>
     <div class="client-panel-actions">
       <button class="client-save-btn" onclick="saveClient()">Enregistrer</button>
       <button class="client-delete-btn" id="client-delete-btn" onclick="deleteClient()" style="display:none" title="Mettre a la corbeille" aria-label="Corbeille"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2.5 4h11M6 4V2.5h4V4M5 4l.5 9h5l.5-9M6.5 6.5v4M9.5 6.5v4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
@@ -2396,12 +2550,13 @@ function switchClientSub(sub){
 function planCollect(){
   var map={};
   clients.forEach(function(c){
+    if(c.deleted) return;
     (Array.isArray(c.shoots)?c.shoots:[]).forEach(function(s){
       if(!s.date) return;
       if(!map[s.date]) map[s.date]=[];
       var carName = (Array.isArray(c.cars)&&c.cars.length&&c.cars[0].model)?c.cars[0].model:(c.car||'');
       var parts=[]; if(carName) parts.push(carName); if(s.time) parts.push(s.time); if(s.place) parts.push(s.place);
-      map[s.date].push({ clientId:c.id, name:c.name||'Client', label:parts.join(' \u00b7 ') });
+      map[s.date].push({ clientId:c.id, name:c.name||'Client', label:parts.join(' \u00b7 '), color:statutColor(c.statut) });
     });
   });
   return map;
@@ -2426,9 +2581,8 @@ function planRender(){
       cell.innerHTML='<span>'+day+'</span>';
       var sh=map[ds];
       if(sh&&sh.length){
-        var col = sh.length>=3?'#2d9e4f':(sh.length===2?'#e0902a':'#2e6fd6');
         var pips=document.createElement('div'); pips.className='pips';
-        for(var k=0;k<Math.min(sh.length,3);k++){ var p=document.createElement('span'); p.style.background=col; pips.appendChild(p); }
+        for(var k=0;k<Math.min(sh.length,3);k++){ var p=document.createElement('span'); p.style.background=sh[k].color; pips.appendChild(p); }
         cell.appendChild(pips);
       }
       cell.onclick=function(){ planSelDay=ds; planRender(); planDetail(ds); };
@@ -2447,12 +2601,14 @@ function planDetail(ds){
   if(!sh.length){ box.innerHTML='<div class="empty-day">Aucun shoot ce jour. Jour libre.</div>'; }
   else sh.forEach(function(s){
     var el=document.createElement('div'); el.className='shoot-item';
-    el.innerHTML='<span class="sc" style="background:var(--blue)"></span><div><div class="si-nm">'+escapeHtml(s.name)+'</div>'+(s.label?'<div class="si-meta">'+escapeHtml(s.label)+'</div>':'')+'</div>';
+    el.innerHTML='<span class="sc" style="background:'+s.color+'"></span><div><div class="si-nm">'+escapeHtml(s.name)+'</div>'+(s.label?'<div class="si-meta">'+escapeHtml(s.label)+'</div>':'')+'</div>';
     el.onclick=function(){ openExistingClientPanel(s.clientId); };
     box.appendChild(el);
   });
   document.getElementById('plan-add-btn').style.display='';
 }
+
+function statutColor(st){ return st==='client' ? 'var(--c-acte)' : 'var(--c-prospect)'; }
 
 function planPrev(){ planMo--; if(planMo<0){planMo=11;planY--;} planRender(); }
 function planNext(){ planMo++; if(planMo>11){planMo=0;planY++;} planRender(); }
@@ -2641,6 +2797,7 @@ function openNewClientPanel(){
   var prev = document.getElementById('client-photo-preview');
   prev.style.display = 'none'; prev.src = '';
   document.getElementById('client-delete-btn').style.display = 'none';
+  document.getElementById('client-docs').style.display = 'none';
   document.getElementById('client-panel').classList.add('open');
 }
 function openExistingClientPanel(id){
@@ -2667,7 +2824,26 @@ function openExistingClientPanel(id){
   var prev = document.getElementById('client-photo-preview');
   if(c.photo){ prev.src = c.photo; prev.style.display = 'block'; } else { prev.style.display='none'; prev.src=''; }
   document.getElementById('client-delete-btn').style.display = '';
+  document.getElementById('client-docs-list').hidden = true; renderClientDocs();
   document.getElementById('client-panel').classList.add('open');
+}
+function renderClientDocs(){
+  var wrap=document.getElementById('client-docs'); if(!wrap) return;
+  if(!currentClientId || typeof window.bfDocsFor!=='function'){ wrap.style.display='none'; return; }
+  wrap.style.display='';
+  var docs=window.bfDocsFor(currentClientId);
+  document.getElementById('client-docs-count').textContent = docs.length ? docs.length+' doc'+(docs.length>1?'s':'') : 'Aucun';
+  var list=document.getElementById('client-docs-list'); if(list.hidden) return;
+  var h = docs.length ? docs.map(function(d){ return '<button type="button" class="client-doc-item" data-doc="'+escapeHtml(d.id)+'"><div class="cdi-t">'+escapeHtml(d.title)+'</div><div class="cdi-d">'+escapeHtml(d.when)+'</div></button>'; }).join('') : '<div class="empty-day">Aucun document pour ce client.</div>';
+  list.innerHTML = h + '<button type="button" class="client-extra-add" data-newdoc="1">+ Nouveau briefing pour ce client</button>';
+}
+function toggleClientDocs(){ var l=document.getElementById('client-docs-list'); l.hidden=!l.hidden; renderClientDocs(); }
+function onClientDocsClick(e){
+  var d=e.target.closest('[data-doc]'), n=e.target.closest('[data-newdoc]'), cid=currentClientId;
+  if(!d && !n) return;
+  closeClientPanel(); switchView('planning');
+  if(d && window.bfOpenDoc) window.bfOpenDoc(d.getAttribute('data-doc'));
+  else if(n && window.bfNewDocFor) window.bfNewDocFor(cid);
 }
 function closeClientPanel(){ document.getElementById('client-panel').classList.remove('open'); }
 
@@ -2686,6 +2862,7 @@ function fcSync(){
 function fcRenderCal(){
   document.getElementById('fc-month').textContent=PLAN_MONTHS[fcMo]+' '+fcY;
   var g=document.getElementById('fc-grid'); g.innerHTML='';
+  var stSel=document.getElementById('client-statut'); g.style.setProperty('--fc-col', statutColor(stSel?stSel.value:'prospect'));
   PLAN_DOW.forEach(function(d){ var e=document.createElement('div'); e.className='cal-dow'; e.textContent=d; g.appendChild(e); });
   var first=new Date(fcY,fcMo,1);
   var startDow=(first.getDay()+6)%7;
@@ -3015,7 +3192,7 @@ var DECOR_PALETTE = [
 ];
 
 var savedTheme = JSON.parse(localStorage.getItem('6flt_theme') || '{}');
-var theme = Object.assign({accent:'#e8571a', bg:'#0e0f11', text:'#f0ede8'}, savedTheme);
+var theme = Object.assign({accent:'#e8571a', bg:'#0e0f11', text:'#f0ede8', prospect:'#e0902a', acte:'#2d9e4f'}, savedTheme);
 
 function hexToRgb(h){return[parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)]}
 function rgbToHex(r,g,b){return'#'+[r,g,b].map(function(v){return Math.max(0,Math.min(255,Math.round(v))).toString(16).padStart(2,'0')}).join('')}
@@ -3031,6 +3208,9 @@ function applyTheme(){
   r.style.setProperty('--surface',shiftHex(theme.bg,6));
   r.style.setProperty('--surface2',shiftHex(theme.bg,12));
   r.style.setProperty('--border',shiftHex(theme.bg,22));
+  r.style.setProperty('--c-prospect',theme.prospect);
+  r.style.setProperty('--c-acte',theme.acte);
+  var pp=document.getElementById('pick-prospect'), pc=document.getElementById('pick-acte'); if(pp)pp.value=theme.prospect; if(pc)pc.value=theme.acte;
   var pa=document.getElementById('pick-accent'), pb=document.getElementById('pick-bg'), pt=document.getElementById('pick-text');
   if(pa)pa.value=theme.accent; if(pb)pb.value=theme.bg; if(pt)pt.value=theme.text;
   document.querySelectorAll('[data-var]').forEach(function(s){s.classList.toggle('selected',s.dataset.color===theme[s.dataset.var]);});
@@ -4120,6 +4300,7 @@ function lbReset(){lbZ=1;lbX=0;lbY=0;lbApply();}
 })();
 
 function switchView(v){
+  if(v!=='planning') document.body.classList.remove('bf-focus');
   document.querySelectorAll('.view').forEach(function(el){el.classList.remove('active');});
   document.querySelectorAll('.nav-tab').forEach(function(el){el.classList.remove('active');});
   document.getElementById('view-'+v).classList.add('active');
@@ -4371,9 +4552,11 @@ var OFFRE = {Essentiel:'Essentiel', Avance:'Avancé', Premium:'Premium'};
 var DIR = lsGet(LS.dir, {});
 var WX = {};
 var doc = null, HIST = [], HP = -1;
-var S = {mode:'edit', src:'briefings', tab:'blocs', sel:null, chip:'Tous', q:'', inited:false, cloud:false, zoom:1};
+var S = {mode:'edit', src:'briefings', tab:'blocs', sel:null, chip:'Tous', q:'', inited:false, cloud:false, zoom:1, mscreen:'list', sheet:null, pmode:'palette', ins:null};
+var MQ = window.matchMedia ? window.matchMedia('(max-width:900px), (max-height:500px) and (pointer:coarse)') : null;
+function MOB(){ return !!(MQ && MQ.matches); }
 try{ var _z = parseFloat(localStorage.getItem('bf-zoom')); if(_z>0) S.zoom = _z; }catch(e){}
-var M = {client:null, tpl:'particulier', q:''};
+var M = {client:null, tpl:'particulier', q:'', step:1, date:null, status:'prospect', y:0, mo:0};
 var DEF_POS = {lat:49.1193, lng:6.1757};
 var PHOTOS = [];
 
@@ -4395,7 +4578,8 @@ var I = {
   photos:'<svg class="bf-ic" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.8"/><path d="M21 16l-5-5-9 8"/></svg>',
   text:'<svg class="bf-ic" viewBox="0 0 24 24"><path d="M5 6V4h14v2M12 4v16M9 20h6"/></svg>',
   checklist:'<svg class="bf-ic" viewBox="0 0 24 24"><path d="M4 6l2 2 3-3M4 13l2 2 3-3M4 20l2 2 3-3"/><path d="M12 7h8M12 14h8M12 21h8"/></svg>',
-  contact:'<svg class="bf-ic" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></svg>'
+  contact:'<svg class="bf-ic" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></svg>',
+  set:'<svg class="bf-ic" viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg>'
 };
 var TYPES = {
   cover:{name:'Couverture', desc:'Photo, prénom et voiture du client', link:'client', linkLabel:'Lié à la fiche client'},
@@ -4654,6 +4838,7 @@ function loadCloud(){
     briefings.forEach(function(l){ var c = byId[l.id]; if(!c || (l.updatedAt||0) > (c.updatedAt||0)){ byId[l.id] = l; up.push(l); } });
     briefings = Object.keys(byId).map(function(k){ return byId[k]; }).sort(function(a,b){ return (b.updatedAt||0)-(a.updatedAt||0); });
     saveLocal();
+    if(typeof window.renderClientDocs==='function') try{ window.renderClientDocs(); }catch(e){}
     if(up.length) sb.from('briefings').upsert(up.map(function(d){ return {id:d.id, user_id:currentUserId, client_id:d.clientId||null, title:d.title||'', status:d.status||'draft', data:d, updated_at:new Date(d.updatedAt||Date.now()).toISOString()}; })).then(function(){});
     if(doc && !saveT){ var fresh = briefings.filter(function(b){ return b.id===doc.id; })[0]; if(fresh && (fresh.updatedAt||0) > (doc.updatedAt||0)){ openDoc(fresh.id, true); return; } }
     if(!doc && briefings.length){ openDoc(lsGet(LS.cur, null) || briefings[0].id, true); return; }
@@ -4662,8 +4847,9 @@ function loadCloud(){
 }
 
 /* ---------- documents ---------- */
-function createDoc(clientId, tplKey){
+function createDoc(clientId, tplKey, date){
   var c = getClient(clientId), sh = c ? nextShoot(c) : null, t, rows;
+  if(date){ var at = c ? (c.shoots||[]).filter(function(x){ return x && x.date===date; })[0] : null; sh = at || {date:date, place:''}; }
   if(String(tplKey).indexOf('c:')===0){ t = CUSTOM[+tplKey.slice(2)] || {}; rows = (t.rows||[]).map(function(r){ return reId(clone(r)); }); }
   else { t = TEMPLATES[tplKey] || TEMPLATES.particulier; rows = t.build(); }
   var route = c && c.spotIds ? c.spotIds.filter(function(id){ var s = getSpot(id); return s && s.kind!=='route'; }) : [];
@@ -4694,6 +4880,23 @@ function deleteDoc(id){
   if(sb && currentUserId) sb.from('briefings').delete().eq('id', id).then(function(res){ if(res.error) console.warn('Supabase briefings delete:', res.error.message); });
   if(!doc && briefings.length) openDoc(briefings[0].id, true); else renderAll();
   toast('Briefing supprimé');
+}
+function clientsChanged(){
+  if(typeof persistClients==='function') persistClients();
+  if(typeof renderClients==='function') try{ renderClients(); }catch(e){}
+  if(typeof planRender==='function') try{ planRender(); }catch(e){}
+}
+function linkShootDate(oldD, newD){
+  var c = getClient(doc.clientId); if(!c || !oldD || !newD || oldD===newD) return;
+  var list = Array.isArray(c.shoots) ? c.shoots : [], s = list.filter(function(x){ return x.date===oldD; })[0]; if(!s) return;
+  if(list.some(function(x){ return x!==s && x.date===newD; })) c.shoots = list.filter(function(x){ return x!==s; }); else s.date = newD;
+  c.shoots.sort(function(a,b){ return (a.date+(a.time||'')).localeCompare(b.date+(b.time||'')); });
+  doc.shootDate = newD; clientsChanged(); toast('Planning de '+(firstName(c)||'ton client')+' mis à jour');
+}
+function linkShootPlace(){
+  var c = getClient(doc.clientId); if(!c) return;
+  var s = (c.shoots||[]).filter(function(x){ return x.date===doc.date; })[0];
+  if(s && s.place!==doc.place){ s.place = doc.place; clientsChanged(); }
 }
 function commit(){
   if(!doc) return;
@@ -4746,7 +4949,7 @@ function blockBody(b){
         '<div>'+ET(b, 'title', 'Prêts pour la séance, {prenom}.', 'h1')+ET(b, 'intro', '{voiture}. {date}, {lieu}. Tout ce qu\'il faut savoir avant le jour J est ici.', 'p', '', {ml:1})+'</div></div>'+
         (car ? '<div class="bf-carbar"><i></i><span>'+esc(car)+'</span></div>' : '<div class="bf-carbar"><i></i></div>')+'</div>';
     case 'client':
-      if(!c) return '<div class="bf-empty bf-eo" style="min-height:90px">Glisse un client ici ou choisis-le dans les réglages</div>';
+      if(!c) return '<div class="bf-empty bf-eo" style="min-height:90px">'+(MOB() ? 'Touche le bouton Client en bas pour lier un client' : 'Glisse un client ici ou choisis-le dans les réglages')+'</div>';
       var cars = (c.cars && c.cars.length ? c.cars : (c.car ? [{model:c.car, color:''}] : [])).filter(function(v){ return v && (v.model||v.color); });
       h = ET(b, 'h', 'Ta fiche', 'h2', 'bf-h')+'<div class="bf-client"><div class="bf-cphoto" style="background:'+avatarBg(c)+'">'+photoOrInitials(c)+'</div><div><div class="bf-cname">'+esc(c.name)+'</div>'+
         cars.map(function(v){ return '<div class="bf-ccar">'+(v.color ? '<span class="bf-sw" style="background:'+esc(v.color)+'"></span>' : '')+esc(v.model||'Voiture')+'</div>'; }).join('')+'</div></div>';
@@ -4772,7 +4975,7 @@ function blockBody(b){
     case 'map':
       list = rs();
       var hMap = ET(b, 'h', 'Le parcours', 'h2', 'bf-h');
-      if(!list.length) return hMap+'<div class="bf-map"><div class="bf-muted">Glisse des spots ici pour tracer le parcours</div></div>';
+      if(!list.length) return hMap+'<div class="bf-map"><div class="bf-muted">'+(MOB() ? 'Ajoute des spots avec le bouton Spots en bas' : 'Glisse des spots ici pour tracer le parcours')+'</div></div>';
       var L = legs(list), tot = L.reduce(function(a,x){ return a+x; }, 0);
       return hMap+'<div class="bf-map"><img src="'+esc(mapUrl(list, p.route, S.mode==='a4'))+'" alt="" draggable="false" onerror="this.parentNode.classList.add(\'err\')"></div>'+
         '<div class="bf-mapcap"><span>'+list.length+' spot'+(list.length>1?'s':'')+(list.length>1 ? ', '+tot+' min de route au total' : '')+'</span><span>'+(doc.timeMode==='sunset'?'Dans l\'ordre du coucher de soleil':doc.timeMode==='sunrise'?'Dans l\'ordre du lever du soleil':'Dans l\'ordre de passage')+'</span></div>'+bnote(b);
@@ -4805,7 +5008,7 @@ function blockBody(b){
       return ET(b, 'h', 'Préparer la voiture', 'h2', 'bf-h')+(lis.length ? '<ul class="bf-check">'+lis.join('')+'</ul>' : '<div class="bf-muted bf-eo">Aucun élément coché</div>')+
         (S.mode==='edit' ? '<button class="bf-addli bf-eo" data-act="chk-add">+ Ajouter un élément</button>' : '')+bnote(b);
     case 'photos':
-      if(!p.imgs.length) return '<div class="bf-pdrop bf-eo">Glisse des photos ici<br>depuis ton ordi ou la bibliothèque</div>';
+      if(!p.imgs.length) return '<div class="bf-pdrop bf-eo">'+(MOB() ? 'Touche ce bloc puis Importer des photos' : 'Glisse des photos ici<br>depuis ton ordi ou la bibliothèque')+'</div>';
       return '<div class="bf-photos" data-l="'+esc(p.layout)+'">'+p.imgs.map(function(src){ return '<img src="'+esc(src)+'" alt="" draggable="false">'; }).join('')+'</div>'+ET(b, 'caption', '', 'p', 'bf-pcap', {prop:'caption', opt:1, ph:'Ajouter une légende…'});
     case 'text':
       return '<div class="bf-txt '+esc(p.style)+'" data-ph="'+esc(p.ph||'Écris ici…')+'"'+(S.mode==='edit' ? ' contenteditable="true"' : '')+'>'+esc(p.html||'')+'</div>';
@@ -4858,17 +5061,18 @@ function renderDoc(){
       '<button class="bf-rr" data-act="row-del" title="Supprimer la rangée" aria-label="Supprimer la rangée">'+I.del+'</button>'+
       '<div class="bf-laypop">'+LAYOUTS.map(function(l){ return '<button data-act="row-layout" data-l="'+l+'" class="'+(l===row.layout?'on':'')+'" title="'+l.replace(/-/g,' / ')+'">'+layoutIcon(l)+'</button>'; }).join('')+'</div></div>';
     row.slots.forEach(function(b, i){
-      if(!b){ h += '<div class="bf-slot bf-empty" data-r="'+row.id+'" data-i="'+i+'">Glisse un bloc, un client, un spot ou une photo</div>'; return; }
+      if(!b){ h += '<div class="bf-slot bf-empty" data-r="'+row.id+'" data-i="'+i+'">'+(MOB() ? 'Touche pour ajouter un bloc' : 'Glisse un bloc, un client, un spot ou une photo')+'</div>'; return; }
       var T = TYPES[b.type]; if(!T){ h += '<div class="bf-slot"></div>'; return; }
       h += '<div class="bf-slot" data-r="'+row.id+'" data-i="'+i+'"><div class="bf-blk'+(S.sel===b.id ? ' sel' : '')+'" data-id="'+b.id+'" data-type="'+b.type+'" data-link="'+(T.link||'')+'">'+
         '<div class="bf-btools"><span class="bf-bt grip" role="button" tabindex="0" draggable="true" data-drag=\'{"kind":"blk","id":"'+b.id+'"}\' title="Déplacer le bloc" aria-label="Déplacer le bloc">'+I.grip+'</span><span>'+(T.link ? I.link : '')+T.name+'</span>'+
+        '<button class="bf-bt bf-bt-set" data-act="blk-set" title="Réglages" aria-label="Réglages du bloc">'+I.set+'</button>'+
         '<button class="bf-bt" data-act="blk-dup" title="Dupliquer" aria-label="Dupliquer">'+I.dup+'</button><button class="bf-bt" data-act="blk-del" title="Supprimer" aria-label="Supprimer">'+I.del+'</button></div>'+
         blockBody(b)+'</div></div>';
     });
     h += '</div><div class="bf-gap" data-i="'+(r+1)+'"></div>';
   });
-  if(!doc.rows.length) h = '<div class="bf-docempty"><b>Document vide</b><p>Glisse un bloc depuis la droite ou choisis un gabarit.</p></div>' + h;
-  h += '<button class="bf-addrow" data-act="add-row">Ajouter une rangée</button>';
+  if(!doc.rows.length) h = '<div class="bf-docempty"><b>Document vide</b><p>'+(MOB() ? 'Touche Bloc en bas ou applique un gabarit depuis le menu.' : 'Glisse un bloc depuis la droite ou choisis un gabarit.')+'</p></div>' + h;
+  h += '<button class="bf-addrow" data-act="add-row">'+(MOB() ? 'Ajouter un bloc' : 'Ajouter une rangée')+'</button>';
   d.innerHTML = h;
   if(S.mode==='a4') setTimeout(pageGuides, 60);
 }
@@ -4887,6 +5091,7 @@ function renderList(){
   document.querySelectorAll('#bf-rail .bf-rail-btn').forEach(function(b){ b.classList.toggle('active', b.dataset.src===S.src); });
   $('bf-search').placeholder = {briefings:'Rechercher un briefing...', clients:'Rechercher un client...', spots:'Rechercher un spot...', photos:'Rechercher...'}[S.src];
   chips.innerHTML = ''; chips.hidden = true;
+  var mob = MOB(), stl = $('bf-side-t'); if(stl) stl.textContent = {clients:'Lier un client', spots:'Ajouter des spots', photos:'Ajouter des photos'}[S.src] || '';
   if(S.src==='briefings'){
     hint.textContent = 'Tes briefings, du plus récent au plus ancien. Enregistrement automatique.';
     list.className = 'bf-list bf-rows bf-sb';
@@ -4900,7 +5105,7 @@ function renderList(){
         '<button class="bf-idel" data-click="del" data-id="'+esc(b.id)+'" title="Supprimer" aria-label="Supprimer le briefing">'+I.del+'</button></div>';
     });
   } else if(S.src==='clients'){
-    hint.textContent = 'Glisse un client sur le document pour le lier : tous les blocs branchés se mettent à jour.';
+    hint.textContent = mob ? 'Touche un client pour le lier : tous les blocs branchés se mettent à jour.' : 'Glisse un client sur le document pour le lier : tous les blocs branchés se mettent à jour.';
     list.className = 'bf-list bf-rows bf-sb';
     var cl = activeClients().filter(function(c){ return !q || (String(c.name||'')+' '+carOf(c)).toLowerCase().indexOf(q)>-1; });
     if(!cl.length) h += '<div class="bf-lempty">'+(activeClients().length ? 'Aucun résultat' : 'Aucun client. Ajoute-les depuis l\'onglet Clients.')+'</div>';
@@ -4914,7 +5119,7 @@ function renderList(){
     if(types.indexOf(S.chip)<0) S.chip = 'Tous';
     chips.hidden = false;
     chips.innerHTML = types.map(function(t){ return '<button class="bf-chip'+(S.chip===t ? ' active' : '')+'" data-chip="'+esc(t)+'">'+esc(t)+'</button>'; }).join('');
-    hint.textContent = 'Glisse un spot sur le document pour l\'ajouter au parcours. Carte, spots et timing suivent.';
+    hint.textContent = mob ? 'Touche un spot pour l\'ajouter au parcours. Carte, spots et timing suivent.' : 'Glisse un spot sur le document pour l\'ajouter au parcours. Carte, spots et timing suivent.';
     list.className = 'bf-list bf-sb';
     var sl = all.filter(function(s){ return (S.chip==='Tous' || (S.chip==='Du client' ? linked.indexOf(s.id)>-1 : s.type===S.chip)) && (!q || String(s.name||'').toLowerCase().indexOf(q)>-1); });
     if(!sl.length) h += '<div class="bf-lempty">Aucun spot</div>';
@@ -4924,10 +5129,10 @@ function renderList(){
         '<div class="bf-cap"><div class="bf-ititle">'+esc(s.name||'Spot')+'</div><div class="bf-isub">'+esc(s.type||'Spot')+'</div></div></div>';
     });
   } else {
-    hint.textContent = 'Photos compressées à l\'import (1600 px, JPEG) puis envoyées dans ton espace Supabase.';
+    hint.textContent = mob ? 'Touche une photo pour l\'ajouter au bloc photos sélectionné, ou en créer un.' : 'Photos compressées à l\'import (1600 px, JPEG) puis envoyées dans ton espace Supabase.';
     list.className = 'bf-list bf-sb';
     PHOTOS = [];
-    h += '<div class="bf-import" id="bf-import" tabindex="0" role="button"><b>Importer des photos</b>Clique ou glisse des fichiers ici</div>';
+    h += '<div class="bf-import" id="bf-import" tabindex="0" role="button"><b>Importer des photos</b>'+(mob ? 'Appareil photo ou photothèque' : 'Clique ou glisse des fichiers ici')+'</div>';
     var mine = doc ? (doc.photos||[]) : [];
     if(mine.length){ h += '<div class="bf-lgrp">Photos de ce briefing</div>'; mine.forEach(function(src){ h += photoItem(src, 'Photo importée'); }); }
     var seen = {}, sp = [];
@@ -4948,6 +5153,7 @@ function renderPanel(){
   var sel = S.sel ? findBlock(S.sel) : null;
   tabs.querySelectorAll('button').forEach(function(b){ b.classList.toggle('on', !sel && b.dataset.tab===S.tab); });
   $('bf-save-tpl').disabled = !doc; $('bf-pdf').disabled = !doc;
+  $('bf-pwrap').classList.toggle('bf-has-sel', !!sel);
   if(sel){ body.innerHTML = settingsHTML(sel.b); return; }
   if(!doc){ body.innerHTML = '<div class="bf-note">Crée ou ouvre un briefing pour ajouter des blocs.</div>'; return; }
   if(S.tab==='blocs'){
@@ -4956,7 +5162,7 @@ function renderPanel(){
     h += '<div class="bf-grp">Contenu libre</div>';
     FREE_TYPES.forEach(function(t){ h += palItem(t); });
   } else {
-    h += '<p class="bf-set-hint">Appliquer un gabarit remplace la structure du document. Le client, le parcours et la date restent. Ctrl+Z pour revenir.</p>';
+    h += '<p class="bf-set-hint">Appliquer un gabarit remplace la structure du document. Le client, le parcours et la date restent. '+(MOB() ? 'La flèche retour en haut permet de revenir.' : 'Ctrl+Z pour revenir.')+'</p>';
     h += '<div class="bf-grp">Gabarits de base</div>';
     Object.keys(TEMPLATES).forEach(function(k){ var t = TEMPLATES[k]; h += tplCard(t.build(), t.name, t.desc, 'data-tpl="'+k+'"', ''); });
     h += '<div class="bf-grp">Mes gabarits</div>';
@@ -4979,7 +5185,8 @@ function routeEditor(withNotes){
       '<button class="bf-mini" data-act="route-up" data-i="'+i+'" title="Monter" aria-label="Monter">↑</button><button class="bf-mini" data-act="route-down" data-i="'+i+'" title="Descendre" aria-label="Descendre">↓</button><button class="bf-mini" data-act="route-del" data-i="'+i+'" title="Retirer" aria-label="Retirer">×</button></div>'+
       (withNotes ? '<textarea class="bf-field" data-act="spotnote" data-id="'+esc(s.id)+'" rows="2" placeholder="Note pour le client (sinon, conseil lumière automatique)">'+esc((doc.spotNotes||{})[s.id]||'')+'</textarea>' : '')+'</div>';
   });
-  if(!list.length) h += '<div class="bf-note">Aucun spot. Glisse-les depuis la liste de gauche.</div>';
+  if(!list.length) h += '<div class="bf-note">'+(MOB() ? 'Aucun spot pour l\'instant.' : 'Aucun spot. Glisse-les depuis la liste de gauche.')+'</div>';
+  if(MOB()) h += '<button class="bf-sbtn" data-act="open-spots">Ajouter des spots</button>';
   return h + '</div><p class="bf-set-hint">Le parcours est partagé par la carte, les spots et le timing. Tes notes de repérage privées ne sont jamais affichées au client.</p>';
 }
 function timeHint(){
@@ -5018,7 +5225,7 @@ function settingsHTML(b){
       h += '<div class="bf-set-label">Disposition</div>'+segProp('layout', p.layout, [['1','1'],['2','2'],['3','3'],['m','Mosaïque']])+
         '<div class="bf-set-label">Légende</div><input class="bf-field" data-act="prop" data-key="caption" value="'+esc(p.caption||'')+'" placeholder="Optionnel">'+
         '<div class="bf-set-label">Photos ('+p.imgs.length+')</div>'+(p.imgs.length ? '<div class="bf-thumbs">'+p.imgs.map(function(src, i){ return '<div><img src="'+esc(src)+'" alt=""><button data-act="photo-del" data-i="'+i+'" aria-label="Retirer">×</button></div>'; }).join('')+'</div>' : '')+
-        '<button class="bf-sbtn" data-act="photo-import">Importer depuis l\'ordi</button><p class="bf-set-hint">Ou glisse des photos depuis l\'onglet Photos à gauche.</p>'; break;
+        '<button class="bf-sbtn" data-act="photo-import">'+(MOB() ? 'Importer des photos' : 'Importer depuis l\'ordi')+'</button><p class="bf-set-hint">'+(MOB() ? 'Ou choisis-les avec le bouton Photos en bas.' : 'Ou glisse des photos depuis l\'onglet Photos à gauche.')+'</p>'; break;
     case 'text':
       h += '<div class="bf-set-label">Style</div>'+segProp('style', p.style, [['p','Paragraphe'],['h','Titre'],['note','Note']])+'<p class="bf-set-hint">Écris directement dans le document. Le texte collé est nettoyé de sa mise en forme.</p>'; break;
     case 'pricing':
@@ -5032,7 +5239,7 @@ function settingsHTML(b){
     case 'contact':
       h += '<div class="bf-set-label">Compte Instagram</div><input class="bf-field" data-act="prop" data-key="handle" value="'+esc(p.handle||'')+'">'; break;
   }
-  if(TX_TYPES.indexOf(b.type)>-1) h += '<p class="bf-set-hint">Clique sur un texte du bloc pour le modifier. Un texte vidé est masqué chez le client. Variables : {prenom} {nom} {voiture} {date} {lieu}</p>'+
+  if(TX_TYPES.indexOf(b.type)>-1) h += '<p class="bf-set-hint">'+(MOB() ? 'Touche' : 'Clique sur')+' un texte du bloc pour le modifier. Un texte vidé est masqué chez le client. Variables : {prenom} {nom} {voiture} {date} {lieu}</p>'+
     (p.tx && Object.keys(p.tx).length ? '<button class="bf-sbtn" data-act="tx-reset">Rétablir les textes d\'origine</button>' : '');
   h += '<div class="bf-sact"><button class="bf-sbtn" data-act="blk-dup">Dupliquer</button><button class="bf-sbtn danger" data-act="blk-del">Supprimer</button></div>';
   return h;
@@ -5046,10 +5253,65 @@ function renderToolbar(){
   document.querySelectorAll('#bf-zoom button').forEach(function(b){ b.disabled = !doc; });
   if(!doc) setSaved('');
 }
-function renderAll(){ renderToolbar(); renderList(); renderDoc(); renderPanel(); }
+function renderAll(){ renderToolbar(); renderList(); renderDoc(); renderPanel(); applyMob(); }
+
+/* ---------- mobile portrait : ecrans, feuilles, barre du bas (v1.34) ---------- */
+function applyMob(){
+  var v = $('view-planning'); if(!v) return;
+  var m = MOB(), ed = m && S.mscreen==='edit' && !!doc;
+  if(S.sheet==='panel' && S.pmode==='settings' && !(S.sel && findBlock(S.sel))) S.sheet = null;
+  if(!ed) S.sheet = null;
+  v.classList.toggle('bf-mob', m);
+  v.classList.toggle('bf-ed', ed);
+  v.classList.toggle('bf-sh', ed && !!S.sheet);
+  document.body.classList.toggle('bf-focus', ed && inView());
+  $('bf-side').classList.toggle('open', ed && S.sheet==='side');
+  $('bf-pwrap').classList.toggle('open', ed && S.sheet==='panel');
+  $('bf-menu').classList.toggle('open', ed && S.sheet==='menu');
+  document.querySelectorAll('#bf-mbar [data-mb]').forEach(function(b){
+    var k = b.dataset.mb;
+    b.classList.toggle('on', (k==='prev' && S.mode==='phone') || (S.sheet==='side' && S.src===k) || (k==='add' && S.sheet==='panel' && S.pmode==='palette'));
+  });
+  var pl = $('bf-mb-prev-l'); if(pl) pl.textContent = S.mode==='phone' ? 'Éditer' : 'Aperçu';
+  var sh = $('bf-shell'); if(sh) sh.style.zoom = m || S.zoom===1 ? '' : String(S.zoom);
+}
+function blurDocText(){ var ae = document.activeElement; if(ae && ae.blur && $('bf-doc').contains(ae)) ae.blur(); }
+function openSheet(k){
+  if(!doc) return;
+  blurDocText();
+  if(k==='settings'){ if(!S.sel || !findBlock(S.sel)) return; S.sheet = 'panel'; S.pmode = 'settings'; }
+  else if(k==='palette' || k==='templates'){
+    if(S.sel && !S.ins){ var f = findBlock(S.sel); if(f) S.ins = {kind:'gap', i:f.r+1}; }
+    S.sel = null; markSel(); S.sheet = 'panel'; S.pmode = 'palette'; S.tab = k==='templates' ? 'gabarits' : 'blocs';
+  }
+  else if(k==='clients' || k==='spots' || k==='photos'){ S.sheet = 'side'; S.src = k; S.q = ''; $('bf-search').value = ''; S.chip = 'Tous'; renderList(); $('bf-list').scrollTop = 0; }
+  else if(k==='menu'){ S.sheet = 'menu'; }
+  if(S.mode!=='edit' && k!=='menu'){ S.mode = 'edit'; renderToolbar(); renderDoc(); }
+  renderPanel(); applyMob();
+  if(S.sheet==='panel') $('bf-panel').scrollTop = 0;
+  if(k==='settings'){ var sid = S.sel; setTimeout(function(){ revealBlock(sid, true); }, 30); }
+}
+function closeSheet(){ S.sheet = null; S.ins = null; applyMob(); }
+function insertNew(nb){
+  var t = S.ins; S.ins = null;
+  if(t && t.kind==='slot'){ var row = findRow(t.r); if(row && !row.slots[t.i]){ row.slots[t.i] = nb; return; } }
+  if(t && t.kind==='gap'){ doc.rows.splice(Math.max(0, Math.min(t.i, doc.rows.length)), 0, R('1', nb)); return; }
+  doc.rows.push(R('1', nb));
+}
+function revealBlock(id, top){
+  var el = $('bf-doc').querySelector('.bf-blk[data-id="'+id+'"]'), cv = $('bf-canvas'); if(!el || !cv) return;
+  if(!top){ el.scrollIntoView({block:'center', behavior:'smooth'}); return; }
+  cv.scrollTo({top:Math.max(0, cv.scrollTop + el.getBoundingClientRect().top - cv.getBoundingClientRect().top - 58), behavior:'smooth'});
+}
+function enterEditor(){ S.mscreen = 'edit'; S.sheet = null; S.ins = null; S.sel = null; S.mode = 'edit'; S.src = 'briefings'; renderAll(); $('bf-canvas').scrollTop = 0; }
+function leaveEditor(){
+  blurDocText(); flushSave();
+  S.mscreen = 'list'; S.sheet = null; S.ins = null; S.sel = null; S.mode = 'edit'; S.src = 'briefings'; S.q = ''; $('bf-search').value = '';
+  renderAll(); $('bf-list').scrollTop = 0;
+}
 
 /* ---------- mutations ---------- */
-function select(id){ S.sel = id; markSel(); renderPanel(); }
+function select(id){ S.sel = id; markSel(); if(!id && S.sheet==='panel' && S.pmode==='settings') S.sheet = null; renderPanel(); applyMob(); }
 function setClient(id){
   var c = getClient(id); doc.clientId = id || null;
   if(c){ var sh = nextShoot(c); if(sh){ if(sh.date) doc.date = sh.date; if(sh.place) doc.place = sh.place; } }
@@ -5100,6 +5362,7 @@ function addPhotosToSel(srcs){
   if(f && f.b.type==='photos') f.b.props.imgs = f.b.props.imgs.concat(srcs);
   else { var nb = B('photos', {imgs:srcs, layout:srcs.length>=3 ? '3' : String(srcs.length)}); doc.rows.push(R('1', nb)); S.sel = nb.id; }
   commit(); renderAll(); toast('Photo ajoutée');
+  if(MOB() && S.sel) setTimeout(function(){ revealBlock(S.sel); }, 60);
 }
 
 /* ---------- glisser-deposer ---------- */
@@ -5184,13 +5447,65 @@ function exportPDF(){
 /* ---------- modale nouveau briefing ---------- */
 function openModal(){
   flushSave();
-  M = {client:null, tpl:'particulier', q:''};
+  var n0 = new Date();
+  M = {client:null, tpl:'particulier', q:'', step:1, date:null, status:'prospect', y:n0.getFullYear(), mo:n0.getMonth()};
   $('bf-m-search').value = '';
   renderModal(); $('bf-modal').hidden = false;
-  setTimeout(function(){ $('bf-m-search').focus(); }, 30);
+  if(!MOB()) setTimeout(function(){ $('bf-m-search').focus(); }, 30);
 }
 function closeModal(){ $('bf-modal').hidden = true; }
+var MOIS = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
+function stColor(st){ return st==='client' || st==='acte' ? 'var(--c-acte)' : 'var(--c-prospect)'; }
+function shootMap(){
+  var map = {};
+  activeClients().forEach(function(c){
+    (Array.isArray(c.shoots) ? c.shoots : []).forEach(function(s){
+      if(!s || !s.date) return;
+      (map[s.date] = map[s.date] || []).push({id:c.id, name:c.name||'Client', st:c.id===M.client ? M.status : c.statut, time:s.time||'', place:s.place||''});
+    });
+  });
+  return map;
+}
+function modalStep(n){
+  var c = getClient(M.client);
+  M.step = n;
+  if(n===2){
+    var sh = nextShoot(c); if(M.date===null) M.date = sh && sh.date>=todayIso() ? sh.date : null;
+    M.status = c && c.statut==='client' ? 'acte' : 'prospect';
+    var base = M.date || todayIso(); M.y = +base.slice(0,4); M.mo = +base.slice(5,7)-1;
+  }
+  renderModal();
+}
+function renderModalCal(){
+  var c = getClient(M.client), map = shootMap(), t = todayIso(), h = '';
+  h += '<div class="bf-mhead">'+(c ? clientThumb(c)+'<div><b>'+esc(c.name||'Client')+'</b><span>'+esc(carOf(c)||'Pas de voiture renseignée')+'</span></div>' : '<div><b>Sans client</b><span>La date reste sur le document</span></div>')+'</div>';
+  h += '<div class="bf-set-label">Date du shooting</div><div class="cal bf-mcal"><div class="cal-top"><div class="mn">'+MOIS[M.mo]+' '+M.y+'</div><div class="cal-nav"><button type="button" data-mact="mprev" aria-label="Mois précédent">&#8249;</button><button type="button" data-mact="mnext" aria-label="Mois suivant">&#8250;</button></div></div><div class="cal-grid">';
+  ['L','M','M','J','V','S','D'].forEach(function(d){ h += '<div class="cal-dow">'+d+'</div>'; });
+  var start = (new Date(M.y, M.mo, 1).getDay()+6)%7, days = new Date(M.y, M.mo+1, 0).getDate();
+  for(var i=0;i<start;i++) h += '<div class="cal-day empty"></div>';
+  for(var d=1; d<=days; d++){
+    var ds = M.y+'-'+String(M.mo+1).padStart(2,'0')+'-'+String(d).padStart(2,'0'), list = map[ds]||[];
+    var mine = c && list.some(function(x){ return x.id===c.id; });
+    h += '<div class="cal-day'+(ds===t ? ' today' : '')+(ds===M.date ? ' selected' : '')+(mine ? ' mine' : '')+'" tabindex="0" role="button" data-mday="'+ds+'"><span>'+d+'</span>'+
+      (list.length ? '<div class="pips">'+list.slice(0,3).map(function(x){ return '<span style="background:'+stColor(x.st)+'"></span>'; }).join('')+'</div>' : '')+'</div>';
+  }
+  h += '</div><div class="cal-legend"><span><i style="background:var(--c-prospect)"></i>Prospect</span><span><i style="background:var(--c-acte)"></i>Acté</span></div></div>';
+  if(M.date){
+    var dl = map[M.date]||[];
+    h += '<div class="bf-mday"><b>'+esc(fdate(M.date))+'</b>'+(dl.length ? dl.map(function(x){ return '<div class="bf-mshoot"><i style="background:'+stColor(x.st)+'"></i><span>'+esc(x.name)+(x.time ? ', '+esc(x.time) : '')+(x.place ? ', '+esc(x.place) : '')+'</span></div>'; }).join('') : '<span class="bf-mfree">Jour libre</span>')+'</div>';
+  } else h += '<p class="bf-set-hint">Choisis un jour pour l\'inscrire au planning'+(c ? ' de '+esc(firstName(c)) : '')+'. Sans date, le briefing est créé avec une date provisoire.</p>';
+  if(c) h += '<div class="bf-set-label">Statut</div><div class="bf-seg bf-sm">'+[['prospect','Prospect'],['acte','Acté']].map(function(o){ return '<button type="button" data-mstat="'+o[0]+'" class="'+(M.status===o[0] ? 'on' : '')+'">'+o[1]+'</button>'; }).join('')+'</div>'+
+    '<p class="bf-set-hint">Le statut est enregistré sur la fiche client et colore le planning. Couleurs modifiables dans le profil.</p>';
+  $('bf-m-step2').innerHTML = h;
+}
 function renderModal(){
+  var two = M.step===2;
+  $('bf-m-step1').hidden = two; $('bf-m-step2').hidden = !two;
+  $('bf-modal-h').textContent = two ? 'Date du shooting' : 'Nouveau briefing';
+  var ft = document.querySelector('#bf-modal .bf-modal-foot');
+  ft.querySelector('[data-mact="back"]').hidden = !two; ft.querySelector('[data-mact="next"]').hidden = two; ft.querySelector('[data-mact="create"]').hidden = !two;
+  ft.querySelector('[data-mact="next"]').disabled = M.client===null;
+  if(two){ renderModalCal(); return; }
   var q = M.q.toLowerCase(), h = '';
   h += '<div class="bf-item'+(M.client==='' ? ' cur' : '')+'" tabindex="0" role="button" data-mclient=""><div class="bf-thumb"><div class="bf-av" style="background:var(--surface2);color:var(--muted)">?</div></div><div class="bf-cap"><div class="bf-ititle">Sans client</div><div class="bf-isub">À lier plus tard</div></div></div>';
   activeClients().filter(function(c){ return !q || String(c.name||'').toLowerCase().indexOf(q)>-1; }).forEach(function(c){
@@ -5202,7 +5517,6 @@ function renderModal(){
   Object.keys(TEMPLATES).forEach(function(k){ var tp = TEMPLATES[k]; t += '<div class="bf-tpl'+(M.tpl===k ? ' on' : '')+'" tabindex="0" role="button" data-mtpl="'+k+'">'+tplMini(tp.build())+'<div><div class="bf-tpl-name">'+esc(tp.name)+'</div><div class="bf-tpl-desc">'+esc(tp.desc)+'</div></div></div>'; });
   CUSTOM.forEach(function(tp, i){ t += '<div class="bf-tpl'+(M.tpl==='c:'+i ? ' on' : '')+'" tabindex="0" role="button" data-mtpl="c:'+i+'">'+tplMini(tp.rows)+'<div><div class="bf-tpl-name">'+esc(tp.name)+'</div><div class="bf-tpl-desc">Mon gabarit</div></div></div>'; });
   $('bf-m-tpls').innerHTML = t;
-  document.querySelector('#bf-modal [data-mact="create"]').disabled = M.client===null;
 }
 
 /* ---------- mode d'affichage ---------- */
@@ -5225,7 +5539,7 @@ function stepZoom(dir){
 function setMode(m){
   if(!doc) return;
   S.mode = m; if(m!=='edit') document.querySelectorAll('#bf-doc .bf-row.lay-open').forEach(function(r){ r.classList.remove('lay-open'); });
-  renderToolbar(); renderDoc(); $('bf-canvas').scrollTop = 0;
+  renderToolbar(); renderDoc(); applyMob(); $('bf-canvas').scrollTop = 0;
 }
 
 /* ---------- liaison des evenements (une seule fois) ---------- */
@@ -5235,6 +5549,7 @@ function bind(){
   document.addEventListener('dragstart', function(e){
     if(!inView()) return;
     var el = e.target.closest ? e.target.closest('#view-planning [data-drag]') : null; if(!el) return;
+    if(MOB()){ e.preventDefault(); return; }
     if(!doc){ e.preventDefault(); toast('Crée ou ouvre un briefing d\'abord'); return; }
     DRAG = JSON.parse(el.dataset.drag);
     if(DRAG.kind==='photo') DRAG.src = PHOTOS[DRAG.i];
@@ -5266,8 +5581,14 @@ function bind(){
     if(a){ docAct(a); return; }
     var link = e.target.closest('a');
     if(link && S.mode==='edit'){ e.preventDefault(); }
+    if(MOB() && S.mode==='edit'){
+      var gap = e.target.closest('.bf-gap'), emp = e.target.closest('.bf-slot.bf-empty');
+      if(gap){ e.stopPropagation(); S.sel = null; S.ins = {kind:'gap', i:+gap.dataset.i}; openSheet('palette'); return; }
+      if(emp){ e.stopPropagation(); S.sel = null; S.ins = {kind:'slot', r:emp.dataset.r, i:+emp.dataset.i}; openSheet('palette'); return; }
+    }
     var blk = e.target.closest('.bf-blk');
     if(blk && S.mode==='edit' && S.sel!==blk.dataset.id) select(blk.dataset.id);
+    if(blk && S.mode==='edit' && MOB() && !e.target.closest('.bf-et, .bf-txt, .bf-addli')) openSheet('settings');
   });
   canvas.addEventListener('click', function(e){
     if(!e.target.closest('.bf-rrail')) document.querySelectorAll('#bf-doc .bf-row.lay-open').forEach(function(r){ r.classList.remove('lay-open'); });
@@ -5315,10 +5636,19 @@ function bind(){
     var tpl = e.target.closest('[data-tpl]'), ctpl = e.target.closest('[data-ctpl]'), add = e.target.closest('[data-add]');
     if(tpl){ applyTemplate(TEMPLATES[tpl.dataset.tpl].build()); return; }
     if(ctpl){ applyTemplate(CUSTOM[+ctpl.dataset.ctpl].rows.map(function(r){ return reId(clone(r)); })); return; }
-    if(add){ var nb = B(add.dataset.add); doc.rows.push(R('1', nb)); S.sel = nb.id; commit(); renderAll(); var el = docEl.querySelector('[data-id="'+nb.id+'"]'); if(el) el.scrollIntoView({block:'center', behavior:'smooth'}); return; }
+    if(add){
+      var nb = B(add.dataset.add), mobAdd = MOB() && S.sheet==='panel';
+      insertNew(nb); S.sel = nb.id;
+      if(mobAdd){ var cfg = DATA_TYPES.indexOf(nb.type)>-1 || nb.type==='photos'; S.sheet = cfg ? 'panel' : null; S.pmode = 'settings'; }
+      commit(); renderAll();
+      setTimeout(function(){ revealBlock(nb.id, mobAdd); }, 30);
+      toast(TYPES[nb.type].name+' ajouté');
+      return;
+    }
     var a = e.target.closest('button[data-act]'); if(!a) return;
     var f = findBlock(S.sel), act = a.dataset.act, i = +a.dataset.i;
     if(act==='desel'){ select(null); return; }
+    if(act==='open-spots'){ openSheet('spots'); return; }
     if(act==='blk-dup' || act==='blk-del'){ blockAct(act); return; }
     if(act==='time-mode'){
       if(a.dataset.val==='free'){ var sc0 = schedule(); if(sc0) doc.startTime = hhmm(sc0.accueil); }
@@ -5351,7 +5681,7 @@ function bind(){
   panel.addEventListener('change', function(e){
     var a = e.target.closest('[data-act]'); if(!a || !doc) return; var f = findBlock(S.sel), act = a.dataset.act, c;
     if(act==='prop' && f){ if(a.type==='checkbox') f.b.props[a.dataset.key] = a.checked; commit(); renderDoc(); if(a.type==='checkbox') renderPanel(); return; }
-    if(act==='doc'){ doc[a.dataset.key] = a.value; commit(); renderAll(); return; }
+    if(act==='doc'){ var dk = a.dataset.key, prev = doc[dk]; doc[dk] = a.value; if(dk==='date') linkShootDate(prev, a.value); if(dk==='place') linkShootPlace(); commit(); renderAll(); return; }
     if(act==='spotnote' || act==='pack'){ commit(); return; }
     if(act==='client-set'){ setClient(a.value); commit(); renderAll(); c = getClient(a.value); toast(c ? 'Briefing lié à '+c.name : 'Client retiré du briefing'); return; }
     if(act==='offre'){ c = getClient(doc.clientId); if(c){ c.offre = a.value; if(typeof persistClients==='function') persistClients(); } commit(); renderAll(); toast('Formule mise à jour sur la fiche client'); return; }
@@ -5373,11 +5703,11 @@ function bind(){
     var k = it.dataset.click;
     if(k==='new'){ openModal(); return; }
     if(k==='del'){ e.stopPropagation(); deleteDoc(it.dataset.id); return; }
-    if(k==='doc'){ if(!doc || doc.id!==it.dataset.id) openDoc(it.dataset.id); return; }
+    if(k==='doc'){ if(!doc || doc.id!==it.dataset.id) openDoc(it.dataset.id); if(MOB()) enterEditor(); return; }
     if(!doc){ toast('Crée ou ouvre un briefing d\'abord'); return; }
-    if(k==='client'){ setClient(it.dataset.id); commit(); renderAll(); var c = getClient(it.dataset.id); toast('Briefing lié à '+(c ? c.name : 'ce client')); }
+    if(k==='client'){ setClient(it.dataset.id); commit(); renderAll(); var c = getClient(it.dataset.id); toast('Briefing lié à '+(c ? c.name : 'ce client')); if(MOB()) closeSheet(); }
     if(k==='spot'){ var ok = addToRoute(it.dataset.id); commit(); renderAll(); var s = getSpot(it.dataset.id); toast(ok ? (s ? s.name : 'Spot')+' ajouté au parcours' : 'Déjà dans le parcours'); }
-    if(k==='photo'){ addPhotosToSel([PHOTOS[+it.dataset.i]]); }
+    if(k==='photo'){ if(MOB()) S.sheet = null; addPhotosToSel([PHOTOS[+it.dataset.i]]); }
   });
   list.addEventListener('keydown', function(e){ if(e.key==='Enter'){ var it = e.target.closest('[data-click],#bf-import'); if(it) it.click(); } });
   list.addEventListener('dragover', function(e){ var imp = e.target.closest('#bf-import'); if(imp && dragKind(e)==='files'){ e.preventDefault(); imp.classList.add('over'); } });
@@ -5386,7 +5716,7 @@ function bind(){
   $('bf-file').addEventListener('change', function(e){
     var files = e.target.files; if(!files || !files.length) return;
     var f = S.sel ? findBlock(S.sel) : null;
-    uploadFiles(files, f && f.b.type==='photos' ? function(urls){ var g = findBlock(f.b.id); if(g){ g.b.props.imgs = g.b.props.imgs.concat(urls); } commit(); renderAll(); } : null);
+    uploadFiles(files, f && f.b.type==='photos' ? function(urls){ var g = findBlock(f.b.id); if(g){ g.b.props.imgs = g.b.props.imgs.concat(urls); } commit(); renderAll(); } : (MOB() ? function(urls){ S.sheet = null; addPhotosToSel(urls); } : null));
     e.target.value = '';
   });
 
@@ -5406,19 +5736,31 @@ function bind(){
   $('bf-modal').addEventListener('click', function(e){
     if(e.target.id==='bf-modal'){ closeModal(); return; }
     var mc = e.target.closest('[data-mclient]'), mt = e.target.closest('[data-mtpl]'), ma = e.target.closest('[data-mact]');
-    if(mc){ M.client = mc.dataset.mclient; renderModal(); return; }
+    var md = e.target.closest('[data-mday]'), ms = e.target.closest('[data-mstat]');
+    if(mc){ if(M.client!==mc.dataset.mclient) M.date = null; M.client = mc.dataset.mclient; renderModal(); return; }
     if(mt){ M.tpl = mt.dataset.mtpl; renderModal(); return; }
+    if(md){ M.date = md.dataset.mday; renderModal(); return; }
+    if(ms){ M.status = ms.dataset.mstat; renderModal(); return; }
     if(ma && ma.dataset.mact==='close'){ closeModal(); return; }
+    if(ma && ma.dataset.mact==='next' && M.client!==null){ modalStep(2); return; }
+    if(ma && ma.dataset.mact==='back'){ modalStep(1); return; }
+    if(ma && (ma.dataset.mact==='mprev' || ma.dataset.mact==='mnext')){ M.mo += ma.dataset.mact==='mnext' ? 1 : -1; if(M.mo<0){ M.mo = 11; M.y--; } if(M.mo>11){ M.mo = 0; M.y++; } renderModal(); return; }
     if(ma && ma.dataset.mact==='create' && M.client!==null){
-      var d = createDoc(M.client, M.tpl);
+      var cl = getClient(M.client), d = createDoc(M.client, M.tpl, M.date);
+      if(cl){
+        cl.statut = M.status==='acte' ? 'client' : 'prospect';
+        if(M.date){ cl.shoots = Array.isArray(cl.shoots) ? cl.shoots : []; if(!cl.shoots.some(function(x){ return x.date===M.date; })) cl.shoots.push({date:M.date, time:'', place:d.place||''}); cl.shoots.sort(function(a,b){ return (a.date+(a.time||'')).localeCompare(b.date+(b.time||'')); }); d.shootDate = M.date; }
+        clientsChanged();
+      }
       briefings.unshift(d); saveLocal(); closeModal();
       S.src = 'briefings'; S.mode = 'edit';
       openDoc(d.id);
       doc.title = docTitle(); pushDoc();
+      if(MOB()) enterEditor();
       toast('Briefing créé');
     }
   });
-  $('bf-modal').addEventListener('keydown', function(e){ if(e.key==='Escape') closeModal(); if(e.key==='Enter' && e.target.closest('[data-mclient],[data-mtpl]')) e.target.click(); });
+  $('bf-modal').addEventListener('keydown', function(e){ if(e.key==='Escape') closeModal(); if(e.key==='Enter' && e.target.closest('[data-mclient],[data-mtpl],[data-mday]')) e.target.click(); });
   $('bf-m-search').addEventListener('input', function(e){ M.q = e.target.value; renderModal(); });
 
   document.addEventListener('keydown', function(e){
@@ -5445,6 +5787,27 @@ function bind(){
   }, {passive:false});
   setZoom(S.zoom);
   window.addEventListener('beforeunload', flushSave);
+
+  /* mobile portrait */
+  $('bf-back').addEventListener('click', leaveEditor);
+  $('bf-more').addEventListener('click', function(){ if(S.sheet==='menu') closeSheet(); else openSheet('menu'); });
+  $('bf-scrim').addEventListener('click', closeSheet);
+  $('view-planning').addEventListener('click', function(e){ if(e.target.closest('[data-sclose]')) closeSheet(); });
+  $('bf-mbar').addEventListener('click', function(e){
+    var b = e.target.closest('[data-mb]'); if(!b || !doc) return; var k = b.dataset.mb;
+    if(k==='prev'){ S.sheet = null; S.ins = null; S.sel = null; markSel(); renderPanel(); setMode(S.mode==='phone' ? 'edit' : 'phone'); return; }
+    var cur = (S.sheet==='side' && S.src===k) || (k==='add' && S.sheet==='panel' && S.pmode==='palette');
+    if(cur){ closeSheet(); return; }
+    openSheet(k==='add' ? 'palette' : k);
+  });
+  $('bf-menu').addEventListener('click', function(e){
+    var b = e.target.closest('[data-mm]'); if(!b || !doc) return; var k = b.dataset.mm;
+    if(k==='tpl'){ openSheet('templates'); return; }
+    if(k==='savetpl'){ closeSheet(); $('bf-save-tpl').click(); return; }
+    if(k==='del'){ var id = doc.id; closeSheet(); deleteDoc(id); if(!briefings.some(function(x){ return x.id===id; })) leaveEditor(); }
+  });
+  var onMQ = function(){ if(!MOB()){ S.sheet = null; S.ins = null; } renderAll(); };
+  if(MQ){ if(MQ.addEventListener) MQ.addEventListener('change', onMQ); else if(MQ.addListener) MQ.addListener(onMQ); }
 }
 function etBlock(el){ var be = el.closest('.bf-blk'), f = be ? findBlock(be.dataset.id) : null; return f ? f.b : null; }
 function etRead(el){
@@ -5476,21 +5839,33 @@ function docAct(a){
   if(act==='lay-toggle'){ var open = rowEl.classList.contains('lay-open'); document.querySelectorAll('#bf-doc .bf-row.lay-open').forEach(function(r){ r.classList.remove('lay-open'); }); if(!open) rowEl.classList.add('lay-open'); return; }
   if(act==='row-layout'){ setLayout(row, a.dataset.l); commit(); renderAll(); return; }
   if(act==='row-dup'){ doc.rows.splice(doc.rows.indexOf(row)+1, 0, reId(clone(row))); commit(); renderAll(); return; }
-  if(act==='row-del'){ doc.rows.splice(doc.rows.indexOf(row), 1); checkSel(); commit(); renderAll(); toast('Rangée supprimée, Ctrl+Z pour annuler'); return; }
-  if(act==='add-row'){ doc.rows.push(R('1')); commit(); renderAll(); var cv = $('bf-canvas'); cv.scrollTop = cv.scrollHeight; return; }
+  if(act==='row-del'){ doc.rows.splice(doc.rows.indexOf(row), 1); checkSel(); commit(); renderAll(); toast('Rangée supprimée'+(MOB() ? '' : ', Ctrl+Z pour annuler')); return; }
+  if(act==='add-row'){ if(MOB()){ S.sel = null; S.ins = {kind:'gap', i:doc.rows.length}; openSheet('palette'); return; } doc.rows.push(R('1')); commit(); renderAll(); var cv = $('bf-canvas'); cv.scrollTop = cv.scrollHeight; return; }
+  if(act==='blk-set'){ S.sel = a.closest('.bf-blk').dataset.id; markSel(); openSheet('settings'); return; }
   if(act==='blk-dup' || act==='blk-del'){ S.sel = a.closest('.bf-blk').dataset.id; blockAct(act); }
 }
 function blockAct(act){
   var f = findBlock(S.sel); if(!f) return;
-  if(act==='blk-del'){ f.row.slots[f.i] = null; removeRowIfVoid(f.row); S.sel = null; commit(); renderAll(); toast(TYPES[f.b.type].name+' supprimé, Ctrl+Z pour annuler'); }
+  if(act==='blk-del'){ f.row.slots[f.i] = null; removeRowIfVoid(f.row); S.sel = null; commit(); renderAll(); toast(TYPES[f.b.type].name+' supprimé'+(MOB() ? '' : ', Ctrl+Z pour annuler')); }
   if(act==='blk-dup'){ var cp = clone(f.b); cp.id = nid('b'); doc.rows.splice(f.r+1, 0, R('1', cp)); S.sel = cp.id; commit(); renderAll(); }
 }
 function applyTemplate(rows){
   if(!doc) return;
-  doc.rows = rows; S.sel = null; commit(); renderAll(); toast('Gabarit appliqué, Ctrl+Z pour revenir');
+  var mob = MOB();
+  if(mob && !confirm('Remplacer la structure du document par ce gabarit ? Le client, le parcours et la date restent.')) return;
+  doc.rows = rows; S.sel = null; if(mob){ S.sheet = null; S.ins = null; } commit(); renderAll(); toast(mob ? 'Gabarit appliqué' : 'Gabarit appliqué, Ctrl+Z pour revenir');
+  if(mob) $('bf-canvas').scrollTop = 0;
 }
 
 /* ---------- point d'entree (appele par switchView) ---------- */
+window.bfDocsFor = function(cid){
+  if(!S.cloud) loadCloud();
+  return briefings.filter(function(b){ return b && b.clientId===cid; }).map(function(b){
+    return {id:b.id, title:b.title||'Briefing', when:(b.date ? fdate(b.date) : 'Sans date')+(b.updatedAt ? ', modifié le '+new Date(b.updatedAt).toLocaleDateString('fr-FR') : '')};
+  });
+};
+window.bfOpenDoc = function(id){ S.src = 'briefings'; S.mode = 'edit'; openDoc(id); if(MOB()) enterEditor(); };
+window.bfNewDocFor = function(cid){ openModal(); M.client = cid; renderModal(); };
 window.initPlanning = function(){
   if(!S.inited){
     S.inited = true;
