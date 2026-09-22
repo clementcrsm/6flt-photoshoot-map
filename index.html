@@ -7,9 +7,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Spoties">
 <meta name="theme-color" content="#0e0f12">
-<link rel="manifest" href="manifest.json?v=1.34">
-<link rel="apple-touch-icon" href="icon-180.png?v=1.34">
-<link rel="icon" type="image/png" href="icon-192.png?v=1.34">
+<link rel="manifest" href="manifest.json?v=1.33">
+<link rel="apple-touch-icon" href="icon-180.png?v=1.33">
+<link rel="icon" type="image/png" href="icon-192.png?v=1.33">
 <title>Spoties</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -775,6 +775,8 @@ nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-
 .bf-sb::-webkit-scrollbar-track{background:transparent}
 .bf-sb::-webkit-scrollbar-thumb{background:var(--border);border-radius:6px;border:2px solid var(--surface)}
 .bf-ic{stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.bf-mobile{display:none;flex:1;align-items:center;justify-content:center;text-align:center;padding:30px;color:var(--muted);font-size:14px;line-height:1.6}
+.bf-mobile b{display:block;color:var(--text);font-size:16px;margin-bottom:6px}
 
 /* rail + liste */
 .bf-rail{width:52px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;align-items:center;padding:12px 0;gap:9px}
@@ -1122,116 +1124,21 @@ select.bf-field{appearance:none;-webkit-appearance:none;background-image:linear-
   #bf-print .bf-row{break-inside:avoid;page-break-inside:avoid}
   #bf-print *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 }
-/* ===== PLANNING MOBILE portrait v1.34 ===== */
-.bf-mbar,.bf-mtop,.bf-shead,.bf-scrim,.bf-menu,.bf-bt-set{display:none}
-#view-planning.bf-mob{--mbar:calc(58px + env(safe-area-inset-bottom))}
-.bf-mob .bf-rail,.bf-mob .bf-pfoot{display:none}
-.bf-mob .bf-side{width:100%;border-right:none}
-.bf-mob:not(.bf-ed) .bf-center,.bf-mob:not(.bf-ed) .bf-panel{display:none}
-.bf-mob .bf-side-head{padding:12px 14px}
-.bf-mob .bf-search{font-size:16px;padding:11px 12px}
-.bf-mob .bf-idel{display:flex;width:34px;height:34px}
-.bf-mob .bf-idel svg{width:15px;height:15px}
-.bf-mob .bf-list{padding:12px 12px calc(20px + env(safe-area-inset-bottom))}
-.bf-mob .bf-rows .bf-item{padding:12px}
-.bf-mob .bf-new{padding:16px;font-size:14px}
-.bf-mob .bf-hint{font-size:12.5px}
-.bf-mob.bf-ed .bf-center{width:100%}
-.bf-mob .bf-toolbar{height:auto;min-height:52px;padding:calc(6px + env(safe-area-inset-top)) 6px 6px;display:grid;grid-template-columns:40px minmax(0,1fr) 38px 38px 38px;column-gap:2px;align-items:center}
-.bf-mob .bf-toolbar>.bf-sep,.bf-mob .bf-toolbar>.bf-seg,.bf-mob .bf-toolbar>.bf-zoom,.bf-mob .bf-toolbar>.bf-send{display:none}
-.bf-mob .bf-mtop{display:flex;align-items:center;justify-content:center;width:38px;height:38px;border:none;background:none;color:var(--text);border-radius:10px;padding:0;cursor:pointer}
-.bf-mob .bf-mtop svg{width:22px;height:22px}
-.bf-mob .bf-mtop.dots svg{fill:currentColor;stroke:none}
-#bf-back{grid-column:1;grid-row:1/3}
-#bf-more{grid-column:5;grid-row:1/3}
-.bf-mob .bf-title{grid-column:2;grid-row:1;font-size:15px;min-width:0;padding:4px 6px}
-.bf-mob .bf-saved{grid-column:2;grid-row:2;padding:0 7px;font-size:10.5px;overflow:hidden;text-overflow:ellipsis}
-.bf-mob #bf-undo{grid-column:3;grid-row:1/3}
-.bf-mob #bf-redo{grid-column:4;grid-row:1/3}
-.bf-mob .bf-ibtn{width:38px;height:38px;border:none;background:none;justify-self:center}
-.bf-mob .bf-ibtn svg{width:19px;height:19px}
-.bf-mob .bf-canvas{padding:14px 10px 28px;display:block}
-.bf-mob .bf-shell,.bf-mob .bf-shell.phone,.bf-mob .bf-shell.a4{width:100%;max-width:none}
-.bf-mob .bf-doc,.bf-mob .bf-shell.phone .bf-doc{padding:24px 16px 22px;border:1px solid var(--border);border-radius:14px;min-height:0}
-.bf-mob .bf-shell.phone .bf-doc::before{display:none}
-.bf-mob .bf-row{grid-template-columns:minmax(0,1fr)!important;gap:22px}
-.bf-mob .bf-cover-main{flex-direction:column;align-items:flex-start;gap:16px}
-.bf-mob .bf-cover h1{font-size:26px}
-.bf-mob .bf-empty{min-height:72px}
-.bf-mob .bf-rrail,.bf-mob .bf-bt.grip{display:none!important}
-.bf-mob .bf-m-edit .bf-row:hover{outline:none}
-.bf-mob .bf-m-edit .bf-blk:hover:not(.sel){outline:none}
-.bf-mob .bf-m-edit .bf-et:hover{background:none}
-.bf-mob .bf-m-edit .bf-gap{height:40px;display:flex;align-items:center;justify-content:center;cursor:pointer}
-.bf-mob .bf-m-edit .bf-gap::before{content:"+";width:26px;height:26px;border-radius:50%;border:1px dashed rgba(255,255,255,.22);color:var(--muted);display:flex;align-items:center;justify-content:center;font-size:17px;line-height:1}
-.bf-mob .bf-btools{top:-46px;left:auto;right:-6px;padding:3px 3px 3px 10px;border-radius:10px;font-size:12.5px;gap:2px}
-.bf-mob .bf-bt{width:34px;height:34px;border-radius:8px}
-.bf-mob .bf-btools svg{width:17px;height:17px}
-.bf-mob .bf-bt-set{display:flex}
-.bf-mob.bf-ed .bf-mbar{display:flex;flex-shrink:0;height:var(--mbar);padding:0 4px env(safe-area-inset-bottom);border-top:1px solid var(--border);background:var(--surface);position:relative;z-index:45;box-sizing:border-box}
-.bf-mbar button{flex:1;background:none;border:none;color:var(--muted);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-family:'Inter',sans-serif;font-size:10.5px;font-weight:600;padding:0;cursor:pointer}
-.bf-mbar svg{width:22px;height:22px}
-.bf-mbar button.on{color:var(--accent)}
-.bf-mbar .bf-mb-plus{width:30px;height:24px;border-radius:8px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center}
-.bf-mbar .bf-mb-plus svg{width:18px;height:18px}
-.bf-mob.bf-ed .bf-side,.bf-mob.bf-ed .bf-panel,.bf-mob.bf-ed .bf-menu{position:absolute;left:0;right:0;bottom:var(--mbar);width:auto;z-index:40;background:var(--surface);border:1px solid var(--border);border-bottom:none;border-radius:18px 18px 0 0;box-shadow:0 -12px 40px rgba(0,0,0,.45);transform:translateY(calc(100% + var(--mbar)));visibility:hidden;transition:transform .24s cubic-bezier(.2,.8,.2,1),visibility 0s .24s}
-.bf-mob.bf-ed .bf-side.open,.bf-mob.bf-ed .bf-panel.open,.bf-mob.bf-ed .bf-menu.open{transform:none;visibility:visible;transition:transform .24s cubic-bezier(.2,.8,.2,1)}
-.bf-mob.bf-ed .bf-menu{display:block;padding:0 12px 14px}
-.bf-mob.bf-ed .bf-side{height:74%}
-.bf-mob.bf-ed .bf-panel{max-height:74%}
-.bf-mob.bf-ed .bf-panel:not(.bf-has-sel){height:74%}
-.bf-mob.bf-ed .bf-panel.bf-has-sel{padding-top:10px}
-.bf-mob.bf-ed .bf-panel.bf-has-sel .bf-shead,.bf-mob.bf-ed .bf-panel.bf-has-sel .bf-ptabs{display:none}
-.bf-mob.bf-ed .bf-side-head{border-bottom:none;padding:6px 14px 10px}
-.bf-mob.bf-ed .bf-list{padding-bottom:18px}
-.bf-mob.bf-ed .bf-list:not(.bf-rows){grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
-.bf-mob.bf-ed .bf-list:not(.bf-rows) .bf-cap{padding:7px 8px}
-.bf-mob.bf-ed .bf-shead{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:18px 14px 4px;position:relative;flex-shrink:0}
-.bf-shead::before{content:"";position:absolute;top:7px;left:50%;width:38px;height:4px;margin-left:-19px;border-radius:2px;background:var(--border)}
-.bf-shead b{font-size:15px;font-weight:700}
-.bf-shead .bf-mini{width:32px;height:32px;font-size:16px}
-.bf-mob.bf-ed.bf-sh .bf-scrim{display:block;position:absolute;left:0;right:0;top:0;bottom:var(--mbar);background:rgba(0,0,0,.4);z-index:35}
-.bf-menu>button{width:100%;display:flex;align-items:center;gap:12px;background:var(--bg);border:1px solid var(--border);border-radius:12px;color:var(--text);font-family:'Inter',sans-serif;font-size:14.5px;font-weight:600;padding:14px;margin-top:8px;cursor:pointer;text-align:left}
-.bf-menu>button svg{width:18px;height:18px;flex-shrink:0}
-.bf-menu>button.danger{color:#ff8a7a}
-.bf-mob .bf-pbody{flex:1 1 auto;padding:4px 14px 18px}
-.bf-mob .bf-ptabs{padding:8px 14px 10px}
-.bf-mob .bf-ptabs button{padding:11px 6px;font-size:13.5px}
-.bf-mob .bf-field{font-size:16px;padding:11px 12px}
-.bf-mob .bf-sbtn{padding:12px;font-size:14px}
-.bf-mob .bf-pal{padding:11px 12px}
-.bf-mob .bf-tog{font-size:14px;padding:7px 0}
-.bf-mob .bf-seg.bf-sm button{padding:9px 4px;font-size:13px}
-.bf-mob .bf-chk{font-size:14px;padding:10px}
-.bf-mob .bf-rlist .bf-mini{width:32px;height:32px;font-size:14px}
-.bf-mob .bf-set-title{font-size:16px}
-.bf-mob .bf-set-label{font-size:12.5px;margin-top:8px}
-.bf-mob .bf-set-hint{font-size:12.5px}
-.bf-mob .bf-modal-bg{padding:0;align-items:stretch}
-.bf-mob .bf-modal{width:100%;max-height:none;height:100%;border-radius:0;border:none}
-.bf-mob .bf-modal-foot{padding:12px 14px calc(12px + env(safe-area-inset-bottom))}
-.bf-mob .bf-modal-foot button{flex:1;padding:13px}
-.bf-mob .bf-mlist{grid-template-columns:1fr;max-height:38vh}
-.bf-mob .bf-mtpls{grid-template-columns:1fr}
-.bf-mob .bf-toolbar{padding-left:calc(6px + env(safe-area-inset-left));padding-right:calc(6px + env(safe-area-inset-right))}
-.bf-mob.bf-ed .bf-mbar{padding-left:calc(4px + env(safe-area-inset-left));padding-right:calc(4px + env(safe-area-inset-right))}
-.bf-mob .bf-canvas{padding-left:calc(10px + env(safe-area-inset-left));padding-right:calc(10px + env(safe-area-inset-right))}
-.bf-mob.bf-ed .bf-side,.bf-mob.bf-ed .bf-panel{padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
-.bf-mob.bf-ed .bf-menu{padding:0 calc(12px + env(safe-area-inset-right)) 14px calc(12px + env(safe-area-inset-left))}
-.bf-mob:not(.bf-ed) .bf-side{padding-left:env(safe-area-inset-left);padding-right:env(safe-area-inset-right)}
-body.bf-focus nav{display:none}
-body.bf-focus #toast{bottom:calc(74px + env(safe-area-inset-bottom))}
+@media (max-width:900px){
+  .bf-wrap{display:none}
+  .bf-mobile{display:flex}
+}
 </style>
 </head>
 <body>
 <div id="splash">
-  <img id="splash-logo" src="icon-512.png?v=1.34" alt="Spoties">
+  <img id="splash-logo" src="icon-512.png?v=1.33" alt="Spoties">
   <div id="splash-credit">Créé par 6flt photographie et Claude<br><span style="opacity:.6">v1.34</span></div>
 </div>
 
 <div id="login-screen">
   <div class="login-box">
-    <img src="icon-192.png?v=1.34" alt="Spoties" class="login-logo">
+    <img src="icon-192.png?v=1.33" alt="Spoties" class="login-logo">
     <h1 class="login-title">Spoties</h1>
     <p class="login-sub" id="login-sub">Connexion</p>
     <input type="email" id="login-email" class="login-input" placeholder="Email" autocomplete="email">
@@ -1246,7 +1153,7 @@ body.bf-focus #toast{bottom:calc(74px + env(safe-area-inset-bottom))}
 </div>
 
 <nav>
-  <button type="button" class="nav-logo" id="nav-logo" onclick="refreshApp()" title="Actualiser l'app" aria-label="Actualiser l'app"><img src="icon-192.png?v=1.34" alt="Spoties" class="nav-logo-img"></button>
+  <button type="button" class="nav-logo" id="nav-logo" onclick="refreshApp()" title="Actualiser l'app" aria-label="Actualiser l'app"><img src="icon-192.png?v=1.33" alt="Spoties" class="nav-logo-img"></button>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="switchView('map')">Carte</button>
     <button class="nav-tab" onclick="switchView('gallery')">Spots</button>
@@ -1884,6 +1791,7 @@ body.bf-focus #toast{bottom:calc(74px + env(safe-area-inset-bottom))}
 </div>
 
 <div id="view-planning" class="view">
+  <div class="bf-mobile"><div><b>Éditeur de briefing</b>Prévu pour ordinateur pour l'instant. Une version mobile simplifiée arrive plus tard.</div></div>
   <div class="bf-wrap">
     <div class="bf-rail" id="bf-rail">
       <button class="bf-rail-btn" data-src="briefings" title="Mes briefings" aria-label="Mes briefings"><svg class="bf-ic" viewBox="0 0 24 24"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/><path d="M9 12h6M9 16h6"/></svg></button>
@@ -1892,8 +1800,7 @@ body.bf-focus #toast{bottom:calc(74px + env(safe-area-inset-bottom))}
       <button class="bf-rail-btn" data-src="spots" title="Spots" aria-label="Spots"><svg class="bf-ic" viewBox="0 0 24 24"><path d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></button>
       <button class="bf-rail-btn" data-src="photos" title="Photos" aria-label="Photos"><svg class="bf-ic" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.8"/><path d="M21 16l-5-5-9 8"/></svg></button>
     </div>
-    <div class="bf-side" id="bf-side">
-      <div class="bf-shead"><b id="bf-side-t"></b><button class="bf-mini" data-sclose aria-label="Fermer">×</button></div>
+    <div class="bf-side">
       <div class="bf-side-head">
         <input type="text" class="bf-search" id="bf-search" placeholder="Rechercher...">
         <div class="bf-chips bf-sb" id="bf-chips"></div>
@@ -1903,7 +1810,6 @@ body.bf-focus #toast{bottom:calc(74px + env(safe-area-inset-bottom))}
     </div>
     <div class="bf-center">
       <div class="bf-toolbar">
-        <button class="bf-mtop" id="bf-back" aria-label="Retour aux briefings"><svg class="bf-ic" viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
         <input type="text" class="bf-title" id="bf-title" aria-label="Titre du briefing">
         <span class="bf-saved" id="bf-saved"></span>
         <div class="bf-sep"></div>
@@ -1920,7 +1826,6 @@ body.bf-focus #toast{bottom:calc(74px + env(safe-area-inset-bottom))}
           <button data-z="1" title="Zoomer (Ctrl +)" aria-label="Zoomer">+</button>
         </div>
         <button class="bf-send" title="Publication : prochaine étape">Envoyer</button>
-        <button class="bf-mtop dots" id="bf-more" aria-label="Plus d'options"><svg viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg></button>
       </div>
       <div class="bf-canvas bf-sb" id="bf-canvas">
         <div class="bf-shell" id="bf-shell">
@@ -1928,16 +1833,8 @@ body.bf-focus #toast{bottom:calc(74px + env(safe-area-inset-bottom))}
           <div class="bf-doc" id="bf-doc"></div>
         </div>
       </div>
-      <div class="bf-mbar" id="bf-mbar">
-        <button data-mb="clients"><svg class="bf-ic" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c0-3.6 3.1-6 7-6s7 2.4 7 6"/></svg>Client</button>
-        <button data-mb="spots"><svg class="bf-ic" viewBox="0 0 24 24"><path d="M12 21s7-5.5 7-11a7 7 0 1 0-14 0c0 5.5 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>Spots</button>
-        <button data-mb="add"><span class="bf-mb-plus"><svg class="bf-ic" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span>Bloc</button>
-        <button data-mb="photos"><svg class="bf-ic" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.8"/><path d="M21 16l-5-5-9 8"/></svg>Photos</button>
-        <button data-mb="prev"><svg class="bf-ic" viewBox="0 0 24 24"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg><span id="bf-mb-prev-l">Aperçu</span></button>
-      </div>
     </div>
-    <div class="bf-panel" id="bf-pwrap">
-      <div class="bf-shead"><b>Ajouter au briefing</b><button class="bf-mini" data-sclose aria-label="Fermer">×</button></div>
+    <div class="bf-panel">
       <div class="bf-ptabs" id="bf-ptabs">
         <button data-tab="blocs" class="on">Blocs</button>
         <button data-tab="gabarits">Gabarits</button>
@@ -1948,13 +1845,6 @@ body.bf-focus #toast{bottom:calc(74px + env(safe-area-inset-bottom))}
         <button id="bf-pdf"><svg class="bf-ic" viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M8 11l4 4 4-4"/><path d="M4 19h16"/></svg>PDF</button>
       </div>
     </div>
-  </div>
-  <div class="bf-scrim" id="bf-scrim"></div>
-  <div class="bf-menu" id="bf-menu">
-    <div class="bf-shead"><b>Briefing</b><button class="bf-mini" data-sclose aria-label="Fermer">×</button></div>
-    <button data-mm="tpl"><svg class="bf-ic" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M10 10v10"/></svg>Appliquer un gabarit</button>
-    <button data-mm="savetpl"><svg class="bf-ic" viewBox="0 0 24 24"><path d="M5 3h11l3 3v15H5z"/><path d="M8 3v6h8"/><rect x="8" y="13" width="8" height="5"/></svg>Enregistrer en gabarit</button>
-    <button data-mm="del" class="danger"><svg class="bf-ic" viewBox="0 0 24 24"><path d="M4 7h16M10 7V4h4v3M6 7l1 13h10l1-13"/></svg>Supprimer ce briefing</button>
   </div>
   <div class="bf-modal-bg" id="bf-modal" hidden>
     <div class="bf-modal" role="dialog" aria-modal="true" aria-labelledby="bf-modal-h">
@@ -4300,7 +4190,6 @@ function lbReset(){lbZ=1;lbX=0;lbY=0;lbApply();}
 })();
 
 function switchView(v){
-  if(v!=='planning') document.body.classList.remove('bf-focus');
   document.querySelectorAll('.view').forEach(function(el){el.classList.remove('active');});
   document.querySelectorAll('.nav-tab').forEach(function(el){el.classList.remove('active');});
   document.getElementById('view-'+v).classList.add('active');
@@ -4552,9 +4441,7 @@ var OFFRE = {Essentiel:'Essentiel', Avance:'Avancé', Premium:'Premium'};
 var DIR = lsGet(LS.dir, {});
 var WX = {};
 var doc = null, HIST = [], HP = -1;
-var S = {mode:'edit', src:'briefings', tab:'blocs', sel:null, chip:'Tous', q:'', inited:false, cloud:false, zoom:1, mscreen:'list', sheet:null, pmode:'palette', ins:null};
-var MQ = window.matchMedia ? window.matchMedia('(max-width:900px), (max-height:500px) and (pointer:coarse)') : null;
-function MOB(){ return !!(MQ && MQ.matches); }
+var S = {mode:'edit', src:'briefings', tab:'blocs', sel:null, chip:'Tous', q:'', inited:false, cloud:false, zoom:1};
 try{ var _z = parseFloat(localStorage.getItem('bf-zoom')); if(_z>0) S.zoom = _z; }catch(e){}
 var M = {client:null, tpl:'particulier', q:'', step:1, date:null, status:'prospect', y:0, mo:0};
 var DEF_POS = {lat:49.1193, lng:6.1757};
@@ -4578,8 +4465,7 @@ var I = {
   photos:'<svg class="bf-ic" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="9" cy="10" r="1.8"/><path d="M21 16l-5-5-9 8"/></svg>',
   text:'<svg class="bf-ic" viewBox="0 0 24 24"><path d="M5 6V4h14v2M12 4v16M9 20h6"/></svg>',
   checklist:'<svg class="bf-ic" viewBox="0 0 24 24"><path d="M4 6l2 2 3-3M4 13l2 2 3-3M4 20l2 2 3-3"/><path d="M12 7h8M12 14h8M12 21h8"/></svg>',
-  contact:'<svg class="bf-ic" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></svg>',
-  set:'<svg class="bf-ic" viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg>'
+  contact:'<svg class="bf-ic" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></svg>'
 };
 var TYPES = {
   cover:{name:'Couverture', desc:'Photo, prénom et voiture du client', link:'client', linkLabel:'Lié à la fiche client'},
@@ -4949,7 +4835,7 @@ function blockBody(b){
         '<div>'+ET(b, 'title', 'Prêts pour la séance, {prenom}.', 'h1')+ET(b, 'intro', '{voiture}. {date}, {lieu}. Tout ce qu\'il faut savoir avant le jour J est ici.', 'p', '', {ml:1})+'</div></div>'+
         (car ? '<div class="bf-carbar"><i></i><span>'+esc(car)+'</span></div>' : '<div class="bf-carbar"><i></i></div>')+'</div>';
     case 'client':
-      if(!c) return '<div class="bf-empty bf-eo" style="min-height:90px">'+(MOB() ? 'Touche le bouton Client en bas pour lier un client' : 'Glisse un client ici ou choisis-le dans les réglages')+'</div>';
+      if(!c) return '<div class="bf-empty bf-eo" style="min-height:90px">Glisse un client ici ou choisis-le dans les réglages</div>';
       var cars = (c.cars && c.cars.length ? c.cars : (c.car ? [{model:c.car, color:''}] : [])).filter(function(v){ return v && (v.model||v.color); });
       h = ET(b, 'h', 'Ta fiche', 'h2', 'bf-h')+'<div class="bf-client"><div class="bf-cphoto" style="background:'+avatarBg(c)+'">'+photoOrInitials(c)+'</div><div><div class="bf-cname">'+esc(c.name)+'</div>'+
         cars.map(function(v){ return '<div class="bf-ccar">'+(v.color ? '<span class="bf-sw" style="background:'+esc(v.color)+'"></span>' : '')+esc(v.model||'Voiture')+'</div>'; }).join('')+'</div></div>';
@@ -4975,7 +4861,7 @@ function blockBody(b){
     case 'map':
       list = rs();
       var hMap = ET(b, 'h', 'Le parcours', 'h2', 'bf-h');
-      if(!list.length) return hMap+'<div class="bf-map"><div class="bf-muted">'+(MOB() ? 'Ajoute des spots avec le bouton Spots en bas' : 'Glisse des spots ici pour tracer le parcours')+'</div></div>';
+      if(!list.length) return hMap+'<div class="bf-map"><div class="bf-muted">Glisse des spots ici pour tracer le parcours</div></div>';
       var L = legs(list), tot = L.reduce(function(a,x){ return a+x; }, 0);
       return hMap+'<div class="bf-map"><img src="'+esc(mapUrl(list, p.route, S.mode==='a4'))+'" alt="" draggable="false" onerror="this.parentNode.classList.add(\'err\')"></div>'+
         '<div class="bf-mapcap"><span>'+list.length+' spot'+(list.length>1?'s':'')+(list.length>1 ? ', '+tot+' min de route au total' : '')+'</span><span>'+(doc.timeMode==='sunset'?'Dans l\'ordre du coucher de soleil':doc.timeMode==='sunrise'?'Dans l\'ordre du lever du soleil':'Dans l\'ordre de passage')+'</span></div>'+bnote(b);
@@ -5008,7 +4894,7 @@ function blockBody(b){
       return ET(b, 'h', 'Préparer la voiture', 'h2', 'bf-h')+(lis.length ? '<ul class="bf-check">'+lis.join('')+'</ul>' : '<div class="bf-muted bf-eo">Aucun élément coché</div>')+
         (S.mode==='edit' ? '<button class="bf-addli bf-eo" data-act="chk-add">+ Ajouter un élément</button>' : '')+bnote(b);
     case 'photos':
-      if(!p.imgs.length) return '<div class="bf-pdrop bf-eo">'+(MOB() ? 'Touche ce bloc puis Importer des photos' : 'Glisse des photos ici<br>depuis ton ordi ou la bibliothèque')+'</div>';
+      if(!p.imgs.length) return '<div class="bf-pdrop bf-eo">Glisse des photos ici<br>depuis ton ordi ou la bibliothèque</div>';
       return '<div class="bf-photos" data-l="'+esc(p.layout)+'">'+p.imgs.map(function(src){ return '<img src="'+esc(src)+'" alt="" draggable="false">'; }).join('')+'</div>'+ET(b, 'caption', '', 'p', 'bf-pcap', {prop:'caption', opt:1, ph:'Ajouter une légende…'});
     case 'text':
       return '<div class="bf-txt '+esc(p.style)+'" data-ph="'+esc(p.ph||'Écris ici…')+'"'+(S.mode==='edit' ? ' contenteditable="true"' : '')+'>'+esc(p.html||'')+'</div>';
@@ -5061,18 +4947,17 @@ function renderDoc(){
       '<button class="bf-rr" data-act="row-del" title="Supprimer la rangée" aria-label="Supprimer la rangée">'+I.del+'</button>'+
       '<div class="bf-laypop">'+LAYOUTS.map(function(l){ return '<button data-act="row-layout" data-l="'+l+'" class="'+(l===row.layout?'on':'')+'" title="'+l.replace(/-/g,' / ')+'">'+layoutIcon(l)+'</button>'; }).join('')+'</div></div>';
     row.slots.forEach(function(b, i){
-      if(!b){ h += '<div class="bf-slot bf-empty" data-r="'+row.id+'" data-i="'+i+'">'+(MOB() ? 'Touche pour ajouter un bloc' : 'Glisse un bloc, un client, un spot ou une photo')+'</div>'; return; }
+      if(!b){ h += '<div class="bf-slot bf-empty" data-r="'+row.id+'" data-i="'+i+'">Glisse un bloc, un client, un spot ou une photo</div>'; return; }
       var T = TYPES[b.type]; if(!T){ h += '<div class="bf-slot"></div>'; return; }
       h += '<div class="bf-slot" data-r="'+row.id+'" data-i="'+i+'"><div class="bf-blk'+(S.sel===b.id ? ' sel' : '')+'" data-id="'+b.id+'" data-type="'+b.type+'" data-link="'+(T.link||'')+'">'+
         '<div class="bf-btools"><span class="bf-bt grip" role="button" tabindex="0" draggable="true" data-drag=\'{"kind":"blk","id":"'+b.id+'"}\' title="Déplacer le bloc" aria-label="Déplacer le bloc">'+I.grip+'</span><span>'+(T.link ? I.link : '')+T.name+'</span>'+
-        '<button class="bf-bt bf-bt-set" data-act="blk-set" title="Réglages" aria-label="Réglages du bloc">'+I.set+'</button>'+
         '<button class="bf-bt" data-act="blk-dup" title="Dupliquer" aria-label="Dupliquer">'+I.dup+'</button><button class="bf-bt" data-act="blk-del" title="Supprimer" aria-label="Supprimer">'+I.del+'</button></div>'+
         blockBody(b)+'</div></div>';
     });
     h += '</div><div class="bf-gap" data-i="'+(r+1)+'"></div>';
   });
-  if(!doc.rows.length) h = '<div class="bf-docempty"><b>Document vide</b><p>'+(MOB() ? 'Touche Bloc en bas ou applique un gabarit depuis le menu.' : 'Glisse un bloc depuis la droite ou choisis un gabarit.')+'</p></div>' + h;
-  h += '<button class="bf-addrow" data-act="add-row">'+(MOB() ? 'Ajouter un bloc' : 'Ajouter une rangée')+'</button>';
+  if(!doc.rows.length) h = '<div class="bf-docempty"><b>Document vide</b><p>Glisse un bloc depuis la droite ou choisis un gabarit.</p></div>' + h;
+  h += '<button class="bf-addrow" data-act="add-row">Ajouter une rangée</button>';
   d.innerHTML = h;
   if(S.mode==='a4') setTimeout(pageGuides, 60);
 }
@@ -5091,7 +4976,6 @@ function renderList(){
   document.querySelectorAll('#bf-rail .bf-rail-btn').forEach(function(b){ b.classList.toggle('active', b.dataset.src===S.src); });
   $('bf-search').placeholder = {briefings:'Rechercher un briefing...', clients:'Rechercher un client...', spots:'Rechercher un spot...', photos:'Rechercher...'}[S.src];
   chips.innerHTML = ''; chips.hidden = true;
-  var mob = MOB(), stl = $('bf-side-t'); if(stl) stl.textContent = {clients:'Lier un client', spots:'Ajouter des spots', photos:'Ajouter des photos'}[S.src] || '';
   if(S.src==='briefings'){
     hint.textContent = 'Tes briefings, du plus récent au plus ancien. Enregistrement automatique.';
     list.className = 'bf-list bf-rows bf-sb';
@@ -5105,7 +4989,7 @@ function renderList(){
         '<button class="bf-idel" data-click="del" data-id="'+esc(b.id)+'" title="Supprimer" aria-label="Supprimer le briefing">'+I.del+'</button></div>';
     });
   } else if(S.src==='clients'){
-    hint.textContent = mob ? 'Touche un client pour le lier : tous les blocs branchés se mettent à jour.' : 'Glisse un client sur le document pour le lier : tous les blocs branchés se mettent à jour.';
+    hint.textContent = 'Glisse un client sur le document pour le lier : tous les blocs branchés se mettent à jour.';
     list.className = 'bf-list bf-rows bf-sb';
     var cl = activeClients().filter(function(c){ return !q || (String(c.name||'')+' '+carOf(c)).toLowerCase().indexOf(q)>-1; });
     if(!cl.length) h += '<div class="bf-lempty">'+(activeClients().length ? 'Aucun résultat' : 'Aucun client. Ajoute-les depuis l\'onglet Clients.')+'</div>';
@@ -5119,7 +5003,7 @@ function renderList(){
     if(types.indexOf(S.chip)<0) S.chip = 'Tous';
     chips.hidden = false;
     chips.innerHTML = types.map(function(t){ return '<button class="bf-chip'+(S.chip===t ? ' active' : '')+'" data-chip="'+esc(t)+'">'+esc(t)+'</button>'; }).join('');
-    hint.textContent = mob ? 'Touche un spot pour l\'ajouter au parcours. Carte, spots et timing suivent.' : 'Glisse un spot sur le document pour l\'ajouter au parcours. Carte, spots et timing suivent.';
+    hint.textContent = 'Glisse un spot sur le document pour l\'ajouter au parcours. Carte, spots et timing suivent.';
     list.className = 'bf-list bf-sb';
     var sl = all.filter(function(s){ return (S.chip==='Tous' || (S.chip==='Du client' ? linked.indexOf(s.id)>-1 : s.type===S.chip)) && (!q || String(s.name||'').toLowerCase().indexOf(q)>-1); });
     if(!sl.length) h += '<div class="bf-lempty">Aucun spot</div>';
@@ -5129,10 +5013,10 @@ function renderList(){
         '<div class="bf-cap"><div class="bf-ititle">'+esc(s.name||'Spot')+'</div><div class="bf-isub">'+esc(s.type||'Spot')+'</div></div></div>';
     });
   } else {
-    hint.textContent = mob ? 'Touche une photo pour l\'ajouter au bloc photos sélectionné, ou en créer un.' : 'Photos compressées à l\'import (1600 px, JPEG) puis envoyées dans ton espace Supabase.';
+    hint.textContent = 'Photos compressées à l\'import (1600 px, JPEG) puis envoyées dans ton espace Supabase.';
     list.className = 'bf-list bf-sb';
     PHOTOS = [];
-    h += '<div class="bf-import" id="bf-import" tabindex="0" role="button"><b>Importer des photos</b>'+(mob ? 'Appareil photo ou photothèque' : 'Clique ou glisse des fichiers ici')+'</div>';
+    h += '<div class="bf-import" id="bf-import" tabindex="0" role="button"><b>Importer des photos</b>Clique ou glisse des fichiers ici</div>';
     var mine = doc ? (doc.photos||[]) : [];
     if(mine.length){ h += '<div class="bf-lgrp">Photos de ce briefing</div>'; mine.forEach(function(src){ h += photoItem(src, 'Photo importée'); }); }
     var seen = {}, sp = [];
@@ -5153,7 +5037,6 @@ function renderPanel(){
   var sel = S.sel ? findBlock(S.sel) : null;
   tabs.querySelectorAll('button').forEach(function(b){ b.classList.toggle('on', !sel && b.dataset.tab===S.tab); });
   $('bf-save-tpl').disabled = !doc; $('bf-pdf').disabled = !doc;
-  $('bf-pwrap').classList.toggle('bf-has-sel', !!sel);
   if(sel){ body.innerHTML = settingsHTML(sel.b); return; }
   if(!doc){ body.innerHTML = '<div class="bf-note">Crée ou ouvre un briefing pour ajouter des blocs.</div>'; return; }
   if(S.tab==='blocs'){
@@ -5162,7 +5045,7 @@ function renderPanel(){
     h += '<div class="bf-grp">Contenu libre</div>';
     FREE_TYPES.forEach(function(t){ h += palItem(t); });
   } else {
-    h += '<p class="bf-set-hint">Appliquer un gabarit remplace la structure du document. Le client, le parcours et la date restent. '+(MOB() ? 'La flèche retour en haut permet de revenir.' : 'Ctrl+Z pour revenir.')+'</p>';
+    h += '<p class="bf-set-hint">Appliquer un gabarit remplace la structure du document. Le client, le parcours et la date restent. Ctrl+Z pour revenir.</p>';
     h += '<div class="bf-grp">Gabarits de base</div>';
     Object.keys(TEMPLATES).forEach(function(k){ var t = TEMPLATES[k]; h += tplCard(t.build(), t.name, t.desc, 'data-tpl="'+k+'"', ''); });
     h += '<div class="bf-grp">Mes gabarits</div>';
@@ -5185,8 +5068,7 @@ function routeEditor(withNotes){
       '<button class="bf-mini" data-act="route-up" data-i="'+i+'" title="Monter" aria-label="Monter">↑</button><button class="bf-mini" data-act="route-down" data-i="'+i+'" title="Descendre" aria-label="Descendre">↓</button><button class="bf-mini" data-act="route-del" data-i="'+i+'" title="Retirer" aria-label="Retirer">×</button></div>'+
       (withNotes ? '<textarea class="bf-field" data-act="spotnote" data-id="'+esc(s.id)+'" rows="2" placeholder="Note pour le client (sinon, conseil lumière automatique)">'+esc((doc.spotNotes||{})[s.id]||'')+'</textarea>' : '')+'</div>';
   });
-  if(!list.length) h += '<div class="bf-note">'+(MOB() ? 'Aucun spot pour l\'instant.' : 'Aucun spot. Glisse-les depuis la liste de gauche.')+'</div>';
-  if(MOB()) h += '<button class="bf-sbtn" data-act="open-spots">Ajouter des spots</button>';
+  if(!list.length) h += '<div class="bf-note">Aucun spot. Glisse-les depuis la liste de gauche.</div>';
   return h + '</div><p class="bf-set-hint">Le parcours est partagé par la carte, les spots et le timing. Tes notes de repérage privées ne sont jamais affichées au client.</p>';
 }
 function timeHint(){
@@ -5225,7 +5107,7 @@ function settingsHTML(b){
       h += '<div class="bf-set-label">Disposition</div>'+segProp('layout', p.layout, [['1','1'],['2','2'],['3','3'],['m','Mosaïque']])+
         '<div class="bf-set-label">Légende</div><input class="bf-field" data-act="prop" data-key="caption" value="'+esc(p.caption||'')+'" placeholder="Optionnel">'+
         '<div class="bf-set-label">Photos ('+p.imgs.length+')</div>'+(p.imgs.length ? '<div class="bf-thumbs">'+p.imgs.map(function(src, i){ return '<div><img src="'+esc(src)+'" alt=""><button data-act="photo-del" data-i="'+i+'" aria-label="Retirer">×</button></div>'; }).join('')+'</div>' : '')+
-        '<button class="bf-sbtn" data-act="photo-import">'+(MOB() ? 'Importer des photos' : 'Importer depuis l\'ordi')+'</button><p class="bf-set-hint">'+(MOB() ? 'Ou choisis-les avec le bouton Photos en bas.' : 'Ou glisse des photos depuis l\'onglet Photos à gauche.')+'</p>'; break;
+        '<button class="bf-sbtn" data-act="photo-import">Importer depuis l\'ordi</button><p class="bf-set-hint">Ou glisse des photos depuis l\'onglet Photos à gauche.</p>'; break;
     case 'text':
       h += '<div class="bf-set-label">Style</div>'+segProp('style', p.style, [['p','Paragraphe'],['h','Titre'],['note','Note']])+'<p class="bf-set-hint">Écris directement dans le document. Le texte collé est nettoyé de sa mise en forme.</p>'; break;
     case 'pricing':
@@ -5239,7 +5121,7 @@ function settingsHTML(b){
     case 'contact':
       h += '<div class="bf-set-label">Compte Instagram</div><input class="bf-field" data-act="prop" data-key="handle" value="'+esc(p.handle||'')+'">'; break;
   }
-  if(TX_TYPES.indexOf(b.type)>-1) h += '<p class="bf-set-hint">'+(MOB() ? 'Touche' : 'Clique sur')+' un texte du bloc pour le modifier. Un texte vidé est masqué chez le client. Variables : {prenom} {nom} {voiture} {date} {lieu}</p>'+
+  if(TX_TYPES.indexOf(b.type)>-1) h += '<p class="bf-set-hint">Clique sur un texte du bloc pour le modifier. Un texte vidé est masqué chez le client. Variables : {prenom} {nom} {voiture} {date} {lieu}</p>'+
     (p.tx && Object.keys(p.tx).length ? '<button class="bf-sbtn" data-act="tx-reset">Rétablir les textes d\'origine</button>' : '');
   h += '<div class="bf-sact"><button class="bf-sbtn" data-act="blk-dup">Dupliquer</button><button class="bf-sbtn danger" data-act="blk-del">Supprimer</button></div>';
   return h;
@@ -5253,65 +5135,10 @@ function renderToolbar(){
   document.querySelectorAll('#bf-zoom button').forEach(function(b){ b.disabled = !doc; });
   if(!doc) setSaved('');
 }
-function renderAll(){ renderToolbar(); renderList(); renderDoc(); renderPanel(); applyMob(); }
-
-/* ---------- mobile portrait : ecrans, feuilles, barre du bas (v1.34) ---------- */
-function applyMob(){
-  var v = $('view-planning'); if(!v) return;
-  var m = MOB(), ed = m && S.mscreen==='edit' && !!doc;
-  if(S.sheet==='panel' && S.pmode==='settings' && !(S.sel && findBlock(S.sel))) S.sheet = null;
-  if(!ed) S.sheet = null;
-  v.classList.toggle('bf-mob', m);
-  v.classList.toggle('bf-ed', ed);
-  v.classList.toggle('bf-sh', ed && !!S.sheet);
-  document.body.classList.toggle('bf-focus', ed && inView());
-  $('bf-side').classList.toggle('open', ed && S.sheet==='side');
-  $('bf-pwrap').classList.toggle('open', ed && S.sheet==='panel');
-  $('bf-menu').classList.toggle('open', ed && S.sheet==='menu');
-  document.querySelectorAll('#bf-mbar [data-mb]').forEach(function(b){
-    var k = b.dataset.mb;
-    b.classList.toggle('on', (k==='prev' && S.mode==='phone') || (S.sheet==='side' && S.src===k) || (k==='add' && S.sheet==='panel' && S.pmode==='palette'));
-  });
-  var pl = $('bf-mb-prev-l'); if(pl) pl.textContent = S.mode==='phone' ? 'Éditer' : 'Aperçu';
-  var sh = $('bf-shell'); if(sh) sh.style.zoom = m || S.zoom===1 ? '' : String(S.zoom);
-}
-function blurDocText(){ var ae = document.activeElement; if(ae && ae.blur && $('bf-doc').contains(ae)) ae.blur(); }
-function openSheet(k){
-  if(!doc) return;
-  blurDocText();
-  if(k==='settings'){ if(!S.sel || !findBlock(S.sel)) return; S.sheet = 'panel'; S.pmode = 'settings'; }
-  else if(k==='palette' || k==='templates'){
-    if(S.sel && !S.ins){ var f = findBlock(S.sel); if(f) S.ins = {kind:'gap', i:f.r+1}; }
-    S.sel = null; markSel(); S.sheet = 'panel'; S.pmode = 'palette'; S.tab = k==='templates' ? 'gabarits' : 'blocs';
-  }
-  else if(k==='clients' || k==='spots' || k==='photos'){ S.sheet = 'side'; S.src = k; S.q = ''; $('bf-search').value = ''; S.chip = 'Tous'; renderList(); $('bf-list').scrollTop = 0; }
-  else if(k==='menu'){ S.sheet = 'menu'; }
-  if(S.mode!=='edit' && k!=='menu'){ S.mode = 'edit'; renderToolbar(); renderDoc(); }
-  renderPanel(); applyMob();
-  if(S.sheet==='panel') $('bf-panel').scrollTop = 0;
-  if(k==='settings'){ var sid = S.sel; setTimeout(function(){ revealBlock(sid, true); }, 30); }
-}
-function closeSheet(){ S.sheet = null; S.ins = null; applyMob(); }
-function insertNew(nb){
-  var t = S.ins; S.ins = null;
-  if(t && t.kind==='slot'){ var row = findRow(t.r); if(row && !row.slots[t.i]){ row.slots[t.i] = nb; return; } }
-  if(t && t.kind==='gap'){ doc.rows.splice(Math.max(0, Math.min(t.i, doc.rows.length)), 0, R('1', nb)); return; }
-  doc.rows.push(R('1', nb));
-}
-function revealBlock(id, top){
-  var el = $('bf-doc').querySelector('.bf-blk[data-id="'+id+'"]'), cv = $('bf-canvas'); if(!el || !cv) return;
-  if(!top){ el.scrollIntoView({block:'center', behavior:'smooth'}); return; }
-  cv.scrollTo({top:Math.max(0, cv.scrollTop + el.getBoundingClientRect().top - cv.getBoundingClientRect().top - 58), behavior:'smooth'});
-}
-function enterEditor(){ S.mscreen = 'edit'; S.sheet = null; S.ins = null; S.sel = null; S.mode = 'edit'; S.src = 'briefings'; renderAll(); $('bf-canvas').scrollTop = 0; }
-function leaveEditor(){
-  blurDocText(); flushSave();
-  S.mscreen = 'list'; S.sheet = null; S.ins = null; S.sel = null; S.mode = 'edit'; S.src = 'briefings'; S.q = ''; $('bf-search').value = '';
-  renderAll(); $('bf-list').scrollTop = 0;
-}
+function renderAll(){ renderToolbar(); renderList(); renderDoc(); renderPanel(); }
 
 /* ---------- mutations ---------- */
-function select(id){ S.sel = id; markSel(); if(!id && S.sheet==='panel' && S.pmode==='settings') S.sheet = null; renderPanel(); applyMob(); }
+function select(id){ S.sel = id; markSel(); renderPanel(); }
 function setClient(id){
   var c = getClient(id); doc.clientId = id || null;
   if(c){ var sh = nextShoot(c); if(sh){ if(sh.date) doc.date = sh.date; if(sh.place) doc.place = sh.place; } }
@@ -5362,7 +5189,6 @@ function addPhotosToSel(srcs){
   if(f && f.b.type==='photos') f.b.props.imgs = f.b.props.imgs.concat(srcs);
   else { var nb = B('photos', {imgs:srcs, layout:srcs.length>=3 ? '3' : String(srcs.length)}); doc.rows.push(R('1', nb)); S.sel = nb.id; }
   commit(); renderAll(); toast('Photo ajoutée');
-  if(MOB() && S.sel) setTimeout(function(){ revealBlock(S.sel); }, 60);
 }
 
 /* ---------- glisser-deposer ---------- */
@@ -5418,30 +5244,102 @@ function handleDrop(kind, t, drag, files){
   }
 }
 
-/* ---------- impression / PDF ---------- */
+/* ---------- export PDF (telechargement) v1.34 ---------- */
+var PDF_LIBS = null;
+function loadScript(src){ return new Promise(function(res, rej){ var sc = document.createElement('script'); sc.src = src; sc.onload = res; sc.onerror = rej; document.head.appendChild(sc); }); }
+function loadPdfLibs(){
+  if(window.html2canvas && window.jspdf) return Promise.resolve();
+  if(!PDF_LIBS) PDF_LIBS = Promise.all([
+    loadScript('https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js'),
+    loadScript('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js')
+  ]).catch(function(e){ PDF_LIBS = null; throw e; });
+  return PDF_LIBS;
+}
+function imgToData(im){
+  var src = im.getAttribute('src') || '';
+  if(!src || src.indexOf('data:')===0) return Promise.resolve();
+  return fetch(src, {mode:'cors', cache:'no-store'}).then(function(r){ if(!r.ok) throw 0; return r.blob(); }).then(function(b){
+    return new Promise(function(res){ var fr = new FileReader(); fr.onload = function(){ im.src = fr.result; im.complete ? res() : (im.onload = im.onerror = res); }; fr.onerror = res; fr.readAsDataURL(b); });
+  }).catch(function(){});
+}
+function buildPrintClone(host){
+  var cl = document.createElement('div');
+  cl.className = 'bf-doc bf-print bf-m-a4';
+  cl.style.setProperty('--car', carColor(getClient(doc.clientId)));
+  cl.innerHTML = $('bf-doc').innerHTML;
+  cl.querySelectorAll('.bf-pg,.bf-rrail,.bf-btools,.bf-addrow').forEach(function(x){ x.remove(); });
+  cl.querySelectorAll('[contenteditable]').forEach(function(x){ x.removeAttribute('contenteditable'); });
+  host.innerHTML = ''; host.appendChild(cl);
+  return cl;
+}
+function pdfFileName(){ return (docTitle() || 'Briefing').replace(/[\\/:*?"<>|]+/g, '').replace(/\s+/g, ' ').trim() + '.pdf'; }
 function exportPDF(){
   if(!doc) return;
+  var btn = $('bf-pdf'); if(btn.disabled) return;
   S.sel = null; setMode('a4'); renderPanel();
-  setTimeout(function(){
-    var host = $('bf-print'); if(!host){ host = document.createElement('div'); host.id = 'bf-print'; document.body.appendChild(host); }
-    var cl = document.createElement('div');
-    cl.className = 'bf-doc bf-print bf-m-a4';
-    cl.style.setProperty('--car', carColor(getClient(doc.clientId)));
-    cl.innerHTML = $('bf-doc').innerHTML;
-    cl.querySelectorAll('.bf-pg,.bf-rrail,.bf-btools,.bf-addrow').forEach(function(x){ x.remove(); });
-    cl.querySelectorAll('[contenteditable]').forEach(function(x){ x.removeAttribute('contenteditable'); });
-    host.innerHTML = ''; host.appendChild(cl);
+  btn.disabled = true; toast('Génération du PDF…');
+  var veil = document.createElement('div');
+  veil.style.cssText = 'position:fixed;inset:0;z-index:99999;background:rgba(10,10,12,.92);display:flex;align-items:center;justify-content:center;color:#fff;font:600 14px Inter,sans-serif';
+  veil.textContent = 'Génération du PDF…';
+  var host = document.createElement('div');
+  host.style.cssText = 'position:absolute;left:0;top:0;width:720px;z-index:99998;background:#fff';
+  document.body.appendChild(host); document.body.appendChild(veil);
+  var done = function(){ host.remove(); veil.remove(); btn.disabled = false; };
+  loadPdfLibs().then(function(){
+    var cl = buildPrintClone(host);
+    cl.style.cssText += ';border:none;box-shadow:none;border-radius:0;padding:0;width:720px';
     var imgs = Array.prototype.slice.call(cl.querySelectorAll('img'));
-    Promise.race([
-      Promise.all(imgs.map(function(im){ return im.complete ? 1 : new Promise(function(r){ im.onload = im.onerror = r; }); })),
-      new Promise(function(r){ setTimeout(r, 5000); })
-    ]).then(function(){
-      var old = document.title; document.title = docTitle();
-      window.print();
-      document.title = old;
-      setTimeout(function(){ host.innerHTML = ''; }, 800);
+    return Promise.race([
+      Promise.all(imgs.map(imgToData)),
+      new Promise(function(r){ setTimeout(r, 8000); })
+    ]).then(function(){ return (document.fonts && document.fonts.ready) || 0; }).then(function(){
+      var scale = 2, top0 = cl.getBoundingClientRect().top;
+      var cuts = Array.prototype.slice.call(cl.querySelectorAll('.bf-row')).map(function(r){ var b = r.getBoundingClientRect(); return {t:(b.top-top0)*scale, b:(b.bottom-top0)*scale}; });
+      return html2canvas(cl, {scale:scale, useCORS:true, backgroundColor:'#ffffff', logging:false, windowWidth:720, scrollX:0, scrollY:-window.scrollY}).then(function(cv){ return {cv:cv, cuts:cuts}; });
     });
-  }, 150);
+  }).then(function(o){
+    var cv = o.cv, cuts = o.cuts;
+    var J = window.jspdf.jsPDF, pdf = new J({unit:'mm', format:'a4', orientation:'portrait', compress:true});
+    var mX = 12, mT = 12, mB = 14, wMM = 210 - mX*2, hMM = 297 - mT - mB;
+    var pxPerMM = cv.width / wMM, pageH = Math.floor(hMM * pxPerMM);
+    var y = 0, first = true;
+    while(y < cv.height - 2){
+      var lim = y + pageH, end = lim;
+      if(lim < cv.height){
+        var best = 0;
+        cuts.forEach(function(c){ if(c.b <= lim && c.b > y + 10 && c.b > best) best = c.b; });
+        var nxt = cuts.filter(function(c){ return c.t >= best - 1 && c.t <= lim; })[0];
+        if(best > y + pageH*0.25) end = Math.min(lim, Math.ceil(nxt ? nxt.t : best));
+      } else end = cv.height;
+      var h = Math.max(1, Math.round(end - y));
+      var pc = document.createElement('canvas'); pc.width = cv.width; pc.height = h;
+      var g = pc.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, pc.width, h); g.drawImage(cv, 0, y, cv.width, h, 0, 0, cv.width, h);
+      if(!first) pdf.addPage(); first = false;
+      pdf.addImage(pc.toDataURL('image/jpeg', 0.92), 'JPEG', mX, mT, wMM, h / pxPerMM);
+      y = end;
+    }
+    pdf.setProperties({title:docTitle(), author:'6flt Photographies'});
+    pdf.save(pdfFileName());
+    done(); toast('PDF téléchargé');
+  }).catch(function(e){
+    console.error('PDF', e); done();
+    toast('Téléchargement impossible, ouverture de l\'impression');
+    printDoc();
+  });
+}
+function printDoc(){
+  var host = $('bf-print'); if(!host){ host = document.createElement('div'); host.id = 'bf-print'; document.body.appendChild(host); }
+  var cl = buildPrintClone(host);
+  var imgs = Array.prototype.slice.call(cl.querySelectorAll('img'));
+  Promise.race([
+    Promise.all(imgs.map(function(im){ return im.complete ? 1 : new Promise(function(r){ im.onload = im.onerror = r; }); })),
+    new Promise(function(r){ setTimeout(r, 5000); })
+  ]).then(function(){
+    var old = document.title; document.title = docTitle();
+    window.print();
+    document.title = old;
+    setTimeout(function(){ host.innerHTML = ''; }, 800);
+  });
 }
 
 /* ---------- modale nouveau briefing ---------- */
@@ -5451,7 +5349,7 @@ function openModal(){
   M = {client:null, tpl:'particulier', q:'', step:1, date:null, status:'prospect', y:n0.getFullYear(), mo:n0.getMonth()};
   $('bf-m-search').value = '';
   renderModal(); $('bf-modal').hidden = false;
-  if(!MOB()) setTimeout(function(){ $('bf-m-search').focus(); }, 30);
+  setTimeout(function(){ $('bf-m-search').focus(); }, 30);
 }
 function closeModal(){ $('bf-modal').hidden = true; }
 var MOIS = ['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre'];
@@ -5539,7 +5437,7 @@ function stepZoom(dir){
 function setMode(m){
   if(!doc) return;
   S.mode = m; if(m!=='edit') document.querySelectorAll('#bf-doc .bf-row.lay-open').forEach(function(r){ r.classList.remove('lay-open'); });
-  renderToolbar(); renderDoc(); applyMob(); $('bf-canvas').scrollTop = 0;
+  renderToolbar(); renderDoc(); $('bf-canvas').scrollTop = 0;
 }
 
 /* ---------- liaison des evenements (une seule fois) ---------- */
@@ -5549,7 +5447,6 @@ function bind(){
   document.addEventListener('dragstart', function(e){
     if(!inView()) return;
     var el = e.target.closest ? e.target.closest('#view-planning [data-drag]') : null; if(!el) return;
-    if(MOB()){ e.preventDefault(); return; }
     if(!doc){ e.preventDefault(); toast('Crée ou ouvre un briefing d\'abord'); return; }
     DRAG = JSON.parse(el.dataset.drag);
     if(DRAG.kind==='photo') DRAG.src = PHOTOS[DRAG.i];
@@ -5581,14 +5478,8 @@ function bind(){
     if(a){ docAct(a); return; }
     var link = e.target.closest('a');
     if(link && S.mode==='edit'){ e.preventDefault(); }
-    if(MOB() && S.mode==='edit'){
-      var gap = e.target.closest('.bf-gap'), emp = e.target.closest('.bf-slot.bf-empty');
-      if(gap){ e.stopPropagation(); S.sel = null; S.ins = {kind:'gap', i:+gap.dataset.i}; openSheet('palette'); return; }
-      if(emp){ e.stopPropagation(); S.sel = null; S.ins = {kind:'slot', r:emp.dataset.r, i:+emp.dataset.i}; openSheet('palette'); return; }
-    }
     var blk = e.target.closest('.bf-blk');
     if(blk && S.mode==='edit' && S.sel!==blk.dataset.id) select(blk.dataset.id);
-    if(blk && S.mode==='edit' && MOB() && !e.target.closest('.bf-et, .bf-txt, .bf-addli')) openSheet('settings');
   });
   canvas.addEventListener('click', function(e){
     if(!e.target.closest('.bf-rrail')) document.querySelectorAll('#bf-doc .bf-row.lay-open').forEach(function(r){ r.classList.remove('lay-open'); });
@@ -5636,19 +5527,10 @@ function bind(){
     var tpl = e.target.closest('[data-tpl]'), ctpl = e.target.closest('[data-ctpl]'), add = e.target.closest('[data-add]');
     if(tpl){ applyTemplate(TEMPLATES[tpl.dataset.tpl].build()); return; }
     if(ctpl){ applyTemplate(CUSTOM[+ctpl.dataset.ctpl].rows.map(function(r){ return reId(clone(r)); })); return; }
-    if(add){
-      var nb = B(add.dataset.add), mobAdd = MOB() && S.sheet==='panel';
-      insertNew(nb); S.sel = nb.id;
-      if(mobAdd){ var cfg = DATA_TYPES.indexOf(nb.type)>-1 || nb.type==='photos'; S.sheet = cfg ? 'panel' : null; S.pmode = 'settings'; }
-      commit(); renderAll();
-      setTimeout(function(){ revealBlock(nb.id, mobAdd); }, 30);
-      toast(TYPES[nb.type].name+' ajouté');
-      return;
-    }
+    if(add){ var nb = B(add.dataset.add); doc.rows.push(R('1', nb)); S.sel = nb.id; commit(); renderAll(); var el = docEl.querySelector('[data-id="'+nb.id+'"]'); if(el) el.scrollIntoView({block:'center', behavior:'smooth'}); return; }
     var a = e.target.closest('button[data-act]'); if(!a) return;
     var f = findBlock(S.sel), act = a.dataset.act, i = +a.dataset.i;
     if(act==='desel'){ select(null); return; }
-    if(act==='open-spots'){ openSheet('spots'); return; }
     if(act==='blk-dup' || act==='blk-del'){ blockAct(act); return; }
     if(act==='time-mode'){
       if(a.dataset.val==='free'){ var sc0 = schedule(); if(sc0) doc.startTime = hhmm(sc0.accueil); }
@@ -5703,11 +5585,11 @@ function bind(){
     var k = it.dataset.click;
     if(k==='new'){ openModal(); return; }
     if(k==='del'){ e.stopPropagation(); deleteDoc(it.dataset.id); return; }
-    if(k==='doc'){ if(!doc || doc.id!==it.dataset.id) openDoc(it.dataset.id); if(MOB()) enterEditor(); return; }
+    if(k==='doc'){ if(!doc || doc.id!==it.dataset.id) openDoc(it.dataset.id); return; }
     if(!doc){ toast('Crée ou ouvre un briefing d\'abord'); return; }
-    if(k==='client'){ setClient(it.dataset.id); commit(); renderAll(); var c = getClient(it.dataset.id); toast('Briefing lié à '+(c ? c.name : 'ce client')); if(MOB()) closeSheet(); }
+    if(k==='client'){ setClient(it.dataset.id); commit(); renderAll(); var c = getClient(it.dataset.id); toast('Briefing lié à '+(c ? c.name : 'ce client')); }
     if(k==='spot'){ var ok = addToRoute(it.dataset.id); commit(); renderAll(); var s = getSpot(it.dataset.id); toast(ok ? (s ? s.name : 'Spot')+' ajouté au parcours' : 'Déjà dans le parcours'); }
-    if(k==='photo'){ if(MOB()) S.sheet = null; addPhotosToSel([PHOTOS[+it.dataset.i]]); }
+    if(k==='photo'){ addPhotosToSel([PHOTOS[+it.dataset.i]]); }
   });
   list.addEventListener('keydown', function(e){ if(e.key==='Enter'){ var it = e.target.closest('[data-click],#bf-import'); if(it) it.click(); } });
   list.addEventListener('dragover', function(e){ var imp = e.target.closest('#bf-import'); if(imp && dragKind(e)==='files'){ e.preventDefault(); imp.classList.add('over'); } });
@@ -5716,7 +5598,7 @@ function bind(){
   $('bf-file').addEventListener('change', function(e){
     var files = e.target.files; if(!files || !files.length) return;
     var f = S.sel ? findBlock(S.sel) : null;
-    uploadFiles(files, f && f.b.type==='photos' ? function(urls){ var g = findBlock(f.b.id); if(g){ g.b.props.imgs = g.b.props.imgs.concat(urls); } commit(); renderAll(); } : (MOB() ? function(urls){ S.sheet = null; addPhotosToSel(urls); } : null));
+    uploadFiles(files, f && f.b.type==='photos' ? function(urls){ var g = findBlock(f.b.id); if(g){ g.b.props.imgs = g.b.props.imgs.concat(urls); } commit(); renderAll(); } : null);
     e.target.value = '';
   });
 
@@ -5756,7 +5638,6 @@ function bind(){
       S.src = 'briefings'; S.mode = 'edit';
       openDoc(d.id);
       doc.title = docTitle(); pushDoc();
-      if(MOB()) enterEditor();
       toast('Briefing créé');
     }
   });
@@ -5787,27 +5668,6 @@ function bind(){
   }, {passive:false});
   setZoom(S.zoom);
   window.addEventListener('beforeunload', flushSave);
-
-  /* mobile portrait */
-  $('bf-back').addEventListener('click', leaveEditor);
-  $('bf-more').addEventListener('click', function(){ if(S.sheet==='menu') closeSheet(); else openSheet('menu'); });
-  $('bf-scrim').addEventListener('click', closeSheet);
-  $('view-planning').addEventListener('click', function(e){ if(e.target.closest('[data-sclose]')) closeSheet(); });
-  $('bf-mbar').addEventListener('click', function(e){
-    var b = e.target.closest('[data-mb]'); if(!b || !doc) return; var k = b.dataset.mb;
-    if(k==='prev'){ S.sheet = null; S.ins = null; S.sel = null; markSel(); renderPanel(); setMode(S.mode==='phone' ? 'edit' : 'phone'); return; }
-    var cur = (S.sheet==='side' && S.src===k) || (k==='add' && S.sheet==='panel' && S.pmode==='palette');
-    if(cur){ closeSheet(); return; }
-    openSheet(k==='add' ? 'palette' : k);
-  });
-  $('bf-menu').addEventListener('click', function(e){
-    var b = e.target.closest('[data-mm]'); if(!b || !doc) return; var k = b.dataset.mm;
-    if(k==='tpl'){ openSheet('templates'); return; }
-    if(k==='savetpl'){ closeSheet(); $('bf-save-tpl').click(); return; }
-    if(k==='del'){ var id = doc.id; closeSheet(); deleteDoc(id); if(!briefings.some(function(x){ return x.id===id; })) leaveEditor(); }
-  });
-  var onMQ = function(){ if(!MOB()){ S.sheet = null; S.ins = null; } renderAll(); };
-  if(MQ){ if(MQ.addEventListener) MQ.addEventListener('change', onMQ); else if(MQ.addListener) MQ.addListener(onMQ); }
 }
 function etBlock(el){ var be = el.closest('.bf-blk'), f = be ? findBlock(be.dataset.id) : null; return f ? f.b : null; }
 function etRead(el){
@@ -5839,22 +5699,18 @@ function docAct(a){
   if(act==='lay-toggle'){ var open = rowEl.classList.contains('lay-open'); document.querySelectorAll('#bf-doc .bf-row.lay-open').forEach(function(r){ r.classList.remove('lay-open'); }); if(!open) rowEl.classList.add('lay-open'); return; }
   if(act==='row-layout'){ setLayout(row, a.dataset.l); commit(); renderAll(); return; }
   if(act==='row-dup'){ doc.rows.splice(doc.rows.indexOf(row)+1, 0, reId(clone(row))); commit(); renderAll(); return; }
-  if(act==='row-del'){ doc.rows.splice(doc.rows.indexOf(row), 1); checkSel(); commit(); renderAll(); toast('Rangée supprimée'+(MOB() ? '' : ', Ctrl+Z pour annuler')); return; }
-  if(act==='add-row'){ if(MOB()){ S.sel = null; S.ins = {kind:'gap', i:doc.rows.length}; openSheet('palette'); return; } doc.rows.push(R('1')); commit(); renderAll(); var cv = $('bf-canvas'); cv.scrollTop = cv.scrollHeight; return; }
-  if(act==='blk-set'){ S.sel = a.closest('.bf-blk').dataset.id; markSel(); openSheet('settings'); return; }
+  if(act==='row-del'){ doc.rows.splice(doc.rows.indexOf(row), 1); checkSel(); commit(); renderAll(); toast('Rangée supprimée, Ctrl+Z pour annuler'); return; }
+  if(act==='add-row'){ doc.rows.push(R('1')); commit(); renderAll(); var cv = $('bf-canvas'); cv.scrollTop = cv.scrollHeight; return; }
   if(act==='blk-dup' || act==='blk-del'){ S.sel = a.closest('.bf-blk').dataset.id; blockAct(act); }
 }
 function blockAct(act){
   var f = findBlock(S.sel); if(!f) return;
-  if(act==='blk-del'){ f.row.slots[f.i] = null; removeRowIfVoid(f.row); S.sel = null; commit(); renderAll(); toast(TYPES[f.b.type].name+' supprimé'+(MOB() ? '' : ', Ctrl+Z pour annuler')); }
+  if(act==='blk-del'){ f.row.slots[f.i] = null; removeRowIfVoid(f.row); S.sel = null; commit(); renderAll(); toast(TYPES[f.b.type].name+' supprimé, Ctrl+Z pour annuler'); }
   if(act==='blk-dup'){ var cp = clone(f.b); cp.id = nid('b'); doc.rows.splice(f.r+1, 0, R('1', cp)); S.sel = cp.id; commit(); renderAll(); }
 }
 function applyTemplate(rows){
   if(!doc) return;
-  var mob = MOB();
-  if(mob && !confirm('Remplacer la structure du document par ce gabarit ? Le client, le parcours et la date restent.')) return;
-  doc.rows = rows; S.sel = null; if(mob){ S.sheet = null; S.ins = null; } commit(); renderAll(); toast(mob ? 'Gabarit appliqué' : 'Gabarit appliqué, Ctrl+Z pour revenir');
-  if(mob) $('bf-canvas').scrollTop = 0;
+  doc.rows = rows; S.sel = null; commit(); renderAll(); toast('Gabarit appliqué, Ctrl+Z pour revenir');
 }
 
 /* ---------- point d'entree (appele par switchView) ---------- */
@@ -5864,7 +5720,7 @@ window.bfDocsFor = function(cid){
     return {id:b.id, title:b.title||'Briefing', when:(b.date ? fdate(b.date) : 'Sans date')+(b.updatedAt ? ', modifié le '+new Date(b.updatedAt).toLocaleDateString('fr-FR') : '')};
   });
 };
-window.bfOpenDoc = function(id){ S.src = 'briefings'; S.mode = 'edit'; openDoc(id); if(MOB()) enterEditor(); };
+window.bfOpenDoc = function(id){ S.src = 'briefings'; S.mode = 'edit'; openDoc(id); };
 window.bfNewDocFor = function(cid){ openModal(); M.client = cid; renderModal(); };
 window.initPlanning = function(){
   if(!S.inited){
