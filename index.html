@@ -7,9 +7,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Spoties">
 <meta name="theme-color" content="#0e0f12">
-<link rel="manifest" href="manifest.json?v=1.31">
-<link rel="apple-touch-icon" href="icon-180.png?v=1.31">
-<link rel="icon" type="image/png" href="icon-192.png?v=1.31">
+<link rel="manifest" href="manifest.json?v=1.32">
+<link rel="apple-touch-icon" href="icon-180.png?v=1.32">
+<link rel="icon" type="image/png" href="icon-192.png?v=1.32">
 <title>Spoties</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -907,8 +907,8 @@ nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-
 /* blocs */
 .bf-h{font-size:18px;font-weight:700;margin:0 0 14px;letter-spacing:-.005em;color:var(--d-text)}
 .bf-cover-top{display:flex;justify-content:space-between;gap:12px;font-family:'Space Mono',monospace;font-size:12px}
-.bf-cover-top span:first-child{color:var(--d-accent)}
-.bf-cover-top span:last-child{color:var(--d-mute)}
+.bf-cover-top .bf-kick{color:var(--d-accent)}
+.bf-cover-top .bf-dos{color:var(--d-mute);margin-left:auto}
 .bf-cover-main{display:flex;gap:22px;align-items:center;margin-top:22px}
 .bf-cav{width:86px;height:86px;border-radius:50%;flex:0 0 auto;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:26px;color:#fff;box-shadow:0 0 0 3px var(--d-bg),0 0 0 5px var(--car);overflow:hidden;background:var(--d-panel)}
 .bf-cav img,.bf-cphoto img{width:100%;height:100%;object-fit:cover;display:block}
@@ -972,6 +972,20 @@ nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-
 .bf-photos[data-l="m"] img:first-child{grid-column:span 2;grid-row:span 2;height:100%}
 .bf-pdrop{border:1.5px dashed var(--d-line);border-radius:10px;padding:30px 12px;text-align:center;color:var(--d-mute);font-size:13px;line-height:1.5}
 .bf-pcap{font-size:12.5px;color:var(--d-mute);margin:9px 0 0}
+/* textes modifiables dans les blocs */
+.bf-et{outline:none;white-space:pre-wrap}
+.bf-m-edit .bf-et{cursor:text;border-radius:4px;transition:background .12s,box-shadow .12s}
+.bf-m-edit .bf-et:hover{background:rgba(232,87,26,.07)}
+.bf-m-edit .bf-et:focus{background:rgba(232,87,26,.1);box-shadow:0 0 0 1px rgba(232,87,26,.55)}
+.bf-m-edit .bf-et:not(li):not(ul):empty::before{content:attr(data-ph);color:var(--d-mute);opacity:.75}
+.bf-m-edit span.bf-et:empty{display:inline-block;min-width:4ch}
+.bf-m-edit .bf-check li.bf-et:empty{min-height:1.45em}
+.bf-bnote{display:block;margin:12px 0 0;font-size:13px;color:var(--d-dim);line-height:1.5}
+.bf-m-edit .bf-et.opt:empty{display:none}
+.bf-m-edit .bf-blk:hover .bf-et.opt:empty,.bf-m-edit .bf-blk.sel .bf-et.opt:empty{display:block}
+.bf-m-phone .bf-et:empty,.bf-m-a4 .bf-et:empty{display:none!important}
+.bf-addli{background:none;border:1px dashed var(--d-line);color:var(--d-mute);border-radius:8px;padding:7px 12px;margin-top:10px;font-family:'Inter',sans-serif;font-size:12px;cursor:pointer}
+.bf-addli:hover{color:var(--d-accent);border-color:var(--d-accent)}
 .bf-txt{outline:none;font-size:14.5px;line-height:1.6;color:var(--d-dim);min-height:1.6em;white-space:pre-wrap}
 .bf-txt:empty::before{content:attr(data-ph);color:var(--d-mute)}
 .bf-m-phone .bf-txt:empty,.bf-m-a4 .bf-txt:empty{display:none}
@@ -1092,13 +1106,13 @@ select.bf-field{appearance:none;-webkit-appearance:none;background-image:linear-
 </head>
 <body>
 <div id="splash">
-  <img id="splash-logo" src="icon-512.png?v=1.31" alt="Spoties">
-  <div id="splash-credit">Créé par 6flt photographie et Claude<br><span style="opacity:.6">v1.31</span></div>
+  <img id="splash-logo" src="icon-512.png?v=1.32" alt="Spoties">
+  <div id="splash-credit">Créé par 6flt photographie et Claude<br><span style="opacity:.6">v1.32</span></div>
 </div>
 
 <div id="login-screen">
   <div class="login-box">
-    <img src="icon-192.png?v=1.31" alt="Spoties" class="login-logo">
+    <img src="icon-192.png?v=1.32" alt="Spoties" class="login-logo">
     <h1 class="login-title">Spoties</h1>
     <p class="login-sub" id="login-sub">Connexion</p>
     <input type="email" id="login-email" class="login-input" placeholder="Email" autocomplete="email">
@@ -1113,7 +1127,7 @@ select.bf-field{appearance:none;-webkit-appearance:none;background-image:linear-
 </div>
 
 <nav>
-  <button type="button" class="nav-logo" id="nav-logo" onclick="refreshApp()" title="Actualiser l'app" aria-label="Actualiser l'app"><img src="icon-192.png?v=1.31" alt="Spoties" class="nav-logo-img"></button>
+  <button type="button" class="nav-logo" id="nav-logo" onclick="refreshApp()" title="Actualiser l'app" aria-label="Actualiser l'app"><img src="icon-192.png?v=1.32" alt="Spoties" class="nav-logo-img"></button>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="switchView('map')">Carte</button>
     <button class="nav-tab" onclick="switchView('gallery')">Spots</button>
@@ -4691,32 +4705,62 @@ function undo(){ if(HP>0){ HP--; doc = JSON.parse(HIST[HP]); checkSel(); renderA
 function redo(){ if(HP<HIST.length-1){ HP++; doc = JSON.parse(HIST[HP]); checkSel(); renderAll(); scheduleSave(); } }
 function checkSel(){ if(S.sel && !findBlock(S.sel)) S.sel = null; }
 
+/* ---------- textes modifiables ---------- */
+var TERMS_DEF = 'Livraison : galerie privée en ligne sous 5 à 7 jours\nDroits : usage personnel et réseaux sociaux inclus, usage commercial sur devis\nAnnulation sans frais jusqu\'à 48h avant, l\'acompte reste dû passé ce délai';
+var TX_TYPES = ['cover','client','rdv','map','spots','timing','checklist','photos','pricing','contact'];
+function fillTok(raw, b){
+  var c = doc ? getClient(doc.clientId) : null, miss = false;
+  var t = {prenom:firstName(c), nom:c ? (c.name||'') : '', voiture:carOf(c), date:doc && doc.date ? fdate(doc.date) : '', lieu:doc ? (doc.place||'') : '', ref:doc ? (doc.ref||'') : '', insta:b && b.props ? String(b.props.handle||'').replace(/^@/, '') : ''};
+  var out = String(raw==null ? '' : raw).replace(/\{(pr[eé]nom|nom|voiture|date|lieu|ref|insta)\}/gi, function(m, k){ k = k.toLowerCase().replace('é','e'); var v = t[k]||''; if(!v) miss = true; return v; });
+  if(miss) out = out.replace(/[ \t]+([.,;:!?])/g, '$1').replace(/,([.!?])/g, '$1').replace(/([.!?])[.,]+/g, '$1').replace(/^[\s.,;:]+/, '').replace(/[ \t]{2,}/g, ' ');
+  return out;
+}
+function ET(b, key, def, tag, cls, o){
+  o = o||{};
+  var p = b.props, raw = o.prop ? (p[o.prop]||'') : (p.tx && p.tx[key]!=null ? p.tx[key] : def);
+  var shown = fillTok(raw, b), edit = S.mode==='edit';
+  if(!edit && !shown.trim()) return '';
+  var inner = o.lines ? shown.split('\n').filter(function(x){ return x.trim(); }).map(function(x){ return '<li>'+esc(x)+'</li>'; }).join('') : esc(shown);
+  if(o.lines && edit && !inner) inner = '<li></li>';
+  var at = ' class="'+(cls ? cls+' ' : '')+(o.opt ? 'opt ' : '')+'bf-et"';
+  if(edit) at += ' contenteditable="true"'+(o.prop ? ' data-prop="'+esc(o.prop)+'"' : ' data-tx="'+esc(key)+'" data-def="'+esc(def)+'"')+
+    ' data-ph="'+esc(o.ph || fillTok(def, b) || 'Écris ici…')+'"'+(o.ml ? ' data-ml="1"' : '')+(o.lines ? ' data-lines="1"' : '');
+  return '<'+tag+at+(o.extra||'')+'>'+inner+'</'+tag+'>';
+}
+function tplProps(b){
+  var d = defaults(b.type), tx = {};
+  Object.keys(b.props.tx||{}).forEach(function(k){ if(k.indexOf('sd_')!==0) tx[k] = b.props.tx[k]; });
+  if(Object.keys(tx).length) d.tx = tx;
+  return d;
+}
+function bnote(b){ return ET(b, 'note', '', 'p', 'bf-bnote', {opt:1, ml:1, ph:'Ajouter une note…'}); }
+
 /* ---------- rendu des blocs ---------- */
 function blockBody(b){
   var c = getClient(doc.clientId), p = b.props, sc, h, list, i;
   switch(b.type){
     case 'cover':
       var car = carOf(c);
-      return '<div class="bf-cover"><div class="bf-cover-top"><span>Briefing shooting</span><span>Dossier '+esc(doc.ref||'')+'</span></div>'+
+      return '<div class="bf-cover"><div class="bf-cover-top">'+ET(b, 'kicker', 'Briefing shooting', 'span', 'bf-kick')+'<span class="bf-dos">Dossier '+esc(doc.ref||'')+'</span></div>'+
         '<div class="bf-cover-main"><div class="bf-cav" style="background:'+(c && c.photo ? 'var(--d-panel)' : avatarBg(c))+'">'+photoOrInitials(c)+'</div>'+
-        '<div><h1>Prêts pour la séance'+(c ? ', '+esc(firstName(c)) : '')+'.</h1><p>'+(car ? esc(car)+'. ' : '')+fdate(doc.date)+(doc.place ? ', '+esc(doc.place) : '')+'. Tout ce qu\'il faut savoir avant le jour J est ici.</p></div></div>'+
+        '<div>'+ET(b, 'title', 'Prêts pour la séance, {prenom}.', 'h1')+ET(b, 'intro', '{voiture}. {date}, {lieu}. Tout ce qu\'il faut savoir avant le jour J est ici.', 'p', '', {ml:1})+'</div></div>'+
         (car ? '<div class="bf-carbar"><i></i><span>'+esc(car)+'</span></div>' : '<div class="bf-carbar"><i></i></div>')+'</div>';
     case 'client':
       if(!c) return '<div class="bf-empty bf-eo" style="min-height:90px">Glisse un client ici ou choisis-le dans les réglages</div>';
       var cars = (c.cars && c.cars.length ? c.cars : (c.car ? [{model:c.car, color:''}] : [])).filter(function(v){ return v && (v.model||v.color); });
-      h = '<h2 class="bf-h">Ta fiche</h2><div class="bf-client"><div class="bf-cphoto" style="background:'+avatarBg(c)+'">'+photoOrInitials(c)+'</div><div><div class="bf-cname">'+esc(c.name)+'</div>'+
+      h = ET(b, 'h', 'Ta fiche', 'h2', 'bf-h')+'<div class="bf-client"><div class="bf-cphoto" style="background:'+avatarBg(c)+'">'+photoOrInitials(c)+'</div><div><div class="bf-cname">'+esc(c.name)+'</div>'+
         cars.map(function(v){ return '<div class="bf-ccar">'+(v.color ? '<span class="bf-sw" style="background:'+esc(v.color)+'"></span>' : '')+esc(v.model||'Voiture')+'</div>'; }).join('')+'</div></div>';
       var facts = '';
       if(p.showOffer && c.offre) facts += '<dt>Formule</dt><dd>Pack '+esc(OFFRE[c.offre]||c.offre)+'</dd>';
       if(p.showContact && c.contact) facts += '<dt>Contact</dt><dd>'+esc(c.contact)+'</dd>';
-      return h + (facts ? '<dl class="bf-facts">'+facts+'</dl>' : '');
+      return h + (facts ? '<dl class="bf-facts">'+facts+'</dl>' : '') + bnote(b);
     case 'rdv':
       sc = schedule(); list = rs();
       var place = doc.place || (list[0] ? list[0].name : '');
       var q = list[0] ? (+list[0].lat)+','+(+list[0].lng) : encodeURIComponent(place);
-      h = '<h2 class="bf-h">Rendez-vous</h2><dl class="bf-facts"><dt>Date</dt><dd>'+fdate(doc.date)+'</dd><dt>Heure</dt><dd>'+rdvTime(sc)+'</dd>'+
+      h = ET(b, 'h', 'Rendez-vous', 'h2', 'bf-h')+'<dl class="bf-facts"><dt>Date</dt><dd>'+fdate(doc.date)+'</dd><dt>Heure</dt><dd>'+rdvTime(sc)+'</dd>'+
         '<dt>Lieu</dt><dd>'+(place ? esc(place) : 'À définir')+'</dd><dt>Durée</dt><dd>'+(sc ? 'Environ '+fmt(sc.fin-sc.accueil) : 'À définir')+'</dd></dl>';
-      if(q) h += '<a class="bf-dbtn" href="https://www.google.com/maps/dir/?api=1&destination='+q+'" target="_blank" rel="noopener">Ouvrir l\'itinéraire</a>';
+      if(q) h += ET(b, 'btn', 'Ouvrir l\'itinéraire', 'a', 'bf-dbtn', {extra:' href="https://www.google.com/maps/dir/?api=1&destination='+q+'" target="_blank" rel="noopener"'});
       if(p.weather){
         var wx = weather(sc);
         if(wx.state==='ok') h += '<div class="bf-wx">'+esc(wx.text)+' Prévision OpenWeatherMap.</div>';
@@ -4724,44 +4768,49 @@ function blockBody(b){
         else if(wx.state==='far') h += '<div class="bf-wx bf-eo">La météo s\'affichera automatiquement 5 jours avant la séance.</div>';
         else if(wx.state==='pending') h += '<div class="bf-wx bf-eo">Chargement de la météo…</div>';
       }
-      return h;
+      return h + bnote(b);
     case 'map':
       list = rs();
-      if(!list.length) return '<h2 class="bf-h">Le parcours</h2><div class="bf-map"><div class="bf-muted">Glisse des spots ici pour tracer le parcours</div></div>';
+      var hMap = ET(b, 'h', 'Le parcours', 'h2', 'bf-h');
+      if(!list.length) return hMap+'<div class="bf-map"><div class="bf-muted">Glisse des spots ici pour tracer le parcours</div></div>';
       var L = legs(list), tot = L.reduce(function(a,x){ return a+x; }, 0);
-      return '<h2 class="bf-h">Le parcours</h2><div class="bf-map"><img src="'+esc(mapUrl(list, p.route, S.mode==='a4'))+'" alt="" draggable="false" onerror="this.parentNode.classList.add(\'err\')"></div>'+
-        '<div class="bf-mapcap"><span>'+list.length+' spot'+(list.length>1?'s':'')+(list.length>1 ? ', '+tot+' min de route au total' : '')+'</span><span>'+(doc.timeMode==='sunset'?'Dans l\'ordre du coucher de soleil':doc.timeMode==='sunrise'?'Dans l\'ordre du lever du soleil':'Dans l\'ordre de passage')+'</span></div>';
+      return hMap+'<div class="bf-map"><img src="'+esc(mapUrl(list, p.route, S.mode==='a4'))+'" alt="" draggable="false" onerror="this.parentNode.classList.add(\'err\')"></div>'+
+        '<div class="bf-mapcap"><span>'+list.length+' spot'+(list.length>1?'s':'')+(list.length>1 ? ', '+tot+' min de route au total' : '')+'</span><span>'+(doc.timeMode==='sunset'?'Dans l\'ordre du coucher de soleil':doc.timeMode==='sunrise'?'Dans l\'ordre du lever du soleil':'Dans l\'ordre de passage')+'</span></div>'+bnote(b);
     case 'spots':
       list = rs();
-      if(!list.length) return '<h2 class="bf-h">Les spots</h2><div class="bf-muted">Aucun spot dans le parcours</div>';
+      var hSp = ET(b, 'h', 'Les spots', 'h2', 'bf-h');
+      if(!list.length) return hSp+'<div class="bf-muted">Aucun spot dans le parcours</div>';
       sc = schedule();
-      return '<h2 class="bf-h">Les spots</h2>'+list.map(function(s, k){
-        var note = (doc.spotNotes && doc.spotNotes[s.id]) || (sc ? lightPhase(sc, sc.starts[k]) : '');
+      return hSp+list.map(function(s, k){
+        var auto = sc ? lightPhase(sc, sc.starts[k]) : '', note = (doc.spotNotes && doc.spotNotes[s.id]) || auto;
+        var noteH = S.mode==='edit' ? '<p class="bf-snote bf-et" contenteditable="true" data-sn="'+esc(s.id)+'" data-def="'+esc(auto)+'" data-ml="1" data-ph="Note pour le client">'+esc(note)+'</p>' : (note ? '<p class="bf-snote">'+esc(note)+'</p>' : '');
         var tags = [s.type, s.access].filter(Boolean);
-        return '<div class="bf-spot"><div class="bf-simg">'+spotImg(s)+'<b>'+(k+1)+'</b></div><div><p class="bf-sname">'+esc(s.name)+'</p>'+(note ? '<p class="bf-snote">'+esc(note)+'</p>' : '')+
+        return '<div class="bf-spot"><div class="bf-simg">'+spotImg(s)+'<b>'+(k+1)+'</b></div><div><p class="bf-sname">'+esc(s.name)+'</p>'+noteH+
           (tags.length ? '<div class="bf-tags">'+tags.map(function(t){ return '<span>'+esc(t)+'</span>'; }).join('')+'</div>' : '')+
           (p.travel && k>0 && sc ? '<p class="bf-sdist">'+sc.legs[k-1]+' min depuis le spot '+k+'</p>' : '')+'</div></div>';
-      }).join('');
+      }).join('')+bnote(b);
     case 'timing':
       sc = schedule();
-      h = '<div class="bf-tlhead"><h2 class="bf-h">Le timing lumière</h2><span class="bf-sun">'+sunChip()+'</span></div>';
+      h = '<div class="bf-tlhead">'+ET(b, 'h', 'Le timing lumière', 'h2', 'bf-h')+'<span class="bf-sun">'+sunChip()+'</span></div>';
       if(!sc) return h + '<div class="bf-muted">Ajoute des spots au parcours pour calculer le timing</div>';
-      h += '<div class="bf-tline"><div class="bf-tl"><p class="bf-tlt">'+fmt(sc.accueil)+'</p><h3>Accueil</h3><p class="bf-tld">Briefing rapide et point sur la voiture ensemble.</p></div>';
+      h += '<div class="bf-tline"><div class="bf-tl"><p class="bf-tlt">'+fmt(sc.accueil)+'</p>'+ET(b, 'a_t', 'Accueil', 'h3')+ET(b, 'a_d', 'Briefing rapide et point sur la voiture ensemble.', 'p', 'bf-tld', {ml:1})+'</div>';
       sc.list.forEach(function(s, k){
         if(k>0) h += '<p class="bf-trip">'+sc.legs[k-1]+' min de route</p>';
-        h += '<div class="bf-tl"><p class="bf-tlt">'+fmt(sc.starts[k])+'</p><h3>Spot '+(k+1)+', '+esc(s.name)+'</h3><p class="bf-tld">'+lightPhase(sc, sc.starts[k])+'</p></div>';
+        h += '<div class="bf-tl"><p class="bf-tlt">'+fmt(sc.starts[k])+'</p><h3>Spot '+(k+1)+', '+esc(s.name)+'</h3>'+ET(b, 'sd_'+s.id, lightPhase(sc, sc.starts[k]), 'p', 'bf-tld', {ml:1})+'</div>';
       });
-      return h + '<div class="bf-tl"><p class="bf-tlt">'+fmt(sc.fin)+'</p><h3>Fin de séance</h3><p class="bf-tld">Debrief et prochaines étapes pour la livraison.</p></div></div>';
+      return h + '<div class="bf-tl"><p class="bf-tlt">'+fmt(sc.fin)+'</p>'+ET(b, 'f_t', 'Fin de séance', 'h3')+ET(b, 'f_d', 'Debrief et prochaines étapes pour la livraison.', 'p', 'bf-tld', {ml:1})+'</div></div>'+bnote(b);
     case 'checklist':
-      var on = (p.items||[]).filter(function(x){ return x.on; });
-      return '<h2 class="bf-h">Préparer la voiture</h2>'+(on.length ? '<ul class="bf-check">'+on.map(function(x){ return '<li>'+esc(x.t)+'</li>'; }).join('')+'</ul>' : '<div class="bf-muted bf-eo">Aucun élément coché</div>');
+      var lis = [];
+      (p.items||[]).forEach(function(x, i){ if(!x.on) return; lis.push(S.mode==='edit' ? '<li class="bf-et" contenteditable="true" data-ci="'+i+'">'+esc(x.t)+'</li>' : '<li>'+esc(x.t)+'</li>'); });
+      return ET(b, 'h', 'Préparer la voiture', 'h2', 'bf-h')+(lis.length ? '<ul class="bf-check">'+lis.join('')+'</ul>' : '<div class="bf-muted bf-eo">Aucun élément coché</div>')+
+        (S.mode==='edit' ? '<button class="bf-addli bf-eo" data-act="chk-add">+ Ajouter un élément</button>' : '')+bnote(b);
     case 'photos':
       if(!p.imgs.length) return '<div class="bf-pdrop bf-eo">Glisse des photos ici<br>depuis ton ordi ou la bibliothèque</div>';
-      return '<div class="bf-photos" data-l="'+esc(p.layout)+'">'+p.imgs.map(function(src){ return '<img src="'+esc(src)+'" alt="" draggable="false">'; }).join('')+'</div>'+(p.caption ? '<p class="bf-pcap">'+esc(p.caption)+'</p>' : '');
+      return '<div class="bf-photos" data-l="'+esc(p.layout)+'">'+p.imgs.map(function(src){ return '<img src="'+esc(src)+'" alt="" draggable="false">'; }).join('')+'</div>'+ET(b, 'caption', '', 'p', 'bf-pcap', {prop:'caption', opt:1, ph:'Ajouter une légende…'});
     case 'text':
       return '<div class="bf-txt '+esc(p.style)+'" data-ph="'+esc(p.ph||'Écris ici…')+'"'+(S.mode==='edit' ? ' contenteditable="true"' : '')+'>'+esc(p.html||'')+'</div>';
     case 'pricing':
-      h = '<h2 class="bf-h">Formule et conditions</h2>';
+      h = ET(b, 'h', 'Formule et conditions', 'h2', 'bf-h');
       var off = c && c.offre;
       if(!off) return h + '<div class="bf-muted bf-eo">Choisis la formule du client dans les réglages</div>';
       var pk = PACKS[off] || {}, price = pk.price!=='' && pk.price!=null ? +pk.price : null, dep = p.deposit!=='' && p.deposit!=null ? +p.deposit : null;
@@ -4769,11 +4818,11 @@ function blockBody(b){
         '<div><span>Prix</span><span>'+(price!=null ? price+' €' : 'À définir')+'</span></div>'+
         (dep ? '<div><span>Acompte versé</span><span>'+dep+' €</span></div>' : '')+
         '<div><span>'+(dep ? 'Solde à régler le jour J' : 'À régler le jour J')+'</span><span>'+(price!=null ? Math.max(0, price-(dep||0))+' €' : 'À définir')+'</span></div></div>';
-      if(p.terms) h += '<ul class="bf-terms"><li>Livraison : galerie privée en ligne sous 5 à 7 jours</li><li>Droits : usage personnel et réseaux sociaux inclus, usage commercial sur devis</li><li>Annulation sans frais jusqu\'à 48h avant, l\'acompte reste dû passé ce délai</li></ul>';
-      return h;
+      if(p.terms) h += ET(b, 'terms', TERMS_DEF, 'ul', 'bf-terms', {lines:1});
+      return h + bnote(b);
     case 'contact':
       var handle = String(p.handle||'').replace(/^@/, '');
-      return '<div class="bf-contact"><a class="bf-cta" href="https://instagram.com/'+esc(handle)+'" target="_blank" rel="noopener">Une question avant le jour J ? Écris sur Instagram, @'+esc(handle)+'</a><span class="bf-sign">6flt Photographies, Grand Est et Luxembourg</span></div>';
+      return '<div class="bf-contact">'+ET(b, 'cta', 'Une question avant le jour J ? Écris sur Instagram, @{insta}', 'a', 'bf-cta', {extra:' href="https://instagram.com/'+esc(handle)+'" target="_blank" rel="noopener"'})+ET(b, 'sign', '6flt Photographies, Grand Est et Luxembourg', 'span', 'bf-sign')+'</div>';
   }
   return '';
 }
@@ -4786,7 +4835,7 @@ function layoutIcon(l){
 /* ---------- rendu du document ---------- */
 var rsT = null, rsPending = false;
 function renderSoon(){ if(!S.inited || !inView()) return; if(rsT) return; rsT = requestAnimationFrame(function(){ rsT = null; if(isEditingText()){ rsPending = true; return; } renderDoc(); if(S.sel) renderPanel(); }); }
-function isEditingText(){ var a = document.activeElement; return a && a.closest && a.closest('#bf-doc .bf-txt'); }
+function isEditingText(){ var a = document.activeElement; return a && a.closest && a.closest('#bf-doc .bf-txt, #bf-doc .bf-et'); }
 function renderDoc(){
   var d = $('bf-doc'), shell = $('bf-shell'), lbl = $('bf-shell-label');
   if(!doc){
@@ -4983,6 +5032,8 @@ function settingsHTML(b){
     case 'contact':
       h += '<div class="bf-set-label">Compte Instagram</div><input class="bf-field" data-act="prop" data-key="handle" value="'+esc(p.handle||'')+'">'; break;
   }
+  if(TX_TYPES.indexOf(b.type)>-1) h += '<p class="bf-set-hint">Clique sur un texte du bloc pour le modifier. Un texte vidé est masqué chez le client. Variables : {prenom} {nom} {voiture} {date} {lieu}</p>'+
+    (p.tx && Object.keys(p.tx).length ? '<button class="bf-sbtn" data-act="tx-reset">Rétablir les textes d\'origine</button>' : '');
   h += '<div class="bf-sact"><button class="bf-sbtn" data-act="blk-dup">Dupliquer</button><button class="bf-sbtn danger" data-act="blk-del">Supprimer</button></div>';
   return h;
 }
@@ -5222,18 +5273,40 @@ function bind(){
     if(!e.target.closest('.bf-rrail')) document.querySelectorAll('#bf-doc .bf-row.lay-open').forEach(function(r){ r.classList.remove('lay-open'); });
     if(!e.target.closest('.bf-blk') && !e.target.closest('button') && !e.target.closest('.bf-rrail') && S.sel) select(null);
   });
+  docEl.addEventListener('focusin', function(e){
+    var el = e.target.closest && e.target.closest('.bf-et'); if(!el || el.dataset.lines) return;
+    var b = etBlock(el); if(!b) return;
+    var raw = etRaw(el, b); if(raw!==etRead(el)){ el.textContent = raw; etCaretEnd(el); }
+  });
+  docEl.addEventListener('keydown', function(e){
+    var el = e.target.closest && e.target.closest('.bf-et'); if(!el) return;
+    if(e.key==='Escape'){ e.preventDefault(); el.blur(); return; }
+    if(e.key!=='Enter' || el.dataset.lines) return;
+    e.preventDefault();
+    if(el.dataset.ci!=null){ if(!etRead(el).trim()){ el.blur(); return; } var b = etBlock(el), i = +el.dataset.ci; if(!b) return; etWrite(el, b, etRead(el)); b.props.items.splice(i+1, 0, {t:'', on:true}); commit(); renderDoc(); focusEt(b.id, '[data-ci="'+(i+1)+'"]'); return; }
+    if(el.dataset.ml) document.execCommand('insertLineBreak'); else el.blur();
+  });
   docEl.addEventListener('input', function(e){
+    var et = e.target.closest('.bf-et');
+    if(et){ var eb = etBlock(et); if(eb){ etWrite(et, eb, etRead(et)); scheduleSave(); } return; }
     var tx = e.target.closest('.bf-txt'); if(!tx) return;
     var f = findBlock(tx.closest('.bf-blk').dataset.id); if(f){ f.b.props.html = (tx.innerText!=null ? tx.innerText : tx.textContent).replace(/\n$/, ''); scheduleSave(); }
   });
   docEl.addEventListener('paste', function(e){
-    if(!e.target.closest('.bf-txt')) return;
+    if(!e.target.closest('.bf-txt, .bf-et')) return;
     e.preventDefault();
     var txt = (e.clipboardData || window.clipboardData).getData('text/plain');
     document.execCommand('insertText', false, txt);
   });
   docEl.addEventListener('focusout', function(e){
-    if(e.target.closest && e.target.closest('.bf-txt')){ commit(); if(rsPending){ rsPending = false; renderSoon(); } }
+    if(e.target.closest && e.target.closest('.bf-txt')){ commit(); if(rsPending){ rsPending = false; renderSoon(); } return; }
+    var el = e.target.closest && e.target.closest('.bf-et'); if(!el || !doc || !el.isConnected) return;
+    var b = etBlock(el); if(!b) return;
+    if(el.dataset.ci!=null && !etRead(el).trim()){ b.props.items.splice(+el.dataset.ci, 1); commit(); rsPending = false; renderSoon(); return; }
+    if(!el.dataset.lines){ var raw = etRaw(el, b), shown = fillTok(raw, b); if(el.dataset.sn!=null && !shown.trim()) shown = el.dataset.def||''; if(el.textContent!==shown) el.textContent = shown; }
+    if(JSON.stringify(doc)!==HIST[HP]) commit();
+    if(S.sel && !panel.contains(e.relatedTarget)) renderPanel();
+    if(rsPending){ rsPending = false; renderSoon(); }
   });
 
   panel.addEventListener('click', function(e){
@@ -5264,6 +5337,7 @@ function bind(){
     else if(act==='photo-del'){ f.b.props.imgs.splice(i, 1); }
     else if(act==='chk-del'){ e.preventDefault(); f.b.props.items.splice(i, 1); }
     else if(act==='photo-import'){ $('bf-file').click(); return; }
+    else if(act==='tx-reset'){ delete f.b.props.tx; toast('Textes d\'origine rétablis'); }
     else return;
     commit(); renderAll();
   });
@@ -5323,7 +5397,7 @@ function bind(){
   $('bf-save-tpl').addEventListener('click', function(){
     if(!doc) return;
     var name = prompt('Nom du gabarit', 'Gabarit '+(CUSTOM.length+1)); if(name===null) return;
-    var rows = doc.rows.map(function(r){ var c = clone(r); c.slots = c.slots.map(function(b){ return b ? {id:b.id, type:b.type, props:b.type==='text' ? Object.assign(defaults('text'), {style:b.props.style, ph:b.props.ph}) : b.type==='checklist' ? clone(b.props) : defaults(b.type)} : null; }); return c; });
+    var rows = doc.rows.map(function(r){ var c = clone(r); c.slots = c.slots.map(function(b){ return b ? {id:b.id, type:b.type, props:b.type==='text' ? Object.assign(defaults('text'), {style:b.props.style, ph:b.props.ph}) : b.type==='checklist' ? clone(b.props) : tplProps(b)} : null; }); return c; });
     CUSTOM.push({name:name.trim()||('Gabarit '+(CUSTOM.length+1)), rows:rows}); lsSet(LS.tpl, CUSTOM);
     S.tab = 'gabarits'; S.sel = null; markSel(); renderPanel(); toast('Structure enregistrée dans Mes gabarits');
   });
@@ -5372,7 +5446,31 @@ function bind(){
   setZoom(S.zoom);
   window.addEventListener('beforeunload', flushSave);
 }
+function etBlock(el){ var be = el.closest('.bf-blk'), f = be ? findBlock(be.dataset.id) : null; return f ? f.b : null; }
+function etRead(el){
+  var v = String(el.innerText!=null ? el.innerText : el.textContent).replace(/\u00a0/g, ' ');
+  if(el.dataset.lines) return v.split('\n').map(function(x){ return x.trim(); }).filter(Boolean).join('\n');
+  return v.replace(/\n+$/, '');
+}
+function etRaw(el, b){
+  var d = el.dataset, p = b.props;
+  if(d.tx!=null) return p.tx && p.tx[d.tx]!=null ? p.tx[d.tx] : (d.def||'');
+  if(d.sn!=null) return (doc.spotNotes && doc.spotNotes[d.sn]) || d.def || '';
+  if(d.ci!=null) return (p.items[+d.ci]||{}).t || '';
+  if(d.prop!=null) return p[d.prop] || '';
+  return etRead(el);
+}
+function etWrite(el, b, v){
+  var d = el.dataset, p = b.props;
+  if(d.tx!=null){ p.tx = p.tx||{}; if(v===(d.def||'')) delete p.tx[d.tx]; else p.tx[d.tx] = v; if(!Object.keys(p.tx).length) delete p.tx; }
+  else if(d.sn!=null){ doc.spotNotes = doc.spotNotes||{}; if(!v.trim() || v===d.def) delete doc.spotNotes[d.sn]; else doc.spotNotes[d.sn] = v; }
+  else if(d.ci!=null){ if(p.items[+d.ci]) p.items[+d.ci].t = v; }
+  else if(d.prop!=null){ p[d.prop] = v; }
+}
+function etCaretEnd(el){ try{ var r = document.createRange(), s = window.getSelection(); r.selectNodeContents(el); r.collapse(false); s.removeAllRanges(); s.addRange(r); }catch(e){} }
+function focusEt(bid, sel){ var n = $('bf-doc').querySelector('.bf-blk[data-id="'+bid+'"] '+sel); if(n){ n.focus(); etCaretEnd(n); } }
 function docAct(a){
+  if(a.dataset.act==='chk-add'){ var cb = etBlock(a); if(!cb) return; cb.props.items = cb.props.items||[]; cb.props.items.push({t:'', on:true}); commit(); renderDoc(); focusEt(cb.id, '[data-ci="'+(cb.props.items.length-1)+'"]'); return; }
   var act = a.dataset.act, rowEl = a.closest('.bf-row'), row = rowEl ? findRow(rowEl.dataset.row) : null;
   if(act==='new-doc'){ openModal(); return; }
   if(act==='lay-toggle'){ var open = rowEl.classList.contains('lay-open'); document.querySelectorAll('#bf-doc .bf-row.lay-open').forEach(function(r){ r.classList.remove('lay-open'); }); if(!open) rowEl.classList.add('lay-open'); return; }
