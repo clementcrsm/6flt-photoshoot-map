@@ -7,9 +7,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Spoties">
 <meta name="theme-color" content="#0e0f12">
-<link rel="manifest" href="manifest.json?v=1.39">
-<link rel="apple-touch-icon" href="icon-180.png?v=1.39">
-<link rel="icon" type="image/png" href="icon-192.png?v=1.39">
+<link rel="manifest" href="manifest.json?v=1.40">
+<link rel="apple-touch-icon" href="icon-180.png?v=1.40">
+<link rel="icon" type="image/png" href="icon-192.png?v=1.40">
 <title>Spoties</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -48,8 +48,8 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:0 24px
 .map-btn{position:absolute;z-index:600;background:var(--surface);border:1px solid var(--border);border-radius:8px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:border-color .15s,color .15s;color:var(--muted)}
 .map-btn:hover,.map-btn.active{border-color:var(--accent);color:var(--accent)}
 /* ---- Filtrage intelligent ---- */
-#btn-discover{top:14px;left:62px;position:absolute}
-#btn-hourly{top:14px;left:110px;position:absolute}
+#btn-discover{position:absolute;top:14px;left:62px}
+#btn-hourly{position:absolute;top:14px;left:110px}
 body.panel-open #btn-discover,body.panel-open #btn-hourly{display:none}
 /* Barre horaire */
 #hourly-bar{position:absolute;left:14px;right:14px;bottom:88px;z-index:650;background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px 18px 16px;box-shadow:0 8px 40px rgba(0,0,0,.6);display:none;flex-direction:column;gap:8px}
@@ -78,11 +78,17 @@ body.panel-open #btn-discover,body.panel-open #btn-hourly{display:none}
 /* Rappel visuel zone de sélection */
 #discover-selecting-hint{position:absolute;top:14px;left:50%;transform:translateX(-50%);z-index:720;background:var(--accent);color:#fff;font-size:12px;font-weight:700;padding:8px 16px;border-radius:20px;box-shadow:0 4px 16px rgba(0,0,0,.5);display:none}
 #discover-selecting-hint.on{display:block}
-#btn-3d{bottom:30px;right:62px}
-#btn-sat{bottom:30px;right:14px}
-#btn-geo{bottom:30px;right:110px}
+/* v1.40 : deux colonnes de boutons, plus de positions eparpillees */
+#btn-3d{position:absolute;bottom:30px;right:62px}
+#btn-sat{position:absolute;bottom:30px;right:14px}
+#btn-geo{position:absolute;bottom:30px;right:110px}
+#map-tools{position:absolute;right:14px;bottom:30px;z-index:600;display:flex;flex-direction:column;gap:8px;transition:right .28s cubic-bezier(.4,0,.2,1)}
+#map-tools-l{position:absolute;left:14px;top:14px;z-index:600;display:flex;flex-direction:column;gap:8px}
+#map-tools .map-btn,#map-tools-l .map-btn{position:static!important;top:auto!important;right:auto!important;bottom:auto!important;left:auto!important;flex:none}
+body.panel-open #map-tools{right:calc(14px + var(--panel) + 14px)}
 #btn-geo.active{border-color:var(--accent);color:var(--accent)}
 #settings-btn{bottom:30px;left:14px;overflow:visible}
+.disc-sm{padding:8px;font-size:12px;font-weight:600}
 
 /* BACKUP */
 #backup-badge{position:absolute;top:-3px;right:-3px;width:9px;height:9px;border-radius:50%;background:var(--accent);display:none;box-shadow:0 0 0 2px var(--surface)}
@@ -97,14 +103,11 @@ body.panel-open #btn-sat{right:calc(14px + var(--panel) + 14px)}
 body.panel-open #btn-geo{right:calc(110px + var(--panel) + 14px)}
 body.panel-open #view-label{right:calc(158px + var(--panel) + 14px)}
 #btn-3d,#btn-sat,#btn-geo,#view-label{transition:right .28s cubic-bezier(.4,0,.2,1)}
-#btn-street{bottom:78px;right:14px;transition:right .28s cubic-bezier(.4,0,.2,1)}
-body.panel-open #btn-street{right:calc(14px + var(--panel) + 14px)}
-#btn-model{bottom:126px;right:14px;transition:right .28s cubic-bezier(.4,0,.2,1)}
-body.panel-open #btn-model{right:calc(14px + var(--panel) + 14px)}
+#btn-street{position:absolute;bottom:78px;right:14px}
+#btn-model{position:absolute;bottom:126px;right:14px}
 #btn-street.active{border-color:var(--accent);color:var(--accent)}
 /* SUN MODE */
-#btn-sun{bottom:78px;right:62px;display:none;transition:right .28s cubic-bezier(.4,0,.2,1)}
-body.panel-open #btn-sun{right:calc(62px + var(--panel) + 14px)}
+#btn-sun{position:absolute;bottom:78px;right:62px;display:none}
 #sun-panel{display:none;position:absolute;z-index:600;background:var(--surface);border:1px solid var(--border);font-family:'Space Mono',monospace}
 #sun-panel.open{display:flex}
 #sun-clock{font-size:15px;color:var(--accent);white-space:nowrap}
@@ -619,7 +622,7 @@ option{background:var(--surface)}
 #toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:10px 20px;font-size:13px;color:var(--text);z-index:9998;opacity:0;transition:all .25s;pointer-events:none;white-space:nowrap}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 /* FILTER */
-#filter-btn{top:14px;left:14px;position:absolute}
+#filter-btn{position:absolute;top:14px;left:14px}
 #filter-dot{position:absolute;top:-3px;right:-3px;width:9px;height:9px;border-radius:50%;background:var(--accent);display:none}
 #filter-dot.on{display:block}
 #filter-panel{position:absolute;top:62px;left:14px;z-index:700;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;width:280px;box-shadow:0 8px 40px rgba(0,0,0,.6);display:none;flex-direction:column;gap:14px;max-height:calc(100vh - 120px);overflow-y:auto}
@@ -863,9 +866,11 @@ nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-
   .nav-add-label{display:none}
   /* recherche : ne plus centrer en largeur fixe, laisser la place au filtre a gauche */
   #search-wrap{left:62px;transform:none;width:auto;right:14px}
-  #filter-btn{top:14px;left:14px}
+
   /* discover/hourly passent sur une 2e ligne pour ne plus chevaucher la recherche */
   #btn-discover{top:62px;left:14px}
+  #btn-hourly{top:62px;left:62px}
+
   #btn-hourly{top:62px;left:62px}
   #discover-panel{top:110px;max-height:calc(100vh - 168px)}
   /* marqueurs spots plus petits pour limiter le chevauchement des pins */
@@ -1266,6 +1271,14 @@ select.bf-field{appearance:none;-webkit-appearance:none;background-image:linear-
 .bf-shstat b{color:var(--text)}
 .bf-shdanger{background:none;border:none;color:#e5534b;font:600 12px 'Inter',sans-serif;cursor:pointer;padding:6px 0;align-self:flex-start}
 /* ===== vue client (lien partage) v1.34 ===== */
+/* v1.40 : panneaux filtres et decouverte plus compacts */
+#filter-panel,#discover-panel{top:62px;left:14px;gap:12px}
+@media(max-width:768px){
+  #filter-panel,#discover-panel{width:calc(100vw - 28px);max-width:340px;padding:15px 16px;gap:10px;max-height:calc(100vh - 230px)}
+  #filter-panel .tag,#discover-panel .tag{padding:5px 11px;font-size:11.5px}
+  #filter-panel .settings-section-title,#discover-panel .settings-section-title{font-size:10px;letter-spacing:.1em}
+  #filter-panel .tag-row{gap:5px}
+}
 /* ===== gel du briefing accepté (v1.39) ===== */
 .bf-shlock{margin:12px 0;padding:11px 13px;border:1px solid #2f6b45;background:rgba(45,158,79,.1);border-radius:11px;display:flex;flex-direction:column;gap:6px}
 .bf-shlock b{font-size:13px;color:#9be0b1}
@@ -1326,13 +1339,13 @@ select.bf-field{appearance:none;-webkit-appearance:none;background-image:linear-
 </head>
 <body>
 <div id="splash">
-  <img id="splash-logo" src="icon-512.png?v=1.39" alt="Spoties">
-  <div id="splash-credit">Créé par 6flt photographie et Claude<br><span style="opacity:.6">v1.39</span></div>
+  <img id="splash-logo" src="icon-512.png?v=1.40" alt="Spoties">
+  <div id="splash-credit">Créé par 6flt photographie et Claude<br><span style="opacity:.6">v1.40</span></div>
 </div>
 
 <div id="login-screen">
   <div class="login-box">
-    <img src="icon-192.png?v=1.39" alt="Spoties" class="login-logo">
+    <img src="icon-192.png?v=1.40" alt="Spoties" class="login-logo">
     <h1 class="login-title">Spoties</h1>
     <p class="login-sub" id="login-sub">Connexion</p>
     <input type="email" id="login-email" class="login-input" placeholder="Email" autocomplete="email">
@@ -1347,7 +1360,7 @@ select.bf-field{appearance:none;-webkit-appearance:none;background-image:linear-
 </div>
 
 <nav>
-  <button type="button" class="nav-logo" id="nav-logo" onclick="refreshApp()" title="Actualiser l'app" aria-label="Actualiser l'app"><img src="icon-192.png?v=1.39" alt="Spoties" class="nav-logo-img"></button>
+  <button type="button" class="nav-logo" id="nav-logo" onclick="refreshApp()" title="Actualiser l'app" aria-label="Actualiser l'app"><img src="icon-192.png?v=1.40" alt="Spoties" class="nav-logo-img"></button>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="switchView('map')">Carte</button>
     <button class="nav-tab" onclick="switchView('gallery')">Spots</button>
@@ -1477,8 +1490,10 @@ select.bf-field{appearance:none;-webkit-appearance:none;background-image:linear-
   <div id="discover-panel">
     <div class="settings-title">Decouverte de routes</div>
     <div class="settings-section-title">1. Zone</div>
-    <button class="disc-btn secondary" id="disc-select-btn" onclick="startZoneSelect()">Selectionner une zone sur la carte</button>
-    <div class="disc-status" id="disc-zone-status">Aucune zone selectionnee</div>
+    <button class="disc-btn secondary" id="disc-select-btn" onclick="placeZone()">Poser la zone au centre de la carte</button>
+    <div class="disc-slider-row" id="disc-radius-row" style="display:none"><span>Rayon</span><input type="range" id="disc-radius" min="1" max="40" step="1" value="10" oninput="onZoneRadius()"><b id="disc-radius-val">10 km</b></div>
+    <div class="disc-status" id="disc-zone-status">Aucune zone posee</div>
+    <button class="disc-btn secondary disc-sm" id="disc-clear-btn" onclick="clearZone()">Retirer la zone</button>
     <div class="settings-divider"></div>
     <div class="settings-section-title">2. Forme recherchee</div>
     <div class="tag-row" id="disc-shape">
@@ -1509,7 +1524,7 @@ select.bf-field{appearance:none;-webkit-appearance:none;background-image:linear-
     <div class="disc-status" id="disc-result-status"></div>
     <button class="disc-btn secondary" id="disc-clear-btn" onclick="clearDiscovery()" style="display:none">Effacer les resultats</button>
   </div>
-  <div id="discover-selecting-hint">Trace un rectangle sur la carte (glisse)</div>
+  <div id="discover-selecting-hint">Glisse le point orange pour deplacer la zone</div>
 
   <!-- Filter panel -->
   <div id="filter-panel">
@@ -3617,9 +3632,9 @@ document.addEventListener('click',function(e){
 });
 
 /* ===================== PROFIL v1.36 : accueil, statistiques, nouveautes ===================== */
-var APP_VERSION='v1.39';
+var APP_VERSION='v1.40';
 // historique reconstruit depuis les anciens index (date = date de livraison). [version, date, approximative, [[n|f, texte]]]
-var CHANGELOG=[["v1.39","2026-09-25",0,[["n","Le briefing se gèle dès que le client accepte les conditions : plus aucune modification ne part dans son lien"],["n","Publier une nouvelle version annule la confirmation du client, qui doit accepter à nouveau"],["n","Mise à jour du lien en pause pendant que tu travailles, publication quand tu es prêt"],["n","Texte des conditions mémorisé avec le lien au moment de l'acceptation"]]],["v1.38","2026-09-23",0,[["n","Anneau d'avancement du contrat sur chaque fiche client et dans la liste : date, briefing, lien, accord, shooting, galerie"],["n","Statistiques : avancement des contrats étape par étape et valeur estimée du carnet"],["f","Numéro de version affiché dans Nouveautés remis à jour"]]],["v1.37","2026-09-23",0,[["n","Briefing : bloc L'essentiel (date, durée, secteur et tarif en tête de document)"],["n","Briefing : bloc Accord, conditions à accepter avant de confirmer"],["n","Séance offerte affichée dans la formule et dans l'essentiel"],["n","Lien client : confirmation verrouillée tant que les conditions ne sont pas acceptées, bouton daté, lien pour proposer une autre date"],["f","Lien client : message distinct entre perte de connexion et lien expiré"]]],["v1.36","2026-09-23",0,[["n","Profil réorganisé : accueil, objectifs, carte, apparence et données sur des pages séparées"],["n","Statistiques : santé des fiches, ajouts par mois, clients, liens partagés, photos, routes, types, heures de shoot"],["n","Page Nouveautés avec l'historique daté de toutes les versions"],["n","Filtre des fiches à compléter dans l'onglet Spots"]]],["v1.35","2026-09-23",0,[["n","Plusieurs photos d'un coup dans les spots, envoyées dans l'ordre choisi"],["n","Heure et affiche des événements, affiche en plein écran"],["f","Événement de la veille encore affiché comme à venir le soir"],["f","Date de création d'un événement perdue à l'édition"]]],["v1.34","2026-09-22",0,[["n","Téléchargement du briefing en PDF"],["n","Lien client interactif : adresse exacte révélée avant le shoot, ajout au calendrier"]]],["v1.33","2026-09-22",0,[["n","Briefings listés dans la fiche client, création directe depuis la fiche"],["n","Texte modifiable directement dans le briefing, zoom de l'éditeur"],["n","Changer la date du shoot dans le briefing met à jour le planning du client"],["n","Toucher le logo actualise l'app"]]],["v1.30","2026-09-22",0,[["n","Planning refait : briefings en rangées réordonnables (1 à 3 colonnes), blocs branchés sur tes spots et clients, gabarits, sauvegarde en ligne"]]],["v1.29","2026-09-20",0,[["n","Cartes Spots plus compactes, décor affiché sur la carte"],["f","Vignettes carrées du Planning déformées"]]],["v1.28","2026-09-20",0,[["n","Galerie et Shotlist fusionnées dans l'onglet Spots"],["n","Sélection multiple et glisser pour supprimer un spot"],["n","Inspirations déplacées vers le profil"]]],["v1.27","2026-09-20",0,[["n","Planning en éditeur grille aimantée, branché sur les spots et clients"]]],["v1.26","2026-09-20",0,[["n","Premier onglet Planning (document de briefing)"],["n","Associer des spots à un client en les touchant sur la carte"]]],["v1.24","2026-09",1,[["f","Boutons de la carte qui se chevauchaient sur mobile"],["f","Panneaux filtres, découverte et soleil qui restaient ouverts ensemble"],["n","Marqueurs réduits à 44 px sur mobile"]]],["v1.23","2026-07-21",0,[["n","Fréquentation des routes heure par heure"],["n","Découverte de routes dans une zone dessinée (OpenStreetMap), filtrées par sinuosité"]]],["v1.22","2026-07-17",0,[["n","Aperçu en direct de l'objet 3D avant de le poser"],["f","Objets 3D qui disparaissaient après une image"]]],["v1.21","2026-07-17",0,[["n","Bouton dédié pour placer un objet 3D"]]],["v1.20","2026-07-17",0,[["n","Comptes séparés : inscription, mot de passe oublié, données propres à chaque compte"],["n","Progression XP sauvegardée dans le compte"]]],["v1.18","2026-07-06",0,[["n","Mode soleil 3D : position du soleil et ombres portées"],["n","Objets 3D sur la carte (voiture, flèche, cube)"],["n","Vidéos courtes sur les spots (20 s max)"],["n","Retracer une route existante"],["n","Zoom et pincement dans la visionneuse, photos réorganisables par glisser"],["n","Progression : XP, niveaux, objectifs et titres"],["n","Historique de recherche et vue Street (Mapillary, repli Google)"]]],["v1.17","2026-06-27",0,[["f","Marqueurs qui glissaient au dézoom"]]],["v1.16","2026-06-27",0,[["f","Tentative de correction des marqueurs (non concluante)"]]],["v1.15","2026-06-27",0,[["n","Navigation entre les photos dans la visionneuse"]]],["v1.14","2026-06-08",0,[["n","Mini-calendrier dans la fiche client pour planifier les shoots"]]],["v1.13","2026-06-07",0,[["n","Planning mensuel de tous les shoots"]]],["v1.12","2026-06-07",0,[["n","Sélection de plusieurs clients et spot de compromis pour leurs voitures"],["f","Badges d'état restylés (v1.12.1)"]]],["v1.11","2026-06-07",0,[["n","États clients automatiques : prospect, planifié, réalisé, livré"],["n","Relance À livrer et accès direct aux spots conseillés pour une voiture"]]],["v1.10","2026-06-07",0,[["n","Shootings planifiés dans la fiche client"]]],["v1.9","2026-06-07",0,[["n","Plusieurs voitures par client avec couleur de carrosserie, offre et statut"]]],["v1.8","2026-06-07",0,[["f","Photos stockées en ligne : fin de la mémoire saturée qui cassait la synchro PC / iPhone"],["f","Accès aux données sécurisé, clé de carte restreinte à ton site"]]],["v1.7","2026-06-06",0,[["f","Synchronisation fiable : un spot supprimé ne réapparaît plus"]]],["v1.6","2026-06-06",0,[["n","Onglet Profil : photo et réglages regroupés"]]],["v1.5","2026-06-06",0,[["n","Connexion par email et mot de passe"],["n","L'app devient 6flt Spots"]]],["v1.4","2026-06-06",0,[["n","Longs trajets jusqu'à 25 étapes"],["n","Types Musée, Circuit, Concession"],["n","Onglet Événements"]]],["v1.3","2026-06-06",1,[["n","Analyse automatique des virages d'une route"],["n","Filtres de la carte et suppression multiple dans la galerie"]]],["v1.2","2026-06-05",0,[["n","Tracé de routes sur la carte"],["n","Corbeille clients avec restauration"],["f","Routes en double et rendu des routes (v1.2.1)"]]],["v1.1","2026-06-05",0,[["n","Onglet Clients"],["n","Synchronisation en ligne des spots et clients"],["n","Écran de démarrage"]]],["v1.0","2026-06-04",0,[["n","Première version : carte des spots, galerie, Shotlist (conseil de spots selon la couleur de la voiture)"]]]];
+var CHANGELOG=[["v1.40","2026-09-25",0,[["f","Boutons de la carte alignés en ligne quand la carte ne se chargeait pas"],["n","Découverte de routes : zone ronde posée au centre de la carte, rayon réglable en kilomètres et point orange à glisser pour la déplacer"],["n","Boutons de la carte regroupés en deux colonnes, une à gauche, une à droite"],["f","Boutons + et - de Mapbox retirés, ils étaient cachés derrière les autres"],["f","Panneaux Filtrer et Découverte plus compacts sur téléphone"]]],["v1.39","2026-09-25",0,[["n","Le briefing se gèle dès que le client accepte les conditions : plus aucune modification ne part dans son lien"],["n","Publier une nouvelle version annule la confirmation du client, qui doit accepter à nouveau"],["n","Mise à jour du lien en pause pendant que tu travailles, publication quand tu es prêt"],["n","Texte des conditions mémorisé avec le lien au moment de l'acceptation"]]],["v1.38","2026-09-23",0,[["n","Anneau d'avancement du contrat sur chaque fiche client et dans la liste : date, briefing, lien, accord, shooting, galerie"],["n","Statistiques : avancement des contrats étape par étape et valeur estimée du carnet"],["f","Numéro de version affiché dans Nouveautés remis à jour"]]],["v1.37","2026-09-23",0,[["n","Briefing : bloc L'essentiel (date, durée, secteur et tarif en tête de document)"],["n","Briefing : bloc Accord, conditions à accepter avant de confirmer"],["n","Séance offerte affichée dans la formule et dans l'essentiel"],["n","Lien client : confirmation verrouillée tant que les conditions ne sont pas acceptées, bouton daté, lien pour proposer une autre date"],["f","Lien client : message distinct entre perte de connexion et lien expiré"]]],["v1.36","2026-09-23",0,[["n","Profil réorganisé : accueil, objectifs, carte, apparence et données sur des pages séparées"],["n","Statistiques : santé des fiches, ajouts par mois, clients, liens partagés, photos, routes, types, heures de shoot"],["n","Page Nouveautés avec l'historique daté de toutes les versions"],["n","Filtre des fiches à compléter dans l'onglet Spots"]]],["v1.35","2026-09-23",0,[["n","Plusieurs photos d'un coup dans les spots, envoyées dans l'ordre choisi"],["n","Heure et affiche des événements, affiche en plein écran"],["f","Événement de la veille encore affiché comme à venir le soir"],["f","Date de création d'un événement perdue à l'édition"]]],["v1.34","2026-09-22",0,[["n","Téléchargement du briefing en PDF"],["n","Lien client interactif : adresse exacte révélée avant le shoot, ajout au calendrier"]]],["v1.33","2026-09-22",0,[["n","Briefings listés dans la fiche client, création directe depuis la fiche"],["n","Texte modifiable directement dans le briefing, zoom de l'éditeur"],["n","Changer la date du shoot dans le briefing met à jour le planning du client"],["n","Toucher le logo actualise l'app"]]],["v1.30","2026-09-22",0,[["n","Planning refait : briefings en rangées réordonnables (1 à 3 colonnes), blocs branchés sur tes spots et clients, gabarits, sauvegarde en ligne"]]],["v1.29","2026-09-20",0,[["n","Cartes Spots plus compactes, décor affiché sur la carte"],["f","Vignettes carrées du Planning déformées"]]],["v1.28","2026-09-20",0,[["n","Galerie et Shotlist fusionnées dans l'onglet Spots"],["n","Sélection multiple et glisser pour supprimer un spot"],["n","Inspirations déplacées vers le profil"]]],["v1.27","2026-09-20",0,[["n","Planning en éditeur grille aimantée, branché sur les spots et clients"]]],["v1.26","2026-09-20",0,[["n","Premier onglet Planning (document de briefing)"],["n","Associer des spots à un client en les touchant sur la carte"]]],["v1.24","2026-09",1,[["f","Boutons de la carte qui se chevauchaient sur mobile"],["f","Panneaux filtres, découverte et soleil qui restaient ouverts ensemble"],["n","Marqueurs réduits à 44 px sur mobile"]]],["v1.23","2026-07-21",0,[["n","Fréquentation des routes heure par heure"],["n","Découverte de routes dans une zone dessinée (OpenStreetMap), filtrées par sinuosité"]]],["v1.22","2026-07-17",0,[["n","Aperçu en direct de l'objet 3D avant de le poser"],["f","Objets 3D qui disparaissaient après une image"]]],["v1.21","2026-07-17",0,[["n","Bouton dédié pour placer un objet 3D"]]],["v1.20","2026-07-17",0,[["n","Comptes séparés : inscription, mot de passe oublié, données propres à chaque compte"],["n","Progression XP sauvegardée dans le compte"]]],["v1.18","2026-07-06",0,[["n","Mode soleil 3D : position du soleil et ombres portées"],["n","Objets 3D sur la carte (voiture, flèche, cube)"],["n","Vidéos courtes sur les spots (20 s max)"],["n","Retracer une route existante"],["n","Zoom et pincement dans la visionneuse, photos réorganisables par glisser"],["n","Progression : XP, niveaux, objectifs et titres"],["n","Historique de recherche et vue Street (Mapillary, repli Google)"]]],["v1.17","2026-06-27",0,[["f","Marqueurs qui glissaient au dézoom"]]],["v1.16","2026-06-27",0,[["f","Tentative de correction des marqueurs (non concluante)"]]],["v1.15","2026-06-27",0,[["n","Navigation entre les photos dans la visionneuse"]]],["v1.14","2026-06-08",0,[["n","Mini-calendrier dans la fiche client pour planifier les shoots"]]],["v1.13","2026-06-07",0,[["n","Planning mensuel de tous les shoots"]]],["v1.12","2026-06-07",0,[["n","Sélection de plusieurs clients et spot de compromis pour leurs voitures"],["f","Badges d'état restylés (v1.12.1)"]]],["v1.11","2026-06-07",0,[["n","États clients automatiques : prospect, planifié, réalisé, livré"],["n","Relance À livrer et accès direct aux spots conseillés pour une voiture"]]],["v1.10","2026-06-07",0,[["n","Shootings planifiés dans la fiche client"]]],["v1.9","2026-06-07",0,[["n","Plusieurs voitures par client avec couleur de carrosserie, offre et statut"]]],["v1.8","2026-06-07",0,[["f","Photos stockées en ligne : fin de la mémoire saturée qui cassait la synchro PC / iPhone"],["f","Accès aux données sécurisé, clé de carte restreinte à ton site"]]],["v1.7","2026-06-06",0,[["f","Synchronisation fiable : un spot supprimé ne réapparaît plus"]]],["v1.6","2026-06-06",0,[["n","Onglet Profil : photo et réglages regroupés"]]],["v1.5","2026-06-06",0,[["n","Connexion par email et mot de passe"],["n","L'app devient 6flt Spots"]]],["v1.4","2026-06-06",0,[["n","Longs trajets jusqu'à 25 étapes"],["n","Types Musée, Circuit, Concession"],["n","Onglet Événements"]]],["v1.3","2026-06-06",1,[["n","Analyse automatique des virages d'une route"],["n","Filtres de la carte et suppression multiple dans la galerie"]]],["v1.2","2026-06-05",0,[["n","Tracé de routes sur la carte"],["n","Corbeille clients avec restauration"],["f","Routes en double et rendu des routes (v1.2.1)"]]],["v1.1","2026-06-05",0,[["n","Onglet Clients"],["n","Synchronisation en ligne des spots et clients"],["n","Écran de démarrage"]]],["v1.0","2026-06-04",0,[["n","Première version : carte des spots, galerie, Shotlist (conseil de spots selon la couleur de la voiture)"]]]];
 var PF_MOIS=['janv.','févr.','mars','avr.','mai','juin','juil.','août','sept.','oct.','nov.','déc.'];
 var pfStack=['pf-hub'];
 var pfNewsShown=6;
@@ -3965,7 +3980,7 @@ function initMap(){
     antialias: true
   });
 
-  map.addControl(new mapboxgl.NavigationControl(), 'bottom-right');
+  groupMapButtons();
 
   map.on('load', function(){
     // 3D buildings layer
@@ -8488,8 +8503,19 @@ function deduceClassFromSpot(s){
 // ===== DECOUVERTE DE ROUTES (zone + Overpass OSM)
 // ============================================================
 var discoverOpen=false, discShape='all';
-var zoneSelectMode=false, zoneBox=null; // {minLng,minLat,maxLng,maxLat}
-var zoneStart=null, zoneDrawEl=null;
+// v1.40 : les boutons de la carte sont regroupes en deux colonnes propres
+function groupMapButtons(){
+  var host=document.getElementById('view-map'); if(!host || document.getElementById('map-tools')) return;
+  function col(id, ids){
+    var w=document.createElement('div'); w.id=id;
+    ids.forEach(function(k){ var b=document.getElementById(k); if(b) w.appendChild(b); });
+    host.appendChild(w);
+  }
+  col('map-tools-l', ['filter-btn','btn-discover','btn-hourly']);
+  col('map-tools', ['btn-model','btn-sun','btn-street','btn-3d','btn-geo','btn-sat']);
+}
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', groupMapButtons);
+else groupMapButtons();
 var discoveredFeatures=null;
 
 function toggleDiscover(){
@@ -8511,87 +8537,71 @@ function setDiscShape(el){
   document.getElementById('disc-sinuo-row').style.display = (discShape==='droite')?'none':'flex';
 }
 
-// --- Selection de zone : on desactive le drag de la carte et on trace un rectangle ---
-function startZoneSelect(){
-  if(!map) return;
-  zoneSelectMode=true;
-  document.getElementById('discover-selecting-hint').classList.add('on');
-  document.getElementById('disc-select-btn').textContent='Annuler la selection';
-  document.getElementById('disc-select-btn').onclick=cancelZoneSelect;
-  map.dragPan.disable();
-  map.getCanvas().style.cursor='crosshair';
-  var c=map.getCanvasContainer();
-  c.addEventListener('mousedown', zoneDown);
-  c.addEventListener('touchstart', zoneTouchStart, {passive:false});
-}
-function cancelZoneSelect(){
-  zoneSelectMode=false;
-  document.getElementById('discover-selecting-hint').classList.remove('on');
-  var btn=document.getElementById('disc-select-btn');
-  btn.textContent = zoneBox? 'Modifier la zone' : 'Selectionner une zone sur la carte';
-  btn.onclick=startZoneSelect;
-  if(map){ map.dragPan.enable(); map.getCanvas().style.cursor=''; }
-  var c=map.getCanvasContainer();
-  c.removeEventListener('mousedown', zoneDown);
-  c.removeEventListener('touchstart', zoneTouchStart);
-  removeZoneDrawEl();
-}
-function mkZoneDrawEl(){
-  removeZoneDrawEl();
-  zoneDrawEl=document.createElement('div');
-  zoneDrawEl.style.cssText='position:absolute;border:2px solid #e8571a;background:rgba(232,87,26,.15);pointer-events:none;z-index:5;border-radius:4px';
-  map.getCanvasContainer().appendChild(zoneDrawEl);
-}
-function removeZoneDrawEl(){ if(zoneDrawEl&&zoneDrawEl.parentNode){ zoneDrawEl.parentNode.removeChild(zoneDrawEl); } zoneDrawEl=null; }
-function ptFromEvent(e){ var r=map.getCanvasContainer().getBoundingClientRect(); return {x:e.clientX-r.left,y:e.clientY-r.top}; }
-function zoneDown(e){ e.preventDefault(); zoneStart=ptFromEvent(e); mkZoneDrawEl();
-  window.addEventListener('mousemove',zoneMove); window.addEventListener('mouseup',zoneUp); }
-function zoneMove(e){ if(!zoneStart)return; drawZone(ptFromEvent(e)); }
-function zoneUp(e){ window.removeEventListener('mousemove',zoneMove); window.removeEventListener('mouseup',zoneUp); finishZone(ptFromEvent(e)); }
-function zoneTouchStart(e){ e.preventDefault(); zoneStart=ptFromEvent(e.touches[0]); mkZoneDrawEl();
-  window.addEventListener('touchmove',zoneTouchMove,{passive:false}); window.addEventListener('touchend',zoneTouchEnd); }
-function zoneTouchMove(e){ e.preventDefault(); if(!zoneStart)return; drawZone(ptFromEvent(e.touches[0])); }
-function zoneTouchEnd(e){ window.removeEventListener('touchmove',zoneTouchMove); window.removeEventListener('touchend',zoneTouchEnd);
-  var t=(e.changedTouches&&e.changedTouches[0]); if(t) finishZone(ptFromEvent(t)); }
-function drawZone(p){ if(!zoneDrawEl)return;
-  var x=Math.min(p.x,zoneStart.x), y=Math.min(p.y,zoneStart.y), w=Math.abs(p.x-zoneStart.x), h=Math.abs(p.y-zoneStart.y);
-  zoneDrawEl.style.left=x+'px'; zoneDrawEl.style.top=y+'px'; zoneDrawEl.style.width=w+'px'; zoneDrawEl.style.height=h+'px'; }
-function finishZone(p){
-  if(!zoneStart) return;
-  var a=map.unproject([zoneStart.x,zoneStart.y]), b=map.unproject([p.x,p.y]);
-  zoneStart=null;
-  if(Math.abs(p.x-a.x)<8 && Math.abs(p.y-a.y)<8){ removeZoneDrawEl(); return; }
-  zoneBox={ minLng:Math.min(a.lng,b.lng), minLat:Math.min(a.lat,b.lat), maxLng:Math.max(a.lng,b.lng), maxLat:Math.max(a.lat,b.lat) };
-  // garde le rectangle visible via une source geojson
-  drawZonePersist();
-  var wkm=(haversine([zoneBox.minLng,zoneBox.minLat],[zoneBox.maxLng,zoneBox.minLat])/1000).toFixed(1);
-  var hkm=(haversine([zoneBox.minLng,zoneBox.minLat],[zoneBox.minLng,zoneBox.maxLat])/1000).toFixed(1);
-  document.getElementById('disc-zone-status').textContent='Zone : '+wkm+' x '+hkm+' km';
-  document.getElementById('disc-run-btn').disabled=false;
-  if(wkm*hkm>400) document.getElementById('disc-zone-status').textContent+=' (zone large, requete plus lente)';
-  cancelZoneSelect();
+// --- Zone de recherche circulaire, deplacable, rayon en kilometres (v1.40) ---
+var zoneCircle=null, zoneMarker=null;
+function circlePoly(lng, lat, km){
+  var pts=[], n=72, R=6371, f=(km/R)*(180/Math.PI);
+  for(var i=0;i<=n;i++){
+    var a=i/n*2*Math.PI;
+    pts.push([lng + f*Math.sin(a)/Math.cos(lat*Math.PI/180), lat + f*Math.cos(a)]);
+  }
+  return {type:'Feature', geometry:{type:'Polygon', coordinates:[pts]}};
 }
 function drawZonePersist(){
-  var poly={type:'Feature',geometry:{type:'Polygon',coordinates:[[
-    [zoneBox.minLng,zoneBox.minLat],[zoneBox.maxLng,zoneBox.minLat],
-    [zoneBox.maxLng,zoneBox.maxLat],[zoneBox.minLng,zoneBox.maxLat],[zoneBox.minLng,zoneBox.minLat]]]}};
-  if(map.getSource('disc-zone')){ map.getSource('disc-zone').setData(poly); }
-  else{
-    map.addSource('disc-zone',{type:'geojson',data:poly});
-    map.addLayer({id:'disc-zone-fill',type:'fill',source:'disc-zone',paint:{'fill-color':'#e8571a','fill-opacity':0.08}});
-    map.addLayer({id:'disc-zone-line',type:'line',source:'disc-zone',paint:{'line-color':'#e8571a','line-width':1.5,'line-dasharray':[2,2]}});
-  }
+  if(!zoneCircle || !map) return;
+  var poly=circlePoly(zoneCircle.lng, zoneCircle.lat, zoneCircle.km);
+  if(map.getSource('disc-zone')){ map.getSource('disc-zone').setData(poly); return; }
+  map.addSource('disc-zone',{type:'geojson',data:poly});
+  map.addLayer({id:'disc-zone-fill',type:'fill',source:'disc-zone',paint:{'fill-color':'#e8571a','fill-opacity':0.08}});
+  map.addLayer({id:'disc-zone-line',type:'line',source:'disc-zone',paint:{'line-color':'#e8571a','line-width':1.5,'line-dasharray':[2,2]}});
 }
+function zoneStatus(){
+  var el=document.getElementById('disc-zone-status'); if(!el) return;
+  if(!zoneCircle){ el.textContent='Aucune zone posee'; return; }
+  var a=Math.round(Math.PI*zoneCircle.km*zoneCircle.km);
+  el.textContent='Rayon '+zoneCircle.km+' km, environ '+a+' km\u00b2'+(a>600 ? ' \u00b7 zone large, requete plus lente' : '');
+}
+function onZoneRadius(){
+  var v=parseInt(document.getElementById('disc-radius').value,10)||10;
+  document.getElementById('disc-radius-val').textContent=v+' km';
+  if(zoneCircle){ zoneCircle.km=v; drawZonePersist(); zoneStatus(); }
+}
+function placeZone(){
+  if(!map) return;
+  var c=map.getCenter(), km=parseInt(document.getElementById('disc-radius').value,10)||10;
+  zoneCircle={lng:c.lng, lat:c.lat, km:km};
+  if(!zoneMarker){
+    var el=document.createElement('div');
+    el.style.cssText='width:26px;height:26px;border-radius:50%;background:#e8571a;border:3px solid #fff;box-shadow:0 2px 10px rgba(0,0,0,.55);cursor:grab';
+    zoneMarker=new mapboxgl.Marker({element:el, draggable:true}).setLngLat([c.lng,c.lat]).addTo(map);
+    zoneMarker.on('drag', function(){ var p=zoneMarker.getLngLat(); zoneCircle.lng=p.lng; zoneCircle.lat=p.lat; drawZonePersist(); });
+    zoneMarker.on('dragend', zoneStatus);
+  } else { zoneMarker.setLngLat([c.lng,c.lat]); zoneMarker.addTo(map); }
+  document.getElementById('disc-radius-row').style.display='flex';
+  document.getElementById('disc-select-btn').textContent='Recentrer la zone ici';
+  document.getElementById('disc-run-btn').disabled=false;
+  drawZonePersist(); zoneStatus();
+}
+function clearZone(){
+  zoneCircle=null;
+  if(zoneMarker) zoneMarker.remove();
+  if(map && map.getSource('disc-zone')) map.getSource('disc-zone').setData({type:'FeatureCollection',features:[]});
+  var r=document.getElementById('disc-radius-row'); if(r) r.style.display='none';
+  var b=document.getElementById('disc-select-btn'); if(b) b.textContent='Poser la zone au centre de la carte';
+  var run=document.getElementById('disc-run-btn'); if(run) run.disabled=true;
+  zoneStatus();
+}
+function cancelZoneSelect(){ /* conserve pour compatibilite : la zone reste posee */ }
 
 // --- Requete Overpass ---
 async function runDiscovery(){
-  if(!zoneBox) return;
+  if(!zoneCircle) return;
   var btn=document.getElementById('disc-run-btn');
   var st=document.getElementById('disc-result-status');
   btn.disabled=true; btn.textContent='Recherche en cours...';
   st.textContent='Interrogation d\'OpenStreetMap...';
-  var bbox=zoneBox.minLat+','+zoneBox.minLng+','+zoneBox.maxLat+','+zoneBox.maxLng;
-  var q='[out:json][timeout:25];(way["highway"~"^(motorway|trunk|primary|secondary|tertiary|unclassified|residential|road|track|service)$"]('+bbox+'););out geom;';
+  var around='(around:'+Math.round(zoneCircle.km*1000)+','+zoneCircle.lat.toFixed(6)+','+zoneCircle.lng.toFixed(6)+')';
+  var q='[out:json][timeout:25];(way["highway"~"^(motorway|trunk|primary|secondary|tertiary|unclassified|residential|road|track|service)$"]'+around+';);out geom;';
   var endpoints=['https://overpass-api.de/api/interpreter','https://overpass.kumi.systems/api/interpreter'];
   var data=null, err=null;
   for(var i=0;i<endpoints.length && !data;i++){
