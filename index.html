@@ -7,9 +7,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Spoties">
 <meta name="theme-color" content="#0e0f12">
-<link rel="manifest" href="manifest.json?v=1.40">
-<link rel="apple-touch-icon" href="icon-180.png?v=1.40">
-<link rel="icon" type="image/png" href="icon-192.png?v=1.40">
+<link rel="manifest" href="manifest.json?v=1.41">
+<link rel="apple-touch-icon" href="icon-180.png?v=1.41">
+<link rel="icon" type="image/png" href="icon-192.png?v=1.41">
 <title>Spoties</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -1335,17 +1335,83 @@ select.bf-field{appearance:none;-webkit-appearance:none;background-image:linear-
   .bf-wrap{display:none}
   .bf-mobile{display:flex}
 }
+/* ===== v1.41 : perimetre (dock en bas), profil flottant, filtres en grille ===== */
+#zone-dock{position:absolute;z-index:690;left:50%;bottom:30px;transform:translateX(-50%);width:440px;max-width:calc(100vw - 20px);background:var(--surface);border:1px solid var(--border);border-radius:16px;box-shadow:0 10px 40px rgba(0,0,0,.6);padding:10px 12px 12px;display:none;flex-direction:column;gap:8px}
+#zone-dock.on{display:flex}
+.zd-top{display:flex;align-items:center;gap:8px}
+.zd-count{flex:1;min-width:0;display:flex;align-items:center;gap:8px;background:none;border:none;color:var(--muted);font:600 12.5px 'Inter',sans-serif;padding:4px 2px;text-align:left;cursor:default}
+.zd-count b{font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.zd-count.has{color:var(--text);cursor:pointer}
+.zd-chev{flex:none;opacity:0;transition:transform .2s}
+.zd-count.has .zd-chev{opacity:.7}
+#zone-dock.list .zd-chev{transform:rotate(180deg)}
+.zd-x{width:30px;height:30px;border-radius:50%;border:1px solid var(--border);background:var(--surface2);color:var(--muted);display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none;padding:0}
+.zd-list{display:none;max-height:min(34vh,260px);overflow-y:auto;-webkit-overflow-scrolling:touch;border-radius:10px;background:var(--surface2)}
+.zd-list.open{display:block}
+.zd-item{display:flex;align-items:center;gap:10px;width:100%;background:none;border:none;border-bottom:1px solid var(--border);color:var(--text);font:500 13px 'Inter',sans-serif;padding:10px 12px;text-align:left;cursor:pointer}
+.zd-item:last-child{border-bottom:none}
+.zd-dot{width:9px;height:9px;border-radius:50%;flex:none;background:var(--accent);box-shadow:0 0 0 2px var(--surface2),0 0 0 3.5px var(--accent)}
+.zd-dot.r{width:14px;height:4px;border-radius:2px;background:#fff;box-shadow:none}
+.zd-nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.zd-d{font:11px 'Space Mono',monospace;color:var(--muted);flex:none}
+.zd-radius{display:flex;align-items:center;gap:8px}
+.zd-radius input[type=range]{flex:1;min-width:0;accent-color:var(--accent);height:28px;margin:0}
+.zd-step{width:34px;height:34px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font:600 18px 'Inter',sans-serif;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none;padding:0;touch-action:manipulation}
+.zd-radius b{font:700 13px 'Space Mono',monospace;color:var(--text);min-width:54px;text-align:right;flex:none}
+.zd-hint{font-size:11px;color:var(--muted);line-height:1.35;text-align:center}
+.zd-hint:empty{display:none}
+.zd-actions{display:flex;gap:8px}
+.zd-btn{flex:1;height:38px;border-radius:10px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font:600 13px 'Inter',sans-serif;cursor:pointer;padding:0 10px}
+.zd-btn.on{border-color:var(--accent);color:var(--accent)}
+.zd-btn.primary{flex:1.6;background:var(--accent);border-color:var(--accent);color:#fff}
+.zd-btn:disabled{opacity:.55}
+.zd-res{display:none;align-items:center;gap:10px;font-size:11.5px;color:var(--muted);line-height:1.4}
+.zd-res.on{display:flex}
+.zd-res span{flex:1}
+#disc-clear-res{background:none;border:none;color:var(--accent);font:600 12px 'Inter',sans-serif;cursor:pointer;padding:4px 0;flex:none}
+#view-map #discover-panel{top:auto;right:auto;left:50%;transform:translateX(-50%);bottom:calc(30px + var(--zd-h,170px) + 10px);width:440px;max-width:calc(100vw - 20px);max-height:calc(100vh - var(--zd-h,170px) - 150px);padding:14px 16px 16px;gap:12px;border-radius:16px;z-index:695}
+.zc-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.zc-ok{background:var(--accent);border:none;color:#fff;font:700 12px 'Inter',sans-serif;border-radius:8px;padding:7px 14px;cursor:pointer}
+.zc-seg{display:flex;gap:3px;background:var(--surface2);border-radius:10px;padding:3px;margin-top:6px}
+.zc-seg button{flex:1;min-width:0;height:32px;border:none;border-radius:8px;background:none;color:var(--muted);font:600 12px 'Inter',sans-serif;cursor:pointer;white-space:nowrap;padding:0 4px}
+.zc-seg button.on{background:var(--surface);color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,.4)}
+body.panel-open #zone-dock,body.panel-open #view-map #discover-panel{display:none!important}
+.marker-inner.in-zone>.spot-marker,.marker-inner.in-zone>.emoji-marker,.marker-inner.in-zone>.route-marker{outline:2px solid var(--accent);outline-offset:3px}
+#map-tools{transition:right .28s cubic-bezier(.4,0,.2,1),bottom .2s ease}
+@media(max-width:640px){
+  #zone-dock{left:10px;right:10px;width:auto;max-width:none;transform:none;bottom:calc(84px + env(safe-area-inset-bottom))}
+  #view-map #discover-panel{left:10px;right:10px;width:auto;max-width:none;transform:none;bottom:calc(84px + env(safe-area-inset-bottom) + var(--zd-h,170px) + 10px);max-height:calc(100vh - var(--zd-h,170px) - 220px)}
+  body.zone-on #map-tools{bottom:calc(84px + env(safe-area-inset-bottom) + var(--zd-h,170px) + 12px)}
+  body.zone-on #view-label{display:none}
+}
+/* profil : carte flottante a gauche, la carte reste visible autour */
+#settings-panel{top:auto;right:auto;left:14px;bottom:calc(84px + env(safe-area-inset-bottom));width:380px;max-width:calc(100vw - 20px);height:min(660px,calc(100vh - 176px));height:min(660px,calc(100svh - 148px - env(safe-area-inset-top) - env(safe-area-inset-bottom)));border:1px solid var(--border);border-radius:18px;box-shadow:0 20px 60px rgba(0,0,0,.55);transform:translateY(14px) scale(.97);transform-origin:left bottom;opacity:0;transition:transform .24s cubic-bezier(.2,.8,.2,1),opacity .18s ease,visibility 0s linear .24s}
+#settings-panel.open{transform:none;opacity:1;visibility:visible;transition:transform .24s cubic-bezier(.2,.8,.2,1),opacity .18s ease,visibility 0s}
+@media (max-width:640px){#settings-panel{left:10px;width:calc(100vw - 20px);max-width:none;border:1px solid var(--border);box-shadow:0 20px 60px rgba(0,0,0,.55)}}
+#pf-scrim{position:fixed;inset:0;z-index:1540;background:rgba(0,0,0,.28);opacity:0;visibility:hidden;transition:opacity .18s,visibility 0s linear .18s}
+#pf-scrim.on{opacity:1;visibility:visible;transition:opacity .18s}
+@media (prefers-reduced-motion:reduce){#settings-panel,#settings-panel.open,#pf-scrim{transition:none}}
+/* filtres : grille, un filtre coupe libere sa place */
+.flt-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-auto-flow:row dense;gap:14px 12px}
+.flt-g{grid-column:1/-1;min-width:0;display:flex;flex-direction:column}
+.flt-g.half{grid-column:auto}
+.flt-g.half.solo{grid-column:1/-1}
+.flt-g.off{display:none}
+.flt-g .field-input{width:100%;min-width:0}
+.flt-g .star-row{flex-wrap:nowrap}
+.flt-empty{display:none;font-size:12px;color:var(--muted);line-height:1.5}
+.flt-empty.on{display:block}
 </style>
 </head>
 <body>
 <div id="splash">
-  <img id="splash-logo" src="icon-512.png?v=1.40" alt="Spoties">
-  <div id="splash-credit">Créé par 6flt photographie et Claude<br><span style="opacity:.6">v1.40</span></div>
+  <img id="splash-logo" src="icon-512.png?v=1.41" alt="Spoties">
+  <div id="splash-credit">Créé par 6flt photographie et Claude<br><span style="opacity:.6">v1.41</span></div>
 </div>
 
 <div id="login-screen">
   <div class="login-box">
-    <img src="icon-192.png?v=1.40" alt="Spoties" class="login-logo">
+    <img src="icon-192.png?v=1.41" alt="Spoties" class="login-logo">
     <h1 class="login-title">Spoties</h1>
     <p class="login-sub" id="login-sub">Connexion</p>
     <input type="email" id="login-email" class="login-input" placeholder="Email" autocomplete="email">
@@ -1360,7 +1426,7 @@ select.bf-field{appearance:none;-webkit-appearance:none;background-image:linear-
 </div>
 
 <nav>
-  <button type="button" class="nav-logo" id="nav-logo" onclick="refreshApp()" title="Actualiser l'app" aria-label="Actualiser l'app"><img src="icon-192.png?v=1.40" alt="Spoties" class="nav-logo-img"></button>
+  <button type="button" class="nav-logo" id="nav-logo" onclick="refreshApp()" title="Actualiser l'app" aria-label="Actualiser l'app"><img src="icon-192.png?v=1.41" alt="Spoties" class="nav-logo-img"></button>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="switchView('map')">Carte</button>
     <button class="nav-tab" onclick="switchView('gallery')">Spots</button>
@@ -1465,8 +1531,8 @@ select.bf-field{appearance:none;-webkit-appearance:none;background-image:linear-
   </button>
 
   <!-- Discover btn (zone / routes inconnues) -->
-  <button id="btn-discover" class="map-btn" onclick="toggleDiscover()" title="Decouverte de routes">
-    <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M9 1.5l2 5 5 .5-3.8 3.3 1.2 5L9 12.8 4.6 15.3l1.2-5L2 7l5-.5z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+  <button id="btn-discover" class="map-btn" onclick="toggleDiscover()" title="Périmètre">
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none"><circle cx="9" cy="9" r="7" stroke="currentColor" stroke-width="1.5" stroke-dasharray="2.6 2.2"/><circle cx="9" cy="9" r="2" fill="currentColor"/></svg>
   </button>
 
   <!-- Hourly frequentation btn -->
@@ -1486,52 +1552,60 @@ select.bf-field{appearance:none;-webkit-appearance:none;background-image:linear-
     <div class="hourly-hint" id="hourly-hint">Routes colorees selon le trafic estime a cette heure</div>
   </div>
 
-  <!-- Discover panel -->
-  <div id="discover-panel">
-    <div class="settings-title">Decouverte de routes</div>
-    <div class="settings-section-title">1. Zone</div>
-    <button class="disc-btn secondary" id="disc-select-btn" onclick="placeZone()">Poser la zone au centre de la carte</button>
-    <div class="disc-slider-row" id="disc-radius-row" style="display:none"><span>Rayon</span><input type="range" id="disc-radius" min="1" max="40" step="1" value="10" oninput="onZoneRadius()"><b id="disc-radius-val">10 km</b></div>
-    <div class="disc-status" id="disc-zone-status">Aucune zone posee</div>
-    <button class="disc-btn secondary disc-sm" id="disc-clear-btn" onclick="clearZone()">Retirer la zone</button>
-    <div class="settings-divider"></div>
-    <div class="settings-section-title">2. Forme recherchee</div>
-    <div class="tag-row" id="disc-shape">
-      <div class="tag active" data-shape="all" onclick="setDiscShape(this)">Toutes</div>
-      <div class="tag" data-shape="sinueuse" onclick="setDiscShape(this)">Sinueuse</div>
-      <div class="tag" data-shape="droite" onclick="setDiscShape(this)">Ligne droite</div>
+  <!-- Perimetre (v1.41) : dock en bas de carte + criteres de recherche -->
+  <div id="zone-dock">
+    <div class="zd-top">
+      <button type="button" class="zd-count" id="zd-count" onclick="zoneToggleList()"><b id="zd-count-t">Aucun spot dans le périmètre</b><svg class="zd-chev" width="10" height="6" viewBox="0 0 10 6"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <button type="button" class="zd-x" onclick="toggleDiscover()" aria-label="Fermer le périmètre"><svg width="11" height="11" viewBox="0 0 12 12"><path d="M1 1l10 10M11 1L1 11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
     </div>
-    <div class="disc-slider-row" id="disc-sinuo-row">
-      <span>Sinuosite min</span>
-      <input type="range" id="disc-sinuo" min="1" max="80" value="15" oninput="document.getElementById('disc-sinuo-val').textContent=this.value+'%'">
-      <b id="disc-sinuo-val">15%</b>
+    <div class="zd-list" id="zd-list"></div>
+    <div class="zd-radius">
+      <button type="button" class="zd-step" onclick="zoneStep(-1)" aria-label="Réduire le rayon">&minus;</button>
+      <input type="range" id="disc-radius" min="0.5" max="40" step="0.5" value="10" oninput="onZoneRadius()" aria-label="Rayon">
+      <button type="button" class="zd-step" onclick="zoneStep(1)" aria-label="Agrandir le rayon">+</button>
+      <b id="disc-radius-val">10 km</b>
     </div>
-    <div class="disc-slider-row">
-      <span>Longueur min</span>
-      <input type="range" id="disc-length" min="200" max="8000" step="100" value="800" oninput="document.getElementById('disc-length-val').textContent=(this.value>=1000?(this.value/1000).toFixed(1)+'km':this.value+'m')">
-      <b id="disc-length-val">800m</b>
+    <div class="zd-hint" id="disc-zone-status"></div>
+    <div class="zd-actions">
+      <button type="button" class="zd-btn" id="zd-crit-btn" onclick="zoneCriteria()">Critères</button>
+      <button type="button" class="zd-btn primary" id="disc-run-btn" onclick="runDiscovery()">Chercher des routes</button>
     </div>
-    <div class="settings-divider"></div>
-    <div class="settings-section-title">3. Frequentation</div>
-    <select class="field-input" id="disc-traffic">
-      <option value="all">Tous niveaux</option>
-      <option value="low">Calme (peu frequentee)</option>
-      <option value="med">Moyenne</option>
-      <option value="high">Passante</option>
-    </select>
-    <div class="settings-divider"></div>
-    <button class="disc-btn" id="disc-run-btn" onclick="runDiscovery()" disabled>Chercher des routes</button>
-    <div class="disc-status" id="disc-result-status"></div>
-    <button class="disc-btn secondary" id="disc-clear-btn" onclick="clearDiscovery()" style="display:none">Effacer les resultats</button>
+    <div class="zd-res" id="zd-res"><span id="disc-result-status"></span><button type="button" id="disc-clear-res" onclick="clearDiscovery()" style="display:none">Effacer</button></div>
   </div>
-  <div id="discover-selecting-hint">Glisse le point orange pour deplacer la zone</div>
+  <div id="discover-panel">
+    <div class="zc-head"><span class="settings-title">Critères de recherche</span><button type="button" class="zc-ok" onclick="zoneCriteria(false)">OK</button></div>
+    <div>
+      <div class="settings-section-title">Forme</div>
+      <div class="tag-row" id="disc-shape">
+        <div class="tag active" data-shape="all" onclick="setDiscShape(this)">Toutes</div>
+        <div class="tag" data-shape="sinueuse" onclick="setDiscShape(this)">Sinueuse</div>
+        <div class="tag" data-shape="droite" onclick="setDiscShape(this)">Ligne droite</div>
+      </div>
+    </div>
+    <div id="disc-sinuo-row">
+      <div class="settings-section-title">Sinuosité minimale</div>
+      <div class="zc-seg" data-for="disc-sinuo"><button type="button" data-v="5">5 %</button><button type="button" data-v="15" class="on">15 %</button><button type="button" data-v="30">30 %</button><button type="button" data-v="50">50 %</button></div>
+    </div>
+    <input type="hidden" id="disc-sinuo" value="15">
+    <div>
+      <div class="settings-section-title">Longueur minimale</div>
+      <div class="zc-seg" data-for="disc-length"><button type="button" data-v="300">300 m</button><button type="button" data-v="800" class="on">800 m</button><button type="button" data-v="2000">2 km</button><button type="button" data-v="5000">5 km</button></div>
+    </div>
+    <input type="hidden" id="disc-length" value="800">
+    <div>
+      <div class="settings-section-title">Fréquentation</div>
+      <div class="zc-seg" data-for="disc-traffic"><button type="button" data-v="all" class="on">Toutes</button><button type="button" data-v="low">Calme</button><button type="button" data-v="med">Moyenne</button><button type="button" data-v="high">Passante</button></div>
+    </div>
+    <input type="hidden" id="disc-traffic" value="all">
+  </div>
 
-  <!-- Filter panel -->
+  <!-- Filter panel (v1.41 : grille, filtres activables dans Profil > Carte) -->
   <div id="filter-panel">
     <div class="settings-title">Filtrer</div>
-    <div>
-      <div class="settings-section-title">Type d'element</div>
-      <div class="tag-row" id="filter-kind">
+    <div class="flt-grid" id="flt-grid">
+      <div class="flt-g" data-flt="kind">
+        <div class="settings-section-title">Type d'élément</div>
+        <div class="tag-row" id="filter-kind">
         <div class="tag active" data-kind="all" onclick="setFilterKind(this)">Tout</div>
         <div class="tag" data-kind="spot" onclick="setFilterKind(this)">Spots</div>
         <div class="tag" data-kind="route" onclick="setFilterKind(this)">Routes</div>
@@ -1540,16 +1614,14 @@ select.bf-field{appearance:none;-webkit-appearance:none;background-image:linear-
         <div class="tag" data-kind="Musee" onclick="setFilterKind(this)">Musees</div>
         <div class="tag" data-kind="Concession" onclick="setFilterKind(this)">Concessions</div>
       </div>
-    </div>
-    <div class="settings-divider"></div>
-    <div>
-      <div class="settings-section-title">Statut</div>
-      <div class="tag-row" id="filter-status"></div>
-    </div>
-    <div class="settings-divider"></div>
-    <div>
-      <div class="settings-section-title">Type</div>
-      <select class="field-input" id="filter-type">
+      </div>
+      <div class="flt-g" data-flt="status">
+        <div class="settings-section-title">Statut</div>
+        <div class="tag-row" id="filter-status"></div>
+      </div>
+      <div class="flt-g half" data-flt="type">
+        <div class="settings-section-title">Type de lieu</div>
+        <select class="field-input" id="filter-type">
         <option value="">Tous les types</option>
         <option>Route / Virage</option>
         <option>Foret</option>
@@ -1560,49 +1632,45 @@ select.bf-field{appearance:none;-webkit-appearance:none;background-image:linear-
         <option>Parking / Zone industrielle</option>
         <option>Autre</option>
       </select>
-    </div>
-    <div class="settings-divider"></div>
-    <div>
-      <div class="settings-section-title">Saison ideale</div>
-      <div class="tag-row" id="filter-season"></div>
-    </div>
-    <div class="settings-divider"></div>
-    <div>
-      <div class="settings-section-title">Note minimale</div>
-      <div class="star-row" id="filter-stars"></div>
-    </div>
-    <div class="settings-divider"></div>
-    <div>
-      <div class="settings-section-title">Etat de la route</div>
-      <select class="field-input" id="filter-road-state">
+      </div>
+      <div class="flt-g half" data-flt="stars">
+        <div class="settings-section-title">Note minimale</div>
+        <div class="star-row" id="filter-stars"></div>
+      </div>
+      <div class="flt-g" data-flt="curves">
+        <div class="settings-section-title">Courbes de la route</div>
+        <div class="tag-row" id="filter-curves">
+        <div class="tag active" data-curve="all" onclick="setFilterCurve(this)">Toutes</div>
+        <div class="tag" data-curve="Droite" onclick="setFilterCurve(this)">Droite</div>
+        <div class="tag" data-curve="Sinueuse" onclick="setFilterCurve(this)">Sinueuse</div>
+        <div class="tag" data-curve="Tres sinueuse" onclick="setFilterCurve(this)">Tres sinueuse</div>
+      </div>
+      </div>
+      <div class="flt-g" data-flt="season">
+        <div class="settings-section-title">Saison idéale</div>
+        <div class="tag-row" id="filter-season"></div>
+      </div>
+      <div class="flt-g half" data-flt="road">
+        <div class="settings-section-title">État de la route</div>
+        <select class="field-input" id="filter-road-state">
         <option value="">Tous</option>
         <option>Excellente</option>
         <option>Bonne</option>
         <option>Degradee</option>
         <option>Mauvaise</option>
       </select>
-    </div>
-    <div class="settings-divider"></div>
-    <div>
-      <div class="settings-section-title">Niveau de circulation</div>
-      <select class="field-input" id="filter-traffic">
+      </div>
+      <div class="flt-g half" data-flt="traffic">
+        <div class="settings-section-title">Circulation</div>
+        <select class="field-input" id="filter-traffic">
         <option value="">Tous</option>
         <option>Faible</option>
         <option>Moderee</option>
         <option>Dense</option>
       </select>
-    </div>
-    <div class="settings-divider"></div>
-    <div>
-      <div class="settings-section-title">Courbes de la route</div>
-      <div class="tag-row" id="filter-curves">
-        <div class="tag active" data-curve="all" onclick="setFilterCurve(this)">Toutes</div>
-        <div class="tag" data-curve="Droite" onclick="setFilterCurve(this)">Droite</div>
-        <div class="tag" data-curve="Sinueuse" onclick="setFilterCurve(this)">Sinueuse</div>
-        <div class="tag" data-curve="Tres sinueuse" onclick="setFilterCurve(this)">Tres sinueuse</div>
       </div>
     </div>
-    <div class="settings-divider"></div>
+    <div class="flt-empty" id="flt-empty">Aucun filtre actif. Choisis lesquels afficher dans Profil, Carte.</div>
     <div class="settings-actions">
       <button onclick="resetFilters()">Reinitialiser</button>
     </div>
@@ -1714,6 +1782,9 @@ select.bf-field{appearance:none;-webkit-appearance:none;background-image:linear-
       </div>
     </div>
         </div>
+        <div class="pf-sec">Filtres proposés</div>
+        <div class="pf-card" style="margin-top:0;padding:6px 14px"><div class="vis-toggles" id="pf-flt-list"></div></div>
+        <div class="pf-note">Un filtre désactivé disparaît du panneau Filtrer et ne filtre plus rien.</div>
       </div>
     </section>
 
@@ -3557,7 +3628,7 @@ function toggleProfile(){
   var open=sp.classList.toggle('open');
   if(open){
     document.getElementById('filter-panel').classList.remove('open');
-    if(discoverOpen) toggleDiscover();
+    if(discoverOpen) zoneCriteria(false);
     pfResetStack();
     refreshProfileHeader();
     pfRenderHub();
@@ -3632,9 +3703,9 @@ document.addEventListener('click',function(e){
 });
 
 /* ===================== PROFIL v1.36 : accueil, statistiques, nouveautes ===================== */
-var APP_VERSION='v1.40';
+var APP_VERSION='v1.41';
 // historique reconstruit depuis les anciens index (date = date de livraison). [version, date, approximative, [[n|f, texte]]]
-var CHANGELOG=[["v1.40","2026-09-25",0,[["f","Boutons de la carte alignés en ligne quand la carte ne se chargeait pas"],["n","Découverte de routes : zone ronde posée au centre de la carte, rayon réglable en kilomètres et point orange à glisser pour la déplacer"],["n","Boutons de la carte regroupés en deux colonnes, une à gauche, une à droite"],["f","Boutons + et - de Mapbox retirés, ils étaient cachés derrière les autres"],["f","Panneaux Filtrer et Découverte plus compacts sur téléphone"]]],["v1.39","2026-09-25",0,[["n","Le briefing se gèle dès que le client accepte les conditions : plus aucune modification ne part dans son lien"],["n","Publier une nouvelle version annule la confirmation du client, qui doit accepter à nouveau"],["n","Mise à jour du lien en pause pendant que tu travailles, publication quand tu es prêt"],["n","Texte des conditions mémorisé avec le lien au moment de l'acceptation"]]],["v1.38","2026-09-23",0,[["n","Anneau d'avancement du contrat sur chaque fiche client et dans la liste : date, briefing, lien, accord, shooting, galerie"],["n","Statistiques : avancement des contrats étape par étape et valeur estimée du carnet"],["f","Numéro de version affiché dans Nouveautés remis à jour"]]],["v1.37","2026-09-23",0,[["n","Briefing : bloc L'essentiel (date, durée, secteur et tarif en tête de document)"],["n","Briefing : bloc Accord, conditions à accepter avant de confirmer"],["n","Séance offerte affichée dans la formule et dans l'essentiel"],["n","Lien client : confirmation verrouillée tant que les conditions ne sont pas acceptées, bouton daté, lien pour proposer une autre date"],["f","Lien client : message distinct entre perte de connexion et lien expiré"]]],["v1.36","2026-09-23",0,[["n","Profil réorganisé : accueil, objectifs, carte, apparence et données sur des pages séparées"],["n","Statistiques : santé des fiches, ajouts par mois, clients, liens partagés, photos, routes, types, heures de shoot"],["n","Page Nouveautés avec l'historique daté de toutes les versions"],["n","Filtre des fiches à compléter dans l'onglet Spots"]]],["v1.35","2026-09-23",0,[["n","Plusieurs photos d'un coup dans les spots, envoyées dans l'ordre choisi"],["n","Heure et affiche des événements, affiche en plein écran"],["f","Événement de la veille encore affiché comme à venir le soir"],["f","Date de création d'un événement perdue à l'édition"]]],["v1.34","2026-09-22",0,[["n","Téléchargement du briefing en PDF"],["n","Lien client interactif : adresse exacte révélée avant le shoot, ajout au calendrier"]]],["v1.33","2026-09-22",0,[["n","Briefings listés dans la fiche client, création directe depuis la fiche"],["n","Texte modifiable directement dans le briefing, zoom de l'éditeur"],["n","Changer la date du shoot dans le briefing met à jour le planning du client"],["n","Toucher le logo actualise l'app"]]],["v1.30","2026-09-22",0,[["n","Planning refait : briefings en rangées réordonnables (1 à 3 colonnes), blocs branchés sur tes spots et clients, gabarits, sauvegarde en ligne"]]],["v1.29","2026-09-20",0,[["n","Cartes Spots plus compactes, décor affiché sur la carte"],["f","Vignettes carrées du Planning déformées"]]],["v1.28","2026-09-20",0,[["n","Galerie et Shotlist fusionnées dans l'onglet Spots"],["n","Sélection multiple et glisser pour supprimer un spot"],["n","Inspirations déplacées vers le profil"]]],["v1.27","2026-09-20",0,[["n","Planning en éditeur grille aimantée, branché sur les spots et clients"]]],["v1.26","2026-09-20",0,[["n","Premier onglet Planning (document de briefing)"],["n","Associer des spots à un client en les touchant sur la carte"]]],["v1.24","2026-09",1,[["f","Boutons de la carte qui se chevauchaient sur mobile"],["f","Panneaux filtres, découverte et soleil qui restaient ouverts ensemble"],["n","Marqueurs réduits à 44 px sur mobile"]]],["v1.23","2026-07-21",0,[["n","Fréquentation des routes heure par heure"],["n","Découverte de routes dans une zone dessinée (OpenStreetMap), filtrées par sinuosité"]]],["v1.22","2026-07-17",0,[["n","Aperçu en direct de l'objet 3D avant de le poser"],["f","Objets 3D qui disparaissaient après une image"]]],["v1.21","2026-07-17",0,[["n","Bouton dédié pour placer un objet 3D"]]],["v1.20","2026-07-17",0,[["n","Comptes séparés : inscription, mot de passe oublié, données propres à chaque compte"],["n","Progression XP sauvegardée dans le compte"]]],["v1.18","2026-07-06",0,[["n","Mode soleil 3D : position du soleil et ombres portées"],["n","Objets 3D sur la carte (voiture, flèche, cube)"],["n","Vidéos courtes sur les spots (20 s max)"],["n","Retracer une route existante"],["n","Zoom et pincement dans la visionneuse, photos réorganisables par glisser"],["n","Progression : XP, niveaux, objectifs et titres"],["n","Historique de recherche et vue Street (Mapillary, repli Google)"]]],["v1.17","2026-06-27",0,[["f","Marqueurs qui glissaient au dézoom"]]],["v1.16","2026-06-27",0,[["f","Tentative de correction des marqueurs (non concluante)"]]],["v1.15","2026-06-27",0,[["n","Navigation entre les photos dans la visionneuse"]]],["v1.14","2026-06-08",0,[["n","Mini-calendrier dans la fiche client pour planifier les shoots"]]],["v1.13","2026-06-07",0,[["n","Planning mensuel de tous les shoots"]]],["v1.12","2026-06-07",0,[["n","Sélection de plusieurs clients et spot de compromis pour leurs voitures"],["f","Badges d'état restylés (v1.12.1)"]]],["v1.11","2026-06-07",0,[["n","États clients automatiques : prospect, planifié, réalisé, livré"],["n","Relance À livrer et accès direct aux spots conseillés pour une voiture"]]],["v1.10","2026-06-07",0,[["n","Shootings planifiés dans la fiche client"]]],["v1.9","2026-06-07",0,[["n","Plusieurs voitures par client avec couleur de carrosserie, offre et statut"]]],["v1.8","2026-06-07",0,[["f","Photos stockées en ligne : fin de la mémoire saturée qui cassait la synchro PC / iPhone"],["f","Accès aux données sécurisé, clé de carte restreinte à ton site"]]],["v1.7","2026-06-06",0,[["f","Synchronisation fiable : un spot supprimé ne réapparaît plus"]]],["v1.6","2026-06-06",0,[["n","Onglet Profil : photo et réglages regroupés"]]],["v1.5","2026-06-06",0,[["n","Connexion par email et mot de passe"],["n","L'app devient 6flt Spots"]]],["v1.4","2026-06-06",0,[["n","Longs trajets jusqu'à 25 étapes"],["n","Types Musée, Circuit, Concession"],["n","Onglet Événements"]]],["v1.3","2026-06-06",1,[["n","Analyse automatique des virages d'une route"],["n","Filtres de la carte et suppression multiple dans la galerie"]]],["v1.2","2026-06-05",0,[["n","Tracé de routes sur la carte"],["n","Corbeille clients avec restauration"],["f","Routes en double et rendu des routes (v1.2.1)"]]],["v1.1","2026-06-05",0,[["n","Onglet Clients"],["n","Synchronisation en ligne des spots et clients"],["n","Écran de démarrage"]]],["v1.0","2026-06-04",0,[["n","Première version : carte des spots, galerie, Shotlist (conseil de spots selon la couleur de la voiture)"]]]];
+var CHANGELOG=[["v1.41","2026-09-27",0,[["n","Périmètre (ex Découverte) : réglages dans un bandeau en bas de carte, rayon au pincement dans le cercle ou avec + et -"],["n","Périmètre : spots à l'intérieur entourés, routes qui le traversent soulignées en blanc, liste des spots à la ronde"],["n","Critères de recherche de routes en boutons plutôt qu'en jauges"],["n","Profil en carte flottante à gauche, la carte reste visible autour"],["n","Filtres proposés au choix dans Profil, Carte, le panneau se réorganise sans trou"],["f","Briefing supprimé qui réapparaissait, renvoyé par un autre appareil qui en gardait une copie"],["n","Supprimer un briefing propose de retirer aussi la séance du planning"]]],["v1.40","2026-09-25",0,[["f","Boutons de la carte alignés en ligne quand la carte ne se chargeait pas"],["n","Découverte de routes : zone ronde posée au centre de la carte, rayon réglable en kilomètres et point orange à glisser pour la déplacer"],["n","Boutons de la carte regroupés en deux colonnes, une à gauche, une à droite"],["f","Boutons + et - de Mapbox retirés, ils étaient cachés derrière les autres"],["f","Panneaux Filtrer et Découverte plus compacts sur téléphone"]]],["v1.39","2026-09-25",0,[["n","Le briefing se gèle dès que le client accepte les conditions : plus aucune modification ne part dans son lien"],["n","Publier une nouvelle version annule la confirmation du client, qui doit accepter à nouveau"],["n","Mise à jour du lien en pause pendant que tu travailles, publication quand tu es prêt"],["n","Texte des conditions mémorisé avec le lien au moment de l'acceptation"]]],["v1.38","2026-09-23",0,[["n","Anneau d'avancement du contrat sur chaque fiche client et dans la liste : date, briefing, lien, accord, shooting, galerie"],["n","Statistiques : avancement des contrats étape par étape et valeur estimée du carnet"],["f","Numéro de version affiché dans Nouveautés remis à jour"]]],["v1.37","2026-09-23",0,[["n","Briefing : bloc L'essentiel (date, durée, secteur et tarif en tête de document)"],["n","Briefing : bloc Accord, conditions à accepter avant de confirmer"],["n","Séance offerte affichée dans la formule et dans l'essentiel"],["n","Lien client : confirmation verrouillée tant que les conditions ne sont pas acceptées, bouton daté, lien pour proposer une autre date"],["f","Lien client : message distinct entre perte de connexion et lien expiré"]]],["v1.36","2026-09-23",0,[["n","Profil réorganisé : accueil, objectifs, carte, apparence et données sur des pages séparées"],["n","Statistiques : santé des fiches, ajouts par mois, clients, liens partagés, photos, routes, types, heures de shoot"],["n","Page Nouveautés avec l'historique daté de toutes les versions"],["n","Filtre des fiches à compléter dans l'onglet Spots"]]],["v1.35","2026-09-23",0,[["n","Plusieurs photos d'un coup dans les spots, envoyées dans l'ordre choisi"],["n","Heure et affiche des événements, affiche en plein écran"],["f","Événement de la veille encore affiché comme à venir le soir"],["f","Date de création d'un événement perdue à l'édition"]]],["v1.34","2026-09-22",0,[["n","Téléchargement du briefing en PDF"],["n","Lien client interactif : adresse exacte révélée avant le shoot, ajout au calendrier"]]],["v1.33","2026-09-22",0,[["n","Briefings listés dans la fiche client, création directe depuis la fiche"],["n","Texte modifiable directement dans le briefing, zoom de l'éditeur"],["n","Changer la date du shoot dans le briefing met à jour le planning du client"],["n","Toucher le logo actualise l'app"]]],["v1.30","2026-09-22",0,[["n","Planning refait : briefings en rangées réordonnables (1 à 3 colonnes), blocs branchés sur tes spots et clients, gabarits, sauvegarde en ligne"]]],["v1.29","2026-09-20",0,[["n","Cartes Spots plus compactes, décor affiché sur la carte"],["f","Vignettes carrées du Planning déformées"]]],["v1.28","2026-09-20",0,[["n","Galerie et Shotlist fusionnées dans l'onglet Spots"],["n","Sélection multiple et glisser pour supprimer un spot"],["n","Inspirations déplacées vers le profil"]]],["v1.27","2026-09-20",0,[["n","Planning en éditeur grille aimantée, branché sur les spots et clients"]]],["v1.26","2026-09-20",0,[["n","Premier onglet Planning (document de briefing)"],["n","Associer des spots à un client en les touchant sur la carte"]]],["v1.24","2026-09",1,[["f","Boutons de la carte qui se chevauchaient sur mobile"],["f","Panneaux filtres, découverte et soleil qui restaient ouverts ensemble"],["n","Marqueurs réduits à 44 px sur mobile"]]],["v1.23","2026-07-21",0,[["n","Fréquentation des routes heure par heure"],["n","Découverte de routes dans une zone dessinée (OpenStreetMap), filtrées par sinuosité"]]],["v1.22","2026-07-17",0,[["n","Aperçu en direct de l'objet 3D avant de le poser"],["f","Objets 3D qui disparaissaient après une image"]]],["v1.21","2026-07-17",0,[["n","Bouton dédié pour placer un objet 3D"]]],["v1.20","2026-07-17",0,[["n","Comptes séparés : inscription, mot de passe oublié, données propres à chaque compte"],["n","Progression XP sauvegardée dans le compte"]]],["v1.18","2026-07-06",0,[["n","Mode soleil 3D : position du soleil et ombres portées"],["n","Objets 3D sur la carte (voiture, flèche, cube)"],["n","Vidéos courtes sur les spots (20 s max)"],["n","Retracer une route existante"],["n","Zoom et pincement dans la visionneuse, photos réorganisables par glisser"],["n","Progression : XP, niveaux, objectifs et titres"],["n","Historique de recherche et vue Street (Mapillary, repli Google)"]]],["v1.17","2026-06-27",0,[["f","Marqueurs qui glissaient au dézoom"]]],["v1.16","2026-06-27",0,[["f","Tentative de correction des marqueurs (non concluante)"]]],["v1.15","2026-06-27",0,[["n","Navigation entre les photos dans la visionneuse"]]],["v1.14","2026-06-08",0,[["n","Mini-calendrier dans la fiche client pour planifier les shoots"]]],["v1.13","2026-06-07",0,[["n","Planning mensuel de tous les shoots"]]],["v1.12","2026-06-07",0,[["n","Sélection de plusieurs clients et spot de compromis pour leurs voitures"],["f","Badges d'état restylés (v1.12.1)"]]],["v1.11","2026-06-07",0,[["n","États clients automatiques : prospect, planifié, réalisé, livré"],["n","Relance À livrer et accès direct aux spots conseillés pour une voiture"]]],["v1.10","2026-06-07",0,[["n","Shootings planifiés dans la fiche client"]]],["v1.9","2026-06-07",0,[["n","Plusieurs voitures par client avec couleur de carrosserie, offre et statut"]]],["v1.8","2026-06-07",0,[["f","Photos stockées en ligne : fin de la mémoire saturée qui cassait la synchro PC / iPhone"],["f","Accès aux données sécurisé, clé de carte restreinte à ton site"]]],["v1.7","2026-06-06",0,[["f","Synchronisation fiable : un spot supprimé ne réapparaît plus"]]],["v1.6","2026-06-06",0,[["n","Onglet Profil : photo et réglages regroupés"]]],["v1.5","2026-06-06",0,[["n","Connexion par email et mot de passe"],["n","L'app devient 6flt Spots"]]],["v1.4","2026-06-06",0,[["n","Longs trajets jusqu'à 25 étapes"],["n","Types Musée, Circuit, Concession"],["n","Onglet Événements"]]],["v1.3","2026-06-06",1,[["n","Analyse automatique des virages d'une route"],["n","Filtres de la carte et suppression multiple dans la galerie"]]],["v1.2","2026-06-05",0,[["n","Tracé de routes sur la carte"],["n","Corbeille clients avec restauration"],["f","Routes en double et rendu des routes (v1.2.1)"]]],["v1.1","2026-06-05",0,[["n","Onglet Clients"],["n","Synchronisation en ligne des spots et clients"],["n","Écran de démarrage"]]],["v1.0","2026-06-04",0,[["n","Première version : carte des spots, galerie, Shotlist (conseil de spots selon la couleur de la voiture)"]]]];
 var PF_MOIS=['janv.','févr.','mars','avr.','mai','juin','juil.','août','sept.','oct.','nov.','déc.'];
 var pfStack=['pf-hub'];
 var pfNewsShown=6;
@@ -4119,6 +4190,7 @@ function renderMarkers(){
   renderRouteLines();
   if(typeof renderModels3D==='function') renderModels3D();
   if(typeof hourlyOpen!=='undefined' && hourlyOpen && typeof applyHourlyColoring==='function') applyHourlyColoring();
+  if(typeof zoneRefresh==='function' && typeof zoneCircle!=='undefined' && zoneCircle) zoneRefresh();
 }
 
 // Trace toutes les lignes de route visibles dans une seule source GeoJSON
@@ -4144,6 +4216,7 @@ function renderRouteLines(){
     map.on('mouseenter','routes-line',function(){ map.getCanvas().style.cursor='pointer'; });
     map.on('mouseleave','routes-line',function(){ map.getCanvas().style.cursor=''; });
   }
+  if(typeof zoneRouteCasing==='function' && typeof zoneCircle!=='undefined' && zoneCircle) zoneRouteCasing();
 }
 // place un petit marqueur au milieu de la route (pour l'ouvrir au tap, comme un spot)
 function addRouteToMap(s){
@@ -5571,17 +5644,40 @@ function loadCloud(){
   sb.from('briefings').select('id,data,updated_at').then(function(res){
     if(res.error){ console.warn('Supabase briefings load:', res.error.message); S.cloud = false; return; }
     var cloud = (res.data||[]).map(function(r){ return r.data; }).filter(function(d){ return d && d.id; });
-    var byId = {}; cloud.forEach(function(d){ byId[d.id] = d; });
+    // v1.41 : un briefing supprime laisse une pierre tombale (data.deleted) au lieu de disparaitre.
+    // Sans elle, un autre appareil qui en gardait une copie la renvoyait au cloud au chargement suivant.
+    var tomb = lsGet(LS_TOMB, {}) || {}, tdirty = false, cloudTomb = {};
+    var byId = {};
+    cloud.forEach(function(d){
+      if(d.deleted){ cloudTomb[d.id] = 1; if(!tomb[d.id] || tomb[d.id] < (d.updatedAt||0)){ tomb[d.id] = d.updatedAt || Date.now(); tdirty = true; } return; }
+      if(tomb[d.id] && (d.updatedAt||0) <= tomb[d.id]) return;
+      byId[d.id] = d;
+    });
     var up = [];
-    briefings.forEach(function(l){ var c = byId[l.id]; if(!c || (l.updatedAt||0) > (c.updatedAt||0)){ byId[l.id] = l; up.push(l); } });
+    briefings.forEach(function(l){
+      if(tomb[l.id] && (l.updatedAt||0) <= tomb[l.id]) return;
+      var c = byId[l.id]; if(!c || (l.updatedAt||0) > (c.updatedAt||0)){ byId[l.id] = l; up.push(l); }
+    });
+    if(tdirty) lsSet(LS_TOMB, tomb);
+    Object.keys(tomb).forEach(function(id){ if(!cloudTomb[id]) pushTomb(id, tomb[id]); });
+    if(doc && tomb[doc.id] && (doc.updatedAt||0) <= tomb[doc.id]){ clearTimeout(saveT); saveT = null; doc = null; }
     briefings = Object.keys(byId).map(function(k){ return byId[k]; }).sort(function(a,b){ return (b.updatedAt||0)-(a.updatedAt||0); });
     saveLocal();
     if(typeof window.renderClientDocs==='function') try{ window.renderClientDocs(); }catch(e){}
     if(up.length) sb.from('briefings').upsert(up.map(function(d){ return {id:d.id, user_id:currentUserId, client_id:d.clientId||null, title:d.title||'', status:d.status||'draft', data:d, updated_at:new Date(d.updatedAt||Date.now()).toISOString()}; })).then(function(){});
     if(doc && !saveT){ var fresh = briefings.filter(function(b){ return b.id===doc.id; })[0]; if(fresh && (fresh.updatedAt||0) > (doc.updatedAt||0)){ openDoc(fresh.id, true); return; } }
-    if(!doc && briefings.length){ openDoc(lsGet(LS.cur, null) || briefings[0].id, true); return; }
+    if(!doc && briefings.length){ var cur = lsGet(LS.cur, null); openDoc(briefings.some(function(b){ return b.id===cur; }) ? cur : briefings[0].id, true); return; }
+    if(!doc){ renderAll(); return; }
     renderList();
   });
+}
+var LS_TOMB = '6flt_bf_deleted';
+function pushTomb(id, ts){
+  if(!sb || !currentUserId || !id) return;
+  // champs vides en plus : une ancienne version de l'app qui lirait cette ligne affiche un document vide au lieu de planter
+  var data = {id:id, deleted:true, updatedAt:ts, title:'Briefing supprimé', titleCustom:true, rows:[], route:[], photos:[], spotNotes:{}, status:'draft'};
+  sb.from('briefings').upsert({id:id, user_id:currentUserId, client_id:null, title:'Supprimé', status:'draft', data:data, updated_at:new Date(ts).toISOString()})
+    .then(function(res){ if(res.error) console.warn('Supabase briefings suppression:', res.error.message); });
 }
 
 /* ---------- documents ---------- */
@@ -5614,9 +5710,19 @@ function deleteDoc(id){
   var d = briefings.filter(function(b){ return b.id===id; })[0]; if(!d) return;
   if(!confirm('Supprimer « '+(d.title||'ce briefing')+' » ? Cette action est définitive.')) return;
   if(doc && doc.id===id){ clearTimeout(saveT); saveT = null; doc = null; }
+  var tomb = lsGet(LS_TOMB, {}) || {};
+  tomb[id] = Math.max(Date.now(), (d.updatedAt||0)+1); lsSet(LS_TOMB, tomb);
   briefings = briefings.filter(function(b){ return b.id!==id; }); saveLocal();
-  if(sb && currentUserId) sb.from('briefings').delete().eq('id', id).then(function(res){ if(res.error) console.warn('Supabase briefings delete:', res.error.message); });
+  pushTomb(id, tomb[id]);
   if(sb && currentUserId && d.share && d.share.token) sb.from('shared_briefings').delete().eq('token', d.share.token).then(function(){});
+  // la seance liee restait dans le planning du client : on propose de la retirer
+  var dc = d.clientId ? getClient(d.clientId) : null, dd = d.shootDate || d.date;
+  if(dc && dd && Array.isArray(dc.shoots) && dc.shoots.some(function(x){ return x && x.date===dd; })
+     && !briefings.some(function(b){ return b.clientId===d.clientId && (b.shootDate||b.date)===dd; })){
+    if(confirm('Retirer aussi la séance du '+fshort(dd)+' du planning de '+(firstName(dc)||'ce client')+' ?')){
+      dc.shoots = dc.shoots.filter(function(x){ return !x || x.date!==dd; }); clientsChanged();
+    }
+  }
   if(!doc && briefings.length) openDoc(briefings[0].id, true); else renderAll();
   toast('Briefing supprimé');
 }
@@ -7242,7 +7348,7 @@ function toggleFilters(){
   var open=p.classList.toggle('open');
   if(open){
     document.getElementById('settings-panel').classList.remove('open');
-    if(discoverOpen) toggleDiscover();
+    if(discoverOpen) zoneCriteria(false);
     if(hourlyOpen) toggleHourly();
   }
 }
@@ -7322,6 +7428,48 @@ function resetFilters(){
   paintFilterStars();
   applyFilters();
 }
+// v1.41 : filtres proposes, activables dans Profil > Carte
+var FLT_DEF={kind:1,status:1,type:1,stars:1,curves:1,season:0,road:0,traffic:0};
+var FLT_LBL=[['kind',"Type d'élément"],['status','Statut'],['type','Type de lieu'],['stars','Note minimale'],['curves','Courbes de la route'],['season','Saison idéale'],['road','État de la route'],['traffic','Niveau de circulation']];
+function fltVis(){
+  var v={}; try{ v=JSON.parse(localStorage.getItem('6flt_filter_vis')||'{}')||{}; }catch(e){ v={}; }
+  var o={}; Object.keys(FLT_DEF).forEach(function(k){ o[k] = (k in v) ? !!v[k] : !!FLT_DEF[k]; }); return o;
+}
+function fltClear(k){
+  if(k==='kind'){ filters.kind=[]; paintFilterKind([]); }
+  else if(k==='status'){ filters.status=[]; document.querySelectorAll('#filter-status .tag').forEach(function(t){ t.classList.remove('active'); }); }
+  else if(k==='type'){ filters.type=''; var ft=document.getElementById('filter-type'); if(ft) ft.value=''; }
+  else if(k==='stars'){ filters.minStars=0; paintFilterStars(); }
+  else if(k==='curves'){ filters.curve='all'; document.querySelectorAll('#filter-curves .tag').forEach(function(t){ t.classList.toggle('active', t.dataset.curve==='all'); }); var g=document.getElementById('gallery-curve-filter'); if(g) g.value='all'; }
+  else if(k==='season'){ filters.season=[]; document.querySelectorAll('#filter-season .tag').forEach(function(t){ t.classList.remove('active'); }); }
+  else if(k==='road'){ filters.roadState=''; var fr=document.getElementById('filter-road-state'); if(fr) fr.value=''; }
+  else if(k==='traffic'){ filters.traffic=''; var fc=document.getElementById('filter-traffic'); if(fc) fc.value=''; }
+}
+function fltApplyVis(){
+  var vis=fltVis(), on=0, halves=[];
+  document.querySelectorAll('#flt-grid .flt-g').forEach(function(g){
+    var k=g.getAttribute('data-flt'), show=!!vis[k];
+    g.classList.toggle('off', !show); g.classList.remove('solo');
+    if(show){ on++; if(g.classList.contains('half')) halves.push(g); }
+  });
+  // une demi-case seule prend toute la largeur : pas de trou, pas de chevauchement
+  if(halves.length%2===1) halves[halves.length-1].classList.add('solo');
+  var em=document.getElementById('flt-empty'); if(em) em.classList.toggle('on', on===0);
+}
+function fltSet(k, on){
+  var vis=fltVis(); vis[k]=!!on;
+  try{ localStorage.setItem('6flt_filter_vis', JSON.stringify(vis)); }catch(e){}
+  if(!on){ fltClear(k); applyFilters(); }
+  fltApplyVis();
+}
+function fltRenderSettings(){
+  var box=document.getElementById('pf-flt-list'); if(!box) return;
+  var vis=fltVis();
+  box.innerHTML=FLT_LBL.map(function(x){
+    return '<div class="switch-row"><span class="switch-label">'+x[1]+'</span><label class="switch"><input type="checkbox" data-fltk="'+x[0]+'"'+(vis[x[0]]?' checked':'')+'><span class="track"><span class="knob"></span></span></label></div>';
+  }).join('');
+  box.querySelectorAll('input[data-fltk]').forEach(function(i){ i.onchange=function(){ fltSet(i.getAttribute('data-fltk'), i.checked); }; });
+}
 // close filter panel on outside click
 document.addEventListener('click',function(e){
   var p=document.getElementById('filter-panel'), b=document.getElementById('filter-btn');
@@ -7330,6 +7478,8 @@ document.addEventListener('click',function(e){
 
 applyTheme();
 buildFilterPanel();
+fltApplyVis();
+fltRenderSettings();
 document.getElementById('owm-key').value = owmKey;
 initBackup();
 
@@ -8518,27 +8668,57 @@ if(document.readyState==='loading') document.addEventListener('DOMContentLoaded'
 else groupMapButtons();
 var discoveredFeatures=null;
 
+// v1.41 : Perimetre. Le bouton ouvre un dock en bas de carte (rayon, spots a la ronde,
+// recherche de routes). Fermer le dock retire le cercle, les surlignages et les resultats.
 function toggleDiscover(){
   discoverOpen=!discoverOpen;
-  document.getElementById('discover-panel').classList.toggle('open',discoverOpen);
+  var dock=document.getElementById('zone-dock');
+  if(dock) dock.classList.toggle('on',discoverOpen);
+  document.body.classList.toggle('zone-on',discoverOpen);
   document.getElementById('btn-discover').classList.toggle('active',discoverOpen);
   if(discoverOpen){
     if(hourlyOpen) toggleHourly();
     document.getElementById('filter-panel').classList.remove('open');
     document.getElementById('settings-panel').classList.remove('open');
+    zoneLayout();
+    if(!zoneCircle) placeZone(); else { drawZonePersist(); zoneRefresh(); }
+    zoneStatus();
   } else {
-    cancelZoneSelect();
+    zoneCriteria(false);
+    zoneListOpen=false;
+    if(typeof map!=='undefined' && map) clearDiscovery();
+    clearZone();
   }
+  zoneLayout();
 }
 function setDiscShape(el){
   document.querySelectorAll('#disc-shape .tag').forEach(function(t){t.classList.remove('active');});
   el.classList.add('active');
   discShape=el.getAttribute('data-shape');
-  document.getElementById('disc-sinuo-row').style.display = (discShape==='droite')?'none':'flex';
+  document.getElementById('disc-sinuo-row').style.display = (discShape==='droite')?'none':'';
 }
+function zoneCriteria(open){
+  var p=document.getElementById('discover-panel'); if(!p) return;
+  if(open===undefined) open=!p.classList.contains('open');
+  p.classList.toggle('open', !!open);
+  var b=document.getElementById('zd-crit-btn'); if(b) b.classList.toggle('on', !!open);
+}
+// criteres en boutons segmentes, plus de jauges fines au doigt
+document.addEventListener('click', function(e){
+  var t=e.target && e.target.closest ? e.target : null; if(!t) return;
+  var b=t.closest('.zc-seg button');
+  if(b){
+    var seg=b.parentNode, inp=document.getElementById(seg.getAttribute('data-for'));
+    if(inp){ seg.querySelectorAll('button').forEach(function(x){ x.classList.toggle('on', x===b); }); inp.value=b.getAttribute('data-v'); }
+    return;
+  }
+  var p=document.getElementById('discover-panel'), cb=document.getElementById('zd-crit-btn');
+  if(p && p.classList.contains('open') && !p.contains(t) && !(cb && cb.contains(t))) zoneCriteria(false);
+});
 
-// --- Zone de recherche circulaire, deplacable, rayon en kilometres (v1.40) ---
-var zoneCircle=null, zoneMarker=null;
+// --- Cercle deplacable, rayon en kilometres ---
+var zoneCircle=null, zoneMarker=null, zoneIn={spots:[],routes:[]}, zoneListOpen=false, zoneRaf=0, zonePinchReady=false;
+var ZONE_MIN=0.5, ZONE_MAX=40;
 function circlePoly(lng, lat, km){
   var pts=[], n=72, R=6371, f=(km/R)*(180/Math.PI);
   for(var i=0;i<=n;i++){
@@ -8548,50 +8728,224 @@ function circlePoly(lng, lat, km){
   return {type:'Feature', geometry:{type:'Polygon', coordinates:[pts]}};
 }
 function drawZonePersist(){
-  if(!zoneCircle || !map) return;
+  if(!zoneCircle || typeof map==='undefined' || !map) return;
   var poly=circlePoly(zoneCircle.lng, zoneCircle.lat, zoneCircle.km);
-  if(map.getSource('disc-zone')){ map.getSource('disc-zone').setData(poly); return; }
-  map.addSource('disc-zone',{type:'geojson',data:poly});
-  map.addLayer({id:'disc-zone-fill',type:'fill',source:'disc-zone',paint:{'fill-color':'#e8571a','fill-opacity':0.08}});
-  map.addLayer({id:'disc-zone-line',type:'line',source:'disc-zone',paint:{'line-color':'#e8571a','line-width':1.5,'line-dasharray':[2,2]}});
+  try{
+    if(map.getSource('disc-zone')){ map.getSource('disc-zone').setData(poly); return; }
+    map.addSource('disc-zone',{type:'geojson',data:poly});
+    map.addLayer({id:'disc-zone-fill',type:'fill',source:'disc-zone',paint:{'fill-color':'#e8571a','fill-opacity':0.08}});
+    map.addLayer({id:'disc-zone-line',type:'line',source:'disc-zone',paint:{'line-color':'#e8571a','line-width':1.5,'line-dasharray':[2,2]}});
+  }catch(e){}
+}
+function zoneRound(km){ km=Math.max(ZONE_MIN, Math.min(ZONE_MAX, km||10)); return km<5 ? Math.round(km*2)/2 : Math.round(km); }
+function zoneKmFmt(km){ return String(km).replace('.',',')+' km'; }
+function zoneShowKm(km){
+  var r=document.getElementById('disc-radius'); if(r) r.value=km;
+  var v=document.getElementById('disc-radius-val'); if(v) v.textContent=zoneKmFmt(km);
+}
+function zoneSetKm(km){
+  if(!zoneCircle) return;
+  zoneCircle.km=zoneRound(km); zoneShowKm(zoneCircle.km); zoneSoon(); zoneStatus();
+}
+function zoneSoon(){
+  if(zoneRaf) return;
+  zoneRaf=requestAnimationFrame(function(){ zoneRaf=0; drawZonePersist(); zoneRefresh(); });
 }
 function zoneStatus(){
   var el=document.getElementById('disc-zone-status'); if(!el) return;
-  if(!zoneCircle){ el.textContent='Aucune zone posee'; return; }
+  if(!zoneCircle){ el.textContent=''; return; }
   var a=Math.round(Math.PI*zoneCircle.km*zoneCircle.km);
-  el.textContent='Rayon '+zoneCircle.km+' km, environ '+a+' km\u00b2'+(a>600 ? ' \u00b7 zone large, requete plus lente' : '');
+  if(a>600) el.textContent='Périmètre large, environ '+a+' km² : la recherche de routes sera plus lente';
+  else el.textContent = IS_TOUCH ? 'Pince le cercle pour régler le rayon, glisse le point orange pour le déplacer' : 'Glisse le point orange pour déplacer le périmètre';
 }
 function onZoneRadius(){
-  var v=parseInt(document.getElementById('disc-radius').value,10)||10;
-  document.getElementById('disc-radius-val').textContent=v+' km';
-  if(zoneCircle){ zoneCircle.km=v; drawZonePersist(); zoneStatus(); }
+  var v=parseFloat(document.getElementById('disc-radius').value)||10;
+  if(zoneCircle) zoneSetKm(v); else zoneShowKm(zoneRound(v));
 }
+function zoneStep(d){
+  if(!zoneCircle) return;
+  var k=zoneCircle.km, st = k<5 ? 0.5 : (k<15 ? 1 : 5);
+  if(d<0 && k===5) st=0.5;
+  if(d<0 && k>15 && k-st<15) st=k-15;
+  zoneSetKm(k + d*st);
+}
+function zoneLayout(){
+  var d=document.getElementById('zone-dock');
+  var r=document.getElementById('zd-res'), st=document.getElementById('disc-result-status');
+  if(r && st) r.classList.toggle('on', !!st.textContent);
+  var h = d && d.classList.contains('on') ? d.offsetHeight : 0;
+  document.body.style.setProperty('--zd-h', (h||170)+'px');
+}
+function zoneIsPhone(){ return window.innerWidth<=640; }
 function placeZone(){
-  if(!map) return;
-  var c=map.getCenter(), km=parseInt(document.getElementById('disc-radius').value,10)||10;
+  if(typeof map==='undefined' || !map || typeof mapboxgl==='undefined') return;
+  var cv=map.getCanvas(), w=cv.clientWidth||window.innerWidth, h=cv.clientHeight||window.innerHeight;
+  var d=document.getElementById('zone-dock'), dh=(d && d.offsetHeight) || 170;
+  var top=zoneIsPhone()?110:70, bottom=dh+(zoneIsPhone()?94:40), vh=Math.max(120, h-top-bottom);
+  var cx=w/2, cy=top+vh/2, pxR=0.36*Math.min(w, vh);
+  var c=map.unproject([cx,cy]), e=map.unproject([cx+pxR,cy]);
+  var km=zoneRound(haversine([c.lng,c.lat],[e.lng,e.lat])/1000);
   zoneCircle={lng:c.lng, lat:c.lat, km:km};
+  zoneShowKm(km);
   if(!zoneMarker){
     var el=document.createElement('div');
     el.style.cssText='width:26px;height:26px;border-radius:50%;background:#e8571a;border:3px solid #fff;box-shadow:0 2px 10px rgba(0,0,0,.55);cursor:grab';
     zoneMarker=new mapboxgl.Marker({element:el, draggable:true}).setLngLat([c.lng,c.lat]).addTo(map);
-    zoneMarker.on('drag', function(){ var p=zoneMarker.getLngLat(); zoneCircle.lng=p.lng; zoneCircle.lat=p.lat; drawZonePersist(); });
-    zoneMarker.on('dragend', zoneStatus);
+    zoneMarker.on('drag', function(){ if(!zoneCircle) return; var p=zoneMarker.getLngLat(); zoneCircle.lng=p.lng; zoneCircle.lat=p.lat; zoneSoon(); });
+    zoneMarker.on('dragend', function(){ zoneRefresh(); zoneStatus(); });
   } else { zoneMarker.setLngLat([c.lng,c.lat]); zoneMarker.addTo(map); }
-  document.getElementById('disc-radius-row').style.display='flex';
-  document.getElementById('disc-select-btn').textContent='Recentrer la zone ici';
-  document.getElementById('disc-run-btn').disabled=false;
-  drawZonePersist(); zoneStatus();
+  zonePinchInit();
+  drawZonePersist(); zoneRefresh(); zoneStatus();
 }
 function clearZone(){
   zoneCircle=null;
   if(zoneMarker) zoneMarker.remove();
-  if(map && map.getSource('disc-zone')) map.getSource('disc-zone').setData({type:'FeatureCollection',features:[]});
-  var r=document.getElementById('disc-radius-row'); if(r) r.style.display='none';
-  var b=document.getElementById('disc-select-btn'); if(b) b.textContent='Poser la zone au centre de la carte';
-  var run=document.getElementById('disc-run-btn'); if(run) run.disabled=true;
-  zoneStatus();
+  try{ if(typeof map!=='undefined' && map && map.getSource('disc-zone')) map.getSource('disc-zone').setData({type:'FeatureCollection',features:[]}); }catch(e){}
+  zoneRefresh(); zoneStatus();
 }
-function cancelZoneSelect(){ /* conserve pour compatibilite : la zone reste posee */ }
+function cancelZoneSelect(){ /* conserve pour compatibilite */ }
+
+// --- Pincement dans le cercle : regle le rayon au lieu de zoomer la carte ---
+function zonePxRadius(){
+  var c=map.project([zoneCircle.lng, zoneCircle.lat]);
+  var dLng=(zoneCircle.km/111.32)/Math.cos(zoneCircle.lat*Math.PI/180);
+  var e=map.project([zoneCircle.lng+dLng, zoneCircle.lat]);
+  return {x:c.x, y:c.y, r:Math.abs(e.x-c.x)};
+}
+function zonePinchInit(){
+  if(zonePinchReady || typeof map==='undefined' || !map) return;
+  zonePinchReady=true;
+  var host=map.getContainer(), P=null;
+  function gap(t){ return Math.hypot(t[0].clientX-t[1].clientX, t[0].clientY-t[1].clientY); }
+  function stop(e){ e.stopPropagation(); if(e.cancelable) e.preventDefault(); }
+  host.addEventListener('touchstart', function(e){
+    if(!discoverOpen || !zoneCircle || e.touches.length!==2) return;
+    var rc=host.getBoundingClientRect();
+    var mx=(e.touches[0].clientX+e.touches[1].clientX)/2-rc.left, my=(e.touches[0].clientY+e.touches[1].clientY)/2-rc.top;
+    var z=zonePxRadius();
+    if(z.r > 0.75*Math.min(rc.width, rc.height)) return;          // cercle plus grand que l'ecran : zoom normal
+    if(Math.hypot(mx-z.x, my-z.y) > Math.max(z.r*1.15, 60)) return; // pincement hors du cercle : zoom normal
+    var g=gap(e.touches); if(g<10) return;
+    P={g0:g, km0:zoneCircle.km};
+    try{ map.touchZoomRotate.disable(); map.dragPan.disable(); }catch(err){}
+    stop(e);
+  }, {capture:true, passive:false});
+  host.addEventListener('touchmove', function(e){
+    if(!P) return;
+    stop(e);
+    if(e.touches.length<2 || !zoneCircle) return;
+    zoneSetKm(P.km0*gap(e.touches)/P.g0);
+  }, {capture:true, passive:false});
+  function end(e){
+    if(!P || e.touches.length>=2) return;
+    P=null;
+    try{ map.touchZoomRotate.enable(); map.dragPan.enable(); }catch(err){}
+    zoneRefresh();
+  }
+  host.addEventListener('touchend', end, true);
+  host.addEventListener('touchcancel', end, true);
+}
+
+// --- Spots et routes a la ronde ---
+function zoneRouteDist(s, z){
+  var line=(s.routeLine && s.routeLine.length) ? s.routeLine : (isFinite(+s.lng) && isFinite(+s.lat) ? [[+s.lng,+s.lat]] : null);
+  if(!line) return Infinity;
+  var kx=111320*Math.cos(z.lat*Math.PI/180), ky=110540, best=Infinity;
+  function P(p){ return [(p[0]-z.lng)*kx, (p[1]-z.lat)*ky]; }
+  var a=P(line[0]);
+  if(line.length===1) return Math.hypot(a[0],a[1]);
+  for(var i=1;i<line.length;i++){
+    var b=P(line[i]), dx=b[0]-a[0], dy=b[1]-a[1], L=dx*dx+dy*dy;
+    var t=L ? Math.max(0, Math.min(1, -(a[0]*dx+a[1]*dy)/L)) : 0;
+    var x=a[0]+t*dx, y=a[1]+t*dy, d=Math.sqrt(x*x+y*y);
+    if(d<best) best=d;
+    a=b;
+  }
+  return best;
+}
+function zoneRefresh(){
+  var inS=[], inR=[];
+  if(zoneCircle && typeof spots!=='undefined'){
+    var c=[zoneCircle.lng, zoneCircle.lat], R=zoneCircle.km*1000;
+    spots.forEach(function(s){
+      if(!s || s.kind==='model3d') return;
+      if(typeof spotPassesFilters==='function' && !spotPassesFilters(s)) return;
+      if(s.kind==='route'){ var d=zoneRouteDist(s, zoneCircle); if(d<=R) inR.push({s:s, d:d}); return; }
+      var la=+s.lat, ln=+s.lng; if(!isFinite(la) || !isFinite(ln)) return;
+      var d2=haversine([ln,la], c); if(d2<=R) inS.push({s:s, d:d2});
+    });
+    inS.sort(function(a,b){ return a.d-b.d; }); inR.sort(function(a,b){ return a.d-b.d; });
+    drawZonePersist();
+  }
+  zoneIn={spots:inS, routes:inR};
+  var ids={}; inS.forEach(function(o){ ids[String(o.s.id)]=1; });
+  if(typeof mbMarkers!=='undefined' && mbMarkers) Object.keys(mbMarkers).forEach(function(id){
+    var m=mbMarkers[id], el=m && m.getElement ? m.getElement() : null, inner=el ? el.querySelector('.marker-inner') : null;
+    if(inner) inner.classList.toggle('in-zone', !!ids[String(id)]);
+  });
+  zoneRouteCasing();
+  zoneCountRender();
+}
+function zoneRouteCasing(){
+  try{
+    if(typeof map==='undefined' || !map || !map.getSource('routes')) return;
+    var ids=(zoneIn.routes||[]).map(function(o){ return String(o.s.id); });
+    if(!map.getLayer('zone-routes-casing')){
+      map.addLayer({id:'zone-routes-casing',type:'line',source:'routes',layout:{'line-cap':'round','line-join':'round'},
+        paint:{'line-color':'#ffffff','line-width':10,'line-opacity':0.95}}, map.getLayer('routes-line') ? 'routes-line' : undefined);
+    } else if(map.getLayer('routes-line')){
+      map.moveLayer('zone-routes-casing','routes-line');
+    }
+    map.setFilter('zone-routes-casing', ids.length ? ['match',['to-string',['get','id']],ids,true,false] : ['==',['get','id'],'__aucune__']);
+  }catch(e){}
+}
+function zoneCountRender(){
+  var t=document.getElementById('zd-count-t'), btn=document.getElementById('zd-count'); if(!t || !btn) return;
+  var n=zoneIn.spots.length, r=zoneIn.routes.length;
+  if(!zoneCircle) t.textContent='Périmètre';
+  else if(!n && !r) t.textContent='Aucun spot dans le périmètre';
+  else t.textContent=[n ? n+' spot'+(n>1?'s':'') : '', r ? r+' route'+(r>1?'s':'') : ''].filter(Boolean).join(', ')+' dans le périmètre';
+  btn.classList.toggle('has', n+r>0);
+  if(!(n+r)) zoneListOpen=false;
+  zoneListRender();
+}
+function zoneToggleList(){
+  if(!(zoneIn.spots.length+zoneIn.routes.length)) return;
+  zoneListOpen=!zoneListOpen; zoneListRender();
+}
+function zoneListRender(){
+  var box=document.getElementById('zd-list'), dock=document.getElementById('zone-dock'); if(!box) return;
+  var all=zoneIn.spots.map(function(o){ return {s:o.s, d:o.d, r:false}; }).concat(zoneIn.routes.map(function(o){ return {s:o.s, d:o.d, r:true}; }));
+  all.sort(function(a,b){ return a.d-b.d; });
+  if(!zoneListOpen || !all.length){ box.innerHTML=''; box.classList.remove('open'); if(dock) dock.classList.remove('list'); zoneLayout(); return; }
+  box.innerHTML=all.map(function(o){
+    var dist=o.d<1000 ? Math.round(o.d)+' m' : (o.d/1000).toFixed(1).replace('.',',')+' km';
+    var nm=o.s.name || (o.r ? 'Route sans nom' : 'Spot sans nom');
+    return '<button type="button" class="zd-item" data-zid="'+escapeHtml(String(o.s.id))+'"><span class="zd-dot'+(o.r?' r':'')+'"></span><span class="zd-nm">'+escapeHtml(nm)+'</span><span class="zd-d">'+dist+'</span></button>';
+  }).join('');
+  box.classList.add('open'); if(dock) dock.classList.add('list');
+  zoneLayout();
+}
+document.addEventListener('click', function(e){
+  var it=e.target && e.target.closest ? e.target.closest('.zd-item') : null; if(!it) return;
+  var id=it.getAttribute('data-zid'), s=(typeof spots!=='undefined' ? spots : []).find(function(x){ return x && String(x.id)===id; });
+  if(!s) return;
+  var ll = s.kind==='route' && s.routeLine && s.routeLine.length ? s.routeLine[Math.floor(s.routeLine.length/2)] : [+s.lng, +s.lat];
+  try{ if(map && isFinite(ll[0]) && isFinite(ll[1])) map.easeTo({center:ll, duration:500}); }catch(err){}
+  openExistingSpotPanel(s.id);
+});
+window.addEventListener('resize', function(){ if(discoverOpen) zoneLayout(); });
+
+// profil : voile leger derriere la carte flottante, un toucher le referme
+(function(){
+  var sp=document.getElementById('settings-panel'); if(!sp || document.getElementById('pf-scrim')) return;
+  var sc=document.createElement('div'); sc.id='pf-scrim';
+  sc.addEventListener('click', function(){ if(typeof pfClose==='function') pfClose(); else sp.classList.remove('open'); });
+  sp.parentNode.insertBefore(sc, sp);
+  function sync(){ sc.classList.toggle('on', sp.classList.contains('open')); }
+  if(window.MutationObserver) new MutationObserver(sync).observe(sp, {attributes:true, attributeFilter:['class']});
+  sync();
+})();
 
 // --- Requete Overpass ---
 async function runDiscovery(){
@@ -8599,7 +8953,7 @@ async function runDiscovery(){
   var btn=document.getElementById('disc-run-btn');
   var st=document.getElementById('disc-result-status');
   btn.disabled=true; btn.textContent='Recherche en cours...';
-  st.textContent='Interrogation d\'OpenStreetMap...';
+  st.textContent='Interrogation d\'OpenStreetMap...'; zoneLayout();
   var around='(around:'+Math.round(zoneCircle.km*1000)+','+zoneCircle.lat.toFixed(6)+','+zoneCircle.lng.toFixed(6)+')';
   var q='[out:json][timeout:25];(way["highway"~"^(motorway|trunk|primary|secondary|tertiary|unclassified|residential|road|track|service)$"]'+around+';);out geom;';
   var endpoints=['https://overpass-api.de/api/interpreter','https://overpass.kumi.systems/api/interpreter'];
@@ -8610,7 +8964,7 @@ async function runDiscovery(){
       if(res.ok) data=await res.json();
     }catch(e){ err=e; }
   }
-  if(!data){ st.textContent='Echec de la requete. Reessaie dans un instant.'; btn.disabled=false; btn.textContent='Chercher des routes'; return; }
+  if(!data){ st.textContent='Échec de la recherche. Réessaie dans un instant.'; btn.disabled=false; btn.textContent='Chercher des routes'; zoneLayout(); return; }
   processOverpass(data);
 }
 
@@ -8653,9 +9007,10 @@ function processOverpass(data){
   discoveredFeatures=feats;
   renderDiscovered();
   var btn=document.getElementById('disc-run-btn'); btn.disabled=false; btn.textContent='Chercher des routes';
-  if(!feats.length){ st.textContent='Aucune route ne correspond. Elargis la zone ou baisse les criteres.'; }
+  if(!feats.length){ st.textContent='Aucune route ne correspond. Élargis le périmètre ou baisse les critères.'; }
   else{ st.textContent=feats.length+' route'+(feats.length>1?'s':'')+' trouvee'+(feats.length>1?'s':'')+'. Tape une route pour la sauver en spot.'; }
-  document.getElementById('disc-clear-btn').style.display = feats.length? 'block':'none';
+  document.getElementById('disc-clear-res').style.display = feats.length? '':'none';
+  zoneLayout();
 }
 
 function isKnownRoute(pts){
@@ -8713,11 +9068,13 @@ function saveDiscoveredAsRoute(name, line, p){
 
 function clearDiscovery(){
   discoveredFeatures=null;
+  if(typeof map==='undefined' || !map) return;
   if(map.getSource('discovered')){ map.getSource('discovered').setData({type:'FeatureCollection',features:[]}); }
   if(map.getLayer('discovered-line')){ map.setLayoutProperty('discovered-line','visibility','none'); map.setLayoutProperty('discovered-hit','visibility','none'); }
   if(map.getLayer('hourly-disc-line')) map.setLayoutProperty('hourly-disc-line','visibility','none');
   document.getElementById('disc-result-status').textContent='';
-  document.getElementById('disc-clear-btn').style.display='none';
+  document.getElementById('disc-clear-res').style.display='none';
+  zoneLayout();
 }
 
 </script>
