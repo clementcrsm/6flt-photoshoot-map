@@ -7,9 +7,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Spoties">
 <meta name="theme-color" content="#0e0f12">
-<link rel="manifest" href="manifest.json?v=1.42">
-<link rel="apple-touch-icon" href="icon-180.png?v=1.42">
-<link rel="icon" type="image/png" href="icon-192.png?v=1.42">
+<link rel="manifest" href="manifest.json?v=1.43">
+<link rel="apple-touch-icon" href="icon-180.png?v=1.43">
+<link rel="icon" type="image/png" href="icon-192.png?v=1.43">
 <title>Spoties</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -1305,12 +1305,12 @@ select.bf-field{appearance:none;-webkit-appearance:none;background-image:linear-
 #cv-root .cv-brand{display:flex;align-items:center;gap:10px;font-size:12px;color:#a5a49d;margin:4px 4px 16px}
 #cv-root .cv-brand img{width:28px;height:28px;border-radius:7px}
 #cv-root .bf-doc{border:none;border-radius:16px;padding:26px 18px 28px}
-#cv-root .cv-banner{background:#17181b;border:1px solid rgba(255,255,255,.09);border-left:3px solid #e8571a;border-radius:12px;padding:12px 14px;margin:0 0 14px;font-size:13px;line-height:1.5;color:#a5a49d}
+#cv-root .cv-banner{background:#17181b;border:1px solid rgba(255,255,255,.09);border-left:3px solid var(--cv-accent,#e8571a);border-radius:12px;padding:12px 14px;margin:0 0 14px;font-size:13px;line-height:1.5;color:#a5a49d}
 #cv-root .cv-banner b{display:block;font-size:14px;margin-bottom:2px;color:#f3f2ee}
 #cv-root .cv-count{font-variant-numeric:tabular-nums;color:#f2a93b;font-weight:700}
 #cv-root .cv-gl{width:100%;aspect-ratio:16/10;border-radius:12px;overflow:hidden;background:#17181b}
 #cv-root .cv-bar{position:fixed;left:0;right:0;bottom:0;z-index:2;display:flex;flex-direction:column;gap:7px;max-width:560px;margin:0 auto;padding:12px 14px calc(10px + env(safe-area-inset-bottom));background:linear-gradient(rgba(14,15,17,0),rgba(14,15,17,.97) 28%)}
-#cv-root .cv-main{width:100%;background:#e8571a;border:1px solid #e8571a;color:#fff;border-radius:12px;padding:14px 10px;font:700 15px 'Inter',sans-serif;text-align:center;text-decoration:none;cursor:pointer}
+#cv-root .cv-main{width:100%;background:var(--cv-accent,#e8571a);border:1px solid var(--cv-accent,#e8571a);color:#fff;border-radius:12px;padding:14px 10px;font:700 15px 'Inter',sans-serif;text-align:center;text-decoration:none;cursor:pointer}
 #cv-root .cv-main[disabled]{opacity:.4;cursor:not-allowed}
 #cv-root .cv-sec{display:flex;gap:7px}
 #cv-root .cv-sec a,#cv-root .cv-sec button{flex:1;background:#17181b;border:1px solid rgba(255,255,255,.12);color:#f3f2ee;border-radius:10px;padding:10px 6px;font:600 12.5px 'Inter',sans-serif;text-align:center;text-decoration:none;cursor:pointer}
@@ -1320,7 +1320,7 @@ select.bf-field{appearance:none;-webkit-appearance:none;background-image:linear-
 #cv-root .cv-alt a{color:#e8571a;text-decoration:underline;text-underline-offset:2px}
 #cv-root .cv-msg{text-align:center;padding:90px 20px;color:#a5a49d;font-size:14px;line-height:1.6}
 #cv-root .cv-msg b{display:block;color:#f3f2ee;font-size:18px;margin-bottom:6px}
-.cv-pin{width:26px;height:26px;border-radius:50%;background:#e8571a;color:#fff;font:800 12px 'Inter',sans-serif;display:flex;align-items:center;justify-content:center;border:2px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.5)}
+.cv-pin{width:26px;height:26px;border-radius:50%;background:var(--cv-accent,#e8571a);color:#fff;font:800 12px 'Inter',sans-serif;display:flex;align-items:center;justify-content:center;border:2px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.5)}
 
 @media print{
   @page{size:A4;margin:12mm 12mm 14mm}
@@ -1413,7 +1413,7 @@ body.panel-open #zone-dock,body.panel-open #view-map #discover-panel{display:non
 #spot-panel.open,#client-panel.open,#event-panel.open{transform:none;opacity:1;visibility:visible;transition:transform .24s cubic-bezier(.2,.8,.2,1),opacity .18s ease,visibility 0s}
 @media(max-width:640px){#spot-panel,#client-panel,#event-panel{left:10px;right:10px;width:auto;max-width:none;border:1px solid var(--border)}}
 @media (prefers-reduced-motion:reduce){#filter-panel.open,#view-map #discover-panel.open,#zone-dock.on,#hourly-bar.open,.bf-modal-bg:not([hidden]) .bf-modal{animation:none}#spot-panel,#client-panel,#event-panel{transition:none}}
-.dz-on{outline:2px dashed var(--accent)!important;outline-offset:-8px}
+.dz-on{outline:2px dashed var(--accent)!important;outline-offset:4px;border-radius:12px;background-color:rgba(232,87,26,.08)}
 .cct{display:flex;flex-direction:column;gap:8px}
 .cct-row{position:relative;display:flex;align-items:center}
 .cct-row .client-input{flex:1;min-width:0;padding-right:78px}
@@ -1423,17 +1423,33 @@ body.panel-open #zone-dock,body.panel-open #view-map #discover-panel{display:non
 .cprog-leg button.on{color:var(--text,#f3f2ee);font-weight:600}
 .cprog-leg button em{font-style:normal;font-weight:500;color:var(--muted);border-bottom:1px dashed currentColor}
 .cprog-hint{font-size:10.5px;color:var(--muted);margin-top:8px;line-height:1.4}
+/* ===== v1.43 : etat des shootings, reglages du document ===== */
+.sd-state{display:flex;align-items:center;gap:4px;margin:8px 0 2px;flex-wrap:wrap}
+.sd-state button{border:1px solid var(--border);background:var(--surface2);color:var(--muted);border-radius:7px;padding:5px 10px;font:600 11.5px 'Inter',sans-serif;cursor:pointer}
+.sd-state button.on{background:var(--accent);border-color:var(--accent);color:#fff}
+.sd-state button.x.on{background:#6b6f78;border-color:#6b6f78}
+.sd-auto{font-size:10.5px;color:var(--muted);margin-left:4px}
+.bf-datebox{display:flex;gap:6px;align-items:stretch}
+.bf-datebox .bf-field{flex:1;min-width:0}
+.bf-datebox .bf-sbtn{flex:none;margin:0;white-space:nowrap}
+.bf-sbtn.on{border-color:var(--accent);color:var(--accent)}
+.bf-accents{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.bf-accents button{width:26px;height:26px;border-radius:50%;border:2px solid transparent;box-shadow:0 0 0 1px var(--border);cursor:pointer;padding:0}
+.bf-accents button.on{border-color:var(--surface);box-shadow:0 0 0 2px var(--text)}
+.bf-accent-pick{position:relative;width:26px;height:26px;border-radius:50%;overflow:hidden;box-shadow:0 0 0 1px var(--border);background:conic-gradient(#e8571a,#c9a227,#2d9e4f,#2f89cf,#8b5cf6,#e0457b,#e8571a);cursor:pointer}
+.bf-accent-pick input{position:absolute;inset:-6px;opacity:0;cursor:pointer;width:40px;height:40px}
+.bf-mtbd{margin-top:10px}
 </style>
 </head>
 <body>
 <div id="splash">
-  <img id="splash-logo" src="icon-512.png?v=1.42" alt="Spoties">
-  <div id="splash-credit">Créé par 6flt photographie et Claude<br><span style="opacity:.6">v1.42</span></div>
+  <img id="splash-logo" src="icon-512.png?v=1.43" alt="Spoties">
+  <div id="splash-credit">Créé par 6flt photographie et Claude<br><span style="opacity:.6">v1.43</span></div>
 </div>
 
 <div id="login-screen">
   <div class="login-box">
-    <img src="icon-192.png?v=1.42" alt="Spoties" class="login-logo">
+    <img src="icon-192.png?v=1.43" alt="Spoties" class="login-logo">
     <h1 class="login-title">Spoties</h1>
     <p class="login-sub" id="login-sub">Connexion</p>
     <input type="email" id="login-email" class="login-input" placeholder="Email" autocomplete="email">
@@ -1448,7 +1464,7 @@ body.panel-open #zone-dock,body.panel-open #view-map #discover-panel{display:non
 </div>
 
 <nav>
-  <button type="button" class="nav-logo" id="nav-logo" onclick="refreshApp()" title="Actualiser l'app" aria-label="Actualiser l'app"><img src="icon-192.png?v=1.42" alt="Spoties" class="nav-logo-img"></button>
+  <button type="button" class="nav-logo" id="nav-logo" onclick="refreshApp()" title="Actualiser l'app" aria-label="Actualiser l'app"><img src="icon-192.png?v=1.43" alt="Spoties" class="nav-logo-img"></button>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="switchView('map')">Carte</button>
     <button class="nav-tab" onclick="switchView('gallery')">Spots</button>
@@ -2256,6 +2272,8 @@ body.panel-open #zone-dock,body.panel-open #view-map #discover-panel{display:non
         <div class="bf-mlist bf-sb" id="bf-m-clients"></div>
         <div class="bf-set-label">Gabarit</div>
         <div class="bf-mtpls" id="bf-m-tpls"></div>
+        <div class="bf-set-label">Ton</div>
+        <div class="bf-seg bf-sm" id="bf-m-tone"></div>
         <p class="bf-set-hint">Sa voiture et ses spots liés sont repris automatiquement. Étape suivante : la date du shooting.</p>
        </div>
        <div class="bf-mstep" id="bf-m-step2" hidden></div>
@@ -2924,7 +2942,7 @@ function planCollect(){
   clients.forEach(function(c){
     if(c.deleted) return;
     (Array.isArray(c.shoots)?c.shoots:[]).forEach(function(s){
-      if(!s.date) return;
+      if(!s || !s.date || s.state==='annule') return;
       if(!map[s.date]) map[s.date]=[];
       var carName = (Array.isArray(c.cars)&&c.cars.length&&c.cars[0].model)?c.cars[0].model:(c.car||'');
       var parts=[]; if(carName) parts.push(carName); if(s.time) parts.push(s.time); if(s.place) parts.push(s.place);
@@ -3000,6 +3018,11 @@ function planAddShoot(){
   switchClientSub('clients');
 }
 
+/* ---------- etat de chaque shooting (v1.43) : auto d'apres la date, ou force a la main ---------- */
+function shootIsDone(s, today){ if(!s || !s.date || s.state==='annule') return false; if(s.state==='fait') return true; if(s.state==='prevu') return false; return s.date < today; }
+function shootIsAhead(s, today){ if(!s || !s.date || s.state==='annule' || s.state==='fait') return false; if(s.state==='prevu') return true; return s.date >= today; }
+function liveShoots(c){ return (c && Array.isArray(c.shoots) ? c.shoots : []).filter(function(s){ return s && s.date && s.state!=='annule'; }); }
+
 /* ---------- avancement du contrat par client (v1.38) ---------- */
 var CSTEPS = [
   {k:'date',  l:'Date posée',       c:'#2e6fd6'},
@@ -3027,11 +3050,11 @@ function clientProgress(c){
   var conf = false, views = 0;
   (sh.tokens||[]).forEach(function(t){ var r = SHARE_CACHE && SHARE_CACHE[t]; if(r){ if(r.confirmed_at) conf = true; views += (r.views||0); } });
   var done = [
-    shoots.some(function(x){ return x && x.date; }),
+    shoots.some(function(x){ return x && x.date && x.state!=='annule'; }),
     sh.docs > 0,
     sh.links > 0,
     conf,
-    shoots.some(function(x){ return x && x.date && x.date < today; }),
+    shoots.some(function(x){ return shootIsDone(x, today); }),
     !!(c.gallery && String(c.gallery).trim())
   ];
   // v1.42 : une etape peut etre marquee a la main quand l'app ne peut pas la deduire
@@ -3055,12 +3078,12 @@ function clientState(c){
   var hasGallery = !!(c.gallery && c.gallery.trim());
   var shoots = Array.isArray(c.shoots) ? c.shoots : [];
   var today = new Date().toISOString().slice(0,10);
-  var hasFuture = shoots.some(function(s){ return s.date >= today; });
-  var hasPast = shoots.some(function(s){ return s.date < today; });
+  var hasFuture = shoots.some(function(s){ return shootIsAhead(s, today); });
+  var hasPast = shoots.some(function(s){ return shootIsDone(s, today); });
   var relance = false;
   if(hasPast && !hasGallery){
     var fiveDaysAgo = new Date(Date.now() - 5*86400000).toISOString().slice(0,10);
-    relance = shoots.some(function(s){ return s.date < today && s.date <= fiveDaysAgo; });
+    relance = shoots.some(function(s){ return shootIsDone(s, today) && s.date <= fiveDaysAgo; });
   }
   var man = c.stepsManual || {};
   if(man.shoot && !hasPast){ hasPast = true; relance = false; }
@@ -3095,14 +3118,14 @@ function renderClients(){
       });
     }
     var nextShoot = '';
-    if(Array.isArray(c.shoots) && c.shoots.length){
-      var today = new Date().toISOString().slice(0,10);
-      var upcoming = c.shoots.filter(function(s){ return s.date >= today; });
-      var s = upcoming.length ? upcoming[0] : c.shoots[c.shoots.length-1];
+    if(liveShoots(c).length){
+      var today = new Date().toISOString().slice(0,10), lv = liveShoots(c);
+      var upcoming = lv.filter(function(s){ return shootIsAhead(s, today); });
+      var s = upcoming.length ? upcoming[0] : lv[lv.length-1];
       if(s){
         var d = new Date(s.date+'T00:00:00');
         var label = d.toLocaleDateString('fr-FR',{day:'2-digit',month:'short'}) + (s.time?' '+s.time:'');
-        var past = s.date < today;
+        var past = !shootIsAhead(s, today);
         nextShoot = '<div class="client-card-meta" style="color:'+(past?'var(--muted)':'var(--accent)')+'">'+(past?'Dernier shoot ':'Shoot ')+escapeHtml(label)+(s.place?' \u00b7 '+escapeHtml(s.place):'')+'</div>';
       }
     }
@@ -3272,7 +3295,7 @@ function renderClientProgress(){
       return '<button type="button" data-step="'+x.k+'" class="'+(pr.done[i] ? 'on' : '')+(m ? ' man' : '')+(pr.auto[i] ? ' auto' : '')+'"><i style="background:'+(pr.done[i] ? x.c : 'var(--border)')+'"></i>'+x.l+(m ? ' <em>à la main</em>' : '')+'</button>';
     }).join('')+'</div>'+
     '<div class="cprog-hint">Touche une étape pour la marquer faite quand l\'app ne peut pas le savoir.</div>';
-  box.querySelectorAll('.cprog-leg button').forEach(function(b){ b.onclick = function(){ toggleClientStep(b.getAttribute('data-step'), b.classList.contains('auto')); }; });
+  if(!box._stepBound){ box._stepBound = true; box.addEventListener('click', function(e){ var b = e.target.closest ? e.target.closest('.cprog-leg button') : null; if(b){ e.preventDefault(); toggleClientStep(b.getAttribute('data-step'), b.classList.contains('auto')); } }); }
 }
 function toggleClientStep(k, isAuto){
   var c = clients.filter(function(x){ return x.id===currentClientId; })[0]; if(!c) return;
@@ -3391,19 +3414,37 @@ function fcRenderRows(){
     var dObj=new Date(parts[0],parts[1]-1,parts[2]);
     var label=dObj.toLocaleDateString('fr-FR',{weekday:'short',day:'numeric',month:'long'});
     var row=document.createElement('div'); row.className='shoot-day-row'; row.setAttribute('data-date',s.date);
+    var tdy=new Date().toISOString().slice(0,10), auto=s.date<tdy ? 'fait' : 'prevu', cur=s.state||auto;
     row.innerHTML='<div class="sd-head"><span class="sd-date">'+label+'</span><button type="button" class="sd-del">Retirer</button></div>'+
+      '<div class="sd-state">'+[['prevu','Prévu'],['fait','Réalisé'],['annule','Annulé']].map(function(o){ return '<button type="button" data-st="'+o[0]+'" class="'+(cur===o[0]?'on':'')+(o[0]==='annule'?' x':'')+'">'+o[1]+'</button>'; }).join('')+
+      '<span class="sd-auto">'+(s.state ? 'Choisi à la main' : 'Selon la date')+'</span></div>'+
       '<div class="sd-fields"><input type="time" class="sd-time" value="'+(s.time?escapeHtml(s.time):'')+'"><input class="sd-place" placeholder="Lieu du shooting" value="'+(s.place?escapeHtml(s.place):'')+'"></div>';
     row.querySelector('.sd-del').onclick=function(){ fcToggleDay(s.date); };
+    row.querySelectorAll('.sd-state button').forEach(function(b){ b.onclick=function(){ fcSetState(s.date, b.getAttribute('data-st')); }; });
     wrap.appendChild(row);
   });
 }
 
+// v1.43 : etat d'un shooting. Enregistre tout de suite sur une fiche existante.
+function fcSetState(ds, st){
+  fcSync();
+  var s=fcShoots.find(function(x){ return x.date===ds; }); if(!s) return;
+  var auto=ds<new Date().toISOString().slice(0,10) ? 'fait' : 'prevu';
+  if(st===auto && s.state!=='annule') delete s.state; else if(s.state===st) delete s.state; else s.state=st;
+  if(currentClientId){
+    var c=clients.find(function(x){ return x.id===currentClientId; });
+    var cs=c && Array.isArray(c.shoots) ? c.shoots.find(function(x){ return x && x.date===ds; }) : null;
+    if(cs){ if(s.state) cs.state=s.state; else delete cs.state; persistClients(); renderClientProgress(); if(typeof renderClients==='function') try{ renderClients(); }catch(e){} }
+  }
+  fcRenderRows();
+  showToast(st==='fait' && s.state ? 'Shooting marqué réalisé' : st==='annule' && s.state ? 'Shooting annulé' : 'État du shooting mis à jour');
+}
 function fcPrev(){ fcSync(); fcMo--; if(fcMo<0){fcMo=11;fcY--;} fcRenderCal(); }
 function fcNext(){ fcSync(); fcMo++; if(fcMo>11){fcMo=0;fcY++;} fcRenderCal(); }
 
 // initialise le calendrier de la fiche a partir d'une liste de shoots
 function fcLoad(shoots){
-  fcShoots = (Array.isArray(shoots)?shoots:[]).map(function(s){ return {date:s.date, time:s.time||'', place:s.place||''}; });
+  fcShoots = (Array.isArray(shoots)?shoots:[]).filter(function(s){ return s && s.date; }).map(function(s){ var o = {date:s.date, time:s.time||'', place:s.place||''}; if(s.state) o.state = s.state; return o; });
   if(fcShoots.length){ var p=fcShoots[0].date.split('-'); fcY=parseInt(p[0],10); fcMo=parseInt(p[1],10)-1; }
   else { var n=new Date(); fcY=n.getFullYear(); fcMo=n.getMonth(); }
   fcRenderCal(); fcRenderRows();
@@ -3514,7 +3555,7 @@ function saveClient(){
   });
   var shoots = [];
   fcSync();
-  fcShoots.forEach(function(s){ if(s.date) shoots.push({date:s.date, time:s.time||'', place:s.place||''}); });
+  fcShoots.forEach(function(s){ if(!s.date) return; var o = {date:s.date, time:s.time||'', place:s.place||''}; if(s.state) o.state = s.state; shoots.push(o); });
   shoots.sort(function(a,b){ return (a.date+(a.time||'')).localeCompare(b.date+(b.time||'')); });
   var c = {
     id: currentClientId || ('c_'+Date.now()+'_'+Math.random().toString(36).slice(2,7)),
@@ -3792,9 +3833,9 @@ document.addEventListener('click',function(e){
 });
 
 /* ===================== PROFIL v1.36 : accueil, statistiques, nouveautes ===================== */
-var APP_VERSION='v1.42';
+var APP_VERSION='v1.43';
 // historique reconstruit depuis les anciens index (date = date de livraison). [version, date, approximative, [[n|f, texte]]]
-var CHANGELOG=[["v1.42","2026-09-28",0,[["f","Photos des clients qui ne s'affichaient pas dans la liste"],["f","Client supprimé qui réapparaissait, renvoyé par un autre appareil"],["n","Contact client en cases séparées : téléphone, e-mail, Instagram, avec bouton pour appeler, écrire ou ouvrir le profil"],["n","Étapes du contrat marquables à la main quand l'app ne peut pas les deviner"],["n","Spots, clients, événements et filtres s'ouvrent en cartes flottantes, avec la même apparition que le profil"],["n","Sur ordinateur, glisser une photo sur un spot, un client ou un événement pour l'ajouter"]]],["v1.41","2026-09-27",0,[["n","Périmètre (ex Découverte) : réglages dans un bandeau en bas de carte, rayon au pincement dans le cercle ou avec + et -"],["n","Périmètre : spots à l'intérieur entourés, routes qui le traversent soulignées en blanc, liste des spots à la ronde"],["n","Critères de recherche de routes en boutons plutôt qu'en jauges"],["n","Profil en carte flottante à gauche, la carte reste visible autour"],["n","Filtres proposés au choix dans Profil, Carte, le panneau se réorganise sans trou"],["f","Briefing supprimé qui réapparaissait, renvoyé par un autre appareil qui en gardait une copie"],["n","Supprimer un briefing propose de retirer aussi la séance du planning"]]],["v1.40","2026-09-25",0,[["f","Boutons de la carte alignés en ligne quand la carte ne se chargeait pas"],["n","Découverte de routes : zone ronde posée au centre de la carte, rayon réglable en kilomètres et point orange à glisser pour la déplacer"],["n","Boutons de la carte regroupés en deux colonnes, une à gauche, une à droite"],["f","Boutons + et - de Mapbox retirés, ils étaient cachés derrière les autres"],["f","Panneaux Filtrer et Découverte plus compacts sur téléphone"]]],["v1.39","2026-09-25",0,[["n","Le briefing se gèle dès que le client accepte les conditions : plus aucune modification ne part dans son lien"],["n","Publier une nouvelle version annule la confirmation du client, qui doit accepter à nouveau"],["n","Mise à jour du lien en pause pendant que tu travailles, publication quand tu es prêt"],["n","Texte des conditions mémorisé avec le lien au moment de l'acceptation"]]],["v1.38","2026-09-23",0,[["n","Anneau d'avancement du contrat sur chaque fiche client et dans la liste : date, briefing, lien, accord, shooting, galerie"],["n","Statistiques : avancement des contrats étape par étape et valeur estimée du carnet"],["f","Numéro de version affiché dans Nouveautés remis à jour"]]],["v1.37","2026-09-23",0,[["n","Briefing : bloc L'essentiel (date, durée, secteur et tarif en tête de document)"],["n","Briefing : bloc Accord, conditions à accepter avant de confirmer"],["n","Séance offerte affichée dans la formule et dans l'essentiel"],["n","Lien client : confirmation verrouillée tant que les conditions ne sont pas acceptées, bouton daté, lien pour proposer une autre date"],["f","Lien client : message distinct entre perte de connexion et lien expiré"]]],["v1.36","2026-09-23",0,[["n","Profil réorganisé : accueil, objectifs, carte, apparence et données sur des pages séparées"],["n","Statistiques : santé des fiches, ajouts par mois, clients, liens partagés, photos, routes, types, heures de shoot"],["n","Page Nouveautés avec l'historique daté de toutes les versions"],["n","Filtre des fiches à compléter dans l'onglet Spots"]]],["v1.35","2026-09-23",0,[["n","Plusieurs photos d'un coup dans les spots, envoyées dans l'ordre choisi"],["n","Heure et affiche des événements, affiche en plein écran"],["f","Événement de la veille encore affiché comme à venir le soir"],["f","Date de création d'un événement perdue à l'édition"]]],["v1.34","2026-09-22",0,[["n","Téléchargement du briefing en PDF"],["n","Lien client interactif : adresse exacte révélée avant le shoot, ajout au calendrier"]]],["v1.33","2026-09-22",0,[["n","Briefings listés dans la fiche client, création directe depuis la fiche"],["n","Texte modifiable directement dans le briefing, zoom de l'éditeur"],["n","Changer la date du shoot dans le briefing met à jour le planning du client"],["n","Toucher le logo actualise l'app"]]],["v1.30","2026-09-22",0,[["n","Planning refait : briefings en rangées réordonnables (1 à 3 colonnes), blocs branchés sur tes spots et clients, gabarits, sauvegarde en ligne"]]],["v1.29","2026-09-20",0,[["n","Cartes Spots plus compactes, décor affiché sur la carte"],["f","Vignettes carrées du Planning déformées"]]],["v1.28","2026-09-20",0,[["n","Galerie et Shotlist fusionnées dans l'onglet Spots"],["n","Sélection multiple et glisser pour supprimer un spot"],["n","Inspirations déplacées vers le profil"]]],["v1.27","2026-09-20",0,[["n","Planning en éditeur grille aimantée, branché sur les spots et clients"]]],["v1.26","2026-09-20",0,[["n","Premier onglet Planning (document de briefing)"],["n","Associer des spots à un client en les touchant sur la carte"]]],["v1.24","2026-09",1,[["f","Boutons de la carte qui se chevauchaient sur mobile"],["f","Panneaux filtres, découverte et soleil qui restaient ouverts ensemble"],["n","Marqueurs réduits à 44 px sur mobile"]]],["v1.23","2026-07-21",0,[["n","Fréquentation des routes heure par heure"],["n","Découverte de routes dans une zone dessinée (OpenStreetMap), filtrées par sinuosité"]]],["v1.22","2026-07-17",0,[["n","Aperçu en direct de l'objet 3D avant de le poser"],["f","Objets 3D qui disparaissaient après une image"]]],["v1.21","2026-07-17",0,[["n","Bouton dédié pour placer un objet 3D"]]],["v1.20","2026-07-17",0,[["n","Comptes séparés : inscription, mot de passe oublié, données propres à chaque compte"],["n","Progression XP sauvegardée dans le compte"]]],["v1.18","2026-07-06",0,[["n","Mode soleil 3D : position du soleil et ombres portées"],["n","Objets 3D sur la carte (voiture, flèche, cube)"],["n","Vidéos courtes sur les spots (20 s max)"],["n","Retracer une route existante"],["n","Zoom et pincement dans la visionneuse, photos réorganisables par glisser"],["n","Progression : XP, niveaux, objectifs et titres"],["n","Historique de recherche et vue Street (Mapillary, repli Google)"]]],["v1.17","2026-06-27",0,[["f","Marqueurs qui glissaient au dézoom"]]],["v1.16","2026-06-27",0,[["f","Tentative de correction des marqueurs (non concluante)"]]],["v1.15","2026-06-27",0,[["n","Navigation entre les photos dans la visionneuse"]]],["v1.14","2026-06-08",0,[["n","Mini-calendrier dans la fiche client pour planifier les shoots"]]],["v1.13","2026-06-07",0,[["n","Planning mensuel de tous les shoots"]]],["v1.12","2026-06-07",0,[["n","Sélection de plusieurs clients et spot de compromis pour leurs voitures"],["f","Badges d'état restylés (v1.12.1)"]]],["v1.11","2026-06-07",0,[["n","États clients automatiques : prospect, planifié, réalisé, livré"],["n","Relance À livrer et accès direct aux spots conseillés pour une voiture"]]],["v1.10","2026-06-07",0,[["n","Shootings planifiés dans la fiche client"]]],["v1.9","2026-06-07",0,[["n","Plusieurs voitures par client avec couleur de carrosserie, offre et statut"]]],["v1.8","2026-06-07",0,[["f","Photos stockées en ligne : fin de la mémoire saturée qui cassait la synchro PC / iPhone"],["f","Accès aux données sécurisé, clé de carte restreinte à ton site"]]],["v1.7","2026-06-06",0,[["f","Synchronisation fiable : un spot supprimé ne réapparaît plus"]]],["v1.6","2026-06-06",0,[["n","Onglet Profil : photo et réglages regroupés"]]],["v1.5","2026-06-06",0,[["n","Connexion par email et mot de passe"],["n","L'app devient 6flt Spots"]]],["v1.4","2026-06-06",0,[["n","Longs trajets jusqu'à 25 étapes"],["n","Types Musée, Circuit, Concession"],["n","Onglet Événements"]]],["v1.3","2026-06-06",1,[["n","Analyse automatique des virages d'une route"],["n","Filtres de la carte et suppression multiple dans la galerie"]]],["v1.2","2026-06-05",0,[["n","Tracé de routes sur la carte"],["n","Corbeille clients avec restauration"],["f","Routes en double et rendu des routes (v1.2.1)"]]],["v1.1","2026-06-05",0,[["n","Onglet Clients"],["n","Synchronisation en ligne des spots et clients"],["n","Écran de démarrage"]]],["v1.0","2026-06-04",0,[["n","Première version : carte des spots, galerie, Shotlist (conseil de spots selon la couleur de la voiture)"]]]];
+var CHANGELOG=[["v1.43","2026-09-28",0,[["n","État de chaque shooting dans la fiche client : prévu, réalisé ou annulé, automatique d'après la date sinon"],["n","Briefing : date à définir, le document devient une proposition et le client te propose un jour"],["n","Briefing : tutoiement ou vouvoiement, au choix avec le gabarit"],["n","Briefing : couleur des titres et boutons au choix, reprise dans le lien client"],["f","Glisser une photo n'entoure plus que la zone photo"]]],["v1.42","2026-09-28",0,[["f","Photos des clients qui ne s'affichaient pas dans la liste"],["f","Client supprimé qui réapparaissait, renvoyé par un autre appareil"],["n","Contact client en cases séparées : téléphone, e-mail, Instagram, avec bouton pour appeler, écrire ou ouvrir le profil"],["n","Étapes du contrat marquables à la main quand l'app ne peut pas les deviner"],["n","Spots, clients, événements et filtres s'ouvrent en cartes flottantes, avec la même apparition que le profil"],["n","Sur ordinateur, glisser une photo sur un spot, un client ou un événement pour l'ajouter"]]],["v1.41","2026-09-27",0,[["n","Périmètre (ex Découverte) : réglages dans un bandeau en bas de carte, rayon au pincement dans le cercle ou avec + et -"],["n","Périmètre : spots à l'intérieur entourés, routes qui le traversent soulignées en blanc, liste des spots à la ronde"],["n","Critères de recherche de routes en boutons plutôt qu'en jauges"],["n","Profil en carte flottante à gauche, la carte reste visible autour"],["n","Filtres proposés au choix dans Profil, Carte, le panneau se réorganise sans trou"],["f","Briefing supprimé qui réapparaissait, renvoyé par un autre appareil qui en gardait une copie"],["n","Supprimer un briefing propose de retirer aussi la séance du planning"]]],["v1.40","2026-09-25",0,[["f","Boutons de la carte alignés en ligne quand la carte ne se chargeait pas"],["n","Découverte de routes : zone ronde posée au centre de la carte, rayon réglable en kilomètres et point orange à glisser pour la déplacer"],["n","Boutons de la carte regroupés en deux colonnes, une à gauche, une à droite"],["f","Boutons + et - de Mapbox retirés, ils étaient cachés derrière les autres"],["f","Panneaux Filtrer et Découverte plus compacts sur téléphone"]]],["v1.39","2026-09-25",0,[["n","Le briefing se gèle dès que le client accepte les conditions : plus aucune modification ne part dans son lien"],["n","Publier une nouvelle version annule la confirmation du client, qui doit accepter à nouveau"],["n","Mise à jour du lien en pause pendant que tu travailles, publication quand tu es prêt"],["n","Texte des conditions mémorisé avec le lien au moment de l'acceptation"]]],["v1.38","2026-09-23",0,[["n","Anneau d'avancement du contrat sur chaque fiche client et dans la liste : date, briefing, lien, accord, shooting, galerie"],["n","Statistiques : avancement des contrats étape par étape et valeur estimée du carnet"],["f","Numéro de version affiché dans Nouveautés remis à jour"]]],["v1.37","2026-09-23",0,[["n","Briefing : bloc L'essentiel (date, durée, secteur et tarif en tête de document)"],["n","Briefing : bloc Accord, conditions à accepter avant de confirmer"],["n","Séance offerte affichée dans la formule et dans l'essentiel"],["n","Lien client : confirmation verrouillée tant que les conditions ne sont pas acceptées, bouton daté, lien pour proposer une autre date"],["f","Lien client : message distinct entre perte de connexion et lien expiré"]]],["v1.36","2026-09-23",0,[["n","Profil réorganisé : accueil, objectifs, carte, apparence et données sur des pages séparées"],["n","Statistiques : santé des fiches, ajouts par mois, clients, liens partagés, photos, routes, types, heures de shoot"],["n","Page Nouveautés avec l'historique daté de toutes les versions"],["n","Filtre des fiches à compléter dans l'onglet Spots"]]],["v1.35","2026-09-23",0,[["n","Plusieurs photos d'un coup dans les spots, envoyées dans l'ordre choisi"],["n","Heure et affiche des événements, affiche en plein écran"],["f","Événement de la veille encore affiché comme à venir le soir"],["f","Date de création d'un événement perdue à l'édition"]]],["v1.34","2026-09-22",0,[["n","Téléchargement du briefing en PDF"],["n","Lien client interactif : adresse exacte révélée avant le shoot, ajout au calendrier"]]],["v1.33","2026-09-22",0,[["n","Briefings listés dans la fiche client, création directe depuis la fiche"],["n","Texte modifiable directement dans le briefing, zoom de l'éditeur"],["n","Changer la date du shoot dans le briefing met à jour le planning du client"],["n","Toucher le logo actualise l'app"]]],["v1.30","2026-09-22",0,[["n","Planning refait : briefings en rangées réordonnables (1 à 3 colonnes), blocs branchés sur tes spots et clients, gabarits, sauvegarde en ligne"]]],["v1.29","2026-09-20",0,[["n","Cartes Spots plus compactes, décor affiché sur la carte"],["f","Vignettes carrées du Planning déformées"]]],["v1.28","2026-09-20",0,[["n","Galerie et Shotlist fusionnées dans l'onglet Spots"],["n","Sélection multiple et glisser pour supprimer un spot"],["n","Inspirations déplacées vers le profil"]]],["v1.27","2026-09-20",0,[["n","Planning en éditeur grille aimantée, branché sur les spots et clients"]]],["v1.26","2026-09-20",0,[["n","Premier onglet Planning (document de briefing)"],["n","Associer des spots à un client en les touchant sur la carte"]]],["v1.24","2026-09",1,[["f","Boutons de la carte qui se chevauchaient sur mobile"],["f","Panneaux filtres, découverte et soleil qui restaient ouverts ensemble"],["n","Marqueurs réduits à 44 px sur mobile"]]],["v1.23","2026-07-21",0,[["n","Fréquentation des routes heure par heure"],["n","Découverte de routes dans une zone dessinée (OpenStreetMap), filtrées par sinuosité"]]],["v1.22","2026-07-17",0,[["n","Aperçu en direct de l'objet 3D avant de le poser"],["f","Objets 3D qui disparaissaient après une image"]]],["v1.21","2026-07-17",0,[["n","Bouton dédié pour placer un objet 3D"]]],["v1.20","2026-07-17",0,[["n","Comptes séparés : inscription, mot de passe oublié, données propres à chaque compte"],["n","Progression XP sauvegardée dans le compte"]]],["v1.18","2026-07-06",0,[["n","Mode soleil 3D : position du soleil et ombres portées"],["n","Objets 3D sur la carte (voiture, flèche, cube)"],["n","Vidéos courtes sur les spots (20 s max)"],["n","Retracer une route existante"],["n","Zoom et pincement dans la visionneuse, photos réorganisables par glisser"],["n","Progression : XP, niveaux, objectifs et titres"],["n","Historique de recherche et vue Street (Mapillary, repli Google)"]]],["v1.17","2026-06-27",0,[["f","Marqueurs qui glissaient au dézoom"]]],["v1.16","2026-06-27",0,[["f","Tentative de correction des marqueurs (non concluante)"]]],["v1.15","2026-06-27",0,[["n","Navigation entre les photos dans la visionneuse"]]],["v1.14","2026-06-08",0,[["n","Mini-calendrier dans la fiche client pour planifier les shoots"]]],["v1.13","2026-06-07",0,[["n","Planning mensuel de tous les shoots"]]],["v1.12","2026-06-07",0,[["n","Sélection de plusieurs clients et spot de compromis pour leurs voitures"],["f","Badges d'état restylés (v1.12.1)"]]],["v1.11","2026-06-07",0,[["n","États clients automatiques : prospect, planifié, réalisé, livré"],["n","Relance À livrer et accès direct aux spots conseillés pour une voiture"]]],["v1.10","2026-06-07",0,[["n","Shootings planifiés dans la fiche client"]]],["v1.9","2026-06-07",0,[["n","Plusieurs voitures par client avec couleur de carrosserie, offre et statut"]]],["v1.8","2026-06-07",0,[["f","Photos stockées en ligne : fin de la mémoire saturée qui cassait la synchro PC / iPhone"],["f","Accès aux données sécurisé, clé de carte restreinte à ton site"]]],["v1.7","2026-06-06",0,[["f","Synchronisation fiable : un spot supprimé ne réapparaît plus"]]],["v1.6","2026-06-06",0,[["n","Onglet Profil : photo et réglages regroupés"]]],["v1.5","2026-06-06",0,[["n","Connexion par email et mot de passe"],["n","L'app devient 6flt Spots"]]],["v1.4","2026-06-06",0,[["n","Longs trajets jusqu'à 25 étapes"],["n","Types Musée, Circuit, Concession"],["n","Onglet Événements"]]],["v1.3","2026-06-06",1,[["n","Analyse automatique des virages d'une route"],["n","Filtres de la carte et suppression multiple dans la galerie"]]],["v1.2","2026-06-05",0,[["n","Tracé de routes sur la carte"],["n","Corbeille clients avec restauration"],["f","Routes en double et rendu des routes (v1.2.1)"]]],["v1.1","2026-06-05",0,[["n","Onglet Clients"],["n","Synchronisation en ligne des spots et clients"],["n","Écran de démarrage"]]],["v1.0","2026-06-04",0,[["n","Première version : carte des spots, galerie, Shotlist (conseil de spots selon la couleur de la voiture)"]]]];
 var PF_MOIS=['janv.','févr.','mars','avr.','mai','juin','juil.','août','sept.','oct.','nov.','déc.'];
 var pfStack=['pf-hub'];
 var pfNewsShown=6;
@@ -3992,7 +4033,7 @@ function pfRenderStats(){
   var nCli=C.filter(function(c){ return c.statut==='client'; }).length;
   var nLiv=C.filter(function(c){ return clientState(c).k==='livre'; }).length;
   var today=localDateStr(), futureShoots=0;
-  C.forEach(function(c){ (Array.isArray(c.shoots)?c.shoots:[]).forEach(function(s){ if(s && s.date && s.date>=today) futureShoots++; }); });
+  C.forEach(function(c){ (Array.isArray(c.shoots)?c.shoots:[]).forEach(function(s){ if(shootIsAhead(s, today)) futureShoots++; }); });
   var nEv=pfUpcomingEvents().length, nBf=pfBriefings().length;
 
   // avancement des contrats (une ligne par etape) + valeur du carnet
@@ -5535,7 +5576,7 @@ var TEMPLATES = {
     R('1', B('accord')),
     R('1', B('contact'))
   ]; }},
-  pro:{name:'Pro ou événement', desc:'Garage, showroom ou rassemblement : objectifs, plusieurs véhicules, droits.', timeMode:'free', startTime:'09:30', build:function(){ return [
+  pro:{name:'Pro ou événement', desc:'Garage, showroom ou rassemblement : objectifs, plusieurs véhicules, droits.', tone:'vous', timeMode:'free', startTime:'09:30', build:function(){ return [
     R('1', B('resume')),
     R('1', B('cover')),
     R('1-2', B('client'), B('text', {style:'note', ph:'Objectifs de la séance, véhicules concernés, consignes pour l\'équipe…'})),
@@ -5658,16 +5699,16 @@ function lightPhase(sc, t){
   if(t < sc.sunset+20) return 'Coucher de soleil : dernière série avant la nuit.';
   return 'Heure bleue : phares allumés, poses longues.';
 }
-function rdvTime(sc){ return sc ? fmt(sc.accueil) : (doc.timeMode==='free' ? fmt(toMin(doc.startTime)) : 'À définir'); }
-function sunChip(){ var st = sunTimes(); return doc.timeMode==='sunrise' ? 'Lever du soleil '+fmt(st.sunrise) : doc.timeMode==='free' ? 'Heure libre, coucher à '+fmt(st.sunset) : 'Coucher du soleil '+fmt(st.sunset); }
+function rdvTime(sc){ if(!doc.date && doc.timeMode!=='free') return doc.timeMode==='sunrise' ? 'Calée sur le lever du soleil' : 'Calée sur le coucher du soleil'; return sc ? fmt(sc.accueil) : (doc.timeMode==='free' ? fmt(toMin(doc.startTime)) : 'À définir'); }
+function sunChip(){ if(!doc.date && doc.timeMode!=='free') return doc.timeMode==='sunrise' ? 'Calé sur le lever du soleil' : 'Calé sur le coucher du soleil'; var st = sunTimes(); return doc.timeMode==='sunrise' ? 'Lever du soleil '+fmt(st.sunrise) : doc.timeMode==='free' ? 'Heure libre, coucher à '+fmt(st.sunset) : 'Coucher du soleil '+fmt(st.sunset); }
 
 /* ---------- carte statique ---------- */
 function encNum(n){ n = n<0 ? ~(n<<1) : (n<<1); var s = ''; while(n>=0x20){ s += String.fromCharCode((0x20|(n&0x1f))+63); n >>= 5; } return s + String.fromCharCode(n+63); }
 function encPoly(pts){ var out = '', pa = 0, pb = 0; pts.forEach(function(p){ var a = Math.round(p[0]*1e5), b = Math.round(p[1]*1e5); out += encNum(a-pa) + encNum(b-pb); pa = a; pb = b; }); return out; }
 function mapUrl(list, showRoute, print){
-  var style = print ? 'light-v11' : 'dark-v11', pins = [], path = null;
-  if(showRoute && list.length>1){ var info = routeInfo(list); var poly = info && info.geometry ? info.geometry : encPoly(list.map(function(s){ return [+s.lat, +s.lng]; })); path = 'path-4+e8571a-0.85('+encodeURIComponent(poly)+')'; }
-  list.forEach(function(s, i){ if(i<99) pins.push('pin-l-'+(i+1)+'+e8571a('+(+s.lng).toFixed(5)+','+(+s.lat).toFixed(5)+')'); });
+  var style = print ? 'light-v11' : 'dark-v11', pins = [], path = null, ac = (accentOf() || '#e8571a').slice(1);
+  if(showRoute && list.length>1){ var info = routeInfo(list); var poly = info && info.geometry ? info.geometry : encPoly(list.map(function(s){ return [+s.lat, +s.lng]; })); path = 'path-4+'+ac+'-0.85('+encodeURIComponent(poly)+')'; }
+  list.forEach(function(s, i){ if(i<99) pins.push('pin-l-'+(i+1)+'+'+ac+'('+(+s.lng).toFixed(5)+','+(+s.lat).toFixed(5)+')'); });
   var pos = list.length===1 ? (+list[0].lng).toFixed(5)+','+(+list[0].lat).toFixed(5)+',12' : 'auto';
   function build(ov){ return 'https://api.mapbox.com/styles/v1/mapbox/'+style+'/static/'+ov.join(',')+'/'+pos+'/960x440@2x?'+(list.length>1?'padding=70&':'')+'access_token='+MAPBOX_TOKEN; }
   var url = build(path ? [path].concat(pins) : pins);
@@ -5770,13 +5811,16 @@ function pushTomb(id, ts){
 }
 
 /* ---------- documents ---------- */
-function createDoc(clientId, tplKey, date){
+function createDoc(clientId, tplKey, date, tone){
   var c = getClient(clientId), sh = c ? nextShoot(c) : null, t, rows;
   if(date){ var at = c ? (c.shoots||[]).filter(function(x){ return x && x.date===date; })[0] : null; sh = at || {date:date, place:''}; }
+  else if(date==='') sh = {date:'', place:(sh && sh.place) || ''};
   if(String(tplKey).indexOf('c:')===0){ t = CUSTOM[+tplKey.slice(2)] || {}; rows = (t.rows||[]).map(function(r){ return reId(clone(r)); }); }
   else { t = TEMPLATES[tplKey] || TEMPLATES.particulier; rows = t.build(); }
   var route = c && c.spotIds ? c.spotIds.filter(function(id){ var s = getSpot(id); return s && s.kind!=='route'; }) : [];
-  return {id:nid('bf_'), title:'', titleCustom:false, clientId:clientId||null, date:(sh && sh.date) || isoPlus(7), place:(sh && sh.place) || '',
+  tone = tone==='vous' || (!tone && t.tone==='vous') ? 'vous' : 'tu';
+  toneRows(rows, tone);
+  return {id:nid('bf_'), title:'', titleCustom:false, tone:tone, clientId:clientId||null, date:date==='' ? '' : ((sh && sh.date) || isoPlus(7)), place:(sh && sh.place) || '',
     route:route, timeMode:t.timeMode||'sunset', startTime:t.startTime||'14:00', rows:rows, photos:[], spotNotes:{},
     ref:'6FLT-'+String(briefings.length+1).padStart(3,'0'), status:'draft', createdAt:Date.now(), updatedAt:Date.now()};
 }
@@ -5842,6 +5886,23 @@ function undo(){ if(HP>0){ HP--; doc = JSON.parse(HIST[HP]); checkSel(); renderA
 function redo(){ if(HP<HIST.length-1){ HP++; doc = JSON.parse(HIST[HP]); checkSel(); renderAll(); scheduleSave(); } }
 function checkSel(){ if(S.sel && !findBlock(S.sel)) S.sel = null; }
 
+/* ---------- ton du document (v1.43) : tu par defaut, vous au choix ---------- */
+function TT(tu, vous){ return doc && doc.tone==='vous' ? vous : tu; }
+function tbd(){ return !!(doc && !doc.date); }
+var TONE_PAIRS = [['Tenue sobre et dans des tons neutres si tu apparais sur les photos', 'Tenue sobre et dans des tons neutres si vous apparaissez sur les photos']];
+function toneRows(rows, tone){
+  var from = tone==='vous' ? 0 : 1, to = 1-from;
+  (rows||[]).forEach(function(r){ (r.slots||[]).forEach(function(b){
+    if(!b || b.type!=='checklist' || !b.props || !Array.isArray(b.props.items)) return;
+    b.props.items.forEach(function(it){ TONE_PAIRS.forEach(function(pp){ if(it.t===pp[from]) it.t = pp[to]; }); });
+  }); });
+  return rows;
+}
+var ACCORD_VOUS = 'Vous recevez vos photos retouchées en pleine définition, libres de publication avec mention de mon compte.\nJ\'utilise ces photos sur mon portfolio et mes réseaux, en vous mentionnant.\nSi vous ne pouvez plus venir, prévenez-moi au moins 24h avant, on replace la séance sans frais. En cas de pluie, je vous préviens la veille au soir et on décale.';
+function accordDef(){ return TT(ACCORD_DEF, ACCORD_VOUS); }
+var ACCENTS = ['#e8571a','#2f89cf','#2d9e4f','#c9a227','#8b5cf6','#e0457b','#9aa0a6'];
+function accentOf(){ var a = doc && doc.accent; return /^#[0-9a-f]{6}$/i.test(a||'') ? a : ''; }
+
 /* ---------- textes modifiables ---------- */
 var TERMS_DEF = 'Livraison : galerie privée en ligne sous 5 à 7 jours\nDroits : usage personnel et réseaux sociaux inclus, usage commercial sur devis\nAnnulation sans frais jusqu\'à 48h avant, l\'acompte reste dû passé ce délai';
 var ACCORD_DEF = 'Tu reçois tes photos retouchées en pleine définition, libres de publication avec mention de mon compte.\nJ\'utilise ces photos sur mon portfolio et mes réseaux, en te mentionnant.\nSi tu ne peux plus venir, préviens-moi au moins 24h avant, on replace la séance sans frais. En cas de pluie, je te préviens la veille au soir et on décale.';
@@ -5887,29 +5948,29 @@ function blockBody(b){
       var rdel = p.deliver || (rpk && rpk.photos ? rpk.photos+' photos retouchées' : '');
       var rzone = [p.area, p.travel].filter(Boolean).join(', ');
       var rdur = sc ? 'Environ '+fmt(sc.fin-sc.accueil) : 'À définir';
-      var rt = rdvTime(sc), rwhen = doc.date ? fdate(doc.date)+(rt && rt!=='À définir' ? ', '+rt : '') : 'Date à définir';
+      var rt = rdvTime(sc), rwhen = doc.date ? fdate(doc.date)+(rt && rt!=='À définir' ? ', '+rt : '') : 'Date à fixer ensemble';
       var rsec = rzone ? '<dt>Secteur</dt><dd>'+esc(rzone)+'</dd>' : (S.mode==='edit' ? '<dt>Secteur</dt><dd><span class="bf-eo">À renseigner dans les réglages</span></dd>' : '');
-      return '<div class="bf-resume">'+ET(b, 'kicker', 'Ta séance photo', 'p', 'bf-rs-kick')+
+      return '<div class="bf-resume">'+ET(b, 'kicker', tbd() ? TT('Ta proposition de séance', 'Votre proposition de séance') : TT('Ta séance photo', 'Votre séance photo'), 'p', 'bf-rs-kick')+
         '<p class="bf-rs-when">'+esc(rwhen)+'</p>'+
         '<dl class="bf-rs-facts"><dt>Durée</dt><dd>'+esc(rdur)+'</dd>'+rsec+
-        (rdel ? '<dt>Tu reçois</dt><dd>'+esc(rdel)+'</dd>' : '')+
+        (rdel ? '<dt>'+TT('Tu reçois', 'Vous recevez')+'</dt><dd>'+esc(rdel)+'</dd>' : '')+
         '<dt>Tarif</dt><dd class="bf-rs-price">'+esc(rprice)+'</dd></dl></div>'+bnote(b);
     case 'accord':
       return ET(b, 'h', 'Avant de confirmer', 'h2', 'bf-h')+
-        ET(b, 'terms', ACCORD_DEF, 'ul', 'bf-terms', {lines:1})+
+        ET(b, 'terms', accordDef(), 'ul', 'bf-terms', {lines:1})+
         '<label class="bf-ack"><input type="checkbox" class="bf-ack-cb" disabled>'+
         ET(b, 'ack', 'J\'ai lu et j\'accepte ces conditions', 'span', 'bf-ack-t')+
         '</label>'+bnote(b);
     case 'cover':
       var car = carOf(c);
-      return '<div class="bf-cover"><div class="bf-cover-top">'+ET(b, 'kicker', 'Briefing shooting', 'span', 'bf-kick')+'<span class="bf-dos">Dossier '+esc(doc.ref||'')+'</span></div>'+
+      return '<div class="bf-cover"><div class="bf-cover-top">'+ET(b, 'kicker', tbd() ? 'Proposition de séance' : 'Briefing shooting', 'span', 'bf-kick')+'<span class="bf-dos">Dossier '+esc(doc.ref||'')+'</span></div>'+
         '<div class="bf-cover-main"><div class="bf-cav" style="background:'+(c && c.photo ? 'var(--d-panel)' : avatarBg(c))+'">'+photoOrInitials(c)+'</div>'+
         '<div>'+ET(b, 'title', 'Prêts pour la séance, {prenom}.', 'h1')+ET(b, 'intro', '{voiture}. {date}, {lieu}. Tout ce qu\'il faut savoir avant le jour J est ici.', 'p', '', {ml:1})+'</div></div>'+
         (car ? '<div class="bf-carbar"><i></i><span>'+esc(car)+'</span></div>' : '<div class="bf-carbar"><i></i></div>')+'</div>';
     case 'client':
       if(!c) return '<div class="bf-empty bf-eo" style="min-height:90px">Glisse un client ici ou choisis-le dans les réglages</div>';
       var cars = (c.cars && c.cars.length ? c.cars : (c.car ? [{model:c.car, color:''}] : [])).filter(function(v){ return v && (v.model||v.color); });
-      h = ET(b, 'h', 'Ta fiche', 'h2', 'bf-h')+'<div class="bf-client"><div class="bf-cphoto" style="background:'+avatarBg(c)+'">'+photoOrInitials(c)+'</div><div><div class="bf-cname">'+esc(c.name)+'</div>'+
+      h = ET(b, 'h', TT('Ta fiche', 'Votre fiche'), 'h2', 'bf-h')+'<div class="bf-client"><div class="bf-cphoto" style="background:'+avatarBg(c)+'">'+photoOrInitials(c)+'</div><div><div class="bf-cname">'+esc(c.name)+'</div>'+
         cars.map(function(v){ return '<div class="bf-ccar">'+(v.color ? '<span class="bf-sw" style="background:'+esc(v.color)+'"></span>' : '')+esc(v.model||'Voiture')+'</div>'; }).join('')+'</div></div>';
       var facts = '';
       if(p.showOffer && c.offre) facts += '<dt>Formule</dt><dd>Pack '+esc(OFFRE[c.offre]||c.offre)+'</dd>';
@@ -5919,7 +5980,7 @@ function blockBody(b){
       sc = schedule(); list = rs();
       var place = doc.place || (list[0] ? list[0].name : '');
       var q = list[0] ? (+list[0].lat)+','+(+list[0].lng) : encodeURIComponent(place);
-      h = ET(b, 'h', 'Rendez-vous', 'h2', 'bf-h')+'<dl class="bf-facts"><dt>Date</dt><dd>'+fdate(doc.date)+'</dd><dt>Heure</dt><dd>'+rdvTime(sc)+'</dd>'+
+      h = ET(b, 'h', 'Rendez-vous', 'h2', 'bf-h')+'<dl class="bf-facts"><dt>Date</dt><dd>'+(doc.date ? fdate(doc.date) : 'À fixer ensemble')+'</dd><dt>Heure</dt><dd>'+rdvTime(sc)+'</dd>'+
         '<dt>Lieu</dt><dd>'+(place ? esc(place) : 'À définir')+'</dd><dt>Durée</dt><dd>'+(sc ? 'Environ '+fmt(sc.fin-sc.accueil) : 'À définir')+'</dd></dl>';
       if(q) h += ET(b, 'btn', 'Ouvrir l\'itinéraire', 'a', 'bf-dbtn', {extra:' href="https://www.google.com/maps/dir/?api=1&destination='+q+'" target="_blank" rel="noopener"'});
       if(p.weather){
@@ -5954,12 +6015,13 @@ function blockBody(b){
       sc = schedule();
       h = '<div class="bf-tlhead">'+ET(b, 'h', 'Le timing lumière', 'h2', 'bf-h')+'<span class="bf-sun">'+sunChip()+'</span></div>';
       if(!sc) return h + '<div class="bf-muted">Ajoute des spots au parcours pour calculer le timing</div>';
-      h += '<div class="bf-tline"><div class="bf-tl"><p class="bf-tlt">'+fmt(sc.accueil)+'</p>'+ET(b, 'a_t', 'Accueil', 'h3')+ET(b, 'a_d', 'Briefing rapide et point sur la voiture ensemble.', 'p', 'bf-tld', {ml:1})+'</div>';
+      var tk = function(m){ if(doc.date || doc.timeMode==='free') return fmt(m); var dm = m - sc.accueil; return dm<=0 ? 'Arrivée' : '+'+fmt(dm); };
+      h += '<div class="bf-tline"><div class="bf-tl"><p class="bf-tlt">'+tk(sc.accueil)+'</p>'+ET(b, 'a_t', 'Accueil', 'h3')+ET(b, 'a_d', 'Briefing rapide et point sur la voiture ensemble.', 'p', 'bf-tld', {ml:1})+'</div>';
       sc.list.forEach(function(s, k){
         if(k>0) h += '<p class="bf-trip">'+sc.legs[k-1]+' min de route</p>';
-        h += '<div class="bf-tl"><p class="bf-tlt">'+fmt(sc.starts[k])+'</p><h3>Spot '+(k+1)+', '+esc(s.name)+'</h3>'+ET(b, 'sd_'+s.id, lightPhase(sc, sc.starts[k]), 'p', 'bf-tld', {ml:1})+'</div>';
+        h += '<div class="bf-tl"><p class="bf-tlt">'+tk(sc.starts[k])+'</p><h3>Spot '+(k+1)+', '+esc(s.name)+'</h3>'+ET(b, 'sd_'+s.id, lightPhase(sc, sc.starts[k]), 'p', 'bf-tld', {ml:1})+'</div>';
       });
-      return h + '<div class="bf-tl"><p class="bf-tlt">'+fmt(sc.fin)+'</p>'+ET(b, 'f_t', 'Fin de séance', 'h3')+ET(b, 'f_d', 'Debrief et prochaines étapes pour la livraison.', 'p', 'bf-tld', {ml:1})+'</div></div>'+bnote(b);
+      return h + (tbd() && doc.timeMode!=='free' ? '<p class="bf-muted" style="margin:0 0 10px">Horaires exacts calés sur la lumière une fois la date fixée.</p>' : '') + '<div class="bf-tl"><p class="bf-tlt">'+tk(sc.fin)+'</p>'+ET(b, 'f_t', 'Fin de séance', 'h3')+ET(b, 'f_d', 'Debrief et prochaines étapes pour la livraison.', 'p', 'bf-tld', {ml:1})+'</div></div>'+bnote(b);
     case 'checklist':
       var lis = [];
       (p.items||[]).forEach(function(x, i){ if(!x.on) return; lis.push(S.mode==='edit' ? '<li class="bf-et" contenteditable="true" data-ci="'+i+'">'+esc(x.t)+'</li>' : '<li>'+esc(x.t)+'</li>'); });
@@ -5989,7 +6051,7 @@ function blockBody(b){
       return h + bnote(b);
     case 'contact':
       var handle = String(p.handle||'').replace(/^@/, '');
-      return '<div class="bf-contact">'+ET(b, 'cta', 'Une question avant le jour J ? Écris sur Instagram, @{insta}', 'a', 'bf-cta', {extra:' href="https://instagram.com/'+esc(handle)+'" target="_blank" rel="noopener"'})+ET(b, 'sign', '6flt Photographies, Grand Est et Luxembourg', 'span', 'bf-sign')+'</div>';
+      return '<div class="bf-contact">'+ET(b, 'cta', tbd() ? TT('Une date qui t\'arrange ? Écris-moi sur Instagram, @{insta}', 'Une date qui vous arrange ? Écrivez-moi sur Instagram, @{insta}') : TT('Une question avant le jour J ? Écris sur Instagram, @{insta}', 'Une question avant le jour J ? Écrivez-moi sur Instagram, @{insta}'), 'a', 'bf-cta', {extra:' href="https://instagram.com/'+esc(handle)+'" target="_blank" rel="noopener"'})+ET(b, 'sign', '6flt Photographies, Grand Est et Luxembourg', 'span', 'bf-sign')+'</div>';
   }
   return '';
 }
@@ -6014,6 +6076,7 @@ function renderDoc(){
   shell.className = 'bf-shell'+(S.mode==='phone' ? ' phone' : '')+(S.mode==='a4' ? ' a4' : '');
   d.className = 'bf-doc bf-m-'+S.mode+(S.mode==='a4' ? ' bf-print' : '');
   d.style.setProperty('--car', carColor(c));
+  if(accentOf()) d.style.setProperty('--d-accent', accentOf()); else d.style.removeProperty('--d-accent');
   if(S.mode==='edit'){ lbl.hidden = true; } else { lbl.hidden = false; lbl.textContent = S.mode==='phone' ? 'Ce que voit ton client sur son téléphone : tout passe en une colonne' : 'Aperçu PDF en thème clair, format A4. Les pointillés marquent les sauts de page'; }
   var h = '<div class="bf-gap" data-i="0"></div>';
   doc.rows.forEach(function(row, r){
@@ -6123,6 +6186,7 @@ function renderPanel(){
     h += '<div class="bf-grp">Contenu libre</div>';
     FREE_TYPES.forEach(function(t){ h += palItem(t); });
   } else {
+    h += docSettings();
     h += '<p class="bf-set-hint">Appliquer un gabarit remplace la structure du document. Le client, le parcours et la date restent. Ctrl+Z pour revenir.</p>';
     h += '<div class="bf-grp">Gabarits de base</div>';
     Object.keys(TEMPLATES).forEach(function(k){ var t = TEMPLATES[k]; h += tplCard(t.build(), t.name, t.desc, 'data-tpl="'+k+'"', ''); });
@@ -6149,6 +6213,20 @@ function routeEditor(withNotes){
   if(!list.length) h += '<div class="bf-note">Aucun spot. Glisse-les depuis la liste de gauche.</div>';
   return h + '</div><p class="bf-set-hint">Le parcours est partagé par la carte, les spots et le timing. Tes notes de repérage privées ne sont jamais affichées au client.</p>';
 }
+function dateField(){
+  return '<div class="bf-set-label">Date</div><div class="bf-datebox"><input type="date" class="bf-field" data-act="doc" data-key="date" value="'+esc(doc.date||'')+'">'+
+    '<button class="bf-sbtn'+(doc.date ? '' : ' on')+'" data-act="date-tbd">À définir</button></div>'+
+    (doc.date ? '' : '<p class="bf-set-hint">Date à définir : le document se présente comme une proposition. Le client ne peut pas confirmer, il te propose une date. Choisis un jour pour débloquer la confirmation.</p>');
+}
+function docSettings(){
+  var a = accentOf(), tone = doc.tone==='vous' ? 'vous' : 'tu';
+  return '<div class="bf-grp">Ce document</div>'+
+    '<div class="bf-set-label">Ton</div><div class="bf-seg bf-sm">'+[['tu','Tutoiement'],['vous','Vouvoiement']].map(function(o){ return '<button data-act="tone" data-val="'+o[0]+'" class="'+(tone===o[0]?'on':'')+'">'+o[1]+'</button>'; }).join('')+'</div>'+
+    '<div class="bf-set-label">Couleur des titres et boutons</div><div class="bf-accents">'+ACCENTS.map(function(c, i){ var on = a ? a.toLowerCase()===c : i===0; return '<button data-act="accent" data-val="'+c+'" class="'+(on?'on':'')+'" style="background:'+c+'" aria-label="Couleur '+c+'"></button>'; }).join('')+
+    '<label class="bf-accent-pick" title="Couleur personnalisée"><input type="color" data-act="accent-in" value="'+(a||'#e8571a')+'"></label></div>'+
+    dateField()+
+    '<p class="bf-set-hint">Le ton change les textes par défaut. Ceux que tu as modifiés à la main restent tels quels.</p>';
+}
 function timeHint(){
   if(doc.timeMode==='free') return '<p class="bf-set-hint">Heure libre, choisie par toi.</p><button class="bf-sbtn" data-act="time-mode" data-val="sunset">Recaler sur le coucher du soleil</button>';
   return '<p class="bf-set-hint">Heure suggérée d\'après '+(doc.timeMode==='sunrise' ? 'le lever' : 'le coucher')+' du soleil et le parcours. Modifie-la pour passer en heure libre.</p>';
@@ -6160,7 +6238,7 @@ function settingsHTML(b){
     case 'resume':
       var spk = (c && c.offre && PACKS[c.offre]) || null;
       h += '<div class="bf-set-label">Client</div>'+clientSelect()+
-        '<div class="bf-set-label">Date</div><input type="date" class="bf-field" data-act="doc" data-key="date" value="'+esc(doc.date||'')+'">'+
+        dateField()+
         '<div class="bf-set-label">Secteur</div><input class="bf-field" data-act="prop" data-key="area" value="'+esc(p.area||'')+'" placeholder="Metz sud">'+
         '<div class="bf-set-label">Temps de route</div><input class="bf-field" data-act="prop" data-key="travel" value="'+esc(p.travel||'')+'" placeholder="20 min">'+
         '<div class="bf-set-label">Tarif affiché</div>'+segProp('priceMode', p.priceMode||'auto', [['auto','Pack du client'],['free','Offert'],['custom','Personnalisé']])+
@@ -6175,7 +6253,7 @@ function settingsHTML(b){
     case 'client':
       h += '<div class="bf-set-label">Client</div>'+clientSelect()+tog('showOffer', 'Afficher la formule', p.showOffer)+tog('showContact', 'Afficher le contact', p.showContact); break;
     case 'rdv':
-      h += '<div class="bf-set-label">Date</div><input type="date" class="bf-field" data-act="doc" data-key="date" value="'+esc(doc.date||'')+'">'+
+      h += dateField()+
         '<div class="bf-set-label">Heure du rendez-vous</div><input type="time" class="bf-field" data-act="rdv-time" value="'+(sc ? hhmm(sc.accueil) : esc(doc.startTime))+'">'+timeHint()+
         '<div class="bf-set-label">Lieu de rendez-vous</div><input class="bf-field" data-act="doc" data-key="place" value="'+esc(doc.place||'')+'" placeholder="'+esc(rs()[0] ? rs()[0].name : 'Adresse ou point de rendez-vous')+'">'+
         tog('weather', 'Afficher la météo', p.weather); break;
@@ -6188,7 +6266,7 @@ function settingsHTML(b){
       h += '<div class="bf-set-label">Calage de la séance</div><div class="bf-seg bf-sm">'+[['sunset','Coucher'],['sunrise','Lever'],['free','Heure libre']].map(function(o){ return '<button data-act="time-mode" data-val="'+o[0]+'" class="'+(doc.timeMode===o[0] ? 'on' : '')+'">'+o[1]+'</button>'; }).join('')+'</div>'+
         (doc.timeMode==='free' ? '<div class="bf-set-label">Heure de début</div><input type="time" class="bf-field" data-act="rdv-time" value="'+esc(doc.startTime)+'">' : '')+
         '<div class="bf-set-label">Temps par spot</div><div class="bf-range"><input type="range" min="15" max="60" step="5" data-act="prop" data-key="perSpot" value="'+(+p.perSpot||25)+'"><span id="bf-ps-val">'+(+p.perSpot||25)+' min</span></div>'+
-        '<p class="bf-set-hint">Lever '+fmt(st.sunrise)+', coucher '+fmt(st.sunset)+', calculés pour le '+esc(fshort(doc.date))+' au premier spot du parcours. '+
+        (doc.date ? '<p class="bf-set-hint">Lever '+fmt(st.sunrise)+', coucher '+fmt(st.sunset)+', calculés pour le '+esc(fshort(doc.date))+' au premier spot du parcours. ' : '<p class="bf-set-hint">Date à définir : le client voit des horaires relatifs, recalés dès que tu fixes la date. ')+
         (doc.timeMode==='sunset' ? 'Le dernier spot tombe sur le coucher, le reste se cale à rebours.' : doc.timeMode==='sunrise' ? 'Le premier spot commence juste avant le lever, le reste s\'enchaîne.' : 'Les spots s\'enchaînent depuis ton heure de début.')+' Trajets calculés par Mapbox.</p>'; break;
     case 'checklist':
       h += '<div class="bf-set-label">Éléments affichés</div>'+(p.items||[]).map(function(x, i){ return '<label class="bf-chk"><input type="checkbox" data-act="chk" data-i="'+i+'"'+(x.on ? ' checked' : '')+'><span>'+esc(x.t)+'</span><button class="bf-mini" data-act="chk-del" data-i="'+i+'" title="Supprimer" aria-label="Supprimer">×</button></label>'; }).join('')+
@@ -6235,6 +6313,18 @@ function select(id){ S.sel = id; markSel(); renderPanel(); }
 function setClient(id){
   var c = getClient(id); doc.clientId = id || null;
   if(c){ var sh = nextShoot(c); if(sh){ if(sh.date) doc.date = sh.date; if(sh.place) doc.place = sh.place; } }
+}
+function setDateTbd(){
+  if(!doc || !doc.date) return;
+  var prev = doc.date, c = getClient(doc.clientId);
+  doc.date = '';
+  // la seance deja inscrite au planning du client n'a plus de raison d'y rester
+  if(c && Array.isArray(c.shoots) && c.shoots.some(function(x){ return x && x.date===prev; })
+     && !briefings.some(function(b){ return b.id!==doc.id && b.clientId===doc.clientId && (b.shootDate||b.date)===prev; })
+     && confirm('Retirer aussi la séance du '+fshort(prev)+' du planning de '+(firstName(c)||'ce client')+' ?')){
+    c.shoots = c.shoots.filter(function(x){ return !x || x.date!==prev; }); clientsChanged();
+  }
+  commit(); renderAll(); toast('Date à définir : le client pourra te proposer un jour');
 }
 function addToRoute(id){ if(doc.route.indexOf(id)<0){ doc.route.push(id); return true; } return false; }
 function removeRowIfVoid(row){ if(row.slots.every(function(s){ return !s; })){ var k = doc.rows.indexOf(row); if(k>-1) doc.rows.splice(k, 1); } }
@@ -6477,7 +6567,7 @@ function buildShare(){
   try{
     var list = rs(), sc = schedule(), car = carColor(getClient(doc.clientId));
     var startMin = sc ? sc.accueil : toMin(doc.startTime||'14:00'), endMin = sc ? sc.fin : startMin + 120;
-    var base = {title:docTitle(), date:doc.date||null, car:car, start:doc.date ? localIso(doc.date, startMin) : null, end:doc.date ? localIso(doc.date, endMin) : null, handle:''};
+    var base = {title:docTitle(), date:doc.date||null, car:car, start:doc.date ? localIso(doc.date, startMin) : null, end:doc.date ? localIso(doc.date, endMin) : null, handle:'', tbd:!doc.date, tone:doc.tone==='vous' ? 'vous' : 'tu', accent:accentOf()||null};
     allBlocks().forEach(function(b){ if(b.type==='contact' && b.props.handle) base.handle = String(b.props.handle).replace(/^@/, ''); });
     var info = list.length>1 ? routeInfo(list) : null;
     out.html_exact = staticRows();
@@ -6501,7 +6591,7 @@ function buildShare(){
     var acc = '';
     allBlocks().forEach(function(b){
       if(b.type!=='accord') return;
-      var t = (b.props.tx && b.props.tx.terms!=null) ? b.props.tx.terms : ACCORD_DEF;
+      var t = (b.props.tx && b.props.tx.terms!=null) ? b.props.tx.terms : accordDef();
       acc += (acc ? '\n' : '') + fillTok(t, b);
     });
     out.accepted_terms = acc || null;
@@ -6564,7 +6654,12 @@ function openShare(){
   if(!sb || !currentUserId){ toast('Connexion requise pour partager'); return; }
   flushSave(); renderShare(); $('bf-share').hidden = false;
 }
-function shareMsg(){ var c = getClient(doc.clientId); return 'Bonjour'+(c ? ' '+firstName(c) : '')+',\n\nVoici ton briefing pour la séance'+(doc.date ? ' du '+fdate(doc.date).toLowerCase() : '')+' : horaires, parcours et préparation de la voiture.\n\n'+shareUrl()+'\n\nÀ très vite,\n6flt Photographies'; }
+function shareMsg(){
+  var c = getClient(doc.clientId), hi = 'Bonjour'+(c ? ' '+firstName(c) : '')+',\n\n';
+  var body = !doc.date ? TT('Voici la présentation de ta séance photo : déroulé, parcours et formule. Dis-moi quel jour t\'arrange.', 'Voici la présentation de votre séance photo : déroulé, parcours et formule. Dites-moi quel jour vous convient.')
+    : TT('Voici ton briefing pour la séance du '+fdate(doc.date).toLowerCase()+' : horaires, parcours et préparation de la voiture.', 'Voici votre briefing pour la séance du '+fdate(doc.date).toLowerCase()+' : horaires, parcours et préparation de la voiture.');
+  return hi+body+'\n\n'+shareUrl()+'\n\n'+TT('À très vite', 'À bientôt')+',\n6flt Photographies';
+}
 function copyText(t){
   if(navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(t);
   var ta = document.createElement('textarea'); ta.value = t; document.body.appendChild(ta); ta.select(); try{ document.execCommand('copy'); }catch(e){} ta.remove(); return Promise.resolve();
@@ -6626,7 +6721,7 @@ function shareAct(e){
 function openModal(){
   flushSave();
   var n0 = new Date();
-  M = {client:null, tpl:'particulier', q:'', step:1, date:null, status:'prospect', y:n0.getFullYear(), mo:n0.getMonth()};
+  M = {client:null, tpl:'particulier', q:'', step:1, date:null, status:'prospect', tone:null, y:n0.getFullYear(), mo:n0.getMonth()};
   $('bf-m-search').value = '';
   renderModal(); $('bf-modal').hidden = false;
   setTimeout(function(){ $('bf-m-search').focus(); }, 30);
@@ -6671,7 +6766,8 @@ function renderModalCal(){
   if(M.date){
     var dl = map[M.date]||[];
     h += '<div class="bf-mday"><b>'+esc(fdate(M.date))+'</b>'+(dl.length ? dl.map(function(x){ return '<div class="bf-mshoot"><i style="background:'+stColor(x.st)+'"></i><span>'+esc(x.name)+(x.time ? ', '+esc(x.time) : '')+(x.place ? ', '+esc(x.place) : '')+'</span></div>'; }).join('') : '<span class="bf-mfree">Jour libre</span>')+'</div>';
-  } else h += '<p class="bf-set-hint">Choisis un jour pour l\'inscrire au planning'+(c ? ' de '+esc(firstName(c)) : '')+'. Sans date, le briefing est créé avec une date provisoire.</p>';
+  } else h += '<p class="bf-set-hint">Choisis un jour pour l\'inscrire au planning'+(c ? ' de '+esc(firstName(c)) : '')+', ou garde la date à définir pour présenter la séance à un prospect avant de fixer le jour ensemble.</p>';
+  h += '<button type="button" class="bf-sbtn bf-mtbd'+(M.date ? '' : ' on')+'" data-mtbd="1">'+(M.date ? 'Passer en date à définir' : 'Date à définir')+'</button>';
   if(c) h += '<div class="bf-set-label">Statut</div><div class="bf-seg bf-sm">'+[['prospect','Prospect'],['acte','Acté']].map(function(o){ return '<button type="button" data-mstat="'+o[0]+'" class="'+(M.status===o[0] ? 'on' : '')+'">'+o[1]+'</button>'; }).join('')+'</div>'+
     '<p class="bf-set-hint">Le statut est enregistré sur la fiche client et colore le planning. Couleurs modifiables dans le profil.</p>';
   $('bf-m-step2').innerHTML = h;
@@ -6695,7 +6791,10 @@ function renderModal(){
   Object.keys(TEMPLATES).forEach(function(k){ var tp = TEMPLATES[k]; t += '<div class="bf-tpl'+(M.tpl===k ? ' on' : '')+'" tabindex="0" role="button" data-mtpl="'+k+'">'+tplMini(tp.build())+'<div><div class="bf-tpl-name">'+esc(tp.name)+'</div><div class="bf-tpl-desc">'+esc(tp.desc)+'</div></div></div>'; });
   CUSTOM.forEach(function(tp, i){ t += '<div class="bf-tpl'+(M.tpl==='c:'+i ? ' on' : '')+'" tabindex="0" role="button" data-mtpl="c:'+i+'">'+tplMini(tp.rows)+'<div><div class="bf-tpl-name">'+esc(tp.name)+'</div><div class="bf-tpl-desc">Mon gabarit</div></div></div>'; });
   $('bf-m-tpls').innerHTML = t;
+  var mt = mTone();
+  $('bf-m-tone').innerHTML = [['tu','Tutoiement'],['vous','Vouvoiement']].map(function(o){ return '<button type="button" data-mtone="'+o[0]+'" class="'+(mt===o[0]?'on':'')+'">'+o[1]+'</button>'; }).join('');
 }
+function mTone(){ if(M.tone) return M.tone; var tp = String(M.tpl).indexOf('c:')===0 ? null : TEMPLATES[M.tpl]; return tp && tp.tone==='vous' ? 'vous' : 'tu'; }
 
 /* ---------- mode d'affichage ---------- */
 /* ---------- zoom du document ---------- */
@@ -6811,6 +6910,9 @@ function bind(){
     var a = e.target.closest('button[data-act]'); if(!a) return;
     var f = findBlock(S.sel), act = a.dataset.act, i = +a.dataset.i;
     if(act==='desel'){ select(null); return; }
+    if(act==='date-tbd'){ setDateTbd(); return; }
+    if(act==='tone'){ var nt = a.dataset.val==='vous' ? 'vous' : 'tu'; if((doc.tone||'tu')===nt) return; doc.tone = nt; toneRows(doc.rows, nt); commit(); renderAll(); toast(nt==='vous' ? 'Document au vouvoiement' : 'Document au tutoiement'); return; }
+    if(act==='accent'){ doc.accent = a.dataset.val==='#e8571a' ? '' : a.dataset.val; commit(); renderAll(); return; }
     if(act==='blk-dup' || act==='blk-del'){ blockAct(act); return; }
     if(act==='time-mode'){
       if(a.dataset.val==='free'){ var sc0 = schedule(); if(sc0) doc.startTime = hhmm(sc0.accueil); }
@@ -6848,6 +6950,7 @@ function bind(){
     if(act==='client-set'){ setClient(a.value); commit(); renderAll(); c = getClient(a.value); toast(c ? 'Briefing lié à '+c.name : 'Client retiré du briefing'); return; }
     if(act==='offre'){ c = getClient(doc.clientId); if(c){ c.offre = a.value; if(typeof persistClients==='function') persistClients(); } commit(); renderAll(); toast('Formule mise à jour sur la fiche client'); return; }
     if(act==='chk' && f){ f.b.props.items[+a.dataset.i].on = a.checked; commit(); renderDoc(); return; }
+    if(act==='accent-in' && /^#[0-9a-f]{6}$/i.test(a.value)){ doc.accent = a.value.toLowerCase()==='#e8571a' ? '' : a.value; commit(); renderAll(); return; }
     if(act==='rdv-time' && a.value){ doc.timeMode = 'free'; doc.startTime = a.value; commit(); renderAll(); toast('Heure libre : '+a.value.replace(':', 'h')); return; }
   });
   panel.addEventListener('keydown', function(e){
@@ -6903,6 +7006,8 @@ function bind(){
     var md = e.target.closest('[data-mday]'), ms = e.target.closest('[data-mstat]');
     if(mc){ if(M.client!==mc.dataset.mclient) M.date = null; M.client = mc.dataset.mclient; renderModal(); return; }
     if(mt){ M.tpl = mt.dataset.mtpl; renderModal(); return; }
+    var mto = e.target.closest('[data-mtone]'); if(mto){ M.tone = mto.dataset.mtone; renderModal(); return; }
+    var mtb = e.target.closest('[data-mtbd]'); if(mtb){ M.date = ''; renderModal(); return; }
     if(md){ M.date = md.dataset.mday; renderModal(); return; }
     if(ms){ M.status = ms.dataset.mstat; renderModal(); return; }
     if(ma && ma.dataset.mact==='close'){ closeModal(); return; }
@@ -6910,7 +7015,7 @@ function bind(){
     if(ma && ma.dataset.mact==='back'){ modalStep(1); return; }
     if(ma && (ma.dataset.mact==='mprev' || ma.dataset.mact==='mnext')){ M.mo += ma.dataset.mact==='mnext' ? 1 : -1; if(M.mo<0){ M.mo = 11; M.y--; } if(M.mo>11){ M.mo = 0; M.y++; } renderModal(); return; }
     if(ma && ma.dataset.mact==='create' && M.client!==null){
-      var cl = getClient(M.client), d = createDoc(M.client, M.tpl, M.date);
+      var cl = getClient(M.client), d = createDoc(M.client, M.tpl, M.date===null ? '' : M.date, mTone());
       if(cl){
         cl.statut = M.status==='acte' ? 'client' : 'prospect';
         if(M.date){ cl.shoots = Array.isArray(cl.shoots) ? cl.shoots : []; if(!cl.shoots.some(function(x){ return x.date===M.date; })) cl.shoots.push({date:M.date, time:'', place:d.place||''}); cl.shoots.sort(function(a,b){ return (a.date+(a.time||'')).localeCompare(b.date+(b.time||'')); }); d.shootDate = M.date; }
@@ -6992,7 +7097,7 @@ function blockAct(act){
 }
 function applyTemplate(rows){
   if(!doc) return;
-  doc.rows = rows; S.sel = null; commit(); renderAll(); toast('Gabarit appliqué, Ctrl+Z pour revenir');
+  doc.rows = toneRows(rows, doc.tone); S.sel = null; commit(); renderAll(); toast('Gabarit appliqué, Ctrl+Z pour revenir');
 }
 
 /* ---------- point d'entree (appele par switchView) ---------- */
@@ -9028,21 +9133,22 @@ window.addEventListener('resize', function(){ if(discoverOpen) zoneLayout(); });
 // v1.42 : glisser-deposer des photos sur ordinateur (spots, clients, evenements)
 (function(){
   function hasFiles(e){ var t = e.dataTransfer && e.dataTransfer.types; return !!t && Array.prototype.indexOf.call(t, 'Files') > -1; }
-  function zone(id, onFiles){
+  function zone(id, onFiles, markSel){
     var el = document.getElementById(id); if(!el) return; var n = 0;
-    el.addEventListener('dragenter', function(e){ if(!hasFiles(e)) return; e.preventDefault(); n++; el.classList.add('dz-on'); });
+    function mk(){ return (markSel && el.querySelector(markSel)) || el; }
+    el.addEventListener('dragenter', function(e){ if(!hasFiles(e)) return; e.preventDefault(); n++; mk().classList.add('dz-on'); });
     el.addEventListener('dragover', function(e){ if(!hasFiles(e)) return; e.preventDefault(); e.dataTransfer.dropEffect = 'copy'; });
-    el.addEventListener('dragleave', function(e){ if(!hasFiles(e)) return; n = Math.max(0, n-1); if(!n) el.classList.remove('dz-on'); });
+    el.addEventListener('dragleave', function(e){ if(!hasFiles(e)) return; n = Math.max(0, n-1); if(!n) mk().classList.remove('dz-on'); });
     el.addEventListener('drop', function(e){
-      if(!hasFiles(e)) return; e.preventDefault(); e.stopPropagation(); n = 0; el.classList.remove('dz-on');
+      if(!hasFiles(e)) return; e.preventDefault(); e.stopPropagation(); n = 0; mk().classList.remove('dz-on');
       var f = Array.prototype.filter.call(e.dataTransfer.files || [], function(x){ return /^image\//.test(x.type); });
       if(!f.length){ if(typeof showToast==='function') showToast('Dépose une image'); return; }
       onFiles(f);
     });
   }
-  zone('spot-panel', function(f){ queueSpotImages(f); });
-  zone('client-panel', function(f){ onClientPhotoSelected({target:{files:f, value:''}}); });
-  zone('event-panel', function(f){ onEventPhotoSelected({target:{files:f, value:''}}); });
+  zone('spot-panel', function(f){ queueSpotImages(f); }, '#panel-image-zone');
+  zone('client-panel', function(f){ onClientPhotoSelected({target:{files:f, value:''}}); }, '.client-photo-zone');
+  zone('event-panel', function(f){ onEventPhotoSelected({target:{files:f, value:''}}); }, '.client-photo-zone');
   // une image lachee a cote d'un panneau ne remplace plus la page
   window.addEventListener('dragover', function(e){ if(hasFiles(e)) e.preventDefault(); });
   window.addEventListener('drop', function(e){ if(hasFiles(e)) e.preventDefault(); });
@@ -9195,14 +9301,14 @@ function clearDiscovery(){
 (function(){
   var tok = SHARE_TOKEN; if(!tok) return;
   var root = document.createElement('div'); root.id = 'cv-root'; document.body.appendChild(root);
-  document.title = 'Ton briefing, 6flt Photographies';
+  document.title = 'Briefing, 6flt Photographies';
   function e(s){ return String(s==null?'':s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
   function msg(t, p){ root.innerHTML = '<div class="cv-msg"><b>'+t+'</b>'+(p||'')+'</div>'; }
   function fail(net){
     if(net) msg('Connexion impossible', 'Vérifie ta connexion et recharge la page.<br>Ton briefing est toujours là.');
     else msg('Ce lien n\'est plus disponible', 'Il a peut-être expiré ou été désactivé.<br>Contacte ton photographe pour en recevoir un nouveau.');
   }
-  msg('Chargement de ton briefing…');
+  msg('Chargement du briefing…');
   if(!sb){ fail(true); return; }
   var D = null, tick = null, MAPS = [];
   function load(){
@@ -9237,28 +9343,34 @@ function clearDiscovery(){
       else h += '<div class="cv-banner"><b>Adresses exactes le '+e(fdt(D.reveal_at, {weekday:'long', day:'numeric', month:'long'}))+' à '+e(fdt(D.reveal_at, {hour:'2-digit', minute:'2-digit'}))+'</b>En attendant, la carte montre la zone de chaque spot. Révélation dans <span class="cv-count" id="cv-count"></span></div>';
     }
     var conf = !!D.confirmed_at, hd = String(d.handle||'').replace(/^@/, '');
-    h += '<div class="bf-doc bf-m-phone" style="--car:'+e(d.car||'#e8571a')+'">'+(D.html||'')+'</div>';
-    if(hd && !conf) h += '<p class="cv-alt">Cette date ne t\'arrange pas ? <a href="https://instagram.com/'+e(hd)+'" target="_blank" rel="noopener">Écris-moi, on en trouve une autre</a></p>';
+    var vous = d.tone==='vous', ac = /^#[0-9a-f]{6}$/i.test(d.accent||'') ? d.accent : '#e8571a', tbdv = !!d.tbd && !conf;
+    function tv(a, b){ return vous ? b : a; }
+    document.title = tv('Ton briefing', 'Votre briefing')+', 6flt Photographies';
+    root.style.setProperty('--cv-accent', ac);
+    h += '<div class="bf-doc bf-m-phone" style="--car:'+e(d.car||'#e8571a')+(d.accent ? ';--d-accent:'+e(ac) : '')+'">'+(D.html||'')+'</div>';
+    if(hd && !conf) h += tbdv ? '<p class="cv-alt">'+tv('La date se fixe ensemble.', 'La date se fixe ensemble.')+' <a href="https://instagram.com/'+e(hd)+'" target="_blank" rel="noopener">'+tv('Écris-moi le jour qui t\'arrange', 'Écrivez-moi le jour qui vous convient')+'</a></p>'
+      : '<p class="cv-alt">'+tv('Cette date ne t\'arrange pas ?', 'Cette date ne vous convient pas ?')+' <a href="https://instagram.com/'+e(hd)+'" target="_blank" rel="noopener">'+tv('Écris-moi, on en trouve une autre', 'Écrivez-moi, on en trouve une autre')+'</a></p>';
     h += '</div>';
     var confLabel = conf ? 'Séance confirmée'
       : (d.start ? 'Je confirme le '+fdt(d.start, {day:'numeric', month:'long'})+' à '+fdt(d.start, {hour:'2-digit', minute:'2-digit'}) : 'Je confirme');
-    h += '<div class="cv-bar">'+
-      '<button id="cv-conf" class="cv-main'+(conf ? ' cv-done' : '')+'"'+(conf ? ' disabled' : '')+'>'+e(confLabel)+'</button>'+
+    var mainBtn = tbdv ? (hd ? '<a class="cv-main" href="https://instagram.com/'+e(hd)+'" target="_blank" rel="noopener">Choisir la date ensemble</a>' : '<button class="cv-main" disabled>Date à fixer ensemble</button>')
+      : '<button id="cv-conf" class="cv-main'+(conf ? ' cv-done' : '')+'"'+(conf ? ' disabled' : '')+'>'+e(confLabel)+'</button>';
+    h += '<div class="cv-bar">'+mainBtn+
       '<div class="cv-sec">'+
       (rev && d.spots && d.spots.length ? '<a href="'+e(navUrl(d.spots))+'" target="_blank" rel="noopener">Itinéraire</a>' : '<button disabled>Itinéraire'+(rev ? '' : ' bientôt')+'</button>')+
       (d.start ? '<a href="data:text/calendar;charset=utf-8,'+encodeURIComponent(ics(Object.assign({revealed:rev}, d)))+'" download="shooting-6flt.ics">Calendrier</a>' : '')+
       (hd ? '<a href="https://instagram.com/'+e(hd)+'" target="_blank" rel="noopener">Écrire</a>' : '')+
       '</div></div>';
     root.innerHTML = h;
-    root.querySelectorAll('.bf-blk[data-type="map"] .bf-map').forEach(function(box){ glMap(box, d, rev); });
+    root.querySelectorAll('.bf-blk[data-type="map"] .bf-map').forEach(function(box){ glMap(box, d, rev, ac); });
     var cb = document.getElementById('cv-conf');
     var ackCb = root.querySelector('.bf-ack-cb'), needAck = !!ackCb;
-    if(ackCb){ ackCb.disabled = false; var ackLb = ackCb.closest('.bf-ack'); if(ackLb) ackLb.style.cursor = 'pointer'; }
+    if(ackCb && !tbdv){ ackCb.disabled = false; var ackLb = ackCb.closest('.bf-ack'); if(ackLb) ackLb.style.cursor = 'pointer'; }
     function syncConf(){
       if(!cb || conf) return;
       var ok = !needAck || ackCb.checked;
       cb.disabled = !ok;
-      cb.title = ok ? '' : 'Coche la case pour confirmer';
+      cb.title = ok ? '' : tv('Coche la case pour confirmer', 'Cochez la case pour confirmer');
     }
     if(ackCb) ackCb.addEventListener('change', syncConf);
     syncConf();
@@ -9282,7 +9394,8 @@ function clearDiscovery(){
       upd(); tick = setInterval(upd, 20000);
     }
   }
-  function glMap(box, d, rev){
+  function glMap(box, d, rev, ac){
+    ac = ac || '#e8571a';
     var pts = rev ? (d.spots||[]) : (d.zones||[]); if(!pts.length || !window.mapboxgl) return;
     var fallback = box.innerHTML;
     box.innerHTML = ''; box.className = 'cv-gl';
@@ -9294,11 +9407,11 @@ function clearDiscovery(){
       m.on('load', function(){
         if(rev){
           var line = d.geometry ? decode(d.geometry) : (pts.length>1 ? pts.map(function(p){ return [p.lng, p.lat]; }) : null);
-          if(line){ m.addSource('cv-route', {type:'geojson', data:{type:'Feature', geometry:{type:'LineString', coordinates:line}}}); m.addLayer({id:'cv-route', type:'line', source:'cv-route', layout:{'line-cap':'round','line-join':'round'}, paint:{'line-color':'#e8571a','line-width':4,'line-opacity':.85}}); line.forEach(function(c){ bb.extend(c); }); }
+          if(line){ m.addSource('cv-route', {type:'geojson', data:{type:'Feature', geometry:{type:'LineString', coordinates:line}}}); m.addLayer({id:'cv-route', type:'line', source:'cv-route', layout:{'line-cap':'round','line-join':'round'}, paint:{'line-color':ac,'line-width':4,'line-opacity':.85}}); line.forEach(function(c){ bb.extend(c); }); }
         } else {
           m.addSource('cv-zones', {type:'geojson', data:{type:'FeatureCollection', features:pts.map(function(z){ return {type:'Feature', geometry:{type:'Polygon', coordinates:[circle(z.lng, z.lat, z.r)]}}; })}});
-          m.addLayer({id:'cv-zf', type:'fill', source:'cv-zones', paint:{'fill-color':'#e8571a','fill-opacity':.16}});
-          m.addLayer({id:'cv-zl', type:'line', source:'cv-zones', paint:{'line-color':'#e8571a','line-width':1.5,'line-dasharray':[2,2]}});
+          m.addLayer({id:'cv-zf', type:'fill', source:'cv-zones', paint:{'fill-color':ac,'fill-opacity':.16}});
+          m.addLayer({id:'cv-zl', type:'line', source:'cv-zones', paint:{'line-color':ac,'line-width':1.5,'line-dasharray':[2,2]}});
           pts.forEach(function(z){ circle(z.lng, z.lat, z.r).forEach(function(c){ bb.extend(c); }); });
         }
         pts.forEach(function(p){
