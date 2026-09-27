@@ -7,9 +7,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Spoties">
 <meta name="theme-color" content="#0e0f12">
-<link rel="manifest" href="manifest.json?v=1.41">
-<link rel="apple-touch-icon" href="icon-180.png?v=1.41">
-<link rel="icon" type="image/png" href="icon-192.png?v=1.41">
+<link rel="manifest" href="manifest.json?v=1.42">
+<link rel="apple-touch-icon" href="icon-180.png?v=1.42">
+<link rel="icon" type="image/png" href="icon-192.png?v=1.42">
 <title>Spoties</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -1401,17 +1401,39 @@ body.panel-open #zone-dock,body.panel-open #view-map #discover-panel{display:non
 .flt-g .star-row{flex-wrap:nowrap}
 .flt-empty{display:none;font-size:12px;color:var(--muted);line-height:1.5}
 .flt-empty.on{display:block}
+/* ===== v1.42 : panneaux en cartes flottantes, apparition commune, contacts, depot de photos ===== */
+@keyframes pfPop{from{opacity:0;translate:0 12px;scale:.97}to{opacity:1;translate:0 0;scale:1}}
+@keyframes pfPopDown{from{opacity:0;translate:0 -10px;scale:.97}to{opacity:1;translate:0 0;scale:1}}
+#filter-panel{transform-origin:left top}
+#filter-panel.open{animation:pfPopDown .24s cubic-bezier(.2,.8,.2,1)}
+#view-map #discover-panel.open,#zone-dock.on,#hourly-bar.open,.bf-modal-bg:not([hidden]) .bf-modal{animation:pfPop .24s cubic-bezier(.2,.8,.2,1)}
+#spot-panel,#client-panel,#event-panel{height:auto;border:1px solid var(--border);border-radius:18px;box-shadow:0 20px 60px rgba(0,0,0,.55);transform:translateY(14px) scale(.97);transform-origin:right bottom;opacity:0;visibility:hidden;transition:transform .24s cubic-bezier(.2,.8,.2,1),opacity .18s ease,visibility 0s linear .24s}
+#spot-panel{top:10px;right:10px;bottom:calc(10px + env(safe-area-inset-bottom));overflow:hidden}
+#client-panel,#event-panel{top:calc(10px + env(safe-area-inset-top));right:10px;bottom:calc(10px + env(safe-area-inset-bottom))}
+#spot-panel.open,#client-panel.open,#event-panel.open{transform:none;opacity:1;visibility:visible;transition:transform .24s cubic-bezier(.2,.8,.2,1),opacity .18s ease,visibility 0s}
+@media(max-width:640px){#spot-panel,#client-panel,#event-panel{left:10px;right:10px;width:auto;max-width:none;border:1px solid var(--border)}}
+@media (prefers-reduced-motion:reduce){#filter-panel.open,#view-map #discover-panel.open,#zone-dock.on,#hourly-bar.open,.bf-modal-bg:not([hidden]) .bf-modal{animation:none}#spot-panel,#client-panel,#event-panel{transition:none}}
+.dz-on{outline:2px dashed var(--accent)!important;outline-offset:-8px}
+.cct{display:flex;flex-direction:column;gap:8px}
+.cct-row{position:relative;display:flex;align-items:center}
+.cct-row .client-input{flex:1;min-width:0;padding-right:78px}
+.cct-go{position:absolute;right:6px;top:50%;transform:translateY(-50%);font:600 11.5px 'Inter',sans-serif;color:var(--accent);background:var(--surface);border:1px solid var(--border);border-radius:7px;padding:5px 9px;text-decoration:none;cursor:pointer}
+.cct-go[hidden]{display:none}
+.cprog-leg button{display:inline-flex;align-items:center;gap:6px;font:11px 'Inter',sans-serif;color:var(--muted);background:none;border:none;padding:3px 0;cursor:pointer;text-align:left}
+.cprog-leg button.on{color:var(--text,#f3f2ee);font-weight:600}
+.cprog-leg button em{font-style:normal;font-weight:500;color:var(--muted);border-bottom:1px dashed currentColor}
+.cprog-hint{font-size:10.5px;color:var(--muted);margin-top:8px;line-height:1.4}
 </style>
 </head>
 <body>
 <div id="splash">
-  <img id="splash-logo" src="icon-512.png?v=1.41" alt="Spoties">
-  <div id="splash-credit">Créé par 6flt photographie et Claude<br><span style="opacity:.6">v1.41</span></div>
+  <img id="splash-logo" src="icon-512.png?v=1.42" alt="Spoties">
+  <div id="splash-credit">Créé par 6flt photographie et Claude<br><span style="opacity:.6">v1.42</span></div>
 </div>
 
 <div id="login-screen">
   <div class="login-box">
-    <img src="icon-192.png?v=1.41" alt="Spoties" class="login-logo">
+    <img src="icon-192.png?v=1.42" alt="Spoties" class="login-logo">
     <h1 class="login-title">Spoties</h1>
     <p class="login-sub" id="login-sub">Connexion</p>
     <input type="email" id="login-email" class="login-input" placeholder="Email" autocomplete="email">
@@ -1426,7 +1448,7 @@ body.panel-open #zone-dock,body.panel-open #view-map #discover-panel{display:non
 </div>
 
 <nav>
-  <button type="button" class="nav-logo" id="nav-logo" onclick="refreshApp()" title="Actualiser l'app" aria-label="Actualiser l'app"><img src="icon-192.png?v=1.41" alt="Spoties" class="nav-logo-img"></button>
+  <button type="button" class="nav-logo" id="nav-logo" onclick="refreshApp()" title="Actualiser l'app" aria-label="Actualiser l'app"><img src="icon-192.png?v=1.42" alt="Spoties" class="nav-logo-img"></button>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="switchView('map')">Carte</button>
     <button class="nav-tab" onclick="switchView('gallery')">Spots</button>
@@ -2329,7 +2351,12 @@ body.panel-open #zone-dock,body.panel-open #view-map #discover-panel{display:non
       </div>
     </div>
     <label class="client-field-label">Contact</label>
-    <input type="text" id="client-contact" class="client-input" placeholder="Tel, mail, Instagram...">
+    <div class="cct">
+      <div class="cct-row"><input type="tel" id="client-phone" class="client-input" placeholder="Téléphone" inputmode="tel" autocomplete="off"><a class="cct-go" id="client-phone-go" hidden>Appeler</a></div>
+      <div class="cct-row"><input type="email" id="client-email" class="client-input" placeholder="E-mail" inputmode="email" autocomplete="off" autocapitalize="off"><a class="cct-go" id="client-email-go" hidden>Écrire</a></div>
+      <div class="cct-row"><input type="text" id="client-insta" class="client-input" placeholder="Instagram, @pseudo" autocomplete="off" autocapitalize="off"><a class="cct-go" id="client-insta-go" target="_blank" rel="noopener" hidden>Ouvrir</a></div>
+      <input type="text" id="client-contact" class="client-input" placeholder="Autre contact (facultatif)">
+    </div>
     <label class="client-field-label">Shootings planifies</label>
     <div class="cal mini-cal">
       <div class="cal-top">
@@ -2845,7 +2872,11 @@ function persistClients(){
   localStorage.setItem('6flt_clients', JSON.stringify(clients));
   if(sb){
     var rows = clients.map(sbRow);
-    if(rows.length) sb.from('clients').upsert(rows).then(function(res){ if(res.error) console.warn('Supabase clients push:', res.error.message); });
+    if(rows.length) sb.from('clients').upsert(rows).then(function(res){
+      if(res.error){ console.warn('Supabase clients push:', res.error.message); return; }
+      clients.forEach(function(c){ c._synced = true; });
+      localStorage.setItem('6flt_clients', JSON.stringify(clients));
+    });
   }
 }
 function syncDeleteClientFromCloud(id){
@@ -2858,7 +2889,10 @@ function syncLoadClientsFromCloud(){
     if(res.error){ console.warn('Supabase clients load:', res.error.message); return; }
     var cloud = (res.data||[]).map(function(r){ return r.data; });
     var cloudIds = {}; cloud.forEach(function(c){ cloudIds[c.id]=true; });
-    var toMigrate = clients.filter(function(c){ return !cloudIds[c.id]; });
+    // v1.42 : un client absent du cloud n'est renvoye que s'il n'y a jamais ete.
+    // Deja synchronise puis absent = supprime depuis un autre appareil, on ne le ressuscite pas.
+    cloud.forEach(function(c){ if(c) c._synced = true; });
+    var toMigrate = clients.filter(function(c){ return c && !cloudIds[c.id] && !c._synced; });
     clients = cloud.concat(toMigrate);
     localStorage.setItem('6flt_clients', JSON.stringify(clients));
     if(toMigrate.length){
@@ -3000,9 +3034,12 @@ function clientProgress(c){
     shoots.some(function(x){ return x && x.date && x.date < today; }),
     !!(c.gallery && String(c.gallery).trim())
   ];
+  // v1.42 : une etape peut etre marquee a la main quand l'app ne peut pas la deduire
+  var auto = done.slice(), man = c.stepsManual || {};
+  done = done.map(function(v, i){ return v || !!man[CSTEPS[i].k]; });
   var n = 0; done.forEach(function(d){ if(d) n++; });
   var nextI = done.indexOf(false);
-  return {done:done, n:n, total:CSTEPS.length, views:views, next:nextI>-1 ? CSTEPS[nextI].l : null};
+  return {done:done, auto:auto, n:n, total:CSTEPS.length, views:views, next:nextI>-1 ? CSTEPS[nextI].l : null};
 }
 // anneau segmente, centre vide : une part par etape du contrat
 function donutSVG(pr, size, sw){
@@ -3025,7 +3062,9 @@ function clientState(c){
     var fiveDaysAgo = new Date(Date.now() - 5*86400000).toISOString().slice(0,10);
     relance = shoots.some(function(s){ return s.date < today && s.date <= fiveDaysAgo; });
   }
-  if(hasGallery && hasPast) return {k:'livre', l:'Livre', c:'#2d9e4f', relance:false};
+  var man = c.stepsManual || {};
+  if(man.shoot && !hasPast){ hasPast = true; relance = false; }
+  if(man.livre || (hasGallery && hasPast)) return {k:'livre', l:'Livre', c:'#2d9e4f', relance:false};
   if(hasPast) return {k:'realise', l:'Realise', c:'#e0902a', relance:relance};
   if(hasFuture) return {k:'planifie', l:'Planifie', c:'#2e6fd6', relance:false};
   return {k:'prospect', l:'Prospect', c:'#7a7f87', relance:false};
@@ -3046,9 +3085,9 @@ function renderClients(){
     var wrap = document.createElement('div');
     wrap.className = 'client-card-wrap';
     var photo = c.photo
-      ? '<div class="client-card-photo" style="background-image:url('+JSON.stringify(c.photo)+')"></div>'
+      ? '<div class="client-card-photo" style="background-image:url(&quot;'+escapeHtml(String(c.photo).replace(/"/g,'%22'))+'&quot;)"></div>'
       : '<div class="client-card-photo">&#128100;</div>';
-    var meta = c.contact || (c.extras && c.extras.length ? c.extras[0].key+': '+c.extras[0].value : '') || '';
+    var meta = c.insta || c.phone || c.email || c.contact || (c.extras && c.extras.length ? c.extras[0].key+': '+c.extras[0].value : '') || '';
     var carDots = '';
     if(Array.isArray(c.cars)){
       c.cars.forEach(function(v){
@@ -3149,7 +3188,7 @@ function renderClientsTrash(){
   list.innerHTML = '';
   trashed.forEach(function(c){
     var photo = c.photo
-      ? '<div class="client-card-photo" style="background-image:url('+JSON.stringify(c.photo)+')"></div>'
+      ? '<div class="client-card-photo" style="background-image:url(&quot;'+escapeHtml(String(c.photo).replace(/"/g,'%22'))+'&quot;)"></div>'
       : '<div class="client-card-photo">&#128100;</div>';
     var card = document.createElement('div');
     card.className = 'client-card';
@@ -3179,7 +3218,7 @@ function openNewClientPanel(){
   document.getElementById('client-statut').value = 'prospect';
   document.getElementById('client-shoots').innerHTML = '';
   fcLoad([]);
-  document.getElementById('client-contact').value = '';
+  cctFill({});
   document.getElementById('client-gallery').value = '';
   document.getElementById('client-notes').value = '';
   document.getElementById('client-extras').innerHTML = '';
@@ -3205,7 +3244,7 @@ function openExistingClientPanel(id){
   document.getElementById('client-statut').value = c.statut||'prospect';
   var shootsWrap = document.getElementById('client-shoots'); shootsWrap.innerHTML = '';
   fcLoad(Array.isArray(c.shoots) ? c.shoots : []);
-  document.getElementById('client-contact').value = c.contact||'';
+  cctFill(c);
   document.getElementById('client-gallery').value = c.gallery||'';
   document.getElementById('client-notes').value = c.notes||'';
   var ex = document.getElementById('client-extras'); ex.innerHTML = '';
@@ -3229,9 +3268,59 @@ function renderClientProgress(){
     '<div class="cprog-s">'+(pr.next ? 'Prochaine : '+escapeHtml(pr.next) : 'Contrat bouclé')+'</div>'+
     (pr.views ? '<div class="cprog-s">'+pr.views+' ouverture'+(pr.views>1?'s':'')+' du lien client</div>' : '')+'</div></div>'+
     '<div class="cprog-leg">'+CSTEPS.map(function(x, i){
-      return '<span'+(pr.done[i] ? ' class="on"' : '')+'><i style="background:'+(pr.done[i] ? x.c : 'var(--border)')+'"></i>'+x.l+'</span>';
-    }).join('')+'</div>';
+      var m = pr.done[i] && !pr.auto[i];
+      return '<button type="button" data-step="'+x.k+'" class="'+(pr.done[i] ? 'on' : '')+(m ? ' man' : '')+(pr.auto[i] ? ' auto' : '')+'"><i style="background:'+(pr.done[i] ? x.c : 'var(--border)')+'"></i>'+x.l+(m ? ' <em>à la main</em>' : '')+'</button>';
+    }).join('')+'</div>'+
+    '<div class="cprog-hint">Touche une étape pour la marquer faite quand l\'app ne peut pas le savoir.</div>';
+  box.querySelectorAll('.cprog-leg button').forEach(function(b){ b.onclick = function(){ toggleClientStep(b.getAttribute('data-step'), b.classList.contains('auto')); }; });
 }
+function toggleClientStep(k, isAuto){
+  var c = clients.filter(function(x){ return x.id===currentClientId; })[0]; if(!c) return;
+  if(isAuto){ showToast('Étape déjà validée par l\'app'); return; }
+  var m = Object.assign({}, c.stepsManual || {});
+  if(m[k]) delete m[k]; else m[k] = Date.now();
+  c.stepsManual = m;
+  persistClients(); renderClientProgress();
+  if(typeof renderClients==='function') try{ renderClients(); }catch(e){}
+}
+function cctParse(str){
+  var s = ' '+String(str||'')+' ', o = {phone:'', email:'', insta:'', other:''}, m;
+  m = s.match(/[^\s,;:()]+@[^\s,;:()]+\.[a-z]{2,}/i); if(m){ o.email = m[0]; s = s.replace(m[0], ' '); }
+  m = s.match(/(?:https?:\/\/)?(?:www\.)?instagram\.com\/([A-Za-z0-9._]{1,30})\/?/i) || s.match(/\b(?:insta(?:gram)?|ig)\s*:?\s*@?([A-Za-z0-9._]{2,30})/i) || s.match(/(?:^|[\s,;:(])@([A-Za-z0-9._]{2,30})/);
+  if(m){ o.insta = '@'+m[1]; s = s.replace(m[0], ' '); }
+  m = s.match(/\+?\d[\d .\-\/]{7,}\d/); if(m){ o.phone = m[0].trim(); s = s.replace(m[0], ' '); }
+  o.other = s.replace(/\b(t[ée]l[ée]?(phone)?|mail|e-mail|insta(gram)?|ig)\b\s*:?/gi, ' ').replace(/^[\s,;:|\/\-]+|[\s,;:|\/\-]+$/g, '').replace(/\s{2,}/g, ' ');
+  return o;
+}
+function cctFill(c){
+  var o = (c && (c.phone!=null || c.email!=null || c.insta!=null)) ? {phone:c.phone||'', email:c.email||'', insta:c.insta||'', other:c.contactOther||''} : cctParse(c && c.contact);
+  document.getElementById('client-phone').value = o.phone;
+  document.getElementById('client-email').value = o.email;
+  document.getElementById('client-insta').value = o.insta;
+  document.getElementById('client-contact').value = o.other;
+  cctLinks();
+}
+function cctRead(c){
+  function v(id){ return document.getElementById(id).value.trim(); }
+  c.phone = v('client-phone'); c.email = v('client-email'); c.insta = v('client-insta'); c.contactOther = v('client-contact');
+  // champ historique garde a jour : briefing, lien mail et anciennes versions le lisent encore
+  c.contact = [c.phone, c.email, c.insta, c.contactOther].filter(Boolean).join(', ');
+}
+function cctHandle(v){
+  v = String(v||'').trim(); var m = v.match(/instagram\.com\/([A-Za-z0-9._]+)/i);
+  return m ? m[1] : v.replace(/^@/, '').replace(/[^A-Za-z0-9._]/g, '');
+}
+function cctLinks(){
+  function set(id, href){ var a = document.getElementById(id); if(!a) return; if(href){ a.href = href; a.hidden = false; } else { a.removeAttribute('href'); a.hidden = true; } }
+  var ph = document.getElementById('client-phone').value.replace(/[^\d+]/g, '');
+  var em = document.getElementById('client-email').value.trim();
+  var ig = cctHandle(document.getElementById('client-insta').value);
+  set('client-phone-go', ph.length>5 ? 'tel:'+ph : '');
+  set('client-email-go', /@.+\./.test(em) ? 'mailto:'+em : '');
+  set('client-insta-go', ig ? 'https://instagram.com/'+ig : '');
+}
+['client-phone','client-email','client-insta'].forEach(function(id){ var el = document.getElementById(id); if(el) el.addEventListener('input', cctLinks); });
+
 function renderClientDocs(){
   var wrap=document.getElementById('client-docs'); if(!wrap) return;
   if(!currentClientId || typeof window.bfDocsFor!=='function'){ wrap.style.display='none'; return; }
@@ -3435,14 +3524,14 @@ function saveClient(){
     offre: document.getElementById('client-offre').value,
     statut: document.getElementById('client-statut').value,
     shoots: shoots,
-    contact: document.getElementById('client-contact').value.trim(),
     gallery: document.getElementById('client-gallery').value.trim(),
     notes: document.getElementById('client-notes').value.trim(),
     extras: extras,
     spotIds: clientSpotIds.slice(),
-    photo: currentClientPhoto,
-    createdAt: currentClientId ? undefined : new Date().toISOString()
+    photo: currentClientPhoto
   };
+  if(!currentClientId) c.createdAt = new Date().toISOString();
+  cctRead(c);
   if(currentClientId){ clients = clients.map(function(x){ return x.id===currentClientId ? Object.assign({}, x, c) : x; }); }
   else { clients.push(c); }
   persistClients(); renderClients(); closeClientPanel(); showToast('Client enregistre');
@@ -3703,9 +3792,9 @@ document.addEventListener('click',function(e){
 });
 
 /* ===================== PROFIL v1.36 : accueil, statistiques, nouveautes ===================== */
-var APP_VERSION='v1.41';
+var APP_VERSION='v1.42';
 // historique reconstruit depuis les anciens index (date = date de livraison). [version, date, approximative, [[n|f, texte]]]
-var CHANGELOG=[["v1.41","2026-09-27",0,[["n","Périmètre (ex Découverte) : réglages dans un bandeau en bas de carte, rayon au pincement dans le cercle ou avec + et -"],["n","Périmètre : spots à l'intérieur entourés, routes qui le traversent soulignées en blanc, liste des spots à la ronde"],["n","Critères de recherche de routes en boutons plutôt qu'en jauges"],["n","Profil en carte flottante à gauche, la carte reste visible autour"],["n","Filtres proposés au choix dans Profil, Carte, le panneau se réorganise sans trou"],["f","Briefing supprimé qui réapparaissait, renvoyé par un autre appareil qui en gardait une copie"],["n","Supprimer un briefing propose de retirer aussi la séance du planning"]]],["v1.40","2026-09-25",0,[["f","Boutons de la carte alignés en ligne quand la carte ne se chargeait pas"],["n","Découverte de routes : zone ronde posée au centre de la carte, rayon réglable en kilomètres et point orange à glisser pour la déplacer"],["n","Boutons de la carte regroupés en deux colonnes, une à gauche, une à droite"],["f","Boutons + et - de Mapbox retirés, ils étaient cachés derrière les autres"],["f","Panneaux Filtrer et Découverte plus compacts sur téléphone"]]],["v1.39","2026-09-25",0,[["n","Le briefing se gèle dès que le client accepte les conditions : plus aucune modification ne part dans son lien"],["n","Publier une nouvelle version annule la confirmation du client, qui doit accepter à nouveau"],["n","Mise à jour du lien en pause pendant que tu travailles, publication quand tu es prêt"],["n","Texte des conditions mémorisé avec le lien au moment de l'acceptation"]]],["v1.38","2026-09-23",0,[["n","Anneau d'avancement du contrat sur chaque fiche client et dans la liste : date, briefing, lien, accord, shooting, galerie"],["n","Statistiques : avancement des contrats étape par étape et valeur estimée du carnet"],["f","Numéro de version affiché dans Nouveautés remis à jour"]]],["v1.37","2026-09-23",0,[["n","Briefing : bloc L'essentiel (date, durée, secteur et tarif en tête de document)"],["n","Briefing : bloc Accord, conditions à accepter avant de confirmer"],["n","Séance offerte affichée dans la formule et dans l'essentiel"],["n","Lien client : confirmation verrouillée tant que les conditions ne sont pas acceptées, bouton daté, lien pour proposer une autre date"],["f","Lien client : message distinct entre perte de connexion et lien expiré"]]],["v1.36","2026-09-23",0,[["n","Profil réorganisé : accueil, objectifs, carte, apparence et données sur des pages séparées"],["n","Statistiques : santé des fiches, ajouts par mois, clients, liens partagés, photos, routes, types, heures de shoot"],["n","Page Nouveautés avec l'historique daté de toutes les versions"],["n","Filtre des fiches à compléter dans l'onglet Spots"]]],["v1.35","2026-09-23",0,[["n","Plusieurs photos d'un coup dans les spots, envoyées dans l'ordre choisi"],["n","Heure et affiche des événements, affiche en plein écran"],["f","Événement de la veille encore affiché comme à venir le soir"],["f","Date de création d'un événement perdue à l'édition"]]],["v1.34","2026-09-22",0,[["n","Téléchargement du briefing en PDF"],["n","Lien client interactif : adresse exacte révélée avant le shoot, ajout au calendrier"]]],["v1.33","2026-09-22",0,[["n","Briefings listés dans la fiche client, création directe depuis la fiche"],["n","Texte modifiable directement dans le briefing, zoom de l'éditeur"],["n","Changer la date du shoot dans le briefing met à jour le planning du client"],["n","Toucher le logo actualise l'app"]]],["v1.30","2026-09-22",0,[["n","Planning refait : briefings en rangées réordonnables (1 à 3 colonnes), blocs branchés sur tes spots et clients, gabarits, sauvegarde en ligne"]]],["v1.29","2026-09-20",0,[["n","Cartes Spots plus compactes, décor affiché sur la carte"],["f","Vignettes carrées du Planning déformées"]]],["v1.28","2026-09-20",0,[["n","Galerie et Shotlist fusionnées dans l'onglet Spots"],["n","Sélection multiple et glisser pour supprimer un spot"],["n","Inspirations déplacées vers le profil"]]],["v1.27","2026-09-20",0,[["n","Planning en éditeur grille aimantée, branché sur les spots et clients"]]],["v1.26","2026-09-20",0,[["n","Premier onglet Planning (document de briefing)"],["n","Associer des spots à un client en les touchant sur la carte"]]],["v1.24","2026-09",1,[["f","Boutons de la carte qui se chevauchaient sur mobile"],["f","Panneaux filtres, découverte et soleil qui restaient ouverts ensemble"],["n","Marqueurs réduits à 44 px sur mobile"]]],["v1.23","2026-07-21",0,[["n","Fréquentation des routes heure par heure"],["n","Découverte de routes dans une zone dessinée (OpenStreetMap), filtrées par sinuosité"]]],["v1.22","2026-07-17",0,[["n","Aperçu en direct de l'objet 3D avant de le poser"],["f","Objets 3D qui disparaissaient après une image"]]],["v1.21","2026-07-17",0,[["n","Bouton dédié pour placer un objet 3D"]]],["v1.20","2026-07-17",0,[["n","Comptes séparés : inscription, mot de passe oublié, données propres à chaque compte"],["n","Progression XP sauvegardée dans le compte"]]],["v1.18","2026-07-06",0,[["n","Mode soleil 3D : position du soleil et ombres portées"],["n","Objets 3D sur la carte (voiture, flèche, cube)"],["n","Vidéos courtes sur les spots (20 s max)"],["n","Retracer une route existante"],["n","Zoom et pincement dans la visionneuse, photos réorganisables par glisser"],["n","Progression : XP, niveaux, objectifs et titres"],["n","Historique de recherche et vue Street (Mapillary, repli Google)"]]],["v1.17","2026-06-27",0,[["f","Marqueurs qui glissaient au dézoom"]]],["v1.16","2026-06-27",0,[["f","Tentative de correction des marqueurs (non concluante)"]]],["v1.15","2026-06-27",0,[["n","Navigation entre les photos dans la visionneuse"]]],["v1.14","2026-06-08",0,[["n","Mini-calendrier dans la fiche client pour planifier les shoots"]]],["v1.13","2026-06-07",0,[["n","Planning mensuel de tous les shoots"]]],["v1.12","2026-06-07",0,[["n","Sélection de plusieurs clients et spot de compromis pour leurs voitures"],["f","Badges d'état restylés (v1.12.1)"]]],["v1.11","2026-06-07",0,[["n","États clients automatiques : prospect, planifié, réalisé, livré"],["n","Relance À livrer et accès direct aux spots conseillés pour une voiture"]]],["v1.10","2026-06-07",0,[["n","Shootings planifiés dans la fiche client"]]],["v1.9","2026-06-07",0,[["n","Plusieurs voitures par client avec couleur de carrosserie, offre et statut"]]],["v1.8","2026-06-07",0,[["f","Photos stockées en ligne : fin de la mémoire saturée qui cassait la synchro PC / iPhone"],["f","Accès aux données sécurisé, clé de carte restreinte à ton site"]]],["v1.7","2026-06-06",0,[["f","Synchronisation fiable : un spot supprimé ne réapparaît plus"]]],["v1.6","2026-06-06",0,[["n","Onglet Profil : photo et réglages regroupés"]]],["v1.5","2026-06-06",0,[["n","Connexion par email et mot de passe"],["n","L'app devient 6flt Spots"]]],["v1.4","2026-06-06",0,[["n","Longs trajets jusqu'à 25 étapes"],["n","Types Musée, Circuit, Concession"],["n","Onglet Événements"]]],["v1.3","2026-06-06",1,[["n","Analyse automatique des virages d'une route"],["n","Filtres de la carte et suppression multiple dans la galerie"]]],["v1.2","2026-06-05",0,[["n","Tracé de routes sur la carte"],["n","Corbeille clients avec restauration"],["f","Routes en double et rendu des routes (v1.2.1)"]]],["v1.1","2026-06-05",0,[["n","Onglet Clients"],["n","Synchronisation en ligne des spots et clients"],["n","Écran de démarrage"]]],["v1.0","2026-06-04",0,[["n","Première version : carte des spots, galerie, Shotlist (conseil de spots selon la couleur de la voiture)"]]]];
+var CHANGELOG=[["v1.42","2026-09-28",0,[["f","Photos des clients qui ne s'affichaient pas dans la liste"],["f","Client supprimé qui réapparaissait, renvoyé par un autre appareil"],["n","Contact client en cases séparées : téléphone, e-mail, Instagram, avec bouton pour appeler, écrire ou ouvrir le profil"],["n","Étapes du contrat marquables à la main quand l'app ne peut pas les deviner"],["n","Spots, clients, événements et filtres s'ouvrent en cartes flottantes, avec la même apparition que le profil"],["n","Sur ordinateur, glisser une photo sur un spot, un client ou un événement pour l'ajouter"]]],["v1.41","2026-09-27",0,[["n","Périmètre (ex Découverte) : réglages dans un bandeau en bas de carte, rayon au pincement dans le cercle ou avec + et -"],["n","Périmètre : spots à l'intérieur entourés, routes qui le traversent soulignées en blanc, liste des spots à la ronde"],["n","Critères de recherche de routes en boutons plutôt qu'en jauges"],["n","Profil en carte flottante à gauche, la carte reste visible autour"],["n","Filtres proposés au choix dans Profil, Carte, le panneau se réorganise sans trou"],["f","Briefing supprimé qui réapparaissait, renvoyé par un autre appareil qui en gardait une copie"],["n","Supprimer un briefing propose de retirer aussi la séance du planning"]]],["v1.40","2026-09-25",0,[["f","Boutons de la carte alignés en ligne quand la carte ne se chargeait pas"],["n","Découverte de routes : zone ronde posée au centre de la carte, rayon réglable en kilomètres et point orange à glisser pour la déplacer"],["n","Boutons de la carte regroupés en deux colonnes, une à gauche, une à droite"],["f","Boutons + et - de Mapbox retirés, ils étaient cachés derrière les autres"],["f","Panneaux Filtrer et Découverte plus compacts sur téléphone"]]],["v1.39","2026-09-25",0,[["n","Le briefing se gèle dès que le client accepte les conditions : plus aucune modification ne part dans son lien"],["n","Publier une nouvelle version annule la confirmation du client, qui doit accepter à nouveau"],["n","Mise à jour du lien en pause pendant que tu travailles, publication quand tu es prêt"],["n","Texte des conditions mémorisé avec le lien au moment de l'acceptation"]]],["v1.38","2026-09-23",0,[["n","Anneau d'avancement du contrat sur chaque fiche client et dans la liste : date, briefing, lien, accord, shooting, galerie"],["n","Statistiques : avancement des contrats étape par étape et valeur estimée du carnet"],["f","Numéro de version affiché dans Nouveautés remis à jour"]]],["v1.37","2026-09-23",0,[["n","Briefing : bloc L'essentiel (date, durée, secteur et tarif en tête de document)"],["n","Briefing : bloc Accord, conditions à accepter avant de confirmer"],["n","Séance offerte affichée dans la formule et dans l'essentiel"],["n","Lien client : confirmation verrouillée tant que les conditions ne sont pas acceptées, bouton daté, lien pour proposer une autre date"],["f","Lien client : message distinct entre perte de connexion et lien expiré"]]],["v1.36","2026-09-23",0,[["n","Profil réorganisé : accueil, objectifs, carte, apparence et données sur des pages séparées"],["n","Statistiques : santé des fiches, ajouts par mois, clients, liens partagés, photos, routes, types, heures de shoot"],["n","Page Nouveautés avec l'historique daté de toutes les versions"],["n","Filtre des fiches à compléter dans l'onglet Spots"]]],["v1.35","2026-09-23",0,[["n","Plusieurs photos d'un coup dans les spots, envoyées dans l'ordre choisi"],["n","Heure et affiche des événements, affiche en plein écran"],["f","Événement de la veille encore affiché comme à venir le soir"],["f","Date de création d'un événement perdue à l'édition"]]],["v1.34","2026-09-22",0,[["n","Téléchargement du briefing en PDF"],["n","Lien client interactif : adresse exacte révélée avant le shoot, ajout au calendrier"]]],["v1.33","2026-09-22",0,[["n","Briefings listés dans la fiche client, création directe depuis la fiche"],["n","Texte modifiable directement dans le briefing, zoom de l'éditeur"],["n","Changer la date du shoot dans le briefing met à jour le planning du client"],["n","Toucher le logo actualise l'app"]]],["v1.30","2026-09-22",0,[["n","Planning refait : briefings en rangées réordonnables (1 à 3 colonnes), blocs branchés sur tes spots et clients, gabarits, sauvegarde en ligne"]]],["v1.29","2026-09-20",0,[["n","Cartes Spots plus compactes, décor affiché sur la carte"],["f","Vignettes carrées du Planning déformées"]]],["v1.28","2026-09-20",0,[["n","Galerie et Shotlist fusionnées dans l'onglet Spots"],["n","Sélection multiple et glisser pour supprimer un spot"],["n","Inspirations déplacées vers le profil"]]],["v1.27","2026-09-20",0,[["n","Planning en éditeur grille aimantée, branché sur les spots et clients"]]],["v1.26","2026-09-20",0,[["n","Premier onglet Planning (document de briefing)"],["n","Associer des spots à un client en les touchant sur la carte"]]],["v1.24","2026-09",1,[["f","Boutons de la carte qui se chevauchaient sur mobile"],["f","Panneaux filtres, découverte et soleil qui restaient ouverts ensemble"],["n","Marqueurs réduits à 44 px sur mobile"]]],["v1.23","2026-07-21",0,[["n","Fréquentation des routes heure par heure"],["n","Découverte de routes dans une zone dessinée (OpenStreetMap), filtrées par sinuosité"]]],["v1.22","2026-07-17",0,[["n","Aperçu en direct de l'objet 3D avant de le poser"],["f","Objets 3D qui disparaissaient après une image"]]],["v1.21","2026-07-17",0,[["n","Bouton dédié pour placer un objet 3D"]]],["v1.20","2026-07-17",0,[["n","Comptes séparés : inscription, mot de passe oublié, données propres à chaque compte"],["n","Progression XP sauvegardée dans le compte"]]],["v1.18","2026-07-06",0,[["n","Mode soleil 3D : position du soleil et ombres portées"],["n","Objets 3D sur la carte (voiture, flèche, cube)"],["n","Vidéos courtes sur les spots (20 s max)"],["n","Retracer une route existante"],["n","Zoom et pincement dans la visionneuse, photos réorganisables par glisser"],["n","Progression : XP, niveaux, objectifs et titres"],["n","Historique de recherche et vue Street (Mapillary, repli Google)"]]],["v1.17","2026-06-27",0,[["f","Marqueurs qui glissaient au dézoom"]]],["v1.16","2026-06-27",0,[["f","Tentative de correction des marqueurs (non concluante)"]]],["v1.15","2026-06-27",0,[["n","Navigation entre les photos dans la visionneuse"]]],["v1.14","2026-06-08",0,[["n","Mini-calendrier dans la fiche client pour planifier les shoots"]]],["v1.13","2026-06-07",0,[["n","Planning mensuel de tous les shoots"]]],["v1.12","2026-06-07",0,[["n","Sélection de plusieurs clients et spot de compromis pour leurs voitures"],["f","Badges d'état restylés (v1.12.1)"]]],["v1.11","2026-06-07",0,[["n","États clients automatiques : prospect, planifié, réalisé, livré"],["n","Relance À livrer et accès direct aux spots conseillés pour une voiture"]]],["v1.10","2026-06-07",0,[["n","Shootings planifiés dans la fiche client"]]],["v1.9","2026-06-07",0,[["n","Plusieurs voitures par client avec couleur de carrosserie, offre et statut"]]],["v1.8","2026-06-07",0,[["f","Photos stockées en ligne : fin de la mémoire saturée qui cassait la synchro PC / iPhone"],["f","Accès aux données sécurisé, clé de carte restreinte à ton site"]]],["v1.7","2026-06-06",0,[["f","Synchronisation fiable : un spot supprimé ne réapparaît plus"]]],["v1.6","2026-06-06",0,[["n","Onglet Profil : photo et réglages regroupés"]]],["v1.5","2026-06-06",0,[["n","Connexion par email et mot de passe"],["n","L'app devient 6flt Spots"]]],["v1.4","2026-06-06",0,[["n","Longs trajets jusqu'à 25 étapes"],["n","Types Musée, Circuit, Concession"],["n","Onglet Événements"]]],["v1.3","2026-06-06",1,[["n","Analyse automatique des virages d'une route"],["n","Filtres de la carte et suppression multiple dans la galerie"]]],["v1.2","2026-06-05",0,[["n","Tracé de routes sur la carte"],["n","Corbeille clients avec restauration"],["f","Routes en double et rendu des routes (v1.2.1)"]]],["v1.1","2026-06-05",0,[["n","Onglet Clients"],["n","Synchronisation en ligne des spots et clients"],["n","Écran de démarrage"]]],["v1.0","2026-06-04",0,[["n","Première version : carte des spots, galerie, Shotlist (conseil de spots selon la couleur de la voiture)"]]]];
 var PF_MOIS=['janv.','févr.','mars','avr.','mai','juin','juil.','août','sept.','oct.','nov.','déc.'];
 var pfStack=['pf-hub'];
 var pfNewsShown=6;
@@ -3783,7 +3872,7 @@ function pfFmtDay(d){
 }
 function pfPct(n,d){ return d ? Math.round(n/d*100) : 0; }
 function pfPlural(n,s,p){ return n+' '+(n>1?(p||s+'s'):s); }
-function pfBriefings(){ try{ var b=JSON.parse(localStorage.getItem('6flt_briefings')||'[]'); return Array.isArray(b) ? b.filter(Boolean) : []; }catch(e){ return []; } }
+function pfBriefings(){ try{ var b=JSON.parse(localStorage.getItem('6flt_briefings')||'[]'); return Array.isArray(b) ? b.filter(function(x){ return x && !x.deleted; }) : []; }catch(e){ return []; } }
 function pfRouteKm(r){
   var l=r.routeLine; if(!Array.isArray(l) || l.length<2) return 0;
   var km=0; for(var i=1;i<l.length;i++){ var a=l[i-1], b=l[i]; if(a && b) km+=distanceKm(a[1],a[0],b[1],b[0]); }
@@ -5345,7 +5434,7 @@ var LS = {docs:'6flt_briefings', cur:'6flt_bf_current', tpl:'6flt_bf_templates',
 function lsGet(k, d){ try{ var v = JSON.parse(localStorage.getItem(k)); return v==null ? d : v; }catch(e){ return d; } }
 function lsSet(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){ console.warn('localStorage', e); } }
 
-var briefings = lsGet(LS.docs, []);
+var briefings = (function(a){ return Array.isArray(a) ? a : []; })(lsGet(LS.docs, [])).filter(function(d){ return d && d.id && !d.deleted; });
 var CUSTOM = lsGet(LS.tpl, []);
 var PACKS = lsGet(LS.packs, {});
 ['Essentiel','Avance','Premium'].forEach(function(k){ if(!PACKS[k]) PACKS[k] = {price:'', photos:''}; });
@@ -5709,7 +5798,7 @@ function openDoc(id, silent){
 function deleteDoc(id){
   var d = briefings.filter(function(b){ return b.id===id; })[0]; if(!d) return;
   if(!confirm('Supprimer « '+(d.title||'ce briefing')+' » ? Cette action est définitive.')) return;
-  if(doc && doc.id===id){ clearTimeout(saveT); saveT = null; doc = null; }
+  if(doc && doc.id===id){ clearTimeout(saveT); saveT = null; clearTimeout(shareT); doc = null; }
   var tomb = lsGet(LS_TOMB, {}) || {};
   tomb[id] = Math.max(Date.now(), (d.updatedAt||0)+1); lsSet(LS_TOMB, tomb);
   briefings = briefings.filter(function(b){ return b.id!==id; }); saveLocal();
@@ -8935,6 +9024,29 @@ document.addEventListener('click', function(e){
   openExistingSpotPanel(s.id);
 });
 window.addEventListener('resize', function(){ if(discoverOpen) zoneLayout(); });
+
+// v1.42 : glisser-deposer des photos sur ordinateur (spots, clients, evenements)
+(function(){
+  function hasFiles(e){ var t = e.dataTransfer && e.dataTransfer.types; return !!t && Array.prototype.indexOf.call(t, 'Files') > -1; }
+  function zone(id, onFiles){
+    var el = document.getElementById(id); if(!el) return; var n = 0;
+    el.addEventListener('dragenter', function(e){ if(!hasFiles(e)) return; e.preventDefault(); n++; el.classList.add('dz-on'); });
+    el.addEventListener('dragover', function(e){ if(!hasFiles(e)) return; e.preventDefault(); e.dataTransfer.dropEffect = 'copy'; });
+    el.addEventListener('dragleave', function(e){ if(!hasFiles(e)) return; n = Math.max(0, n-1); if(!n) el.classList.remove('dz-on'); });
+    el.addEventListener('drop', function(e){
+      if(!hasFiles(e)) return; e.preventDefault(); e.stopPropagation(); n = 0; el.classList.remove('dz-on');
+      var f = Array.prototype.filter.call(e.dataTransfer.files || [], function(x){ return /^image\//.test(x.type); });
+      if(!f.length){ if(typeof showToast==='function') showToast('Dépose une image'); return; }
+      onFiles(f);
+    });
+  }
+  zone('spot-panel', function(f){ queueSpotImages(f); });
+  zone('client-panel', function(f){ onClientPhotoSelected({target:{files:f, value:''}}); });
+  zone('event-panel', function(f){ onEventPhotoSelected({target:{files:f, value:''}}); });
+  // une image lachee a cote d'un panneau ne remplace plus la page
+  window.addEventListener('dragover', function(e){ if(hasFiles(e)) e.preventDefault(); });
+  window.addEventListener('drop', function(e){ if(hasFiles(e)) e.preventDefault(); });
+})();
 
 // profil : voile leger derriere la carte flottante, un toucher le referme
 (function(){
