@@ -7,9 +7,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Spoties">
 <meta name="theme-color" content="#0e0f12">
-<link rel="manifest" href="manifest.json?v=1.43">
-<link rel="apple-touch-icon" href="icon-180.png?v=1.43">
-<link rel="icon" type="image/png" href="icon-192.png?v=1.43">
+<link rel="manifest" href="manifest.json?v=1.44">
+<link rel="apple-touch-icon" href="icon-180.png?v=1.44">
+<link rel="icon" type="image/png" href="icon-192.png?v=1.44">
 <title>Spoties</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -1439,17 +1439,37 @@ body.panel-open #zone-dock,body.panel-open #view-map #discover-panel{display:non
 .bf-accent-pick{position:relative;width:26px;height:26px;border-radius:50%;overflow:hidden;box-shadow:0 0 0 1px var(--border);background:conic-gradient(#e8571a,#c9a227,#2d9e4f,#2f89cf,#8b5cf6,#e0457b,#e8571a);cursor:pointer}
 .bf-accent-pick input{position:absolute;inset:-6px;opacity:0;cursor:pointer;width:40px;height:40px}
 .bf-mtbd{margin-top:10px}
+/* ===== v1.44 : notifications ===== */
+.pf-ntf{display:flex;flex-direction:column;gap:10px}
+.pf-ntf-state{font-size:13px;line-height:1.45;color:var(--text)}
+.pf-ntf-btn{height:42px;border-radius:11px;border:1px solid var(--accent);background:var(--accent);color:#fff;font:700 13.5px 'Inter',sans-serif;cursor:pointer}
+.pf-ntf-btn.ghost{background:none;color:var(--accent)}
+.pf-ntf-btn[hidden],.pf-ntf-link[hidden]{display:none}
+.pf-ntf-btn:disabled{opacity:.55}
+.pf-ntf-link{background:none;border:none;color:var(--muted);font:600 12px 'Inter',sans-serif;padding:4px 0;align-self:flex-start;cursor:pointer}
+.pf-ntf-list{display:flex;flex-direction:column;gap:11px}
+.pf-ntf-list div{display:flex;flex-direction:column;gap:2px}
+.pf-ntf-list b{font-size:13px;font-weight:600}
+.pf-ntf-list span{font-size:11.5px;color:var(--muted);line-height:1.4}
+#ntf-ready{position:fixed;inset:0;z-index:3000;background:rgba(0,0,0,.35);display:flex;align-items:flex-end;justify-content:center;padding:10px 10px calc(10px + env(safe-area-inset-bottom))}
+.ntf-card{width:min(480px,100%);background:var(--surface);border:1px solid var(--border);border-radius:18px;box-shadow:0 20px 60px rgba(0,0,0,.55);padding:14px;display:flex;flex-direction:column;gap:10px;animation:pfPop .24s cubic-bezier(.2,.8,.2,1)}
+.ntf-head{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:14px}
+.ntf-x{width:30px;height:30px;border-radius:50%;border:1px solid var(--border);background:var(--surface2);color:var(--muted);cursor:pointer;flex:none}
+.ntf-txt{width:100%;box-sizing:border-box;background:var(--surface2);border:1px solid var(--border);border-radius:11px;color:var(--text);font:14px/1.45 'Inter',sans-serif;padding:10px 12px;resize:vertical}
+.ntf-acts{display:flex;gap:8px}
+.ntf-acts button{flex:1;height:42px;border-radius:11px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font:600 13px 'Inter',sans-serif;cursor:pointer}
+.ntf-acts .ntf-go{flex:1.6;background:var(--accent);border-color:var(--accent);color:#fff}
 </style>
 </head>
 <body>
 <div id="splash">
-  <img id="splash-logo" src="icon-512.png?v=1.43" alt="Spoties">
-  <div id="splash-credit">Créé par 6flt photographie et Claude<br><span style="opacity:.6">v1.43</span></div>
+  <img id="splash-logo" src="icon-512.png?v=1.44" alt="Spoties">
+  <div id="splash-credit">Créé par 6flt photographie et Claude<br><span style="opacity:.6">v1.44</span></div>
 </div>
 
 <div id="login-screen">
   <div class="login-box">
-    <img src="icon-192.png?v=1.43" alt="Spoties" class="login-logo">
+    <img src="icon-192.png?v=1.44" alt="Spoties" class="login-logo">
     <h1 class="login-title">Spoties</h1>
     <p class="login-sub" id="login-sub">Connexion</p>
     <input type="email" id="login-email" class="login-input" placeholder="Email" autocomplete="email">
@@ -1464,7 +1484,7 @@ body.panel-open #zone-dock,body.panel-open #view-map #discover-panel{display:non
 </div>
 
 <nav>
-  <button type="button" class="nav-logo" id="nav-logo" onclick="refreshApp()" title="Actualiser l'app" aria-label="Actualiser l'app"><img src="icon-192.png?v=1.43" alt="Spoties" class="nav-logo-img"></button>
+  <button type="button" class="nav-logo" id="nav-logo" onclick="refreshApp()" title="Actualiser l'app" aria-label="Actualiser l'app"><img src="icon-192.png?v=1.44" alt="Spoties" class="nav-logo-img"></button>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="switchView('map')">Carte</button>
     <button class="nav-tab" onclick="switchView('gallery')">Spots</button>
@@ -1755,6 +1775,7 @@ body.panel-open #zone-dock,body.panel-open #view-map #discover-panel{display:non
         <div class="pf-list">
           <button type="button" class="pf-row" onclick="pfOpenPage('map')"><span class="pf-ico"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 13s4.5-4 4.5-7.3a4.5 4.5 0 00-9 0C2.5 9 7 13 7 13z" stroke="currentColor" stroke-width="1.4"/><circle cx="7" cy="5.7" r="1.5" stroke="currentColor" stroke-width="1.4"/></svg></span><span class="pf-row-l">Carte</span><span class="pf-row-v" id="pf-v-map"></span><svg class="pf-chev" width="8" height="13" viewBox="0 0 8 13"><path d="M1.5 1.5l5 5-5 5" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
           <button type="button" class="pf-row" onclick="pfOpenPage('look')"><span class="pf-ico"><span style="width:12px;height:12px;border-radius:50%;background:var(--accent);display:block"></span></span><span class="pf-row-l">Apparence</span><svg class="pf-chev" width="8" height="13" viewBox="0 0 8 13"><path d="M1.5 1.5l5 5-5 5" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <button type="button" class="pf-row" onclick="pfOpenPage('notif')"><span class="pf-ico"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3.5 10.5V6.8a3.5 3.5 0 017 0v3.7l1 1H2.5z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M5.8 12.6a1.3 1.3 0 002.4 0" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg></span><span class="pf-row-l">Notifications</span><span class="pf-row-v" id="pf-v-notif"></span><svg class="pf-chev" width="8" height="13" viewBox="0 0 8 13"><path d="M1.5 1.5l5 5-5 5" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
           <button type="button" class="pf-row" onclick="pfOpenPage('data')"><span class="pf-ico"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><ellipse cx="7" cy="3.5" rx="5" ry="2" stroke="currentColor" stroke-width="1.4"/><path d="M2 3.5v7c0 1.1 2.2 2 5 2s5-.9 5-2v-7M2 7c0 1.1 2.2 2 5 2s5-.9 5-2" stroke="currentColor" stroke-width="1.4"/></svg></span><span class="pf-row-l">Données &amp; météo</span><span class="pf-row-v" id="pf-v-data"></span><svg class="pf-chev" width="8" height="13" viewBox="0 0 8 13"><path d="M1.5 1.5l5 5-5 5" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         </div>
         <div class="pf-sec">App</div>
@@ -1823,6 +1844,29 @@ body.panel-open #zone-dock,body.panel-open #view-map #discover-panel{display:non
         <div class="pf-sec">Filtres proposés</div>
         <div class="pf-card" style="margin-top:0;padding:6px 14px"><div class="vis-toggles" id="pf-flt-list"></div></div>
         <div class="pf-note">Un filtre désactivé disparaît du panneau Filtrer et ne filtre plus rien.</div>
+      </div>
+    </section>
+
+    <!-- NOTIFICATIONS (v1.44) -->
+    <section class="pf-screen" id="pf-notif">
+      <div class="pf-bar"><button class="pf-ib" onclick="pfBack()" aria-label="Retour"><svg width="8" height="13" viewBox="0 0 8 13"><path d="M6.5 1.5l-5 5 5 5" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button><h2>Notifications</h2></div>
+      <div class="pf-pad">
+        <div class="pf-card pf-ntf" style="margin-top:0">
+          <div class="pf-ntf-state" id="pf-ntf-state">Vérification…</div>
+          <button type="button" class="pf-ntf-btn" id="pf-ntf-on" onclick="pushEnable()" hidden>Activer sur cet appareil</button>
+          <button type="button" class="pf-ntf-btn ghost" id="pf-ntf-test" onclick="pushTest()" hidden>Envoyer une notification de test</button>
+          <button type="button" class="pf-ntf-link" id="pf-ntf-off" onclick="pushDisable()" hidden>Désactiver sur cet appareil</button>
+        </div>
+        <div class="pf-sec">Tu es prévenu quand</div>
+        <div class="pf-card pf-ntf-list" style="margin-top:0">
+          <div><b>Le client ouvre son briefing</b><span>La première fois seulement.</span></div>
+          <div><b>Le client confirme</b><span>Tout de suite.</span></div>
+          <div><b>Pas de confirmation après 48 h</b><span>Avec un message de relance prêt à envoyer.</span></div>
+          <div><b>Date à définir sans réponse depuis 3 jours</b><span>Avec un message de relance prêt à envoyer.</span></div>
+          <div><b>24 h avant le shooting</b><span>Rappel, et adresses révélées : un message pour prévenir le client est prêt.</span></div>
+          <div><b>Galerie pas livrée 5 jours après</b><span>Ouvre directement la fiche du client.</span></div>
+        </div>
+        <div class="pf-note">Relances et galerie arrivent entre 9h et 21h. Sur iPhone, les notifications ne marchent que dans l'app ouverte depuis l'écran d'accueil. Tes propres ouvertures du lien, connecté à ton compte, ne comptent pas.</div>
       </div>
     </section>
 
@@ -3833,9 +3877,9 @@ document.addEventListener('click',function(e){
 });
 
 /* ===================== PROFIL v1.36 : accueil, statistiques, nouveautes ===================== */
-var APP_VERSION='v1.43';
+var APP_VERSION='v1.44';
 // historique reconstruit depuis les anciens index (date = date de livraison). [version, date, approximative, [[n|f, texte]]]
-var CHANGELOG=[["v1.43","2026-09-28",0,[["n","État de chaque shooting dans la fiche client : prévu, réalisé ou annulé, automatique d'après la date sinon"],["n","Briefing : date à définir, le document devient une proposition et le client te propose un jour"],["n","Briefing : tutoiement ou vouvoiement, au choix avec le gabarit"],["n","Briefing : couleur des titres et boutons au choix, reprise dans le lien client"],["f","Glisser une photo n'entoure plus que la zone photo"]]],["v1.42","2026-09-28",0,[["f","Photos des clients qui ne s'affichaient pas dans la liste"],["f","Client supprimé qui réapparaissait, renvoyé par un autre appareil"],["n","Contact client en cases séparées : téléphone, e-mail, Instagram, avec bouton pour appeler, écrire ou ouvrir le profil"],["n","Étapes du contrat marquables à la main quand l'app ne peut pas les deviner"],["n","Spots, clients, événements et filtres s'ouvrent en cartes flottantes, avec la même apparition que le profil"],["n","Sur ordinateur, glisser une photo sur un spot, un client ou un événement pour l'ajouter"]]],["v1.41","2026-09-27",0,[["n","Périmètre (ex Découverte) : réglages dans un bandeau en bas de carte, rayon au pincement dans le cercle ou avec + et -"],["n","Périmètre : spots à l'intérieur entourés, routes qui le traversent soulignées en blanc, liste des spots à la ronde"],["n","Critères de recherche de routes en boutons plutôt qu'en jauges"],["n","Profil en carte flottante à gauche, la carte reste visible autour"],["n","Filtres proposés au choix dans Profil, Carte, le panneau se réorganise sans trou"],["f","Briefing supprimé qui réapparaissait, renvoyé par un autre appareil qui en gardait une copie"],["n","Supprimer un briefing propose de retirer aussi la séance du planning"]]],["v1.40","2026-09-25",0,[["f","Boutons de la carte alignés en ligne quand la carte ne se chargeait pas"],["n","Découverte de routes : zone ronde posée au centre de la carte, rayon réglable en kilomètres et point orange à glisser pour la déplacer"],["n","Boutons de la carte regroupés en deux colonnes, une à gauche, une à droite"],["f","Boutons + et - de Mapbox retirés, ils étaient cachés derrière les autres"],["f","Panneaux Filtrer et Découverte plus compacts sur téléphone"]]],["v1.39","2026-09-25",0,[["n","Le briefing se gèle dès que le client accepte les conditions : plus aucune modification ne part dans son lien"],["n","Publier une nouvelle version annule la confirmation du client, qui doit accepter à nouveau"],["n","Mise à jour du lien en pause pendant que tu travailles, publication quand tu es prêt"],["n","Texte des conditions mémorisé avec le lien au moment de l'acceptation"]]],["v1.38","2026-09-23",0,[["n","Anneau d'avancement du contrat sur chaque fiche client et dans la liste : date, briefing, lien, accord, shooting, galerie"],["n","Statistiques : avancement des contrats étape par étape et valeur estimée du carnet"],["f","Numéro de version affiché dans Nouveautés remis à jour"]]],["v1.37","2026-09-23",0,[["n","Briefing : bloc L'essentiel (date, durée, secteur et tarif en tête de document)"],["n","Briefing : bloc Accord, conditions à accepter avant de confirmer"],["n","Séance offerte affichée dans la formule et dans l'essentiel"],["n","Lien client : confirmation verrouillée tant que les conditions ne sont pas acceptées, bouton daté, lien pour proposer une autre date"],["f","Lien client : message distinct entre perte de connexion et lien expiré"]]],["v1.36","2026-09-23",0,[["n","Profil réorganisé : accueil, objectifs, carte, apparence et données sur des pages séparées"],["n","Statistiques : santé des fiches, ajouts par mois, clients, liens partagés, photos, routes, types, heures de shoot"],["n","Page Nouveautés avec l'historique daté de toutes les versions"],["n","Filtre des fiches à compléter dans l'onglet Spots"]]],["v1.35","2026-09-23",0,[["n","Plusieurs photos d'un coup dans les spots, envoyées dans l'ordre choisi"],["n","Heure et affiche des événements, affiche en plein écran"],["f","Événement de la veille encore affiché comme à venir le soir"],["f","Date de création d'un événement perdue à l'édition"]]],["v1.34","2026-09-22",0,[["n","Téléchargement du briefing en PDF"],["n","Lien client interactif : adresse exacte révélée avant le shoot, ajout au calendrier"]]],["v1.33","2026-09-22",0,[["n","Briefings listés dans la fiche client, création directe depuis la fiche"],["n","Texte modifiable directement dans le briefing, zoom de l'éditeur"],["n","Changer la date du shoot dans le briefing met à jour le planning du client"],["n","Toucher le logo actualise l'app"]]],["v1.30","2026-09-22",0,[["n","Planning refait : briefings en rangées réordonnables (1 à 3 colonnes), blocs branchés sur tes spots et clients, gabarits, sauvegarde en ligne"]]],["v1.29","2026-09-20",0,[["n","Cartes Spots plus compactes, décor affiché sur la carte"],["f","Vignettes carrées du Planning déformées"]]],["v1.28","2026-09-20",0,[["n","Galerie et Shotlist fusionnées dans l'onglet Spots"],["n","Sélection multiple et glisser pour supprimer un spot"],["n","Inspirations déplacées vers le profil"]]],["v1.27","2026-09-20",0,[["n","Planning en éditeur grille aimantée, branché sur les spots et clients"]]],["v1.26","2026-09-20",0,[["n","Premier onglet Planning (document de briefing)"],["n","Associer des spots à un client en les touchant sur la carte"]]],["v1.24","2026-09",1,[["f","Boutons de la carte qui se chevauchaient sur mobile"],["f","Panneaux filtres, découverte et soleil qui restaient ouverts ensemble"],["n","Marqueurs réduits à 44 px sur mobile"]]],["v1.23","2026-07-21",0,[["n","Fréquentation des routes heure par heure"],["n","Découverte de routes dans une zone dessinée (OpenStreetMap), filtrées par sinuosité"]]],["v1.22","2026-07-17",0,[["n","Aperçu en direct de l'objet 3D avant de le poser"],["f","Objets 3D qui disparaissaient après une image"]]],["v1.21","2026-07-17",0,[["n","Bouton dédié pour placer un objet 3D"]]],["v1.20","2026-07-17",0,[["n","Comptes séparés : inscription, mot de passe oublié, données propres à chaque compte"],["n","Progression XP sauvegardée dans le compte"]]],["v1.18","2026-07-06",0,[["n","Mode soleil 3D : position du soleil et ombres portées"],["n","Objets 3D sur la carte (voiture, flèche, cube)"],["n","Vidéos courtes sur les spots (20 s max)"],["n","Retracer une route existante"],["n","Zoom et pincement dans la visionneuse, photos réorganisables par glisser"],["n","Progression : XP, niveaux, objectifs et titres"],["n","Historique de recherche et vue Street (Mapillary, repli Google)"]]],["v1.17","2026-06-27",0,[["f","Marqueurs qui glissaient au dézoom"]]],["v1.16","2026-06-27",0,[["f","Tentative de correction des marqueurs (non concluante)"]]],["v1.15","2026-06-27",0,[["n","Navigation entre les photos dans la visionneuse"]]],["v1.14","2026-06-08",0,[["n","Mini-calendrier dans la fiche client pour planifier les shoots"]]],["v1.13","2026-06-07",0,[["n","Planning mensuel de tous les shoots"]]],["v1.12","2026-06-07",0,[["n","Sélection de plusieurs clients et spot de compromis pour leurs voitures"],["f","Badges d'état restylés (v1.12.1)"]]],["v1.11","2026-06-07",0,[["n","États clients automatiques : prospect, planifié, réalisé, livré"],["n","Relance À livrer et accès direct aux spots conseillés pour une voiture"]]],["v1.10","2026-06-07",0,[["n","Shootings planifiés dans la fiche client"]]],["v1.9","2026-06-07",0,[["n","Plusieurs voitures par client avec couleur de carrosserie, offre et statut"]]],["v1.8","2026-06-07",0,[["f","Photos stockées en ligne : fin de la mémoire saturée qui cassait la synchro PC / iPhone"],["f","Accès aux données sécurisé, clé de carte restreinte à ton site"]]],["v1.7","2026-06-06",0,[["f","Synchronisation fiable : un spot supprimé ne réapparaît plus"]]],["v1.6","2026-06-06",0,[["n","Onglet Profil : photo et réglages regroupés"]]],["v1.5","2026-06-06",0,[["n","Connexion par email et mot de passe"],["n","L'app devient 6flt Spots"]]],["v1.4","2026-06-06",0,[["n","Longs trajets jusqu'à 25 étapes"],["n","Types Musée, Circuit, Concession"],["n","Onglet Événements"]]],["v1.3","2026-06-06",1,[["n","Analyse automatique des virages d'une route"],["n","Filtres de la carte et suppression multiple dans la galerie"]]],["v1.2","2026-06-05",0,[["n","Tracé de routes sur la carte"],["n","Corbeille clients avec restauration"],["f","Routes en double et rendu des routes (v1.2.1)"]]],["v1.1","2026-06-05",0,[["n","Onglet Clients"],["n","Synchronisation en ligne des spots et clients"],["n","Écran de démarrage"]]],["v1.0","2026-06-04",0,[["n","Première version : carte des spots, galerie, Shotlist (conseil de spots selon la couleur de la voiture)"]]]];
+var CHANGELOG=[["v1.44","2026-09-28",0,[["n","Notifications sur ton téléphone : briefing ouvert, séance confirmée, relance après 48 h, date toujours à fixer, rappel 24 h avant avec adresses révélées, galerie à livrer"],["n","Toucher une notification ouvre le bon briefing ou la bonne fiche, avec le message pour le client déjà rédigé"]]],["v1.43","2026-09-28",0,[["n","État de chaque shooting dans la fiche client : prévu, réalisé ou annulé, automatique d'après la date sinon"],["n","Briefing : date à définir, le document devient une proposition et le client te propose un jour"],["n","Briefing : tutoiement ou vouvoiement, au choix avec le gabarit"],["n","Briefing : couleur des titres et boutons au choix, reprise dans le lien client"],["f","Glisser une photo n'entoure plus que la zone photo"]]],["v1.42","2026-09-28",0,[["f","Photos des clients qui ne s'affichaient pas dans la liste"],["f","Client supprimé qui réapparaissait, renvoyé par un autre appareil"],["n","Contact client en cases séparées : téléphone, e-mail, Instagram, avec bouton pour appeler, écrire ou ouvrir le profil"],["n","Étapes du contrat marquables à la main quand l'app ne peut pas les deviner"],["n","Spots, clients, événements et filtres s'ouvrent en cartes flottantes, avec la même apparition que le profil"],["n","Sur ordinateur, glisser une photo sur un spot, un client ou un événement pour l'ajouter"]]],["v1.41","2026-09-27",0,[["n","Périmètre (ex Découverte) : réglages dans un bandeau en bas de carte, rayon au pincement dans le cercle ou avec + et -"],["n","Périmètre : spots à l'intérieur entourés, routes qui le traversent soulignées en blanc, liste des spots à la ronde"],["n","Critères de recherche de routes en boutons plutôt qu'en jauges"],["n","Profil en carte flottante à gauche, la carte reste visible autour"],["n","Filtres proposés au choix dans Profil, Carte, le panneau se réorganise sans trou"],["f","Briefing supprimé qui réapparaissait, renvoyé par un autre appareil qui en gardait une copie"],["n","Supprimer un briefing propose de retirer aussi la séance du planning"]]],["v1.40","2026-09-25",0,[["f","Boutons de la carte alignés en ligne quand la carte ne se chargeait pas"],["n","Découverte de routes : zone ronde posée au centre de la carte, rayon réglable en kilomètres et point orange à glisser pour la déplacer"],["n","Boutons de la carte regroupés en deux colonnes, une à gauche, une à droite"],["f","Boutons + et - de Mapbox retirés, ils étaient cachés derrière les autres"],["f","Panneaux Filtrer et Découverte plus compacts sur téléphone"]]],["v1.39","2026-09-25",0,[["n","Le briefing se gèle dès que le client accepte les conditions : plus aucune modification ne part dans son lien"],["n","Publier une nouvelle version annule la confirmation du client, qui doit accepter à nouveau"],["n","Mise à jour du lien en pause pendant que tu travailles, publication quand tu es prêt"],["n","Texte des conditions mémorisé avec le lien au moment de l'acceptation"]]],["v1.38","2026-09-23",0,[["n","Anneau d'avancement du contrat sur chaque fiche client et dans la liste : date, briefing, lien, accord, shooting, galerie"],["n","Statistiques : avancement des contrats étape par étape et valeur estimée du carnet"],["f","Numéro de version affiché dans Nouveautés remis à jour"]]],["v1.37","2026-09-23",0,[["n","Briefing : bloc L'essentiel (date, durée, secteur et tarif en tête de document)"],["n","Briefing : bloc Accord, conditions à accepter avant de confirmer"],["n","Séance offerte affichée dans la formule et dans l'essentiel"],["n","Lien client : confirmation verrouillée tant que les conditions ne sont pas acceptées, bouton daté, lien pour proposer une autre date"],["f","Lien client : message distinct entre perte de connexion et lien expiré"]]],["v1.36","2026-09-23",0,[["n","Profil réorganisé : accueil, objectifs, carte, apparence et données sur des pages séparées"],["n","Statistiques : santé des fiches, ajouts par mois, clients, liens partagés, photos, routes, types, heures de shoot"],["n","Page Nouveautés avec l'historique daté de toutes les versions"],["n","Filtre des fiches à compléter dans l'onglet Spots"]]],["v1.35","2026-09-23",0,[["n","Plusieurs photos d'un coup dans les spots, envoyées dans l'ordre choisi"],["n","Heure et affiche des événements, affiche en plein écran"],["f","Événement de la veille encore affiché comme à venir le soir"],["f","Date de création d'un événement perdue à l'édition"]]],["v1.34","2026-09-22",0,[["n","Téléchargement du briefing en PDF"],["n","Lien client interactif : adresse exacte révélée avant le shoot, ajout au calendrier"]]],["v1.33","2026-09-22",0,[["n","Briefings listés dans la fiche client, création directe depuis la fiche"],["n","Texte modifiable directement dans le briefing, zoom de l'éditeur"],["n","Changer la date du shoot dans le briefing met à jour le planning du client"],["n","Toucher le logo actualise l'app"]]],["v1.30","2026-09-22",0,[["n","Planning refait : briefings en rangées réordonnables (1 à 3 colonnes), blocs branchés sur tes spots et clients, gabarits, sauvegarde en ligne"]]],["v1.29","2026-09-20",0,[["n","Cartes Spots plus compactes, décor affiché sur la carte"],["f","Vignettes carrées du Planning déformées"]]],["v1.28","2026-09-20",0,[["n","Galerie et Shotlist fusionnées dans l'onglet Spots"],["n","Sélection multiple et glisser pour supprimer un spot"],["n","Inspirations déplacées vers le profil"]]],["v1.27","2026-09-20",0,[["n","Planning en éditeur grille aimantée, branché sur les spots et clients"]]],["v1.26","2026-09-20",0,[["n","Premier onglet Planning (document de briefing)"],["n","Associer des spots à un client en les touchant sur la carte"]]],["v1.24","2026-09",1,[["f","Boutons de la carte qui se chevauchaient sur mobile"],["f","Panneaux filtres, découverte et soleil qui restaient ouverts ensemble"],["n","Marqueurs réduits à 44 px sur mobile"]]],["v1.23","2026-07-21",0,[["n","Fréquentation des routes heure par heure"],["n","Découverte de routes dans une zone dessinée (OpenStreetMap), filtrées par sinuosité"]]],["v1.22","2026-07-17",0,[["n","Aperçu en direct de l'objet 3D avant de le poser"],["f","Objets 3D qui disparaissaient après une image"]]],["v1.21","2026-07-17",0,[["n","Bouton dédié pour placer un objet 3D"]]],["v1.20","2026-07-17",0,[["n","Comptes séparés : inscription, mot de passe oublié, données propres à chaque compte"],["n","Progression XP sauvegardée dans le compte"]]],["v1.18","2026-07-06",0,[["n","Mode soleil 3D : position du soleil et ombres portées"],["n","Objets 3D sur la carte (voiture, flèche, cube)"],["n","Vidéos courtes sur les spots (20 s max)"],["n","Retracer une route existante"],["n","Zoom et pincement dans la visionneuse, photos réorganisables par glisser"],["n","Progression : XP, niveaux, objectifs et titres"],["n","Historique de recherche et vue Street (Mapillary, repli Google)"]]],["v1.17","2026-06-27",0,[["f","Marqueurs qui glissaient au dézoom"]]],["v1.16","2026-06-27",0,[["f","Tentative de correction des marqueurs (non concluante)"]]],["v1.15","2026-06-27",0,[["n","Navigation entre les photos dans la visionneuse"]]],["v1.14","2026-06-08",0,[["n","Mini-calendrier dans la fiche client pour planifier les shoots"]]],["v1.13","2026-06-07",0,[["n","Planning mensuel de tous les shoots"]]],["v1.12","2026-06-07",0,[["n","Sélection de plusieurs clients et spot de compromis pour leurs voitures"],["f","Badges d'état restylés (v1.12.1)"]]],["v1.11","2026-06-07",0,[["n","États clients automatiques : prospect, planifié, réalisé, livré"],["n","Relance À livrer et accès direct aux spots conseillés pour une voiture"]]],["v1.10","2026-06-07",0,[["n","Shootings planifiés dans la fiche client"]]],["v1.9","2026-06-07",0,[["n","Plusieurs voitures par client avec couleur de carrosserie, offre et statut"]]],["v1.8","2026-06-07",0,[["f","Photos stockées en ligne : fin de la mémoire saturée qui cassait la synchro PC / iPhone"],["f","Accès aux données sécurisé, clé de carte restreinte à ton site"]]],["v1.7","2026-06-06",0,[["f","Synchronisation fiable : un spot supprimé ne réapparaît plus"]]],["v1.6","2026-06-06",0,[["n","Onglet Profil : photo et réglages regroupés"]]],["v1.5","2026-06-06",0,[["n","Connexion par email et mot de passe"],["n","L'app devient 6flt Spots"]]],["v1.4","2026-06-06",0,[["n","Longs trajets jusqu'à 25 étapes"],["n","Types Musée, Circuit, Concession"],["n","Onglet Événements"]]],["v1.3","2026-06-06",1,[["n","Analyse automatique des virages d'une route"],["n","Filtres de la carte et suppression multiple dans la galerie"]]],["v1.2","2026-06-05",0,[["n","Tracé de routes sur la carte"],["n","Corbeille clients avec restauration"],["f","Routes en double et rendu des routes (v1.2.1)"]]],["v1.1","2026-06-05",0,[["n","Onglet Clients"],["n","Synchronisation en ligne des spots et clients"],["n","Écran de démarrage"]]],["v1.0","2026-06-04",0,[["n","Première version : carte des spots, galerie, Shotlist (conseil de spots selon la couleur de la voiture)"]]]];
 var PF_MOIS=['janv.','févr.','mars','avr.','mai','juin','juil.','août','sept.','oct.','nov.','déc.'];
 var pfStack=['pf-hub'];
 var pfNewsShown=6;
@@ -3872,6 +3916,7 @@ function pfOpenPage(name){
   else if(name==='news') pfRenderNews();
   else if(name==='goals'){ if(typeof renderGameUI==='function') renderGameUI(); }
   else if(name==='data'){ if(typeof updateBackupBadge==='function') updateBackupBadge(); }
+  else if(name==='notif'){ pushRefresh(); }
 }
 function pfSeg(btn){
   btn.parentNode.querySelectorAll('button').forEach(function(b){ b.classList.toggle('on', b===btn); });
@@ -7677,6 +7722,123 @@ fltRenderSettings();
 document.getElementById('owm-key').value = owmKey;
 initBackup();
 
+
+/* ===== NOTIFICATIONS PUSH (v1.44) ===== */
+var VAPID_PUBLIC = 'BOph3IRn1uPlXzoljifkGCP9HoQ1pWYS3V60bUbimAFwqO00QAEsUSx21LoVmgFb0Zzrc1DqSFAtHGs2UoNQbWU';
+function pushSupported(){ return 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window; }
+function pushStandalone(){ return window.navigator.standalone===true || (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches); }
+function pushIOS(){ return /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints>1); }
+function pushKey(b64){
+  var pad = '='.repeat((4 - b64.length % 4) % 4), raw = atob((b64 + pad).replace(/-/g, '+').replace(/_/g, '/'));
+  var out = new Uint8Array(raw.length); for(var i=0;i<raw.length;i++) out[i] = raw.charCodeAt(i); return out;
+}
+function pushSub(){
+  if(!pushSupported()) return Promise.resolve(null);
+  return navigator.serviceWorker.ready.then(function(reg){ return reg.pushManager.getSubscription(); }).catch(function(){ return null; });
+}
+function pushSave(sub){
+  if(!sub || !sb || !currentUserId) return Promise.resolve();
+  var j = sub.toJSON();
+  return sb.from('push_subscriptions').upsert({endpoint:j.endpoint, p256dh:j.keys.p256dh, auth:j.keys.auth, user_id:currentUserId, ua:navigator.userAgent.slice(0,160)}, {onConflict:'endpoint'})
+    .then(function(r){ if(r.error) throw r.error; });
+}
+function pushRefresh(){
+  var st = document.getElementById('pf-ntf-state'), on = document.getElementById('pf-ntf-on'), te = document.getElementById('pf-ntf-test'), off = document.getElementById('pf-ntf-off'), v = document.getElementById('pf-v-notif');
+  function show(txt, a, b, c, val){ if(st) st.textContent = txt; if(on) on.hidden = !a; if(te) te.hidden = !b; if(off) off.hidden = !c; if(v) v.textContent = val||''; }
+  if(!pushSupported()){
+    if(pushIOS() && !pushStandalone()) show('Ouvre Spoties depuis son icône sur l\'écran d\'accueil pour activer les notifications.', 0, 0, 0, '');
+    else show('Cet appareil ne prend pas en charge les notifications.', 0, 0, 0, '');
+    return;
+  }
+  if(Notification.permission==='denied'){ show('Notifications refusées pour Spoties. Réactive-les dans les réglages de ton téléphone, rubrique Notifications.', 0, 0, 0, 'Refusées'); return; }
+  pushSub().then(function(sub){
+    if(sub && Notification.permission==='granted') show('Actives sur cet appareil.', 0, 1, 1, 'Actives');
+    else show('Désactivées sur cet appareil.', 1, 0, 0, '');
+  });
+}
+function pushEnable(){
+  if(!pushSupported()){ pushRefresh(); return; }
+  if(!sb || !currentUserId){ showToast('Connexion requise'); return; }
+  var btn = document.getElementById('pf-ntf-on'); if(btn) btn.disabled = true;
+  // la demande doit partir directement du toucher, sinon iOS la refuse
+  Notification.requestPermission().then(function(p){
+    if(p!=='granted') throw new Error('refus');
+    return navigator.serviceWorker.ready;
+  }).then(function(reg){
+    return reg.pushManager.getSubscription().then(function(s){ return s || reg.pushManager.subscribe({userVisibleOnly:true, applicationServerKey:pushKey(VAPID_PUBLIC)}); });
+  }).then(pushSave).then(function(){
+    showToast('Notifications activées'); pushTest(true);
+  }).catch(function(e){
+    showToast(e && e.message==='refus' ? 'Autorisation refusée' : 'Activation impossible : '+((e && e.message) || e));
+  }).then(function(){ if(btn) btn.disabled = false; pushRefresh(); });
+}
+function pushTest(quiet){
+  if(!sb || !sb.functions) return;
+  sb.functions.invoke('notify', {body:{mode:'test'}}).then(function(r){
+    var d = r && r.data;
+    if(d && d.ok>0){ if(!quiet) showToast('Notification envoyée'); }
+    else showToast(d && d.total===0 ? 'Aucun appareil enregistré' : 'Envoi impossible pour l\'instant');
+  }, function(){ showToast('Envoi impossible pour l\'instant'); });
+}
+function pushDisable(){
+  pushSub().then(function(sub){
+    if(!sub) return;
+    var ep = sub.endpoint;
+    return sub.unsubscribe().then(function(){ if(sb) return sb.from('push_subscriptions').delete().eq('endpoint', ep); });
+  }).then(function(){ showToast('Notifications désactivées sur cet appareil'); pushRefresh(); }, function(){ pushRefresh(); });
+}
+// a chaque ouverture : l'abonnement existant est renvoye au serveur (reinstallation, autre compte)
+function pushSync(){ if(!pushSupported() || Notification.permission!=='granted') return; pushSub().then(function(sub){ if(sub) pushSave(sub).catch(function(){}); pushRefresh(); }); }
+
+// toucher une notification : ouvre le bon briefing ou la bonne fiche
+function notifGo(u){
+  var p; try{ p = new URL(u, location.href).searchParams; }catch(e){ return; }
+  var go = p.get('go'), n = p.get('n'); if(!go) return;
+  var k = go.split(':')[0], id = go.slice(k.length+1); if(!id) return;
+  if(k==='bf'){
+    switchView('planning');
+    setTimeout(function(){ if(window.bfOpenDoc) try{ window.bfOpenDoc(id); }catch(e){} if(n && n!=='j1') notifReady(n, id); }, 400);
+  } else if(k==='client'){
+    switchView('clients'); if(typeof switchClientSub==='function') switchClientSub('clients');
+    setTimeout(function(){ openExistingClientPanel(id); }, 400);
+  }
+}
+if('serviceWorker' in navigator) navigator.serviceWorker.addEventListener('message', function(e){ if(e.data && e.data.type==='notif-go') notifGo(e.data.url); });
+
+// message pret a envoyer au client, au ton du briefing
+function notifReady(kind, bfId){
+  var list = []; try{ list = JSON.parse(localStorage.getItem('6flt_briefings')||'[]'); }catch(e){}
+  var b = list.filter(function(x){ return x && x.id===bfId; })[0]; if(!b || !b.share || !b.share.token) return;
+  var c = clients.filter(function(x){ return x.id===b.clientId; })[0] || null;
+  var pre = c ? String(c.name||'').trim().split(/\s+/)[0] : '', vous = b.tone==='vous';
+  var url = location.origin + location.pathname.replace(/[^\/]*$/, '') + '?b=' + b.share.token;
+  var dt = b.date ? new Date(b.date+'T12:00:00').toLocaleDateString('fr-FR', {weekday:'long', day:'numeric', month:'long'}) : '';
+  var hi = 'Bonjour'+(pre ? ' '+pre : '')+', ', t = '';
+  if(kind==='relance') t = vous ? hi+'je reviens vers vous pour la séance'+(dt ? ' du '+dt : '')+'. Avez-vous pu regarder le briefing ? Il reste juste à confirmer en bas de la page : '+url
+                                : hi+'je reviens vers toi pour la séance'+(dt ? ' du '+dt : '')+'. Tu as pu regarder le briefing ? Il reste juste à confirmer en bas de la page : '+url;
+  else if(kind==='tbd') t = vous ? hi+'avez-vous pu regarder la proposition de séance ? Dites-moi quel jour vous convient et je bloque le créneau : '+url
+                                 : hi+'tu as pu regarder la proposition de séance ? Dis-moi quel jour t\'arrange et je bloque le créneau : '+url;
+  else if(kind==='reveal') t = vous ? hi+'les adresses exactes des spots sont maintenant dans votre briefing : '+url+'\nÀ très vite !'
+                                    : hi+'les adresses exactes des spots sont maintenant dans ton briefing : '+url+'\nÀ très vite !';
+  if(!t) return;
+  var ig = c ? String(c.insta||'').replace(/^.*instagram\.com\//i, '').replace(/^@/, '').replace(/[^A-Za-z0-9._].*$/, '') : '';
+  var old = document.getElementById('ntf-ready'); if(old) old.remove();
+  var el = document.createElement('div'); el.id = 'ntf-ready';
+  el.innerHTML = '<div class="ntf-card"><div class="ntf-head"><b>Message pour '+escapeHtml(c ? (c.name||'ton client') : 'ton client')+'</b><button type="button" class="ntf-x" aria-label="Fermer">&#x2715;</button></div>'+
+    '<textarea class="ntf-txt" rows="6"></textarea>'+
+    '<div class="ntf-acts"><button type="button" class="ntf-copy">Copier</button><button type="button" class="ntf-go">Copier et ouvrir Instagram</button></div></div>';
+  el.querySelector('.ntf-txt').value = t;
+  document.body.appendChild(el);
+  function copy(){ var v = el.querySelector('.ntf-txt').value; if(navigator.clipboard && navigator.clipboard.writeText) return navigator.clipboard.writeText(v).catch(function(){}); var ta = el.querySelector('.ntf-txt'); ta.select(); try{ document.execCommand('copy'); }catch(e){} return Promise.resolve(); }
+  el.querySelector('.ntf-x').onclick = function(){ el.remove(); };
+  el.querySelector('.ntf-copy').onclick = function(){ copy().then(function(){ showToast('Message copié'); }); };
+  el.querySelector('.ntf-go').onclick = function(){
+    var href = ig ? 'https://ig.me/m/'+ig : 'https://www.instagram.com/direct/inbox/';
+    copy(); showToast('Message copié, colle-le dans la conversation');
+    var w = null; try{ w = window.open(href, '_blank'); }catch(e){} if(!w) location.href = href;
+  };
+}
+
 // ===== BARRIERE DE CONNEXION =====
 var appBooted = false;
 function bootApp(){
@@ -7689,6 +7851,12 @@ function bootApp(){
   if(typeof syncLoadEventsFromCloud==='function'){ syncLoadEventsFromCloud(); }
   if(typeof loadProfilePhoto==='function'){ loadProfilePhoto(); }
   if(typeof syncLoadGameFromCloud==='function'){ syncLoadGameFromCloud(); }
+  setTimeout(pushSync, 1500);
+  if(/[?&]go=/.test(location.search)){
+    var goUrl = location.href;
+    try{ history.replaceState(null, '', location.pathname); }catch(e){}
+    setTimeout(function(){ notifGo(goUrl); }, 900);
+  }
 }
 function showLogin(){ document.getElementById('login-screen').classList.add('show'); }
 function hideLogin(){ document.getElementById('login-screen').classList.remove('show'); }

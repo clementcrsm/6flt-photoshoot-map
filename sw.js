@@ -1,8 +1,9 @@
-// Service worker Spoties v1.30
+// Service worker Spoties v1.44
 // HTML en reseau d'abord (toujours la derniere version en ligne, cache en secours hors ligne).
 // Icones et manifest en cache d'abord. Les API (Mapbox, meteo, Supabase...) restent en reseau direct.
-const CACHE = 'spoties-v1-30';
-const SHELL = ['./', './index.html', './manifest.json?v=1.30', './icon-180.png?v=1.30', './icon-192.png?v=1.30', './icon-512.png?v=1.30'];
+// v1.44 : reception des notifications push et ouverture du bon ecran au toucher.
+const CACHE = 'spoties-v1-44';
+const SHELL = ['./', './index.html', './manifest.json?v=1.44', './icon-180.png?v=1.44', './icon-192.png?v=1.44', './icon-512.png?v=1.44'];
 
 self.addEventListener('install', function(e){
   // chaque fichier est mis en cache separement : un fichier absent ne bloque plus l'installation
@@ -36,4 +37,29 @@ self.addEventListener('fetch', function(e){
     return;
   }
   e.respondWith(caches.match(req).then(function(cached){ return cached || fetch(req); }));
+});
+
+// notification recue : iOS exige qu'elle soit toujours affichee
+self.addEventListener('push', function(e){
+  var d = {};
+  try{ d = e.data ? e.data.json() : {}; }catch(x){ d = {title:'Spoties', body:e.data ? e.data.text() : ''}; }
+  var opts = {body:d.body || '', icon:'icon-192.png?v=1.44', badge:'icon-192.png?v=1.44', data:{url:d.url || './'}};
+  if(d.tag) opts.tag = d.tag;
+  e.waitUntil(self.registration.showNotification(d.title || 'Spoties', opts));
+});
+
+// toucher la notification : reprend l'app ouverte ou l'ouvre sur le bon ecran
+self.addEventListener('notificationclick', function(e){
+  e.notification.close();
+  var target = new URL((e.notification.data && e.notification.data.url) || './', self.registration.scope).href;
+  e.waitUntil(self.clients.matchAll({type:'window', includeUncontrolled:true}).then(function(list){
+    for(var i=0;i<list.length;i++){
+      var c = list[i];
+      if(c.url.indexOf(self.registration.scope)===0 && 'focus' in c){
+        c.postMessage({type:'notif-go', url:target});
+        return c.focus();
+      }
+    }
+    return self.clients.openWindow(target);
+  }));
 });
