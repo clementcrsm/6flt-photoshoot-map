@@ -69,6 +69,38 @@ a{color:inherit}
 .banner ol{margin:6px 0 2px;padding-left:20px;color:var(--text);font-size:13.5px;line-height:1.75}
 .banner .ic{display:inline-flex;vertical-align:-3px;color:#3b8cff}
 #cv-install .banner{margin:0 0 14px}
+/* v1.2.2 : carte d'installation visible + guide plein ecran */
+.inst-card{background:rgba(232,87,26,.1);border:1px solid rgba(232,87,26,.55);border-radius:16px;padding:14px;margin:0 0 16px}
+.inst-top{display:flex;gap:12px;align-items:center}
+.inst-top img{width:46px;height:46px;border-radius:11px;flex:none}
+.inst-top b{display:block;font-size:15.5px;color:#fff;margin-bottom:3px}
+.inst-top span{display:block;font-size:13px;color:#c9c7c0;line-height:1.45}
+.inst-btn{display:block;width:100%;margin-top:12px;background:#fff;color:#111;border:none;border-radius:11px;padding:13px;font:700 15px 'Inter',sans-serif;cursor:pointer}
+#inst-sheet{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,.74);display:flex;justify-content:center;padding:calc(14px + env(safe-area-inset-top)) 12px calc(64px + env(safe-area-inset-bottom))}
+#inst-sheet.at-top{align-items:flex-start}
+#inst-sheet.at-bottom{align-items:flex-end;padding-top:calc(64px + env(safe-area-inset-top));padding-bottom:calc(14px + env(safe-area-inset-bottom))}
+.inst-box{background:#1c1d21;border:1px solid rgba(255,255,255,.1);border-radius:18px;padding:18px 16px 16px;width:100%;max-width:520px;color:#f3f2ee;font-family:'Inter',sans-serif}
+.inst-box h3{margin:0 0 4px;font-size:19px;font-weight:800}
+.inst-kicker{margin:0 0 4px;color:#9be0b1;font-weight:700;font-size:13px}
+.inst-sub{margin:0;color:#a5a49d;font-size:13.5px;line-height:1.45}
+.inst-steps{list-style:none;margin:12px 0 14px;padding:0;counter-reset:st}
+.inst-steps li{display:flex;align-items:center;gap:8px 10px;flex-wrap:wrap;padding:10px 0;border-top:1px solid rgba(255,255,255,.07);font-size:15px;line-height:1.4}
+.inst-steps li::before{counter-increment:st;content:counter(st);flex:none;width:26px;height:26px;border-radius:50%;background:var(--accent);color:#fff;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center}
+.inst-chip{display:inline-flex;align-items:center;gap:6px;background:#2c2c2e;color:#fff;border-radius:10px;padding:6px 10px;font-weight:600;font-size:14px;white-space:nowrap}
+.inst-chip svg{color:#0a84ff;flex:none}
+.inst-chip.round{border-radius:50%;width:36px;height:36px;justify-content:center;padding:0;font-size:15px;letter-spacing:1px}
+.inst-chip.blue{color:#0a84ff}
+.inst-close{display:block;width:100%;margin-top:8px;background:transparent;border:1px solid rgba(255,255,255,.18);color:#f3f2ee;border-radius:11px;padding:12px;font:600 14px 'Inter',sans-serif;cursor:pointer}
+.inst-arrow{position:fixed;z-index:301;color:var(--accent);pointer-events:none;animation:instDown 1s ease-in-out infinite}
+.inst-arrow svg{display:block;filter:drop-shadow(0 0 1.5px #fff) drop-shadow(0 3px 8px rgba(0,0,0,.7))}
+.inst-arrow.br{right:10px;bottom:calc(2px + env(safe-area-inset-bottom))}
+.inst-arrow.bc{left:50%;margin-left:-32px;bottom:calc(2px + env(safe-area-inset-bottom))}
+.inst-note{flex-basis:100%;padding-left:36px;font-size:12.5px;color:#8e8d88;line-height:1.3}
+.inst-appic{width:20px;height:20px;border-radius:5px}
+.inst-arrow.tr{right:12px;top:calc(4px + env(safe-area-inset-top));animation-name:instUp}
+.inst-arrow.tr svg{transform:rotate(180deg)}
+@keyframes instDown{0%,100%{transform:translateY(0)}50%{transform:translateY(9px)}}
+@keyframes instUp{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px 40px 14px 14px;margin-bottom:12px;cursor:pointer;position:relative}
 .card:active{border-color:var(--accent)}
 .card b{display:block;font-size:15px;margin-bottom:4px}
@@ -201,6 +233,8 @@ a{color:inherit}
 
 <div id="cv-root"></div>
 
+<div id="inst-sheet" hidden></div>
+
 <div id="modal-add" hidden>
   <div class="sheet">
     <h2>Ajouter une séance</h2>
@@ -215,7 +249,7 @@ a{color:inherit}
 </div>
 
 <script>
-/* ===== 6flt Clients v1.2.1 (Spoties v1.51.1 : panneau Ajouter qui restait ouvert) ===== */
+/* ===== 6flt Clients v1.2.2 (Spoties v1.51.2 : guide d'installation visible) ===== */
 var SUPABASE_URL = 'https://gpirhmddoeokakikbjkr.supabase.co';
 var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdwaXJobWRkb2Vva2FraWtiamtyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA2NDI3MzAsImV4cCI6MjA5NjIxODczMH0.LghihUJQCtYBIMsRGXrjh2k4IcVYnf5CyD4lzlQNv6w';
 var VAPID_PUBLIC = 'BOph3IRn1uPlXzoljifkGCP9HoQ1pWYS3V60bUbimAFwqO00QAEsUSx21LoVmgFb0Zzrc1DqSFAtHGs2UoNQbWU';
@@ -284,23 +318,63 @@ var deferredInstall = null;
 window.addEventListener('beforeinstallprompt', function(ev){ ev.preventDefault(); deferredInstall = ev; refreshHelpers(); });
 window.addEventListener('appinstalled', function(){ deferredInstall = null; refreshHelpers(); });
 var SHARE_IC = '<span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Partager"><path d="M12 3v12"/><path d="M8 7l4-4 4 4"/><path d="M5 11v8a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-8"/></svg></span>';
+var PLUS_IC = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="17" height="17" rx="4"/><path d="M12 8v8M8 12h8"/></svg>';
+var ARROW_IC = '<svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v16"/><path d="M5 12l7 7 7-7"/></svg>';
+function chip(inner, cls){ return '<span class="inst-chip'+(cls ? ' '+cls : '')+'">'+inner+'</span>'; }
+// etapes du guide selon le navigateur, et ou pointe la fleche
+function guideSpec(u){
+  var home = chip('Sur l\'écran d\'accueil '+PLUS_IC), add = chip('Ajouter', 'blue');
+  var homeStep = 'Touche '+home+'<small class="inst-note">Fais défiler vers le bas si tu ne le vois pas</small>';
+  var addStep = 'Touche '+add+' en haut à droite';
+  var openStep = 'Ouvre '+chip('<img class="inst-appic" src="icon-192.png?v=1.0" alt=""> 6flt Clients')+'<small class="inst-note">depuis ton écran d\'accueil</small>';
+  if(u.inapp) return {arrow:'tr', steps:[
+    'Touche '+chip('•••', 'round')+' en haut à droite',
+    'Touche '+chip(u.ios ? 'Ouvrir dans Safari' : 'Ouvrir dans le navigateur'),
+    'Le lien s\'ouvre : suis le guide d\'installation qui s\'affiche']};
+  if(u.android) return {arrow:'tr', steps:[
+    'Touche '+chip('⋮', 'round')+' en haut à droite',
+    'Touche '+chip('Installer l\'application')+' ou '+chip('Ajouter à l\'écran d\'accueil'),
+    openStep]};
+  if(u.otherIOS) return {arrow:'tr', steps:[
+    'Touche '+chip(SHARE_IC)+' en haut à droite',
+    homeStep, addStep, openStep]};
+  if(u.safari26) return {arrow:'br', steps:[
+    'Touche '+chip('•••', 'round')+' en bas à droite',
+    'Touche '+chip(SHARE_IC+' Partager'),
+    homeStep, addStep, openStep]};
+  return {arrow:'bc', steps:[
+    'Touche '+chip(SHARE_IC)+' en bas de l\'écran',
+    homeStep, addStep, openStep]};
+}
 function installHTML(){
   if(isStandalone()) return '';
   var u = uaInfo();
   if(!u.ios && !u.android) return '';
-  var head = '<b>Installe l\'app pour recevoir tes notifications</b>Date fixée, adresses du jour J, rappel la veille, galerie : tout arrive sur ton téléphone.';
-  if(u.inapp) return '<div class="banner col"><b>Ouvre ce lien dans '+(u.ios ? 'Safari' : 'ton navigateur')+'</b>Tu es dans le navigateur d\'une autre app, l\'installation n\'y est pas possible. Touche ••• en haut à droite, puis « Ouvrir dans '+(u.ios ? 'Safari' : 'le navigateur')+' ».</div>';
-  if(u.android){
-    if(deferredInstall) return '<div class="banner"><div>'+head+'</div><button type="button" class="js-install">Installer</button></div>';
-    return '<div class="banner col">'+head+'<details><summary>Comment faire (30 s) ›</summary><ol><li>Ouvre le menu ⋮ du navigateur</li><li>Touche « Installer l\'application » ou « Ajouter à l\'écran d\'accueil »</li><li>Ouvre l\'app depuis ton écran d\'accueil</li></ol></details></div>';
-  }
-  var steps = u.otherIOS
-    ? ['Touche '+SHARE_IC+' en haut à droite, dans la barre d\'adresse', 'Touche « Sur l\'écran d\'accueil »', 'Touche « Ajouter », puis ouvre l\'app depuis ton écran d\'accueil']
-    : u.safari26
-    ? ['Touche ••• à droite de la barre d\'adresse', 'Touche « Partager » '+SHARE_IC, 'Fais défiler et touche « Sur l\'écran d\'accueil »', 'Touche « Ajouter », puis ouvre l\'app depuis ton écran d\'accueil']
-    : ['Touche '+SHARE_IC+' en bas de l\'écran', 'Fais défiler et touche « Sur l\'écran d\'accueil »', 'Touche « Ajouter », puis ouvre l\'app depuis ton écran d\'accueil'];
-  return '<div class="banner col">'+head+'<details><summary>Comment faire (30 s) ›</summary><ol>'+steps.map(function(s){ return '<li>'+s+'</li>'; }).join('')+'</ol></details></div>';
+  var top = function(t, sub){ return '<div class="inst-top"><img src="icon-192.png?v=1.0" alt=""><div><b>'+t+'</b><span>'+sub+'</span></div></div>'; };
+  if(u.inapp) return '<div class="inst-card">'+top('Ouvre ce lien dans '+(u.ios ? 'Safari' : 'ton navigateur'), 'Depuis cette app, 6flt Clients ne peut pas s\'installer.')+
+    '<button type="button" class="inst-btn js-inst-open">Comment faire</button></div>';
+  var card = top('Installe l\'app 6flt Clients', 'Rappel la veille, adresses du jour J, galerie : tout arrive en notification.');
+  if(u.android && deferredInstall) return '<div class="inst-card">'+card+'<button type="button" class="inst-btn js-install">Installer l\'app</button></div>';
+  return '<div class="inst-card">'+card+'<button type="button" class="inst-btn js-inst-open">Installer l\'app</button></div>';
 }
+function openInstallSheet(afterConfirm){
+  if(isStandalone()) return;
+  var u = uaInfo();
+  if(!u.ios && !u.android) return;
+  var sh = document.getElementById('inst-sheet'); if(!sh) return;
+  var g = guideSpec(u);
+  var head = afterConfirm
+    ? '<p class="inst-kicker">Séance confirmée</p><h3>Dernière étape : installe l\'app</h3><p class="inst-sub">Pour recevoir le rappel la veille, tes adresses du jour J et ta galerie.</p>'
+    : '<h3>'+(u.inapp ? 'Ouvre ce lien dans '+(u.ios ? 'Safari' : 'ton navigateur') : 'Installer en 30 secondes')+'</h3>';
+  sh.className = g.arrow==='tr' ? 'at-bottom' : 'at-top';
+  sh.innerHTML = '<div class="inst-box" role="dialog" aria-label="Installer l\'app">'+head+
+    '<ol class="inst-steps">'+g.steps.map(function(t){ return '<li>'+t+'</li>'; }).join('')+'</ol>'+
+    (u.android && deferredInstall ? '<button type="button" class="inst-btn js-install">Installer l\'app</button>' : '')+
+    '<button type="button" class="inst-close js-inst-close">J\'ai compris</button></div>'+
+    '<div class="inst-arrow '+g.arrow+'">'+ARROW_IC+'</div>';
+  sh.hidden = false;
+}
+function closeInstallSheet(){ var sh = document.getElementById('inst-sheet'); if(sh){ sh.hidden = true; sh.innerHTML = ''; } }
 // bandeau d'aide : installation tant que l'app n'est pas installee, puis activation des notifications
 function helperBannerHTML(){
   if(!isStandalone()) return installHTML();
@@ -311,9 +385,14 @@ function refreshHelpers(){
   var slot = document.getElementById('cv-install'); if(slot) slot.innerHTML = helperBannerHTML();
 }
 document.addEventListener('click', function(ev){
-  var t = ev.target && ev.target.closest ? ev.target.closest('.js-enable-notif, .js-install') : null;
+  var sh = document.getElementById('inst-sheet');
+  if(sh && ev.target===sh){ closeInstallSheet(); return; }
+  var t = ev.target && ev.target.closest ? ev.target.closest('.js-enable-notif, .js-install, .js-inst-open, .js-inst-close') : null;
   if(!t) return;
   if(t.classList.contains('js-enable-notif')){ enableNotifications(); return; }
+  if(t.classList.contains('js-inst-open')){ openInstallSheet(false); return; }
+  if(t.classList.contains('js-inst-close')){ closeInstallSheet(); return; }
+  closeInstallSheet();
   if(deferredInstall){
     var p = deferredInstall; deferredInstall = null;
     try{ p.prompt(); }catch(x){}
@@ -683,6 +762,7 @@ function renderDetail(){
       var mh = root.querySelector('.cv-miss'); if(mh) mh.remove();
       if(ackCb){ ackCb.disabled = true; }
       if(accBlk && nm) accBlk.insertAdjacentHTML('beforeend', signedHTML(nm, sg, DETAIL_D.confirmed_at));
+      if(!isStandalone()) setTimeout(function(){ openInstallSheet(true); }, 700);
     }, function(){ cb.disabled = false; });
   };
 
