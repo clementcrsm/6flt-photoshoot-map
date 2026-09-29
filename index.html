@@ -7,9 +7,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Spoties">
 <meta name="theme-color" content="#0e0f12">
-<link rel="manifest" href="manifest.json?v=1.44">
-<link rel="apple-touch-icon" href="icon-180.png?v=1.44">
-<link rel="icon" type="image/png" href="icon-192.png?v=1.44">
+<link rel="manifest" href="manifest.json?v=1.47">
+<link rel="apple-touch-icon" href="icon-180.png?v=1.47">
+<link rel="icon" type="image/png" href="icon-192.png?v=1.47">
 <title>Spoties</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -1459,17 +1459,42 @@ body.panel-open #zone-dock,body.panel-open #view-map #discover-panel{display:non
 .ntf-acts{display:flex;gap:8px}
 .ntf-acts button{flex:1;height:42px;border-radius:11px;border:1px solid var(--border);background:var(--surface2);color:var(--text);font:600 13px 'Inter',sans-serif;cursor:pointer}
 .ntf-acts .ntf-go{flex:1.6;background:var(--accent);border-color:var(--accent);color:#fff}
+/* ===== v1.45 : bloc Jour J, PDF client ===== */
+.bf-jtag{margin:-4px 0 10px;font-size:11px;color:var(--d-accent);font-weight:600}
+.bf-jlock{margin:0;padding:12px 14px;border:1px dashed var(--d-line);border-radius:10px;color:var(--d-dim);font-size:13px;line-height:1.5}
+#cv-root .cv-banner.cv-ok{border-left-color:#2d9e4f}
+#cv-root .cv-banner a{color:var(--cv-accent,#e8571a);font-weight:700;text-decoration:none}
+/* ===== v1.46 : suivi des contrats ===== */
+.pf-trk-sub{display:flex;flex-direction:column;border-top:1px solid var(--border);background:var(--surface)}
+.pf-trk-sub[hidden]{display:none}
+.pf-trk-it{display:block;width:100%;text-align:left;background:none;border:none;border-bottom:1px solid var(--border);color:var(--text);font:500 13px 'Inter',sans-serif;padding:11px 14px 11px 52px;cursor:pointer}
+.pf-trk-it:last-child{border-bottom:none}
+#pf-track .pf-row.open .pf-chev{transform:rotate(90deg)}
+/* ===== v1.47 : signature du client ===== */
+#cv-root .cv-sign{margin-top:14px;display:flex;flex-direction:column;gap:7px}
+#cv-root .cv-sl{display:flex;align-items:center;justify-content:space-between;font-size:12px;font-weight:600;color:var(--d-dim,#a5a49d)}
+#cv-root .cv-name{width:100%;box-sizing:border-box;background:var(--d-panel,#17181b);border:1px solid var(--d-line,rgba(255,255,255,.09));border-radius:10px;color:var(--d-text,#f3f2ee);font:15px 'Inter',sans-serif;padding:11px 12px;margin-bottom:4px}
+#cv-root .cv-clear{background:none;border:none;color:var(--cv-accent,#e8571a);font:600 12px 'Inter',sans-serif;cursor:pointer;padding:2px 0}
+#cv-root .cv-pad{display:block;width:100%;height:150px;background:#fff;border-radius:10px;touch-action:none;cursor:crosshair}
+#cv-root .cv-sh{margin:0;font-size:11.5px;color:var(--d-mute,#6f6f69)}
+#cv-root .cv-miss{margin:10px 0 0;font-size:13px;font-weight:600;color:var(--cv-accent,#e8571a)}
+#cv-root .cv-main.cv-wait{opacity:.55}
+.bf-doc .bf-signed{margin-top:14px;display:flex;flex-direction:column;gap:6px;align-items:flex-start}
+.bf-doc .bf-signed img{max-width:240px;width:60%;height:auto;background:#fff;border-radius:8px;border:1px solid var(--d-line)}
+.bf-doc .bf-signed span{font-size:12.5px;color:var(--d-dim)}
+.bf-doc .bf-signed b{color:var(--d-text)}
+.bf-shsig{display:block;max-width:200px;margin-top:8px;background:#fff;border-radius:6px}
 </style>
 </head>
 <body>
 <div id="splash">
-  <img id="splash-logo" src="icon-512.png?v=1.44" alt="Spoties">
-  <div id="splash-credit">Créé par 6flt photographie et Claude<br><span style="opacity:.6">v1.44</span></div>
+  <img id="splash-logo" src="icon-512.png?v=1.47" alt="Spoties">
+  <div id="splash-credit">Créé par 6flt photographie et Claude<br><span style="opacity:.6">v1.47</span></div>
 </div>
 
 <div id="login-screen">
   <div class="login-box">
-    <img src="icon-192.png?v=1.44" alt="Spoties" class="login-logo">
+    <img src="icon-192.png?v=1.47" alt="Spoties" class="login-logo">
     <h1 class="login-title">Spoties</h1>
     <p class="login-sub" id="login-sub">Connexion</p>
     <input type="email" id="login-email" class="login-input" placeholder="Email" autocomplete="email">
@@ -1484,7 +1509,7 @@ body.panel-open #zone-dock,body.panel-open #view-map #discover-panel{display:non
 </div>
 
 <nav>
-  <button type="button" class="nav-logo" id="nav-logo" onclick="refreshApp()" title="Actualiser l'app" aria-label="Actualiser l'app"><img src="icon-192.png?v=1.44" alt="Spoties" class="nav-logo-img"></button>
+  <button type="button" class="nav-logo" id="nav-logo" onclick="refreshApp()" title="Actualiser l'app" aria-label="Actualiser l'app"><img src="icon-192.png?v=1.47" alt="Spoties" class="nav-logo-img"></button>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="switchView('map')">Carte</button>
     <button class="nav-tab" onclick="switchView('gallery')">Spots</button>
@@ -1766,6 +1791,8 @@ body.panel-open #zone-dock,body.panel-open #view-map #discover-panel{display:non
         </div>
         <div class="pf-sec">À traiter</div>
         <div class="pf-list" id="pf-todo"></div>
+        <div class="pf-sec">Suivi des contrats</div>
+        <div class="pf-list" id="pf-track"></div>
         <div class="pf-sec">Activité</div>
         <div class="pf-list">
           <button type="button" class="pf-row" onclick="pfOpenPage('stats')"><span class="pf-ico"><svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 12V7M6 12V3M10 12V8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></span><span class="pf-row-l">Statistiques</span><svg class="pf-chev" width="8" height="13" viewBox="0 0 8 13"><path d="M1.5 1.5l5 5-5 5" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
@@ -3804,6 +3831,7 @@ function toggleProfile(){
     document.getElementById('filter-panel').classList.remove('open');
     if(discoverOpen) zoneCriteria(false);
     pfResetStack();
+    if(!shareCacheBusy) SHARE_CACHE = null;
     refreshProfileHeader();
     pfRenderHub();
   }
@@ -3877,9 +3905,9 @@ document.addEventListener('click',function(e){
 });
 
 /* ===================== PROFIL v1.36 : accueil, statistiques, nouveautes ===================== */
-var APP_VERSION='v1.44';
+var APP_VERSION='v1.47';
 // historique reconstruit depuis les anciens index (date = date de livraison). [version, date, approximative, [[n|f, texte]]]
-var CHANGELOG=[["v1.44","2026-09-28",0,[["n","Notifications sur ton téléphone : briefing ouvert, séance confirmée, relance après 48 h, date toujours à fixer, rappel 24 h avant avec adresses révélées, galerie à livrer"],["n","Toucher une notification ouvre le bon briefing ou la bonne fiche, avec le message pour le client déjà rédigé"]]],["v1.43","2026-09-28",0,[["n","État de chaque shooting dans la fiche client : prévu, réalisé ou annulé, automatique d'après la date sinon"],["n","Briefing : date à définir, le document devient une proposition et le client te propose un jour"],["n","Briefing : tutoiement ou vouvoiement, au choix avec le gabarit"],["n","Briefing : couleur des titres et boutons au choix, reprise dans le lien client"],["f","Glisser une photo n'entoure plus que la zone photo"]]],["v1.42","2026-09-28",0,[["f","Photos des clients qui ne s'affichaient pas dans la liste"],["f","Client supprimé qui réapparaissait, renvoyé par un autre appareil"],["n","Contact client en cases séparées : téléphone, e-mail, Instagram, avec bouton pour appeler, écrire ou ouvrir le profil"],["n","Étapes du contrat marquables à la main quand l'app ne peut pas les deviner"],["n","Spots, clients, événements et filtres s'ouvrent en cartes flottantes, avec la même apparition que le profil"],["n","Sur ordinateur, glisser une photo sur un spot, un client ou un événement pour l'ajouter"]]],["v1.41","2026-09-27",0,[["n","Périmètre (ex Découverte) : réglages dans un bandeau en bas de carte, rayon au pincement dans le cercle ou avec + et -"],["n","Périmètre : spots à l'intérieur entourés, routes qui le traversent soulignées en blanc, liste des spots à la ronde"],["n","Critères de recherche de routes en boutons plutôt qu'en jauges"],["n","Profil en carte flottante à gauche, la carte reste visible autour"],["n","Filtres proposés au choix dans Profil, Carte, le panneau se réorganise sans trou"],["f","Briefing supprimé qui réapparaissait, renvoyé par un autre appareil qui en gardait une copie"],["n","Supprimer un briefing propose de retirer aussi la séance du planning"]]],["v1.40","2026-09-25",0,[["f","Boutons de la carte alignés en ligne quand la carte ne se chargeait pas"],["n","Découverte de routes : zone ronde posée au centre de la carte, rayon réglable en kilomètres et point orange à glisser pour la déplacer"],["n","Boutons de la carte regroupés en deux colonnes, une à gauche, une à droite"],["f","Boutons + et - de Mapbox retirés, ils étaient cachés derrière les autres"],["f","Panneaux Filtrer et Découverte plus compacts sur téléphone"]]],["v1.39","2026-09-25",0,[["n","Le briefing se gèle dès que le client accepte les conditions : plus aucune modification ne part dans son lien"],["n","Publier une nouvelle version annule la confirmation du client, qui doit accepter à nouveau"],["n","Mise à jour du lien en pause pendant que tu travailles, publication quand tu es prêt"],["n","Texte des conditions mémorisé avec le lien au moment de l'acceptation"]]],["v1.38","2026-09-23",0,[["n","Anneau d'avancement du contrat sur chaque fiche client et dans la liste : date, briefing, lien, accord, shooting, galerie"],["n","Statistiques : avancement des contrats étape par étape et valeur estimée du carnet"],["f","Numéro de version affiché dans Nouveautés remis à jour"]]],["v1.37","2026-09-23",0,[["n","Briefing : bloc L'essentiel (date, durée, secteur et tarif en tête de document)"],["n","Briefing : bloc Accord, conditions à accepter avant de confirmer"],["n","Séance offerte affichée dans la formule et dans l'essentiel"],["n","Lien client : confirmation verrouillée tant que les conditions ne sont pas acceptées, bouton daté, lien pour proposer une autre date"],["f","Lien client : message distinct entre perte de connexion et lien expiré"]]],["v1.36","2026-09-23",0,[["n","Profil réorganisé : accueil, objectifs, carte, apparence et données sur des pages séparées"],["n","Statistiques : santé des fiches, ajouts par mois, clients, liens partagés, photos, routes, types, heures de shoot"],["n","Page Nouveautés avec l'historique daté de toutes les versions"],["n","Filtre des fiches à compléter dans l'onglet Spots"]]],["v1.35","2026-09-23",0,[["n","Plusieurs photos d'un coup dans les spots, envoyées dans l'ordre choisi"],["n","Heure et affiche des événements, affiche en plein écran"],["f","Événement de la veille encore affiché comme à venir le soir"],["f","Date de création d'un événement perdue à l'édition"]]],["v1.34","2026-09-22",0,[["n","Téléchargement du briefing en PDF"],["n","Lien client interactif : adresse exacte révélée avant le shoot, ajout au calendrier"]]],["v1.33","2026-09-22",0,[["n","Briefings listés dans la fiche client, création directe depuis la fiche"],["n","Texte modifiable directement dans le briefing, zoom de l'éditeur"],["n","Changer la date du shoot dans le briefing met à jour le planning du client"],["n","Toucher le logo actualise l'app"]]],["v1.30","2026-09-22",0,[["n","Planning refait : briefings en rangées réordonnables (1 à 3 colonnes), blocs branchés sur tes spots et clients, gabarits, sauvegarde en ligne"]]],["v1.29","2026-09-20",0,[["n","Cartes Spots plus compactes, décor affiché sur la carte"],["f","Vignettes carrées du Planning déformées"]]],["v1.28","2026-09-20",0,[["n","Galerie et Shotlist fusionnées dans l'onglet Spots"],["n","Sélection multiple et glisser pour supprimer un spot"],["n","Inspirations déplacées vers le profil"]]],["v1.27","2026-09-20",0,[["n","Planning en éditeur grille aimantée, branché sur les spots et clients"]]],["v1.26","2026-09-20",0,[["n","Premier onglet Planning (document de briefing)"],["n","Associer des spots à un client en les touchant sur la carte"]]],["v1.24","2026-09",1,[["f","Boutons de la carte qui se chevauchaient sur mobile"],["f","Panneaux filtres, découverte et soleil qui restaient ouverts ensemble"],["n","Marqueurs réduits à 44 px sur mobile"]]],["v1.23","2026-07-21",0,[["n","Fréquentation des routes heure par heure"],["n","Découverte de routes dans une zone dessinée (OpenStreetMap), filtrées par sinuosité"]]],["v1.22","2026-07-17",0,[["n","Aperçu en direct de l'objet 3D avant de le poser"],["f","Objets 3D qui disparaissaient après une image"]]],["v1.21","2026-07-17",0,[["n","Bouton dédié pour placer un objet 3D"]]],["v1.20","2026-07-17",0,[["n","Comptes séparés : inscription, mot de passe oublié, données propres à chaque compte"],["n","Progression XP sauvegardée dans le compte"]]],["v1.18","2026-07-06",0,[["n","Mode soleil 3D : position du soleil et ombres portées"],["n","Objets 3D sur la carte (voiture, flèche, cube)"],["n","Vidéos courtes sur les spots (20 s max)"],["n","Retracer une route existante"],["n","Zoom et pincement dans la visionneuse, photos réorganisables par glisser"],["n","Progression : XP, niveaux, objectifs et titres"],["n","Historique de recherche et vue Street (Mapillary, repli Google)"]]],["v1.17","2026-06-27",0,[["f","Marqueurs qui glissaient au dézoom"]]],["v1.16","2026-06-27",0,[["f","Tentative de correction des marqueurs (non concluante)"]]],["v1.15","2026-06-27",0,[["n","Navigation entre les photos dans la visionneuse"]]],["v1.14","2026-06-08",0,[["n","Mini-calendrier dans la fiche client pour planifier les shoots"]]],["v1.13","2026-06-07",0,[["n","Planning mensuel de tous les shoots"]]],["v1.12","2026-06-07",0,[["n","Sélection de plusieurs clients et spot de compromis pour leurs voitures"],["f","Badges d'état restylés (v1.12.1)"]]],["v1.11","2026-06-07",0,[["n","États clients automatiques : prospect, planifié, réalisé, livré"],["n","Relance À livrer et accès direct aux spots conseillés pour une voiture"]]],["v1.10","2026-06-07",0,[["n","Shootings planifiés dans la fiche client"]]],["v1.9","2026-06-07",0,[["n","Plusieurs voitures par client avec couleur de carrosserie, offre et statut"]]],["v1.8","2026-06-07",0,[["f","Photos stockées en ligne : fin de la mémoire saturée qui cassait la synchro PC / iPhone"],["f","Accès aux données sécurisé, clé de carte restreinte à ton site"]]],["v1.7","2026-06-06",0,[["f","Synchronisation fiable : un spot supprimé ne réapparaît plus"]]],["v1.6","2026-06-06",0,[["n","Onglet Profil : photo et réglages regroupés"]]],["v1.5","2026-06-06",0,[["n","Connexion par email et mot de passe"],["n","L'app devient 6flt Spots"]]],["v1.4","2026-06-06",0,[["n","Longs trajets jusqu'à 25 étapes"],["n","Types Musée, Circuit, Concession"],["n","Onglet Événements"]]],["v1.3","2026-06-06",1,[["n","Analyse automatique des virages d'une route"],["n","Filtres de la carte et suppression multiple dans la galerie"]]],["v1.2","2026-06-05",0,[["n","Tracé de routes sur la carte"],["n","Corbeille clients avec restauration"],["f","Routes en double et rendu des routes (v1.2.1)"]]],["v1.1","2026-06-05",0,[["n","Onglet Clients"],["n","Synchronisation en ligne des spots et clients"],["n","Écran de démarrage"]]],["v1.0","2026-06-04",0,[["n","Première version : carte des spots, galerie, Shotlist (conseil de spots selon la couleur de la voiture)"]]]];
+var CHANGELOG=[["v1.47","2026-09-28",0,[["n","Lien client : nom, prénom et signature au doigt avant de confirmer la séance"],["n","Signature visible dans le panneau de partage, dans le lien client et dans son PDF, figée avec le document accepté"],["n","Lien client : le bouton de confirmation indique ce qu'il manque au lieu de rester grisé"]]],["v1.46","2026-09-28",0,[["n","Profil : suivi des contrats en trois lignes, briefings sans réponse depuis 48 h, séances confirmées sans acompte, galeries à livrer"],["n","Toucher une ligne ouvre le briefing ou la fiche, avec le message de relance déjà rédigé"]]],["v1.45","2026-09-28",0,[["n","Lien client : bouton PDF pour garder le briefing lisible sans réseau le jour du shoot"],["n","Briefing : bloc Jour J, des consignes que le client ne voit qu'au moment où les adresses sont révélées"],["n","Lien client : bandeau à la révélation des adresses, qui mène aux consignes et rappelle le PDF"]]],["v1.44","2026-09-28",0,[["n","Notifications sur ton téléphone : briefing ouvert, séance confirmée, relance après 48 h, date toujours à fixer, rappel 24 h avant avec adresses révélées, galerie à livrer"],["n","Toucher une notification ouvre le bon briefing ou la bonne fiche, avec le message pour le client déjà rédigé"]]],["v1.43","2026-09-28",0,[["n","État de chaque shooting dans la fiche client : prévu, réalisé ou annulé, automatique d'après la date sinon"],["n","Briefing : date à définir, le document devient une proposition et le client te propose un jour"],["n","Briefing : tutoiement ou vouvoiement, au choix avec le gabarit"],["n","Briefing : couleur des titres et boutons au choix, reprise dans le lien client"],["f","Glisser une photo n'entoure plus que la zone photo"]]],["v1.42","2026-09-28",0,[["f","Photos des clients qui ne s'affichaient pas dans la liste"],["f","Client supprimé qui réapparaissait, renvoyé par un autre appareil"],["n","Contact client en cases séparées : téléphone, e-mail, Instagram, avec bouton pour appeler, écrire ou ouvrir le profil"],["n","Étapes du contrat marquables à la main quand l'app ne peut pas les deviner"],["n","Spots, clients, événements et filtres s'ouvrent en cartes flottantes, avec la même apparition que le profil"],["n","Sur ordinateur, glisser une photo sur un spot, un client ou un événement pour l'ajouter"]]],["v1.41","2026-09-27",0,[["n","Périmètre (ex Découverte) : réglages dans un bandeau en bas de carte, rayon au pincement dans le cercle ou avec + et -"],["n","Périmètre : spots à l'intérieur entourés, routes qui le traversent soulignées en blanc, liste des spots à la ronde"],["n","Critères de recherche de routes en boutons plutôt qu'en jauges"],["n","Profil en carte flottante à gauche, la carte reste visible autour"],["n","Filtres proposés au choix dans Profil, Carte, le panneau se réorganise sans trou"],["f","Briefing supprimé qui réapparaissait, renvoyé par un autre appareil qui en gardait une copie"],["n","Supprimer un briefing propose de retirer aussi la séance du planning"]]],["v1.40","2026-09-25",0,[["f","Boutons de la carte alignés en ligne quand la carte ne se chargeait pas"],["n","Découverte de routes : zone ronde posée au centre de la carte, rayon réglable en kilomètres et point orange à glisser pour la déplacer"],["n","Boutons de la carte regroupés en deux colonnes, une à gauche, une à droite"],["f","Boutons + et - de Mapbox retirés, ils étaient cachés derrière les autres"],["f","Panneaux Filtrer et Découverte plus compacts sur téléphone"]]],["v1.39","2026-09-25",0,[["n","Le briefing se gèle dès que le client accepte les conditions : plus aucune modification ne part dans son lien"],["n","Publier une nouvelle version annule la confirmation du client, qui doit accepter à nouveau"],["n","Mise à jour du lien en pause pendant que tu travailles, publication quand tu es prêt"],["n","Texte des conditions mémorisé avec le lien au moment de l'acceptation"]]],["v1.38","2026-09-23",0,[["n","Anneau d'avancement du contrat sur chaque fiche client et dans la liste : date, briefing, lien, accord, shooting, galerie"],["n","Statistiques : avancement des contrats étape par étape et valeur estimée du carnet"],["f","Numéro de version affiché dans Nouveautés remis à jour"]]],["v1.37","2026-09-23",0,[["n","Briefing : bloc L'essentiel (date, durée, secteur et tarif en tête de document)"],["n","Briefing : bloc Accord, conditions à accepter avant de confirmer"],["n","Séance offerte affichée dans la formule et dans l'essentiel"],["n","Lien client : confirmation verrouillée tant que les conditions ne sont pas acceptées, bouton daté, lien pour proposer une autre date"],["f","Lien client : message distinct entre perte de connexion et lien expiré"]]],["v1.36","2026-09-23",0,[["n","Profil réorganisé : accueil, objectifs, carte, apparence et données sur des pages séparées"],["n","Statistiques : santé des fiches, ajouts par mois, clients, liens partagés, photos, routes, types, heures de shoot"],["n","Page Nouveautés avec l'historique daté de toutes les versions"],["n","Filtre des fiches à compléter dans l'onglet Spots"]]],["v1.35","2026-09-23",0,[["n","Plusieurs photos d'un coup dans les spots, envoyées dans l'ordre choisi"],["n","Heure et affiche des événements, affiche en plein écran"],["f","Événement de la veille encore affiché comme à venir le soir"],["f","Date de création d'un événement perdue à l'édition"]]],["v1.34","2026-09-22",0,[["n","Téléchargement du briefing en PDF"],["n","Lien client interactif : adresse exacte révélée avant le shoot, ajout au calendrier"]]],["v1.33","2026-09-22",0,[["n","Briefings listés dans la fiche client, création directe depuis la fiche"],["n","Texte modifiable directement dans le briefing, zoom de l'éditeur"],["n","Changer la date du shoot dans le briefing met à jour le planning du client"],["n","Toucher le logo actualise l'app"]]],["v1.30","2026-09-22",0,[["n","Planning refait : briefings en rangées réordonnables (1 à 3 colonnes), blocs branchés sur tes spots et clients, gabarits, sauvegarde en ligne"]]],["v1.29","2026-09-20",0,[["n","Cartes Spots plus compactes, décor affiché sur la carte"],["f","Vignettes carrées du Planning déformées"]]],["v1.28","2026-09-20",0,[["n","Galerie et Shotlist fusionnées dans l'onglet Spots"],["n","Sélection multiple et glisser pour supprimer un spot"],["n","Inspirations déplacées vers le profil"]]],["v1.27","2026-09-20",0,[["n","Planning en éditeur grille aimantée, branché sur les spots et clients"]]],["v1.26","2026-09-20",0,[["n","Premier onglet Planning (document de briefing)"],["n","Associer des spots à un client en les touchant sur la carte"]]],["v1.24","2026-09",1,[["f","Boutons de la carte qui se chevauchaient sur mobile"],["f","Panneaux filtres, découverte et soleil qui restaient ouverts ensemble"],["n","Marqueurs réduits à 44 px sur mobile"]]],["v1.23","2026-07-21",0,[["n","Fréquentation des routes heure par heure"],["n","Découverte de routes dans une zone dessinée (OpenStreetMap), filtrées par sinuosité"]]],["v1.22","2026-07-17",0,[["n","Aperçu en direct de l'objet 3D avant de le poser"],["f","Objets 3D qui disparaissaient après une image"]]],["v1.21","2026-07-17",0,[["n","Bouton dédié pour placer un objet 3D"]]],["v1.20","2026-07-17",0,[["n","Comptes séparés : inscription, mot de passe oublié, données propres à chaque compte"],["n","Progression XP sauvegardée dans le compte"]]],["v1.18","2026-07-06",0,[["n","Mode soleil 3D : position du soleil et ombres portées"],["n","Objets 3D sur la carte (voiture, flèche, cube)"],["n","Vidéos courtes sur les spots (20 s max)"],["n","Retracer une route existante"],["n","Zoom et pincement dans la visionneuse, photos réorganisables par glisser"],["n","Progression : XP, niveaux, objectifs et titres"],["n","Historique de recherche et vue Street (Mapillary, repli Google)"]]],["v1.17","2026-06-27",0,[["f","Marqueurs qui glissaient au dézoom"]]],["v1.16","2026-06-27",0,[["f","Tentative de correction des marqueurs (non concluante)"]]],["v1.15","2026-06-27",0,[["n","Navigation entre les photos dans la visionneuse"]]],["v1.14","2026-06-08",0,[["n","Mini-calendrier dans la fiche client pour planifier les shoots"]]],["v1.13","2026-06-07",0,[["n","Planning mensuel de tous les shoots"]]],["v1.12","2026-06-07",0,[["n","Sélection de plusieurs clients et spot de compromis pour leurs voitures"],["f","Badges d'état restylés (v1.12.1)"]]],["v1.11","2026-06-07",0,[["n","États clients automatiques : prospect, planifié, réalisé, livré"],["n","Relance À livrer et accès direct aux spots conseillés pour une voiture"]]],["v1.10","2026-06-07",0,[["n","Shootings planifiés dans la fiche client"]]],["v1.9","2026-06-07",0,[["n","Plusieurs voitures par client avec couleur de carrosserie, offre et statut"]]],["v1.8","2026-06-07",0,[["f","Photos stockées en ligne : fin de la mémoire saturée qui cassait la synchro PC / iPhone"],["f","Accès aux données sécurisé, clé de carte restreinte à ton site"]]],["v1.7","2026-06-06",0,[["f","Synchronisation fiable : un spot supprimé ne réapparaît plus"]]],["v1.6","2026-06-06",0,[["n","Onglet Profil : photo et réglages regroupés"]]],["v1.5","2026-06-06",0,[["n","Connexion par email et mot de passe"],["n","L'app devient 6flt Spots"]]],["v1.4","2026-06-06",0,[["n","Longs trajets jusqu'à 25 étapes"],["n","Types Musée, Circuit, Concession"],["n","Onglet Événements"]]],["v1.3","2026-06-06",1,[["n","Analyse automatique des virages d'une route"],["n","Filtres de la carte et suppression multiple dans la galerie"]]],["v1.2","2026-06-05",0,[["n","Tracé de routes sur la carte"],["n","Corbeille clients avec restauration"],["f","Routes en double et rendu des routes (v1.2.1)"]]],["v1.1","2026-06-05",0,[["n","Onglet Clients"],["n","Synchronisation en ligne des spots et clients"],["n","Écran de démarrage"]]],["v1.0","2026-06-04",0,[["n","Première version : carte des spots, galerie, Shotlist (conseil de spots selon la couleur de la voiture)"]]]];
 var PF_MOIS=['janv.','févr.','mars','avr.','mai','juin','juil.','août','sept.','oct.','nov.','déc.'];
 var pfStack=['pf-hub'];
 var pfNewsShown=6;
@@ -3967,6 +3995,59 @@ function pfRouteKm(r){
 
 /* ---------- accueil ---------- */
 var PF_CHEV='<svg class="pf-chev" width="8" height="13" viewBox="0 0 8 13"><path d="M1.5 1.5l5 5-5 5" stroke="currentColor" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+/* ---------- suivi des contrats (v1.46) : trois lignes, pas un tableau de bord ---------- */
+function pfTrack(){
+  var now = Date.now(), today = new Date().toISOString().slice(0,10), out = {wait:[], dep:[], gal:[]};
+  pfBriefings().forEach(function(b){
+    var sh = b.share; if(!sh || !sh.token || sh.revoked) return;
+    var r = SHARE_CACHE && SHARE_CACHE[sh.token]; if(r && r.revoked) return;
+    if(b.date && b.date < today) return;
+    var c = clients.filter(function(x){ return x.id===b.clientId; })[0], nm = c ? (c.name||'Client') : (b.title||'Briefing');
+    var conf = r ? !!r.confirmed_at : !!sh.locked;
+    if(!conf){ if(sh.createdAt && now - sh.createdAt > 48*3600000) out.wait.push({bf:b.id, nm:nm, n:b.date ? 'relance' : 'tbd'}); return; }
+    var pr = null; (b.rows||[]).forEach(function(row){ (row.slots||[]).forEach(function(x){ if(x && x.type==='pricing') pr = x; }); });
+    if(pr && pr.props && !pr.props.free && !(+pr.props.deposit > 0)) out.dep.push({bf:b.id, nm:nm});
+  });
+  clients.forEach(function(c){
+    if(!c || c.deleted || String(c.gallery||'').trim() || (c.stepsManual && c.stepsManual.livre)) return;
+    if((Array.isArray(c.shoots) ? c.shoots : []).some(function(x){ return shootIsDone(x, today); })) out.gal.push({client:c.id, nm:c.name||'Client'});
+  });
+  return out;
+}
+function pfRenderTrack(){
+  var box = pfEl('pf-track'); if(!box) return;
+  var t = pfTrack(), h = '';
+  function line(key, list, title, ico, cls){
+    if(!list.length) return '';
+    var names = list.slice(0,3).map(function(x){ return escapeHtml(x.nm); }).join(', ') + (list.length>3 ? ' et '+(list.length-3)+' autre'+(list.length>4?'s':'') : '');
+    var sub = '<div class="pf-trk-sub" data-trk-list="'+key+'" hidden>'+list.map(function(x, i){ return '<button type="button" class="pf-trk-it" data-trk="'+key+'" data-i="'+i+'">'+escapeHtml(x.nm)+'</button>'; }).join('')+'</div>';
+    return '<button type="button" class="pf-row" data-trk-head="'+key+'"><span class="pf-ico '+cls+'">'+ico+'</span><span class="pf-row-l">'+title+'<small>'+names+'</small></span>'+PF_CHEV+'</button>'+sub;
+  }
+  h += line('wait', t.wait, pfPlural(t.wait.length, 'briefing')+' sans réponse depuis 48 h', '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.4"/><path d="M7 4v3.2l2 1.3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>', 'w');
+  h += line('dep', t.dep, pfPlural(t.dep.length, 'séance')+' confirmée'+(t.dep.length>1?'s':'')+' sans acompte', '€', 'a');
+  h += line('gal', t.gal, pfPlural(t.gal.length, 'galerie')+' à livrer', '<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="1.5" y="2.5" width="11" height="9" rx="2" stroke="currentColor" stroke-width="1.4"/><path d="M1.5 9l3-3 3 3 2-2 3 3" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>', 'b');
+  if(!h) h = '<div class="pf-row static"><span class="pf-ico g">✓</span><span class="pf-row-l">Rien en attente<small>Réponses, acomptes et galeries à jour</small></span></div>';
+  box.innerHTML = h; box._trk = t;
+  if(!box._bound){
+    box._bound = true;
+    box.addEventListener('click', function(ev){
+      var hd = ev.target.closest('[data-trk-head]'), it = ev.target.closest('[data-trk]');
+      var T = box._trk || {wait:[], dep:[], gal:[]};
+      if(hd){
+        var k = hd.getAttribute('data-trk-head');
+        if(T[k].length===1){ pfTrackOpen(k, T[k][0]); return; }
+        var sub = box.querySelector('[data-trk-list="'+k+'"]'); if(sub){ sub.hidden = !sub.hidden; hd.classList.toggle('open', !sub.hidden); }
+        return;
+      }
+      if(it){ var x = T[it.getAttribute('data-trk')][+it.getAttribute('data-i')]; if(x) pfTrackOpen(it.getAttribute('data-trk'), x); }
+    });
+  }
+}
+function pfTrackOpen(k, x){
+  pfClose();
+  if(k==='gal') notifGo('?go=client:'+x.client);
+  else notifGo('?go=bf:'+x.bf+(k==='wait' ? '&n='+x.n : ''));
+}
 function pfTodoRow(cls, ico, title, sub, action){
   return '<button type="button" class="pf-row" data-act="'+action+'"><span class="pf-ico '+cls+'">'+ico+'</span><span class="pf-row-l">'+title+(sub?'<small>'+sub+'</small>':'')+'</span>'+PF_CHEV+'</button>';
 }
@@ -3994,6 +4075,7 @@ function pfRenderHub(){
   if(staleB) h+=pfTodoRow('w','<svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1.5v7M4 5.5l3 3 3-3M2 12h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>', 'Sauvegarde à refaire', dB===null ? 'Aucun export JSON pour l’instant' : 'Dernier export il y a '+Math.floor(dB)+' jours', 'data');
   if(!h) h='<div class="pf-row static"><span class="pf-ico g">✓</span><span class="pf-row-l">Rien à traiter<small>Fiches, photos et sauvegarde à jour</small></span></div>';
   var todo=pfEl('pf-todo'); todo.innerHTML=h;
+  pfRenderTrack(); ensureShareCache(pfRenderTrack);
   if(!todo._bound){
     todo.addEventListener('click', function(ev){
       var b=ev.target.closest('[data-act]'); if(!b) return;
@@ -5569,10 +5651,12 @@ var TYPES = {
   photos:{name:'Photos', desc:'1, 2, 3 images ou mosaïque'},
   text:{name:'Texte', desc:'Paragraphe, titre ou note'},
   checklist:{name:'Préparation voiture', desc:'Checklist à cocher'},
-  contact:{name:'Contact', desc:'Lien Instagram et signature'}
+  contact:{name:'Contact', desc:'Lien Instagram et signature'},
+  jourj:{name:'Jour J', desc:'Consignes affichées avec les adresses'}
 };
+I.jourj = '<svg class="bf-ic" viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-11.5a7 7 0 00-14 0C5 14.8 12 21 12 21z"/><path d="M9.5 10l1.8 1.8L15 8"/></svg>';
 var DATA_TYPES = ['resume','cover','client','rdv','map','spots','timing','pricing','accord'];
-var FREE_TYPES = ['photos','text','checklist','contact'];
+var FREE_TYPES = ['jourj','photos','text','checklist','contact'];
 var LAYOUTS = ['1','1-1','1-1-1','2-1','1-2'];
 
 /* ---------- modele ---------- */
@@ -5610,6 +5694,7 @@ var TEMPLATES = {
     R('1', B('map')),
     R('1-1', B('spots'), B('timing')),
     R('2-1', B('checklist'), B('photos', {layout:'1', caption:'Ambiance recherchée'})),
+    R('1', B('jourj')),
     R('1', B('pricing')),
     R('1', B('accord')),
     R('1', B('contact'))
@@ -5618,6 +5703,7 @@ var TEMPLATES = {
     R('1', B('resume')),
     R('1-1', B('rdv', {weather:false}), B('map')),
     R('1', B('timing')),
+    R('1', B('jourj')),
     R('1', B('accord')),
     R('1', B('contact'))
   ]; }},
@@ -5627,6 +5713,7 @@ var TEMPLATES = {
     R('1-2', B('client'), B('text', {style:'note', ph:'Objectifs de la séance, véhicules concernés, consignes pour l\'équipe…'})),
     R('1-1', B('rdv'), B('map')),
     R('1-1', B('spots'), B('timing', {perSpot:40})),
+    R('1', B('jourj')),
     R('1', B('pricing')),
     R('1', B('accord')),
     R('1', B('contact'))
@@ -5948,10 +6035,14 @@ function accordDef(){ return TT(ACCORD_DEF, ACCORD_VOUS); }
 var ACCENTS = ['#e8571a','#2f89cf','#2d9e4f','#c9a227','#8b5cf6','#e0457b','#9aa0a6'];
 function accentOf(){ var a = doc && doc.accent; return /^#[0-9a-f]{6}$/i.test(a||'') ? a : ''; }
 
+var PUBLIC_PASS = false;
+var JOURJ_TU = 'Rendez-vous au premier spot 10 minutes avant l\'heure, voiture propre et plein fait.\nLe réseau peut manquer sur place : télécharge le PDF de ce briefing avant de partir.\nUn imprévu ? Écris-moi sur Instagram, je réponds vite.';
+var JOURJ_VOUS = 'Rendez-vous au premier spot 10 minutes avant l\'heure, voiture propre et plein fait.\nLe réseau peut manquer sur place : téléchargez le PDF de ce briefing avant de partir.\nUn imprévu ? Écrivez-moi sur Instagram, je réponds vite.';
+
 /* ---------- textes modifiables ---------- */
 var TERMS_DEF = 'Livraison : galerie privée en ligne sous 5 à 7 jours\nDroits : usage personnel et réseaux sociaux inclus, usage commercial sur devis\nAnnulation sans frais jusqu\'à 48h avant, l\'acompte reste dû passé ce délai';
 var ACCORD_DEF = 'Tu reçois tes photos retouchées en pleine définition, libres de publication avec mention de mon compte.\nJ\'utilise ces photos sur mon portfolio et mes réseaux, en te mentionnant.\nSi tu ne peux plus venir, préviens-moi au moins 24h avant, on replace la séance sans frais. En cas de pluie, je te préviens la veille au soir et on décale.';
-var TX_TYPES = ['resume','cover','client','rdv','map','spots','timing','checklist','photos','pricing','accord','contact'];
+var TX_TYPES = ['jourj','resume','cover','client','rdv','map','spots','timing','checklist','photos','pricing','accord','contact'];
 function fillTok(raw, b){
   var c = doc ? getClient(doc.clientId) : null, miss = false;
   var t = {prenom:firstName(c), nom:c ? (c.name||'') : '', voiture:carOf(c), date:doc && doc.date ? fdate(doc.date) : '', lieu:doc ? (doc.place||'') : '', ref:doc ? (doc.ref||'') : '', insta:b && b.props ? String(b.props.handle||'').replace(/^@/, '') : ''};
@@ -6000,6 +6091,11 @@ function blockBody(b){
         '<dl class="bf-rs-facts"><dt>Durée</dt><dd>'+esc(rdur)+'</dd>'+rsec+
         (rdel ? '<dt>'+TT('Tu reçois', 'Vous recevez')+'</dt><dd>'+esc(rdel)+'</dd>' : '')+
         '<dt>Tarif</dt><dd class="bf-rs-price">'+esc(rprice)+'</dd></dl></div>'+bnote(b);
+    case 'jourj':
+      h = ET(b, 'h', 'Le jour J', 'h2', 'bf-h');
+      if(PUBLIC_PASS) return h + '<p class="bf-jlock">'+TT('Tes consignes s\'afficheront ici avec les adresses exactes des spots.', 'Vos consignes s\'afficheront ici avec les adresses exactes des spots.')+'</p>';
+      return h + (S.mode==='edit' ? '<p class="bf-jtag bf-eo">Visible par le client à la révélation des adresses</p>' : '') +
+        ET(b, 'lines', TT(JOURJ_TU, JOURJ_VOUS), 'ul', 'bf-terms bf-jlist', {lines:1}) + bnote(b);
     case 'accord':
       return ET(b, 'h', 'Avant de confirmer', 'h2', 'bf-h')+
         ET(b, 'terms', accordDef(), 'ul', 'bf-terms', {lines:1})+
@@ -6501,6 +6597,76 @@ function buildPrintClone(host){
   return cl;
 }
 function pdfFileName(){ return (docTitle() || 'Briefing').replace(/[\\/:*?"<>|]+/g, '').replace(/\s+/g, ' ').trim() + '.pdf'; }
+/* ---------- PDF depuis un HTML deja rendu (lien client, v1.45) ---------- */
+function pdfCapture(cl){
+    var imgs = Array.prototype.slice.call(cl.querySelectorAll('img'));
+    return Promise.race([
+      Promise.all(imgs.map(imgToData)),
+      new Promise(function(r){ setTimeout(r, 8000); })
+    ]).then(function(){ return (document.fonts && document.fonts.ready) || 0; }).then(function(){
+      var scale = 2, top0 = cl.getBoundingClientRect().top;
+      var cuts = Array.prototype.slice.call(cl.querySelectorAll('.bf-row')).map(function(r){ var b = r.getBoundingClientRect(); return {t:(b.top-top0)*scale, b:(b.bottom-top0)*scale}; });
+      return html2canvas(cl, {scale:scale, useCORS:true, backgroundColor:'#ffffff', logging:false, windowWidth:720, scrollX:0, scrollY:-window.scrollY}).then(function(cv){ return {cv:cv, cuts:cuts}; });
+    });
+}
+function pdfWrite(o, title, file){
+    var cv = o.cv, cuts = o.cuts;
+    var J = window.jspdf.jsPDF, pdf = new J({unit:'mm', format:'a4', orientation:'portrait', compress:true});
+    var mX = 12, mT = 12, mB = 14, wMM = 210 - mX*2, hMM = 297 - mT - mB;
+    var pxPerMM = cv.width / wMM, pageH = Math.floor(hMM * pxPerMM);
+    var y = 0, first = true, ctx = cv.getContext('2d');
+    var gaps = [];
+    for(var gi=0; gi<cuts.length-1; gi++){ if(cuts[gi+1].t > cuts[gi].b) gaps.push((cuts[gi].b + cuts[gi+1].t)/2); }
+    function blankCut(lo, hi){
+      lo = Math.max(0, Math.floor(lo)); hi = Math.min(cv.height, Math.floor(hi)); if(hi - lo < 12) return 0;
+      var w = cv.width, data = ctx.getImageData(0, lo, w, hi - lo).data, run = 0, need = 10;
+      for(var r = hi - lo - 1; r >= 0; r--){
+        var o = r*w*4, edges = 0;
+        for(var x = 4; x < w*4; x += 8){
+          if(Math.abs(data[o+x]-data[o+x-4]) + Math.abs(data[o+x+1]-data[o+x-3]) + Math.abs(data[o+x+2]-data[o+x-2]) > 60){ if(++edges > 8) break; }
+        }
+        if(edges <= 8){ if(++run >= need) return lo + r + Math.floor(need/2); } else run = 0;
+      }
+      return 0;
+    }
+    while(y < cv.height - 2){
+      var lim = y + pageH, end;
+      if(lim >= cv.height) end = cv.height;
+      else {
+        var g1 = gaps.filter(function(g){ return g > y + pageH*0.4 && g <= lim - 2; }).pop();
+        end = g1 || blankCut(y + pageH*0.4, lim - 2) || gaps.filter(function(g){ return g > y + pageH*0.15 && g <= lim - 2; }).pop() || blankCut(y + pageH*0.1, y + pageH*0.4) || lim;
+        end = Math.round(end);
+      }
+      var h = Math.max(1, Math.round(end - y));
+      var pc = document.createElement('canvas'); pc.width = cv.width; pc.height = h;
+      var g = pc.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, pc.width, h); g.drawImage(cv, 0, y, cv.width, h, 0, 0, cv.width, h);
+      if(!first) pdf.addPage(); first = false;
+      pdf.addImage(pc.toDataURL('image/jpeg', 0.92), 'JPEG', mX, mT, wMM, h / pxPerMM);
+      y = end;
+    }
+    pdf.setProperties({title:title, author:'6flt Photographies'});
+    pdf.save(file);
+}
+window.bfHtmlPdf = function(html, o){
+  o = o || {};
+  var host = document.createElement('div');
+  host.style.cssText = 'position:absolute;left:0;top:0;width:720px;z-index:-1;background:#fff;pointer-events:none';
+  document.body.appendChild(host);
+  return loadPdfLibs().then(function(){
+    var cl = document.createElement('div');
+    cl.className = 'bf-doc bf-print bf-m-a4';
+    if(o.car) cl.style.setProperty('--car', o.car);
+    if(o.accent) cl.style.setProperty('--d-accent', o.accent);
+    cl.innerHTML = html || '';
+    cl.querySelectorAll('.cv-gl').forEach(function(x){ x.remove(); });
+    host.appendChild(cl);
+    cl.style.cssText += ';border:none;box-shadow:none;border-radius:0;padding:0;width:720px';
+    return pdfCapture(cl);
+  }).then(function(r){
+    pdfWrite(r, o.title || 'Briefing', o.file || 'Briefing 6flt.pdf');
+    host.remove();
+  }, function(e){ host.remove(); throw e; });
+};
 function exportPDF(){
   if(!doc) return;
   var btn = $('bf-pdf'); if(btn.disabled) return;
@@ -6621,6 +6787,7 @@ function buildShare(){
     var auto = {}; if(sc) list.forEach(function(s, k){ auto[s.id] = lightPhase(sc, sc.starts[k]); });
     doc.spotNotes = auto; doc.place = '\u00a7PLACE\u00a7'; SPOT_MASK = '\u00a7HIDE\u00a7';
     var w = whenLbl(mode);
+    PUBLIC_PASS = true;
     out.html_public = staticRows()
       .replace(/<a[^>]*google\.com\/maps[^>]*>[\s\S]*?<\/a>/g, '')
       .replace(/<img src="https:\/\/api\.mapbox\.com[^"]*"[^>]*>/g, '')
@@ -6640,7 +6807,7 @@ function buildShare(){
       acc += (acc ? '\n' : '') + fillTok(t, b);
     });
     out.accepted_terms = acc || null;
-  } finally { S.mode = oldMode; doc.spotNotes = oldNotes; doc.place = oldPlace; SPOT_MASK = null; }
+  } finally { S.mode = oldMode; doc.spotNotes = oldNotes; doc.place = oldPlace; SPOT_MASK = null; PUBLIC_PASS = false; }
   return out;
 }
 function shareLocked(){ return !!(doc && doc.share && doc.share.locked); }
@@ -6659,7 +6826,7 @@ function shareSoon(){
 }
 function shareStats(){
   if(!shareOn() || !sb) return;
-  sb.from('shared_briefings').select('views,confirmed_at,reveal_at').eq('token', doc.share.token).maybeSingle().then(function(r){
+  sb.from('shared_briefings').select('views,confirmed_at,reveal_at,signed_name,signature').eq('token', doc.share.token).maybeSingle().then(function(r){
     var el = $('bf-sh-stat'); if(!el) return;
     if(!r.data){ el.textContent = 'Statistiques indisponibles'; return; }
     var d = r.data, v = d.views||0, t = [];
@@ -6667,7 +6834,8 @@ function shareStats(){
     if(wasLocked !== nowLocked){ doc.share.locked = nowLocked; commit(); renderShare(); return; }
     doc.share.locked = nowLocked;
     t.push('<b>'+v+'</b> ouverture'+(v>1?'s':'')+' par le client');
-    t.push(d.confirmed_at ? 'Confirmé le <b>'+new Date(d.confirmed_at).toLocaleString('fr-FR', {day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'})+'</b>' : 'Pas encore confirmé');
+    t.push(d.confirmed_at ? 'Confirmé le <b>'+new Date(d.confirmed_at).toLocaleString('fr-FR', {day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'})+'</b>'+(d.signed_name ? ' par <b>'+esc(d.signed_name)+'</b>' : '') : 'Pas encore confirmé');
+    if(d.confirmed_at && d.signature && /^data:image\/png;base64,/.test(d.signature)) t.push('<img class="bf-shsig" src="'+esc(d.signature)+'" alt="Signature du client">');
     t.push(!d.reveal_at ? 'Adresses visibles' : new Date(d.reveal_at).getFullYear()>2900 ? 'Adresses masquées tant que la date n\'est pas fixée' : 'Adresses révélées le <b>'+new Date(d.reveal_at).toLocaleString('fr-FR', {weekday:'short', day:'numeric', month:'short', hour:'2-digit', minute:'2-digit'})+'</b>');
     el.innerHTML = t.join('<br>');
   });
@@ -7818,8 +7986,8 @@ function notifReady(kind, bfId){
                                 : hi+'je reviens vers toi pour la séance'+(dt ? ' du '+dt : '')+'. Tu as pu regarder le briefing ? Il reste juste à confirmer en bas de la page : '+url;
   else if(kind==='tbd') t = vous ? hi+'avez-vous pu regarder la proposition de séance ? Dites-moi quel jour vous convient et je bloque le créneau : '+url
                                  : hi+'tu as pu regarder la proposition de séance ? Dis-moi quel jour t\'arrange et je bloque le créneau : '+url;
-  else if(kind==='reveal') t = vous ? hi+'les adresses exactes des spots sont maintenant dans votre briefing : '+url+'\nÀ très vite !'
-                                    : hi+'les adresses exactes des spots sont maintenant dans ton briefing : '+url+'\nÀ très vite !';
+  else if(kind==='reveal') t = vous ? hi+'les adresses exactes des spots et les consignes du jour J sont maintenant dans votre briefing : '+url+'\nPensez à télécharger le PDF en bas de la page, il reste lisible sans réseau. À très vite !'
+                                    : hi+'les adresses exactes des spots et les consignes du jour J sont maintenant dans ton briefing : '+url+'\nPense à télécharger le PDF en bas de la page, il reste lisible sans réseau. À très vite !';
   if(!t) return;
   var ig = c ? String(c.insta||'').replace(/^.*instagram\.com\//i, '').replace(/^@/, '').replace(/[^A-Za-z0-9._].*$/, '') : '';
   var old = document.getElementById('ntf-ready'); if(old) old.remove();
@@ -9511,10 +9679,13 @@ function clearDiscovery(){
       else h += '<div class="cv-banner"><b>Adresses exactes le '+e(fdt(D.reveal_at, {weekday:'long', day:'numeric', month:'long'}))+' à '+e(fdt(D.reveal_at, {hour:'2-digit', minute:'2-digit'}))+'</b>En attendant, la carte montre la zone de chaque spot. Révélation dans <span class="cv-count" id="cv-count"></span></div>';
     }
     var conf = !!D.confirmed_at, hd = String(d.handle||'').replace(/^@/, '');
+    var hasJ = /data-type="jourj"/.test(D.html||'');
     var vous = d.tone==='vous', ac = /^#[0-9a-f]{6}$/i.test(d.accent||'') ? d.accent : '#e8571a', tbdv = !!d.tbd && !conf;
     function tv(a, b){ return vous ? b : a; }
     document.title = tv('Ton briefing', 'Votre briefing')+', 6flt Photographies';
     root.style.setProperty('--cv-accent', ac);
+    if(rev && d.start && new Date(d.start) - Date.now() > -6*3600000 && new Date(d.start) - Date.now() < 48*3600000)
+      h += '<div class="cv-banner cv-ok"><b>Adresses exactes disponibles</b>'+(hasJ ? '<a href="#cv-jourj">'+tv('Tes consignes du jour J', 'Vos consignes du jour J')+'</a> sont dans le briefing. ' : '')+tv('Télécharge le PDF avant de partir : il reste lisible sans réseau.', 'Téléchargez le PDF avant de partir : il reste lisible sans réseau.')+'</div>';
     h += '<div class="bf-doc bf-m-phone" style="--car:'+e(d.car||'#e8571a')+(d.accent ? ';--d-accent:'+e(ac) : '')+'">'+(D.html||'')+'</div>';
     if(hd && !conf) h += tbdv ? '<p class="cv-alt">'+tv('La date se fixe ensemble.', 'La date se fixe ensemble.')+' <a href="https://instagram.com/'+e(hd)+'" target="_blank" rel="noopener">'+tv('Écris-moi le jour qui t\'arrange', 'Écrivez-moi le jour qui vous convient')+'</a></p>'
       : '<p class="cv-alt">'+tv('Cette date ne t\'arrange pas ?', 'Cette date ne vous convient pas ?')+' <a href="https://instagram.com/'+e(hd)+'" target="_blank" rel="noopener">'+tv('Écris-moi, on en trouve une autre', 'Écrivez-moi, on en trouve une autre')+'</a></p>';
@@ -9526,29 +9697,92 @@ function clearDiscovery(){
     h += '<div class="cv-bar">'+mainBtn+
       '<div class="cv-sec">'+
       (rev && d.spots && d.spots.length ? '<a href="'+e(navUrl(d.spots))+'" target="_blank" rel="noopener">Itinéraire</a>' : '<button disabled>Itinéraire'+(rev ? '' : ' bientôt')+'</button>')+
+      '<button id="cv-pdf" type="button">PDF</button>'+
       (d.start ? '<a href="data:text/calendar;charset=utf-8,'+encodeURIComponent(ics(Object.assign({revealed:rev}, d)))+'" download="shooting-6flt.ics">Calendrier</a>' : '')+
       (hd ? '<a href="https://instagram.com/'+e(hd)+'" target="_blank" rel="noopener">Écrire</a>' : '')+
       '</div></div>';
     root.innerHTML = h;
     root.querySelectorAll('.bf-blk[data-type="map"] .bf-map').forEach(function(box){ glMap(box, d, rev, ac); });
+    var jb = root.querySelector('.bf-blk[data-type="jourj"]'); if(jb) jb.id = 'cv-jourj';
+    var pb = document.getElementById('cv-pdf');
+    if(pb) pb.onclick = function(){
+      if(!window.bfHtmlPdf){ alert('PDF indisponible'); return; }
+      pb.disabled = true; pb.textContent = 'PDF…';
+      var nm = String(d.title || 'Briefing').replace(/[\\/:*?"<>|]+/g, '').trim() || 'Briefing';
+      var pdfHtml = D.html;
+      if(D.confirmed_at){
+        var tmp = document.createElement('div'); tmp.innerHTML = D.html || '';
+        var ab = tmp.querySelector('.bf-blk[data-type="accord"]');
+        if(ab){ var cbx = ab.querySelector('.bf-ack-cb'); if(cbx) cbx.setAttribute('checked', ''); if(D.signed_name) ab.insertAdjacentHTML('beforeend', signedHTML(D.signed_name, D.signature, D.confirmed_at)); }
+        pdfHtml = tmp.innerHTML;
+      }
+      Promise.race([window.bfHtmlPdf(pdfHtml, {car:d.car, accent:d.accent || '', title:nm, file:nm+'.pdf'}), new Promise(function(r, j){ setTimeout(function(){ j(new Error('delai')); }, 30000); })]).then(function(){ pb.disabled = false; pb.textContent = 'PDF'; },
+        function(){ pb.disabled = false; pb.textContent = 'PDF'; alert(tv('Téléchargement impossible sans réseau. Réessaie une fois connecté.', 'Téléchargement impossible sans réseau. Réessayez une fois connecté.')); });
+    };
     var cb = document.getElementById('cv-conf');
-    var ackCb = root.querySelector('.bf-ack-cb'), needAck = !!ackCb;
-    if(ackCb && !tbdv){ ackCb.disabled = false; var ackLb = ackCb.closest('.bf-ack'); if(ackLb) ackLb.style.cursor = 'pointer'; }
+    var ackCb = root.querySelector('.bf-ack-cb'), needAck = !!ackCb, accBlk = ackCb ? ackCb.closest('.bf-blk') : null;
+    if(ackCb && !tbdv && !conf){ ackCb.disabled = false; var ackLb = ackCb.closest('.bf-ack'); if(ackLb) ackLb.style.cursor = 'pointer'; }
+    if(ackCb && conf){ ackCb.checked = true; }
+    // v1.47 : signature. Seulement si le briefing contient un bloc Accord, les anciens liens restent inchanges
+    var pad = null, nameIn = null, ink = false;
+    if(accBlk && conf && D.signed_name) accBlk.insertAdjacentHTML('beforeend', signedHTML(D.signed_name, D.signature, D.confirmed_at));
+    if(accBlk && !conf && !tbdv){
+      accBlk.insertAdjacentHTML('beforeend', '<div class="cv-sign"><label class="cv-sl" for="cv-name">'+tv('Ton nom et prénom', 'Vos nom et prénom')+'</label>'+
+        '<input id="cv-name" class="cv-name" autocomplete="name" autocapitalize="words" placeholder="Prénom Nom">'+
+        '<div class="cv-sl">'+tv('Ta signature', 'Votre signature')+'<button type="button" class="cv-clear">Effacer</button></div>'+
+        '<canvas class="cv-pad" aria-label="Zone de signature"></canvas>'+
+        '<p class="cv-sh">'+tv('Signe avec le doigt dans le cadre blanc.', 'Signez avec le doigt dans le cadre blanc.')+'</p></div>');
+      nameIn = accBlk.querySelector('.cv-name'); pad = accBlk.querySelector('.cv-pad');
+      var pctx = null, drawing = false, last = null, dpr = Math.max(1, Math.min(3, window.devicePixelRatio||1));
+      var sizePad = function(){ var w = pad.clientWidth || 300, h = 150; pad.width = Math.round(w*dpr); pad.height = Math.round(h*dpr); pctx = pad.getContext('2d'); if(!pctx) return; pctx.fillStyle = '#fff'; pctx.fillRect(0, 0, pad.width, pad.height); pctx.strokeStyle = '#14151a'; pctx.lineWidth = 2.4*dpr; pctx.lineCap = 'round'; pctx.lineJoin = 'round'; ink = false; };
+      sizePad();
+      var pt = function(e){ var b = pad.getBoundingClientRect(); return {x:(e.clientX-b.left)*dpr, y:(e.clientY-b.top)*dpr}; };
+      pad.addEventListener('pointerdown', function(e){ if(!pctx) return; e.preventDefault(); drawing = true; last = pt(e); try{ pad.setPointerCapture(e.pointerId); }catch(x){} pctx.beginPath(); pctx.arc(last.x, last.y, pctx.lineWidth/2, 0, Math.PI*2); pctx.fillStyle = '#14151a'; pctx.fill(); });
+      pad.addEventListener('pointermove', function(e){ if(!drawing || !pctx) return; e.preventDefault(); var p = pt(e); pctx.beginPath(); pctx.moveTo(last.x, last.y); pctx.lineTo(p.x, p.y); pctx.stroke(); last = p; if(!ink){ ink = true; syncConf(); } });
+      var stop = function(){ drawing = false; };
+      pad.addEventListener('pointerup', stop); pad.addEventListener('pointercancel', stop); pad.addEventListener('pointerleave', stop);
+      accBlk.querySelector('.cv-clear').onclick = function(){ sizePad(); syncConf(); };
+      nameIn.addEventListener('input', function(){ syncConf(); });
+    }
+    function missing(){
+      if(!needAck) return '';
+      if(!ackCb.checked) return tv('Coche la case des conditions', 'Cochez la case des conditions');
+      if(nameIn && nameIn.value.trim().length < 3) return tv('Écris ton nom et prénom', 'Écrivez vos nom et prénom');
+      if(pad && !ink) return tv('Signe dans le cadre blanc', 'Signez dans le cadre blanc');
+      return '';
+    }
     function syncConf(){
       if(!cb || conf) return;
-      var ok = !needAck || ackCb.checked;
-      cb.disabled = !ok;
-      cb.title = ok ? '' : tv('Coche la case pour confirmer', 'Cochez la case pour confirmer');
+      var m = missing();
+      cb.classList.toggle('cv-wait', !!m);
+      cb.title = m;
     }
     if(ackCb) ackCb.addEventListener('change', syncConf);
     syncConf();
+    function sigData(){
+      if(!pad || !ink) return null;
+      try{ var W = Math.min(600, pad.width), H = Math.round(pad.height*W/pad.width), c2 = document.createElement('canvas'); c2.width = W; c2.height = H; var g = c2.getContext('2d'); g.fillStyle = '#fff'; g.fillRect(0, 0, W, H); g.drawImage(pad, 0, 0, W, H); return c2.toDataURL('image/png'); }catch(x){ return null; }
+    }
     if(cb && !conf) cb.onclick = function(){
-      if(needAck && !ackCb.checked) return;
+      var m = missing();
+      if(m){
+        if(accBlk && accBlk.scrollIntoView) try{ accBlk.scrollIntoView({behavior:'smooth', block:'center'}); }catch(x){}
+        var hint = root.querySelector('.cv-miss'); if(!hint && accBlk){ accBlk.insertAdjacentHTML('beforeend', '<p class="cv-miss"></p>'); hint = root.querySelector('.cv-miss'); }
+        if(hint) hint.textContent = m;
+        return;
+      }
+      var nm = nameIn ? nameIn.value.trim() : null, sg = sigData();
       cb.disabled = true;
-      sb.rpc('confirm_shared_brief', {p_token:tok}).then(function(r){
-        if(r.error || !r.data){ cb.disabled = false; alert('Confirmation impossible, réessaie dans un instant.'); return; }
-        D.confirmed_at = new Date().toISOString(); cb.className = 'cv-main cv-done'; cb.textContent = 'Séance confirmée';
+      var args = {p_token:tok}; if(nm) args.p_name = nm; if(sg) args.p_sig = sg;
+      sb.rpc('confirm_shared_brief', args).then(function(r){
+        if(r.error || !r.data){ cb.disabled = false; alert(tv('Confirmation impossible, réessaie dans un instant.', 'Confirmation impossible, réessayez dans un instant.')); return; }
+        D.confirmed_at = new Date().toISOString(); D.signed_name = nm; D.signature = sg; conf = true;
+        cb.className = 'cv-main cv-done'; cb.textContent = 'Séance confirmée';
         var alt = root.querySelector('.cv-alt'); if(alt) alt.remove();
+        var sgBox = root.querySelector('.cv-sign'); if(sgBox) sgBox.remove();
+        var mh = root.querySelector('.cv-miss'); if(mh) mh.remove();
+        if(ackCb){ ackCb.disabled = true; }
+        if(accBlk && nm) accBlk.insertAdjacentHTML('beforeend', signedHTML(nm, sg, D.confirmed_at));
       }, function(){ cb.disabled = false; });
     };
     clearInterval(tick);
@@ -9561,6 +9795,10 @@ function clearDiscovery(){
       };
       upd(); tick = setInterval(upd, 20000);
     }
+  }
+  function signedHTML(nm, sg, at){
+    var when = at ? new Date(at).toLocaleDateString('fr-FR', {day:'numeric', month:'long', year:'numeric'}) : '';
+    return '<div class="bf-signed">'+(sg ? '<img src="'+e(sg)+'" alt="Signature">' : '')+'<span>Signé par <b>'+e(nm)+'</b>'+(when ? ' le '+e(when) : '')+'</span></div>';
   }
   function glMap(box, d, rev, ac){
     ac = ac || '#e8571a';
