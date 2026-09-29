@@ -49,6 +49,7 @@ window.__c6Manifest();
 <style>
 :root{--bg:#0e0f11;--surface:#16181c;--surface2:#1e2126;--border:#2a2d35;--accent:#e8571a;--accent2:#f0a070;--text:#f0ede8;--muted:#7a7d85}
 *{box-sizing:border-box}
+[hidden]{display:none!important}
 body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;min-height:100vh;-webkit-tap-highlight-color:transparent}
 a{color:inherit}
 
@@ -214,7 +215,7 @@ a{color:inherit}
 </div>
 
 <script>
-/* ===== 6flt Clients v1.2 (Spoties v1.51 : lien unique, installation) ===== */
+/* ===== 6flt Clients v1.2.1 (Spoties v1.51.1 : panneau Ajouter qui restait ouvert) ===== */
 var SUPABASE_URL = 'https://gpirhmddoeokakikbjkr.supabase.co';
 var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdwaXJobWRkb2Vva2FraWtiamtyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA2NDI3MzAsImV4cCI6MjA5NjIxODczMH0.LghihUJQCtYBIMsRGXrjh2k4IcVYnf5CyD4lzlQNv6w';
 var VAPID_PUBLIC = 'BOph3IRn1uPlXzoljifkGCP9HoQ1pWYS3V60bUbimAFwqO00QAEsUSx21LoVmgFb0Zzrc1DqSFAtHGs2UoNQbWU';
@@ -426,6 +427,8 @@ document.getElementById('btn-add').addEventListener('click', function(){
   document.getElementById('add-input').focus();
 });
 document.getElementById('add-cancel').addEventListener('click', function(){ modal.hidden = true; });
+document.getElementById('add-input').addEventListener('input', function(){ document.getElementById('add-err').textContent = ''; });
+modal.addEventListener('click', function(ev){ if(ev.target===modal) modal.hidden = true; });
 document.getElementById('add-go').addEventListener('click', function(){
   var input = document.getElementById('add-input'), err = document.getElementById('add-err'), go = document.getElementById('add-go');
   var tok = extractToken(input.value);
