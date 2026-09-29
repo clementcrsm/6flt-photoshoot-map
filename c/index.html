@@ -306,6 +306,30 @@ a{color:inherit}
 .cv-gal textarea{width:100%;box-sizing:border-box;background:var(--d-panel);border:1px solid var(--d-line);border-radius:10px;color:var(--d-text);font:14px 'Inter',sans-serif;padding:10px 12px}
 .cv-pub{display:flex;gap:8px;align-items:flex-start;font-size:12.5px;color:var(--d-dim);margin-top:8px;line-height:1.4;cursor:pointer}
 .cv-pub input{margin:2px 0 0;flex:none;width:16px;height:16px;accent-color:var(--d-accent)}
+/* ===== v1.6 : calendrier de proposition de date ===== */
+#prop-sheet{position:fixed;inset:0;z-index:400;background:rgba(0,0,0,.66);display:flex;align-items:flex-end;justify-content:center}
+#prop-sheet .ps-card{width:100%;max-width:560px;max-height:92vh;overflow-y:auto;background:#16181c;border-radius:18px 18px 0 0;padding:16px 16px calc(16px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:10px;color:#f0ede8;font-family:'Inter',sans-serif}
+#prop-sheet .ps-head{display:flex;align-items:center;justify-content:space-between}
+#prop-sheet .ps-head b{font-size:17px}
+#prop-sheet .ps-x{width:34px;height:34px;border-radius:50%;border:1px solid #2a2d35;background:#1e2126;color:#f0ede8;font-size:14px;cursor:pointer}
+#prop-sheet .ps-mhead{display:flex;align-items:center;justify-content:space-between;margin-top:2px}
+#prop-sheet .ps-month{font-size:15px;font-weight:700}
+#prop-sheet .ps-nav{width:40px;height:36px;border-radius:10px;border:1px solid #2a2d35;background:#1e2126;color:#f0ede8;font-size:20px;line-height:1;cursor:pointer}
+#prop-sheet .ps-nav[disabled]{opacity:.3}
+#prop-sheet .ps-dow,#prop-sheet .ps-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}
+#prop-sheet .ps-dow span{text-align:center;font-size:11px;font-weight:600;color:#7a7d85}
+#prop-sheet .ps-d{height:42px;border-radius:10px;border:1px solid #2a2d35;background:#1e2126;color:#f0ede8;font:600 14px 'Inter',sans-serif;cursor:pointer;padding:0}
+#prop-sheet .ps-d[disabled]{background:transparent;border-color:transparent;color:#4a4d55;cursor:default}
+#prop-sheet .ps-d.no{text-decoration:line-through;color:#8a5a4a}
+#prop-sheet .ps-d.on{background:var(--ps-accent,#e8571a);border-color:var(--ps-accent,#e8571a);color:#fff}
+#prop-sheet .ps-leg{margin:0;font-size:11.5px;color:#7a7d85}
+#prop-sheet .ps-lbl{font-size:12px;font-weight:600;color:#a5a49d;margin-top:4px}
+#prop-sheet .ps-chips{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+#prop-sheet .ps-chips button{height:40px;border-radius:10px;border:1px solid #2a2d35;background:#1e2126;color:#f0ede8;font:600 13px 'Inter',sans-serif;cursor:pointer}
+#prop-sheet .ps-chips button.on{border-color:var(--ps-accent,#e8571a);color:var(--ps-accent,#e8571a);background:rgba(255,255,255,.03)}
+#prop-sheet .ps-note{width:100%;background:#1e2126;border:1px solid #2a2d35;border-radius:10px;color:#f0ede8;font:16px 'Inter',sans-serif;padding:10px 12px;resize:none}
+#prop-sheet .ps-go{min-height:50px;padding:12px 14px;line-height:1.25;border-radius:12px;border:none;background:var(--ps-accent,#e8571a);color:#fff;font:700 15px 'Inter',sans-serif;cursor:pointer}
+#prop-sheet .ps-go[disabled]{opacity:.4;cursor:default}
 </style>
 </head>
 <body>
@@ -335,7 +359,7 @@ a{color:inherit}
 </div>
 
 <script>
-/* ===== 6flt Clients v1.5.1 (Spoties v1.55.1 : mise en page du briefing complete) ===== */
+/* ===== 6flt Clients v1.6 (Spoties v1.56 : calendrier de proposition de date) ===== */
 var SUPABASE_URL = 'https://gpirhmddoeokakikbjkr.supabase.co';
 var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdwaXJobWRkb2Vva2FraWtiamtyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA2NDI3MzAsImV4cCI6MjA5NjIxODczMH0.LghihUJQCtYBIMsRGXrjh2k4IcVYnf5CyD4lzlQNv6w';
 var VAPID_PUBLIC = 'BOph3IRn1uPlXzoljifkGCP9HoQ1pWYS3V60bUbimAFwqO00QAEsUSx21LoVmgFb0Zzrc1DqSFAtHGs2UoNQbWU';
@@ -647,6 +671,7 @@ document.getElementById('add-go').addEventListener('click', function(){
 /* ===== vue detail (portee du rendu du lien client Spoties v1.48) ===== */
 var DETAIL_TOK = null, DETAIL_D = null, DETAIL_TICK = null, DETAIL_MAPS = [];
 function closeDetail(){
+  closePropSheet();
   DETAIL_MAPS.forEach(function(m){ try{ m.remove(); }catch(x){} }); DETAIL_MAPS = [];
   clearInterval(DETAIL_TICK);
   document.getElementById('cv-root').classList.remove('open');
@@ -723,18 +748,26 @@ function glMap(box, d, rev, ac){
     m.on('error', function(ev){ console.warn('carte', ev && ev.error); });
   }catch(err){ console.warn(err); box.className = 'bf-map'; box.innerHTML = fallback; }
 }
-/* v1.5 : proposition de date. Etat lu sur le serveur (en attente, refusee), l'appareil sert de repli hors ligne */
+/* v1.5 : proposition de date. Etat lu sur le serveur (en attente, refusee), l'appareil sert de repli hors ligne.
+   v1.6 : le bouton du bas ouvre directement un calendrier ; moment de la journee au lieu d'une heure ; jour refuse barre */
+var PROP_DECLINED = [], PROP_TV = function(a){ return a; };
+var PROP_MOMENTS = [['', 'Peu importe'], ['morning', 'Matin'], ['afternoon', 'Après-midi'], ['evening', 'Fin de journée']];
 function propKey(){ return '6fltc_proposed_' + DETAIL_TOK; }
 function propLocal(){
   var v = null; try{ v = localStorage.getItem(propKey()); }catch(x){}
-  var m = String(v||'').match(/^(\d{4}-\d{2}-\d{2})(?: (\d{2}:\d{2}))?/);
+  var m = String(v||'').match(/^(\d{4}-\d{2}-\d{2})(?: (\S+))?/);
   return m ? {status:'pending', date:m[1], time:m[2]||''} : null;
 }
-function propDay(dt, tm){
-  var s = new Date(dt+'T12:00:00').toLocaleDateString('fr-FR', {weekday:'long', day:'numeric', month:'long'});
+function propMoment(tm){
   var t = String(tm||'').match(/^(\d{1,2}):(\d{2})/);
-  return s + (t ? ' à '+('0'+t[1]).slice(-2)+'h'+t[2] : '');
+  if(t) return ' à '+('0'+t[1]).slice(-2)+'h'+t[2];
+  return tm==='morning' ? ', le matin' : tm==='afternoon' ? ', l\'après-midi' : tm==='evening' ? ', en fin de journée' : '';
 }
+function propDay(dt, tm){
+  return new Date(dt+'T12:00:00').toLocaleDateString('fr-FR', {weekday:'long', day:'numeric', month:'long'}) + propMoment(tm);
+}
+function capFirst(t){ return String(t).replace(/^./, function(c){ return c.toUpperCase(); }); }
+function isoDay(d){ return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2); }
 function renderProp(st, tv){
   var box = document.getElementById('cv-prop'); if(!box) return;
   var key = st ? st.status+'|'+st.date+'|'+(st.time||'') : 'none';
@@ -747,35 +780,82 @@ function renderProp(st, tv){
     if(jump){ jump.textContent = st.status==='accepted' ? 'Date acceptée' : 'Date proposée, en attente'; jump.disabled = true; }
     return;
   }
-  var no = st && st.status==='declined' ? '<p class="cv-prop-no">'+e(propDay(st.date, '').replace(/^./, function(c){ return c.toUpperCase(); }))+' '+tv('ne sera pas possible. Propose une autre date :', 'ne sera pas possible. Proposez une autre date :')+'</p>' : '';
-  box.innerHTML = (no || '<label class="cv-sl">Proposer une date</label>')+
-    '<input type="date" id="cv-prop-date"><input type="time" id="cv-prop-time">'+
-    '<textarea id="cv-prop-note" rows="2" placeholder="Un mot pour préciser (optionnel)"></textarea>'+
-    '<button type="button" id="cv-prop-go">Envoyer la proposition</button>';
-  if(jump){ jump.textContent = 'Proposer une date'; jump.disabled = false; }
-  var go = document.getElementById('cv-prop-go'), tok = DETAIL_TOK;
+  box.innerHTML = st && st.status==='declined'
+    ? '<p class="cv-prop-no">'+e(capFirst(propDay(st.date, '')))+' '+tv('ne sera pas possible. Choisis un autre jour avec le bouton en bas.', 'ne sera pas possible. Choisissez un autre jour avec le bouton en bas.')+'</p>'
+    : '';
+  if(jump){ jump.textContent = st && st.status==='declined' ? 'Proposer une autre date' : 'Proposer une date'; jump.disabled = false; }
+}
+/* calendrier de proposition, en feuille par-dessus la page */
+function closePropSheet(){ var el = document.getElementById('prop-sheet'); if(el) el.remove(); }
+function openPropSheet(){
+  var tv = PROP_TV, tok = DETAIL_TOK; if(!tok) return;
+  closePropSheet();
+  var today = new Date(); today.setHours(12, 0, 0, 0);
+  var first = new Date(today); first.setDate(first.getDate() + 1);
+  var last = new Date(today); last.setMonth(last.getMonth() + 6);
+  var minI = isoDay(first), maxI = isoDay(last);
+  var S = {y:first.getFullYear(), m:first.getMonth(), day:'', t:''};
+  var ac = (DETAIL_D && DETAIL_D.data && /^#[0-9a-f]{6}$/i.test(DETAIL_D.data.accent||'')) ? DETAIL_D.data.accent : '#e8571a';
+  var el = document.createElement('div'); el.id = 'prop-sheet'; el.style.setProperty('--ps-accent', ac);
+  el.innerHTML = '<div class="ps-card" role="dialog" aria-label="Proposer une date">'+
+    '<div class="ps-head"><b>Proposer une date</b><button type="button" class="ps-x" aria-label="Fermer">&#x2715;</button></div>'+
+    '<div class="ps-mhead"><button type="button" class="ps-nav" data-m="-1" aria-label="Mois précédent">&#8249;</button><span class="ps-month"></span><button type="button" class="ps-nav" data-m="1" aria-label="Mois suivant">&#8250;</button></div>'+
+    '<div class="ps-dow"><span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span><span>D</span></div>'+
+    '<div class="ps-grid"></div>'+
+    '<p class="ps-leg"'+(PROP_DECLINED.length ? '' : ' hidden')+'>'+tv('Jours barrés : déjà refusés pour ta séance.', 'Jours barrés : déjà refusés pour votre séance.')+'</p>'+
+    '<div class="ps-lbl">Moment de la journée</div>'+
+    '<div class="ps-chips">'+PROP_MOMENTS.map(function(o){ return '<button type="button" data-t="'+o[0]+'"'+(o[0]==='' ? ' class="on"' : '')+'>'+o[1]+'</button>'; }).join('')+'</div>'+
+    '<textarea class="ps-note" rows="2" maxlength="500" placeholder="Un mot pour préciser (optionnel)"></textarea>'+
+    '<button type="button" class="ps-go" disabled>'+tv('Choisis un jour', 'Choisissez un jour')+'</button></div>';
+  document.body.appendChild(el);
+  var grid = el.querySelector('.ps-grid'), go = el.querySelector('.ps-go');
+  function paint(){
+    var mo = new Date(S.y, S.m, 1, 12);
+    el.querySelector('.ps-month').textContent = capFirst(mo.toLocaleDateString('fr-FR', {month:'long', year:'numeric'}));
+    el.querySelector('[data-m="-1"]').disabled = (S.y*12+S.m) <= (first.getFullYear()*12+first.getMonth());
+    el.querySelector('[data-m="1"]').disabled = (S.y*12+S.m) >= (last.getFullYear()*12+last.getMonth());
+    var lead = (mo.getDay()+6)%7, n = new Date(S.y, S.m+1, 0).getDate(), h = '';
+    for(var i=0;i<lead;i++) h += '<span></span>';
+    for(var d=1; d<=n; d++){
+      var iso = S.y+'-'+('0'+(S.m+1)).slice(-2)+'-'+('0'+d).slice(-2);
+      var no = PROP_DECLINED.indexOf(iso) > -1, off = iso < minI || iso > maxI || no;
+      h += '<button type="button" class="ps-d'+(no ? ' no' : '')+(iso===S.day ? ' on' : '')+'" data-d="'+iso+'"'+(off ? ' disabled' : '')+'>'+d+'</button>';
+    }
+    grid.innerHTML = h;
+    go.disabled = !S.day;
+    go.textContent = S.day ? capFirst(tv('Proposer le ', 'Proposer le ')+propDay(S.day, S.t)) : tv('Choisis un jour', 'Choisissez un jour');
+  }
+  el.addEventListener('click', function(ev){
+    if(ev.target===el || ev.target.closest('.ps-x')){ closePropSheet(); return; }
+    var nb = ev.target.closest('.ps-nav');
+    if(nb && !nb.disabled){ S.m += +nb.getAttribute('data-m'); if(S.m<0){ S.m = 11; S.y--; } if(S.m>11){ S.m = 0; S.y++; } paint(); return; }
+    var db = ev.target.closest('.ps-d');
+    if(db && !db.disabled){ S.day = db.getAttribute('data-d'); paint(); return; }
+    var cb = ev.target.closest('.ps-chips button');
+    if(cb){ S.t = cb.getAttribute('data-t'); el.querySelectorAll('.ps-chips button').forEach(function(x){ x.classList.toggle('on', x===cb); }); paint(); return; }
+  });
   go.onclick = function(){
-    var dt = document.getElementById('cv-prop-date').value, tm = document.getElementById('cv-prop-time').value, nt = document.getElementById('cv-prop-note').value.trim();
-    if(!dt){ alert(tv('Choisis une date', 'Choisissez une date')); return; }
-    go.disabled = true;
+    if(!S.day) return;
+    var nt = el.querySelector('.ps-note').value.trim(), dt = S.day, tm = S.t;
+    go.disabled = true; go.textContent = 'Envoi…';
     sb.rpc('propose_shared_date', {p_token:tok, p_date:dt, p_time:tm || null, p_note:nt || null}).then(function(r){
-      if(r.error || !r.data){ go.disabled = false; alert(tv('Envoi impossible, réessaie.', 'Envoi impossible, réessayez.')); return; }
-      try{ localStorage.setItem('6fltc_proposed_' + tok, dt+(tm ? ' '+tm.slice(0, 5) : '')); }catch(ex){}
+      if(r.error || !r.data){ paint(); alert(tv('Envoi impossible. Ce jour n\'est peut-être plus proposable, choisis-en un autre.', 'Envoi impossible. Ce jour n\'est peut-être plus proposable, choisissez-en un autre.')); return; }
+      try{ localStorage.setItem('6fltc_proposed_' + tok, dt+(tm ? ' '+tm : '')); }catch(ex){}
+      closePropSheet();
       if(DETAIL_TOK===tok) renderProp({status:'pending', date:dt, time:tm}, tv);
-    }, function(){ go.disabled = false; alert(tv('Envoi impossible, vérifie ta connexion.', 'Envoi impossible, vérifiez votre connexion.')); });
+    }, function(){ paint(); alert(tv('Envoi impossible, vérifie ta connexion.', 'Envoi impossible, vérifiez votre connexion.')); });
   };
+  paint();
 }
 function propInit(tv){
   var tok = DETAIL_TOK, jump = document.getElementById('cv-prop-jump');
-  if(jump) jump.onclick = function(){
-    var box = document.getElementById('cv-prop'); if(!box) return;
-    box.scrollIntoView({behavior:'smooth', block:'center'});
-    var di = document.getElementById('cv-prop-date'); if(di) setTimeout(function(){ try{ di.focus(); }catch(x){} }, 400);
-  };
+  PROP_TV = tv; PROP_DECLINED = [];
+  if(jump) jump.onclick = function(){ if(!jump.disabled) openPropSheet(); };
   renderProp(propLocal(), tv);
   if(sb) sb.rpc('get_date_proposal', {p_token:tok}).then(function(r){
     if(DETAIL_TOK!==tok || !r || r.error) return;
     var d = r.data && r.data.status ? {status:r.data.status, date:String(r.data.date||'').slice(0, 10), time:String(r.data.time||'')} : null;
+    PROP_DECLINED = (r.data && Array.isArray(r.data.declined) ? r.data.declined : []).map(function(x){ return String(x).slice(0, 10); });
     if(!d || d.status!=='pending'){ try{ localStorage.removeItem('6fltc_proposed_' + tok); }catch(x){} }
     renderProp(d, tv);
   }, function(){});
