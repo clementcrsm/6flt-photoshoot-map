@@ -1,9 +1,10 @@
-// Service worker Spoties v1.44
+// Service worker Spoties v1.51
 // HTML en reseau d'abord (toujours la derniere version en ligne, cache en secours hors ligne).
 // Icones et manifest en cache d'abord. Les API (Mapbox, meteo, Supabase...) restent en reseau direct.
 // v1.44 : reception des notifications push et ouverture du bon ecran au toucher.
-const CACHE = 'spoties-v1-44';
-const SHELL = ['./', './index.html', './manifest.json?v=1.44', './icon-180.png?v=1.44', './icon-192.png?v=1.44', './icon-512.png?v=1.44'];
+// v1.51 : le dossier c/ (app 6flt Clients) a son propre service worker, on ne s'en occupe pas ici.
+const CACHE = 'spoties-v1-51';
+const SHELL = ['./', './index.html', './manifest.json?v=1.51', './icon-180.png?v=1.51', './icon-192.png?v=1.51', './icon-512.png?v=1.51'];
 
 self.addEventListener('install', function(e){
   // chaque fichier est mis en cache separement : un fichier absent ne bloque plus l'installation
@@ -21,6 +22,7 @@ self.addEventListener('activate', function(e){
 self.addEventListener('fetch', function(e){
   var req = e.request, url = req.url;
   if(req.method!=='GET') return;
+  if(url.indexOf(new URL('c/', self.registration.scope).href)===0) return;
   if(url.indexOf('mapbox.com')>-1 || url.indexOf('openweathermap.org')>-1 || url.indexOf('sunrise-sunset.org')>-1 ||
      url.indexOf('googleapis.com')>-1 || url.indexOf('gstatic.com')>-1 || url.indexOf('supabase.co')>-1 ||
      url.indexOf('jsdelivr.net')>-1 || url.indexOf('mapillary.com')>-1){
@@ -43,7 +45,7 @@ self.addEventListener('fetch', function(e){
 self.addEventListener('push', function(e){
   var d = {};
   try{ d = e.data ? e.data.json() : {}; }catch(x){ d = {title:'Spoties', body:e.data ? e.data.text() : ''}; }
-  var opts = {body:d.body || '', icon:'icon-192.png?v=1.44', badge:'icon-192.png?v=1.44', data:{url:d.url || './'}};
+  var opts = {body:d.body || '', icon:'icon-192.png?v=1.51', badge:'icon-192.png?v=1.51', data:{url:d.url || './'}};
   if(d.tag) opts.tag = d.tag;
   e.waitUntil(self.registration.showNotification(d.title || 'Spoties', opts));
 });

@@ -8,7 +8,37 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="mobile-web-app-capable" content="yes">
-<link rel="manifest" href="manifest.json?v=1.0">
+<meta name="apple-mobile-web-app-title" content="6flt Clients">
+<script>
+// v1.2 : sur iPhone, l'app installee a sa propre memoire, separee de Safari, et demarre sur le start_url du manifest.
+// On donne donc a iOS un manifest qui porte les seances deja ouvertes, pour les retrouver dans l'app installee.
+// Si iOS n'utilise pas ce manifest, il reprend l'adresse de la page, qui contient aussi les seances (?b=).
+window.__c6Manifest = function(){
+  try{
+    var base = location.origin + location.pathname.replace(/[^\/]*$/, '');
+    var ua = navigator.userAgent || '';
+    var ios = /iphone|ipad|ipod/i.test(ua) || (navigator.platform==='MacIntel' && navigator.maxTouchPoints > 1);
+    var standalone = navigator.standalone === true || (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches);
+    var toks = [];
+    var m = location.search.match(/[?&]b=([^&#]+)/);
+    if(m) decodeURIComponent(m[1]).split(',').forEach(function(t){ t = t.trim(); if(t && toks.indexOf(t) < 0) toks.push(t); });
+    try{ (JSON.parse(localStorage.getItem('6fltc_tokens') || '[]') || []).forEach(function(x){ if(x && x.token && toks.indexOf(x.token) < 0) toks.push(x.token); }); }catch(e2){}
+    toks = toks.filter(function(t){ return /^[A-Za-z0-9_-]{6,64}$/.test(t); }).slice(0, 20);
+    var href = 'manifest.json?v=1.0';
+    if(ios && !standalone && toks.length){
+      var man = {name:'6flt Clients', short_name:'6flt Clients', description:'Suivez vos séances photo avec 6flt Photographies',
+        start_url: base + '?b=' + toks.join(','), scope: base, display:'standalone', orientation:'portrait',
+        background_color:'#0e0f11', theme_color:'#0e0f11',
+        icons:[{src: base + 'icon-192.png?v=1.0', sizes:'192x192', type:'image/png'}, {src: base + 'icon-512.png?v=1.0', sizes:'512x512', type:'image/png'}]};
+      href = 'data:application/manifest+json,' + encodeURIComponent(JSON.stringify(man));
+    }
+    var link = document.querySelector('link[rel="manifest"]');
+    if(!link){ link = document.createElement('link'); link.rel = 'manifest'; document.head.appendChild(link); }
+    link.href = href;
+  }catch(e){}
+};
+window.__c6Manifest();
+</script>
 <link rel="apple-touch-icon" href="icon-180.png?v=1.0">
 <link rel="icon" type="image/png" href="icon-192.png?v=1.0">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -31,6 +61,13 @@ a{color:inherit}
 .banner{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:12px;padding:12px 14px;margin-bottom:14px;font-size:13px;color:var(--muted);display:flex;align-items:center;justify-content:space-between;gap:10px;line-height:1.4}
 .banner b{display:block;color:var(--text);font-size:13.5px;margin-bottom:2px}
 .banner button{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:9px 13px;font-size:12.5px;font-weight:700;cursor:pointer;flex-shrink:0;white-space:nowrap}
+.banner.col{display:block}
+.banner details{margin-top:8px}
+.banner summary{cursor:pointer;color:var(--accent);font-weight:700;font-size:13px;list-style:none;padding:4px 0}
+.banner summary::-webkit-details-marker{display:none}
+.banner ol{margin:6px 0 2px;padding-left:20px;color:var(--text);font-size:13.5px;line-height:1.75}
+.banner .ic{display:inline-flex;vertical-align:-3px;color:#3b8cff}
+#cv-install .banner{margin:0 0 14px}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px 40px 14px 14px;margin-bottom:12px;cursor:pointer;position:relative}
 .card:active{border-color:var(--accent)}
 .card b{display:block;font-size:15px;margin-bottom:4px}
@@ -177,7 +214,7 @@ a{color:inherit}
 </div>
 
 <script>
-/* ===== 6flt Clients v1.1 (v1.50 : galerie) ===== */
+/* ===== 6flt Clients v1.2 (Spoties v1.51 : lien unique, installation) ===== */
 var SUPABASE_URL = 'https://gpirhmddoeokakikbjkr.supabase.co';
 var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdwaXJobWRkb2Vva2FraWtiamtyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA2NDI3MzAsImV4cCI6MjA5NjIxODczMH0.LghihUJQCtYBIMsRGXrjh2k4IcVYnf5CyD4lzlQNv6w';
 var VAPID_PUBLIC = 'BOph3IRn1uPlXzoljifkGCP9HoQ1pWYS3V60bUbimAFwqO00QAEsUSx21LoVmgFb0Zzrc1DqSFAtHGs2UoNQbWU';
@@ -195,6 +232,26 @@ function addTokenToStore(tok){
   saveTokens(list);
 }
 function removeTokenFromStore(tok){ saveTokens(loadTokens().filter(function(x){ return x.token!==tok; })); }
+function validToken(t){ return /^[A-Za-z0-9_-]{6,64}$/.test(String(t||'')); }
+function urlTokens(){
+  var out = [];
+  try{
+    var m = location.search.match(/[?&]b=([^&#]+)/);
+    if(m) decodeURIComponent(m[1]).split(',').forEach(function(t){ t = t.trim(); if(validToken(t) && out.indexOf(t) < 0) out.push(t); });
+  }catch(e){}
+  return out;
+}
+// dans Safari, l'adresse de la page porte toutes les seances : c'est elle qu'iOS reprend a l'installation
+function syncUrl(){
+  if(isStandalone()) return;
+  try{
+    var toks = loadTokens().map(function(x){ return x.token; }).filter(validToken);
+    history.replaceState(null, '', location.pathname + (toks.length ? '?b=' + toks.join(',') : ''));
+  }catch(e){}
+  if(window.__c6Manifest) window.__c6Manifest();
+}
+function loadJSON(k, d){ try{ var v = JSON.parse(localStorage.getItem(k) || 'null'); return v==null ? d : v; }catch(e){ return d; } }
+function saveJSON(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
 function extractToken(raw){
   raw = String(raw==null ? '' : raw).trim();
   if(!raw) return '';
@@ -212,7 +269,56 @@ function fdt(iso, o){ return new Date(iso).toLocaleString('fr-FR', o); }
 function isStandalone(){
   try{ return window.navigator.standalone === true || (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches); }catch(e){ return false; }
 }
-function isIOS(){ return /iphone|ipad|ipod/i.test(navigator.userAgent || ''); }
+function isIOS(){ return /iphone|ipad|ipod/i.test(navigator.userAgent || '') || (navigator.platform==='MacIntel' && navigator.maxTouchPoints > 1); }
+function uaInfo(){
+  var ua = navigator.userAgent || '';
+  var ios = isIOS(), android = /android/i.test(ua);
+  var inapp = /Instagram|FBAN|FBAV|FB_IAB|FBIOS|Messenger|Snapchat|TikTok|musical_ly|BytedanceWebview|Line\//i.test(ua);
+  var otherIOS = /CriOS|FxiOS|EdgiOS/i.test(ua);
+  var sv = +((ua.match(/Version\/(\d+)/) || [])[1] || 0);
+  return {ios:ios, android:android, inapp:inapp, otherIOS:otherIOS, safari26:ios && !otherIOS && !inapp && sv >= 26};
+}
+/* ===== installation (v1.2) ===== */
+var deferredInstall = null;
+window.addEventListener('beforeinstallprompt', function(ev){ ev.preventDefault(); deferredInstall = ev; refreshHelpers(); });
+window.addEventListener('appinstalled', function(){ deferredInstall = null; refreshHelpers(); });
+var SHARE_IC = '<span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-label="Partager"><path d="M12 3v12"/><path d="M8 7l4-4 4 4"/><path d="M5 11v8a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-8"/></svg></span>';
+function installHTML(){
+  if(isStandalone()) return '';
+  var u = uaInfo();
+  if(!u.ios && !u.android) return '';
+  var head = '<b>Installe l\'app pour recevoir tes notifications</b>Date fixée, adresses du jour J, rappel la veille, galerie : tout arrive sur ton téléphone.';
+  if(u.inapp) return '<div class="banner col"><b>Ouvre ce lien dans '+(u.ios ? 'Safari' : 'ton navigateur')+'</b>Tu es dans le navigateur d\'une autre app, l\'installation n\'y est pas possible. Touche ••• en haut à droite, puis « Ouvrir dans '+(u.ios ? 'Safari' : 'le navigateur')+' ».</div>';
+  if(u.android){
+    if(deferredInstall) return '<div class="banner"><div>'+head+'</div><button type="button" class="js-install">Installer</button></div>';
+    return '<div class="banner col">'+head+'<details><summary>Comment faire (30 s) ›</summary><ol><li>Ouvre le menu ⋮ du navigateur</li><li>Touche « Installer l\'application » ou « Ajouter à l\'écran d\'accueil »</li><li>Ouvre l\'app depuis ton écran d\'accueil</li></ol></details></div>';
+  }
+  var steps = u.otherIOS
+    ? ['Touche '+SHARE_IC+' en haut à droite, dans la barre d\'adresse', 'Touche « Sur l\'écran d\'accueil »', 'Touche « Ajouter », puis ouvre l\'app depuis ton écran d\'accueil']
+    : u.safari26
+    ? ['Touche ••• à droite de la barre d\'adresse', 'Touche « Partager » '+SHARE_IC, 'Fais défiler et touche « Sur l\'écran d\'accueil »', 'Touche « Ajouter », puis ouvre l\'app depuis ton écran d\'accueil']
+    : ['Touche '+SHARE_IC+' en bas de l\'écran', 'Fais défiler et touche « Sur l\'écran d\'accueil »', 'Touche « Ajouter », puis ouvre l\'app depuis ton écran d\'accueil'];
+  return '<div class="banner col">'+head+'<details><summary>Comment faire (30 s) ›</summary><ol>'+steps.map(function(s){ return '<li>'+s+'</li>'; }).join('')+'</ol></details></div>';
+}
+// bandeau d'aide : installation tant que l'app n'est pas installee, puis activation des notifications
+function helperBannerHTML(){
+  if(!isStandalone()) return installHTML();
+  return notifBannerHTML();
+}
+function refreshHelpers(){
+  if(typeof renderList==='function') renderList();
+  var slot = document.getElementById('cv-install'); if(slot) slot.innerHTML = helperBannerHTML();
+}
+document.addEventListener('click', function(ev){
+  var t = ev.target && ev.target.closest ? ev.target.closest('.js-enable-notif, .js-install') : null;
+  if(!t) return;
+  if(t.classList.contains('js-enable-notif')){ enableNotifications(); return; }
+  if(deferredInstall){
+    var p = deferredInstall; deferredInstall = null;
+    try{ p.prompt(); }catch(x){}
+    Promise.resolve(p.userChoice).then(refreshHelpers, refreshHelpers);
+  }
+});
 function urlBase64ToUint8Array(base64String){
   var padding = '='.repeat((4 - base64String.length % 4) % 4);
   var base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
@@ -221,19 +327,15 @@ function urlBase64ToUint8Array(base64String){
   return out;
 }
 function notifBannerHTML(){
-  if(!isStandalone()){
-    if(isIOS()) return '<div class="banner"><div><b>Installe l\'app</b>Touche Partager puis "Sur l\'écran d\'accueil" pour recevoir tes notifications.</div></div>';
-    return '<div class="banner"><div><b>Installe l\'app</b>Ajoute cette page à ton écran d\'accueil pour recevoir tes notifications.</div></div>';
-  }
   if(!('Notification' in window)) return '';
   if(Notification.permission==='granted') return '';
-  if(Notification.permission==='denied') return '<div class="banner"><div><b>Notifications désactivées</b>Réactive-les dans les réglages de ton téléphone.</div></div>';
-  return '<div class="banner"><div><b>Reste informé</b>Active les notifications pour ne rien manquer.</div><button id="btn-enable-notif" type="button">Activer</button></div>';
+  if(Notification.permission==='denied') return '<div class="banner"><div><b>Notifications désactivées</b>Réactive-les dans Réglages, Notifications, 6flt Clients.</div></div>';
+  return '<div class="banner"><div><b>Dernière étape</b>Active les notifications pour être prévenu de chaque étape de ta séance.</div><button class="js-enable-notif" type="button">Activer</button></div>';
 }
 function enableNotifications(){
   if(!('Notification' in window)){ alert('Notifications indisponibles sur ce téléphone.'); return; }
   Notification.requestPermission().then(function(perm){
-    renderList();
+    refreshHelpers();
     if(perm!=='granted' || !('serviceWorker' in navigator)) return;
     navigator.serviceWorker.ready.then(function(reg){
       return reg.pushManager.getSubscription().then(function(sub){
@@ -263,7 +365,7 @@ var CARD_CACHE = {};
 function renderList(){
   var root = document.getElementById('view-list');
   var tokens = loadTokens();
-  var h = notifBannerHTML();
+  var h = helperBannerHTML();
   if(!tokens.length){
     h += '<div class="empty"><b>Aucune séance</b>Touche le + pour ajouter le lien reçu de ton photographe.</div>';
     root.innerHTML = h;
@@ -289,7 +391,10 @@ function renderList(){
 }
 function loadCardData(tok){
   if(!sb) return;
-  sb.rpc('get_shared_brief', {p_token:tok}).then(function(r){
+  // v1.2 : les cartes lisent sans compter une ouverture (seule l'ouverture d'une seance compte)
+  sb.rpc('peek_shared_brief', {p_token:tok}).then(function(r){
+    return r.error ? sb.rpc('get_shared_brief', {p_token:tok}) : r;
+  }).then(function(r){
     if(r.error || !r.data || r.data.error){ CARD_CACHE[tok] = {error:true}; renderList(); return; }
     CARD_CACHE[tok] = r.data; renderList();
   }, function(){ /* pas de reseau : on retentera au prochain rendu */ });
@@ -306,11 +411,10 @@ function bindListEvents(){
     btn.addEventListener('click', function(ev){
       ev.stopPropagation();
       removeTokenFromStore(btn.getAttribute('data-rm'));
+      syncUrl();
       renderList();
     });
   });
-  var nb = document.getElementById('btn-enable-notif');
-  if(nb) nb.addEventListener('click', enableNotifications);
 }
 
 /* ===== ajout d'une séance ===== */
@@ -333,6 +437,7 @@ document.getElementById('add-go').addEventListener('click', function(){
     if(r.error || !r.data || r.data.error){ err.textContent = 'Séance introuvable, vérifie le lien.'; return; }
     CARD_CACHE[tok] = r.data;
     addTokenToStore(tok);
+    syncUrl();
     modal.hidden = true;
     renderList();
     registerTokenForExistingPush(tok);
@@ -428,6 +533,7 @@ function renderDetail(){
   var h = '<div class="cv-wrap">';
   h += '<button type="button" class="cv-back" onclick="closeDetail()">‹ Mes séances</button>';
   h += '<div class="cv-brand"><img src="icon-192.png?v=1.0" alt="">6flt Photographies, briefing de séance</div>';
+  h += '<div id="cv-install">'+helperBannerHTML()+'</div>';
   if(D.gallery_url && /^https?:\/\//i.test(D.gallery_url))
     h += '<div class="cv-banner cv-ok"><b>'+tv('Ta galerie est prête', 'Votre galerie est prête')+'</b><a href="'+e(D.gallery_url)+'" target="_blank" rel="noopener">'+tv('Voir mes photos', 'Voir vos photos')+' ›</a></div>';
   if(!rev){
@@ -712,28 +818,35 @@ function bfHtmlPdf(html, o){
 if('serviceWorker' in navigator){
   navigator.serviceWorker.register('./sw.js').catch(function(err){ console.warn(err); });
   navigator.serviceWorker.addEventListener('message', function(ev){
-    if(ev.data && ev.data.type==='notif-go'){ renderList(); }
+    if(ev.data && ev.data.type==='notif-go'){ refreshHelpers(); }
   });
 }
 
-/* ===== demarrage ===== */
+/* ===== demarrage (v1.2) ===== */
 (function start(){
-  var qTok = '';
-  try{ qTok = new URLSearchParams(location.search).get('b') || ''; }catch(ex){}
-  if(qTok){
-    var tok = extractToken(qTok);
-    try{ history.replaceState(null, '', location.pathname); }catch(ex2){}
-    if(tok && sb){
-      sb.rpc('get_shared_brief', {p_token:tok}).then(function(r){
-        renderList();
-        if(!r.error && r.data && !r.data.error){
-          CARD_CACHE[tok] = r.data; addTokenToStore(tok); registerTokenForExistingPush(tok); openDetail(tok);
-        }
-      }, function(){ renderList(); });
-      return;
-    }
+  var toks = urlTokens();
+  if(isStandalone()){
+    // app installee : les seances du lien d'installation sont importees une seule fois,
+    // pour qu'une seance retiree de la liste ne revienne pas a chaque lancement
+    var imported = loadJSON('6fltc_imported', []), fresh = [];
+    if(!Array.isArray(imported)) imported = [];
+    toks.forEach(function(t){
+      if(imported.indexOf(t) > -1) return;
+      imported.push(t);
+      if(!loadTokens().some(function(x){ return x.token===t; })){ addTokenToStore(t); fresh.push(t); }
+    });
+    saveJSON('6fltc_imported', imported);
+    if(toks.length){ try{ history.replaceState(null, '', location.pathname); }catch(ex){} }
+    renderList();
+    fresh.forEach(registerTokenForExistingPush);
+    if(fresh.length===1) openDetail(fresh[0]);
+    return;
   }
+  // navigateur : le lien ouvre la seance, la liste et l'adresse gardent toutes les seances
+  toks.forEach(addTokenToStore);
+  syncUrl();
   renderList();
+  if(toks.length===1) openDetail(toks[0]);
 })();
 </script>
 </body>
