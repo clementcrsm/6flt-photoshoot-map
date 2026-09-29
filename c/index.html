@@ -219,8 +219,12 @@ a{color:inherit}
 .cv-gal{margin-top:16px;padding-top:16px;border-top:1px solid var(--d-line)}
 .cv-gal .btn{display:inline-flex;padding:12px 18px;background:var(--d-accent);color:#fff!important;border-radius:10px;font-weight:700;text-decoration:none;font-size:14px;margin-bottom:14px}
 .cv-stars{display:flex;gap:6px;margin-bottom:10px}
-.cv-star{font-size:26px;cursor:pointer;color:var(--d-line);background:none;border:none;padding:0;line-height:1}
+.cv-star{font-size:32px;cursor:pointer;color:#55565c;background:none;border:none;padding:0 2px;line-height:1}
+#cv-review-go[disabled]{opacity:.4;cursor:not-allowed}
 .cv-star.on{color:#f2a93b}
+.cv-gal textarea{width:100%;box-sizing:border-box;background:var(--d-panel);border:1px solid var(--d-line);border-radius:10px;color:var(--d-text);font:14px 'Inter',sans-serif;padding:10px 12px}
+.cv-pub{display:flex;gap:8px;align-items:flex-start;font-size:12.5px;color:var(--d-dim);margin-top:8px;line-height:1.4;cursor:pointer}
+.cv-pub input{margin:2px 0 0;flex:none;width:16px;height:16px;accent-color:var(--d-accent)}
 </style>
 </head>
 <body>
@@ -250,7 +254,7 @@ a{color:inherit}
 </div>
 
 <script>
-/* ===== 6flt Clients v1.2.3 (Spoties v1.51.3 : activation des notifications fiable) ===== */
+/* ===== 6flt Clients v1.3 (Spoties v1.53 : accord de publication des avis) ===== */
 var SUPABASE_URL = 'https://gpirhmddoeokakikbjkr.supabase.co';
 var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdwaXJobWRkb2Vva2FraWtiamtyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA2NDI3MzAsImV4cCI6MjA5NjIxODczMH0.LghihUJQCtYBIMsRGXrjh2k4IcVYnf5CyD4lzlQNv6w';
 var VAPID_PUBLIC = 'BOph3IRn1uPlXzoljifkGCP9HoQ1pWYS3V60bUbimAFwqO00QAEsUSx21LoVmgFb0Zzrc1DqSFAtHGs2UoNQbWU';
@@ -702,6 +706,7 @@ function renderDetail(){
       galH += '<label class="cv-sl">'+tv('Une note pour le photographe ?', 'Une note pour le photographe ?')+'</label>'+
         '<div class="cv-stars" id="cv-stars">'+[1,2,3,4,5].map(function(n){ return '<button type="button" class="cv-star" data-n="'+n+'">★</button>'; }).join('')+'</div>'+
         '<textarea id="cv-review-text" rows="2" placeholder="'+tv('Un commentaire (optionnel)', 'Un commentaire (optionnel)')+'"></textarea>'+
+        '<label class="cv-pub"><input type="checkbox" id="cv-review-pub"> '+tv('J\'accepte que mon avis soit publié (Instagram, site de 6flt)', 'J\'accepte que mon avis soit publié (Instagram, site de 6flt)')+'</label>'+
         '<button type="button" id="cv-review-go" class="cv-prop-btn" disabled style="margin-top:8px;background:var(--d-accent);color:#fff;border:none;border-radius:10px;padding:10px 16px;font-weight:700;font-size:13px;cursor:pointer">'+tv('Envoyer', 'Envoyer')+'</button>';
     }
     galH += '</div>';
@@ -823,7 +828,8 @@ function renderDetail(){
     if(!curStars){ return; }
     reviewGo.disabled = true;
     var txt = document.getElementById('cv-review-text').value.trim();
-    sb.rpc('submit_shared_review', {p_token:DETAIL_TOK, p_rating:curStars, p_text:txt || null}).then(function(r){
+    var pub = !!(document.getElementById('cv-review-pub') || {}).checked;
+    sb.rpc('submit_shared_review', {p_token:DETAIL_TOK, p_rating:curStars, p_text:txt || null, p_public:pub}).then(function(r){
       if(r.error || !r.data){ reviewGo.disabled = false; alert(tv('Envoi impossible, réessaie.', 'Envoi impossible, réessayez.')); return; }
       DETAIL_D.review_submitted_at = new Date().toISOString(); DETAIL_D.review_rating = curStars;
       renderDetail();
