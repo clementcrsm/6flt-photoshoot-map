@@ -7,9 +7,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Spoties">
 <meta name="theme-color" content="#0e0f12">
-<link rel="manifest" href="manifest.json?v=1.47">
-<link rel="apple-touch-icon" href="icon-180.png?v=1.47">
-<link rel="icon" type="image/png" href="icon-192.png?v=1.47">
+<link rel="manifest" href="manifest.json?v=1.48">
+<link rel="apple-touch-icon" href="icon-180.png?v=1.48">
+<link rel="icon" type="image/png" href="icon-192.png?v=1.48">
 <title>Spoties</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -1470,6 +1470,17 @@ body.panel-open #zone-dock,body.panel-open #view-map #discover-panel{display:non
 .pf-trk-it{display:block;width:100%;text-align:left;background:none;border:none;border-bottom:1px solid var(--border);color:var(--text);font:500 13px 'Inter',sans-serif;padding:11px 14px 11px 52px;cursor:pointer}
 .pf-trk-it:last-child{border-bottom:none}
 #pf-track .pf-row.open .pf-chev{transform:rotate(90deg)}
+/* ===== v1.48 : bloc Lien, etapes du timing, choix de spots ===== */
+.bf-lien .bf-ld{font-size:13px;color:var(--d-dim);margin:0 0 4px;line-height:1.5}
+.bf-lurl{font-family:'Space Mono',monospace;font-size:10.5px;color:var(--d-mute);margin:8px 0 0;word-break:break-all}
+.bf-tlmin{color:var(--d-mute)}
+.bf-tl.bf-step::before{border-style:dashed}
+.bf-r2{display:flex;align-items:center;gap:6px}
+.bf-r2 .bf-mnum{width:72px;flex:none}
+.bf-unit{font-size:11.5px;color:var(--muted);flex:none}
+#bf-pick .bf-mlist{max-height:360px}
+#bf-pick .bf-item.is-in{opacity:.45;cursor:default}
+#bf-pick .bf-item .bf-inroute{top:4px;left:4px}
 /* ===== v1.47 : signature du client ===== */
 #cv-root .cv-sign{margin-top:14px;display:flex;flex-direction:column;gap:7px}
 #cv-root .cv-sl{display:flex;align-items:center;justify-content:space-between;font-size:12px;font-weight:600;color:var(--d-dim,#a5a49d)}
@@ -1488,13 +1499,13 @@ body.panel-open #zone-dock,body.panel-open #view-map #discover-panel{display:non
 </head>
 <body>
 <div id="splash">
-  <img id="splash-logo" src="icon-512.png?v=1.47" alt="Spoties">
-  <div id="splash-credit">Créé par 6flt photographie et Claude<br><span style="opacity:.6">v1.47</span></div>
+  <img id="splash-logo" src="icon-512.png?v=1.48" alt="Spoties">
+  <div id="splash-credit">Créé par 6flt photographie et Claude<br><span style="opacity:.6">v1.48</span></div>
 </div>
 
 <div id="login-screen">
   <div class="login-box">
-    <img src="icon-192.png?v=1.47" alt="Spoties" class="login-logo">
+    <img src="icon-192.png?v=1.48" alt="Spoties" class="login-logo">
     <h1 class="login-title">Spoties</h1>
     <p class="login-sub" id="login-sub">Connexion</p>
     <input type="email" id="login-email" class="login-input" placeholder="Email" autocomplete="email">
@@ -1509,11 +1520,11 @@ body.panel-open #zone-dock,body.panel-open #view-map #discover-panel{display:non
 </div>
 
 <nav>
-  <button type="button" class="nav-logo" id="nav-logo" onclick="refreshApp()" title="Actualiser l'app" aria-label="Actualiser l'app"><img src="icon-192.png?v=1.47" alt="Spoties" class="nav-logo-img"></button>
+  <button type="button" class="nav-logo" id="nav-logo" onclick="refreshApp()" title="Actualiser l'app" aria-label="Actualiser l'app"><img src="icon-192.png?v=1.48" alt="Spoties" class="nav-logo-img"></button>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="switchView('map')">Carte</button>
     <button class="nav-tab" onclick="switchView('gallery')">Spots</button>
-    <button class="nav-tab" onclick="switchView('planning')">Planning</button>
+    <button class="nav-tab" onclick="switchView('planning')">Briefing</button>
     <button class="nav-tab" onclick="switchView('clients')">Clients</button>
     <button class="nav-tab" onclick="switchView('events')">Evenements</button>
     <button class="nav-tab" onclick="window.open('https://6fltphotographie.mypixieset.com/','_blank')">Portfolio</button>
@@ -2350,6 +2361,17 @@ body.panel-open #zone-dock,body.panel-open #view-map #discover-panel{display:non
        <div class="bf-mstep" id="bf-m-step2" hidden></div>
       </div>
       <div class="bf-modal-foot"><button class="bf-sbtn" data-mact="close">Annuler</button><button class="bf-sbtn" data-mact="back" hidden>Retour</button><button class="bf-primary" data-mact="next">Suivant</button><button class="bf-primary" data-mact="create" hidden>Créer le briefing</button></div>
+    </div>
+  </div>
+  <div class="bf-modal-bg" id="bf-pick" hidden>
+    <div class="bf-modal" role="dialog" aria-modal="true" aria-labelledby="bf-pick-h">
+      <div class="bf-modal-head"><h3 id="bf-pick-h">Ajouter des spots au parcours</h3><button class="bf-mini" data-pkc="close" aria-label="Fermer">×</button></div>
+      <div class="bf-modal-body">
+        <input type="text" class="bf-search" id="bf-pick-q" placeholder="Rechercher un spot..." autocomplete="off">
+        <div class="bf-mlist bf-sb" id="bf-pick-list"></div>
+        <p class="bf-set-hint" id="bf-pick-hint"></p>
+      </div>
+      <div class="bf-modal-foot"><button class="bf-primary" data-pkc="close">Terminé</button></div>
     </div>
   </div>
   <input type="file" id="bf-file" accept="image/*" multiple hidden>
@@ -3905,9 +3927,9 @@ document.addEventListener('click',function(e){
 });
 
 /* ===================== PROFIL v1.36 : accueil, statistiques, nouveautes ===================== */
-var APP_VERSION='v1.47';
+var APP_VERSION='v1.48';
 // historique reconstruit depuis les anciens index (date = date de livraison). [version, date, approximative, [[n|f, texte]]]
-var CHANGELOG=[["v1.47","2026-09-28",0,[["n","Lien client : nom, prénom et signature au doigt avant de confirmer la séance"],["n","Signature visible dans le panneau de partage, dans le lien client et dans son PDF, figée avec le document accepté"],["n","Lien client : le bouton de confirmation indique ce qu'il manque au lieu de rester grisé"]]],["v1.46","2026-09-28",0,[["n","Profil : suivi des contrats en trois lignes, briefings sans réponse depuis 48 h, séances confirmées sans acompte, galeries à livrer"],["n","Toucher une ligne ouvre le briefing ou la fiche, avec le message de relance déjà rédigé"]]],["v1.45","2026-09-28",0,[["n","Lien client : bouton PDF pour garder le briefing lisible sans réseau le jour du shoot"],["n","Briefing : bloc Jour J, des consignes que le client ne voit qu'au moment où les adresses sont révélées"],["n","Lien client : bandeau à la révélation des adresses, qui mène aux consignes et rappelle le PDF"]]],["v1.44","2026-09-28",0,[["n","Notifications sur ton téléphone : briefing ouvert, séance confirmée, relance après 48 h, date toujours à fixer, rappel 24 h avant avec adresses révélées, galerie à livrer"],["n","Toucher une notification ouvre le bon briefing ou la bonne fiche, avec le message pour le client déjà rédigé"]]],["v1.43","2026-09-28",0,[["n","État de chaque shooting dans la fiche client : prévu, réalisé ou annulé, automatique d'après la date sinon"],["n","Briefing : date à définir, le document devient une proposition et le client te propose un jour"],["n","Briefing : tutoiement ou vouvoiement, au choix avec le gabarit"],["n","Briefing : couleur des titres et boutons au choix, reprise dans le lien client"],["f","Glisser une photo n'entoure plus que la zone photo"]]],["v1.42","2026-09-28",0,[["f","Photos des clients qui ne s'affichaient pas dans la liste"],["f","Client supprimé qui réapparaissait, renvoyé par un autre appareil"],["n","Contact client en cases séparées : téléphone, e-mail, Instagram, avec bouton pour appeler, écrire ou ouvrir le profil"],["n","Étapes du contrat marquables à la main quand l'app ne peut pas les deviner"],["n","Spots, clients, événements et filtres s'ouvrent en cartes flottantes, avec la même apparition que le profil"],["n","Sur ordinateur, glisser une photo sur un spot, un client ou un événement pour l'ajouter"]]],["v1.41","2026-09-27",0,[["n","Périmètre (ex Découverte) : réglages dans un bandeau en bas de carte, rayon au pincement dans le cercle ou avec + et -"],["n","Périmètre : spots à l'intérieur entourés, routes qui le traversent soulignées en blanc, liste des spots à la ronde"],["n","Critères de recherche de routes en boutons plutôt qu'en jauges"],["n","Profil en carte flottante à gauche, la carte reste visible autour"],["n","Filtres proposés au choix dans Profil, Carte, le panneau se réorganise sans trou"],["f","Briefing supprimé qui réapparaissait, renvoyé par un autre appareil qui en gardait une copie"],["n","Supprimer un briefing propose de retirer aussi la séance du planning"]]],["v1.40","2026-09-25",0,[["f","Boutons de la carte alignés en ligne quand la carte ne se chargeait pas"],["n","Découverte de routes : zone ronde posée au centre de la carte, rayon réglable en kilomètres et point orange à glisser pour la déplacer"],["n","Boutons de la carte regroupés en deux colonnes, une à gauche, une à droite"],["f","Boutons + et - de Mapbox retirés, ils étaient cachés derrière les autres"],["f","Panneaux Filtrer et Découverte plus compacts sur téléphone"]]],["v1.39","2026-09-25",0,[["n","Le briefing se gèle dès que le client accepte les conditions : plus aucune modification ne part dans son lien"],["n","Publier une nouvelle version annule la confirmation du client, qui doit accepter à nouveau"],["n","Mise à jour du lien en pause pendant que tu travailles, publication quand tu es prêt"],["n","Texte des conditions mémorisé avec le lien au moment de l'acceptation"]]],["v1.38","2026-09-23",0,[["n","Anneau d'avancement du contrat sur chaque fiche client et dans la liste : date, briefing, lien, accord, shooting, galerie"],["n","Statistiques : avancement des contrats étape par étape et valeur estimée du carnet"],["f","Numéro de version affiché dans Nouveautés remis à jour"]]],["v1.37","2026-09-23",0,[["n","Briefing : bloc L'essentiel (date, durée, secteur et tarif en tête de document)"],["n","Briefing : bloc Accord, conditions à accepter avant de confirmer"],["n","Séance offerte affichée dans la formule et dans l'essentiel"],["n","Lien client : confirmation verrouillée tant que les conditions ne sont pas acceptées, bouton daté, lien pour proposer une autre date"],["f","Lien client : message distinct entre perte de connexion et lien expiré"]]],["v1.36","2026-09-23",0,[["n","Profil réorganisé : accueil, objectifs, carte, apparence et données sur des pages séparées"],["n","Statistiques : santé des fiches, ajouts par mois, clients, liens partagés, photos, routes, types, heures de shoot"],["n","Page Nouveautés avec l'historique daté de toutes les versions"],["n","Filtre des fiches à compléter dans l'onglet Spots"]]],["v1.35","2026-09-23",0,[["n","Plusieurs photos d'un coup dans les spots, envoyées dans l'ordre choisi"],["n","Heure et affiche des événements, affiche en plein écran"],["f","Événement de la veille encore affiché comme à venir le soir"],["f","Date de création d'un événement perdue à l'édition"]]],["v1.34","2026-09-22",0,[["n","Téléchargement du briefing en PDF"],["n","Lien client interactif : adresse exacte révélée avant le shoot, ajout au calendrier"]]],["v1.33","2026-09-22",0,[["n","Briefings listés dans la fiche client, création directe depuis la fiche"],["n","Texte modifiable directement dans le briefing, zoom de l'éditeur"],["n","Changer la date du shoot dans le briefing met à jour le planning du client"],["n","Toucher le logo actualise l'app"]]],["v1.30","2026-09-22",0,[["n","Planning refait : briefings en rangées réordonnables (1 à 3 colonnes), blocs branchés sur tes spots et clients, gabarits, sauvegarde en ligne"]]],["v1.29","2026-09-20",0,[["n","Cartes Spots plus compactes, décor affiché sur la carte"],["f","Vignettes carrées du Planning déformées"]]],["v1.28","2026-09-20",0,[["n","Galerie et Shotlist fusionnées dans l'onglet Spots"],["n","Sélection multiple et glisser pour supprimer un spot"],["n","Inspirations déplacées vers le profil"]]],["v1.27","2026-09-20",0,[["n","Planning en éditeur grille aimantée, branché sur les spots et clients"]]],["v1.26","2026-09-20",0,[["n","Premier onglet Planning (document de briefing)"],["n","Associer des spots à un client en les touchant sur la carte"]]],["v1.24","2026-09",1,[["f","Boutons de la carte qui se chevauchaient sur mobile"],["f","Panneaux filtres, découverte et soleil qui restaient ouverts ensemble"],["n","Marqueurs réduits à 44 px sur mobile"]]],["v1.23","2026-07-21",0,[["n","Fréquentation des routes heure par heure"],["n","Découverte de routes dans une zone dessinée (OpenStreetMap), filtrées par sinuosité"]]],["v1.22","2026-07-17",0,[["n","Aperçu en direct de l'objet 3D avant de le poser"],["f","Objets 3D qui disparaissaient après une image"]]],["v1.21","2026-07-17",0,[["n","Bouton dédié pour placer un objet 3D"]]],["v1.20","2026-07-17",0,[["n","Comptes séparés : inscription, mot de passe oublié, données propres à chaque compte"],["n","Progression XP sauvegardée dans le compte"]]],["v1.18","2026-07-06",0,[["n","Mode soleil 3D : position du soleil et ombres portées"],["n","Objets 3D sur la carte (voiture, flèche, cube)"],["n","Vidéos courtes sur les spots (20 s max)"],["n","Retracer une route existante"],["n","Zoom et pincement dans la visionneuse, photos réorganisables par glisser"],["n","Progression : XP, niveaux, objectifs et titres"],["n","Historique de recherche et vue Street (Mapillary, repli Google)"]]],["v1.17","2026-06-27",0,[["f","Marqueurs qui glissaient au dézoom"]]],["v1.16","2026-06-27",0,[["f","Tentative de correction des marqueurs (non concluante)"]]],["v1.15","2026-06-27",0,[["n","Navigation entre les photos dans la visionneuse"]]],["v1.14","2026-06-08",0,[["n","Mini-calendrier dans la fiche client pour planifier les shoots"]]],["v1.13","2026-06-07",0,[["n","Planning mensuel de tous les shoots"]]],["v1.12","2026-06-07",0,[["n","Sélection de plusieurs clients et spot de compromis pour leurs voitures"],["f","Badges d'état restylés (v1.12.1)"]]],["v1.11","2026-06-07",0,[["n","États clients automatiques : prospect, planifié, réalisé, livré"],["n","Relance À livrer et accès direct aux spots conseillés pour une voiture"]]],["v1.10","2026-06-07",0,[["n","Shootings planifiés dans la fiche client"]]],["v1.9","2026-06-07",0,[["n","Plusieurs voitures par client avec couleur de carrosserie, offre et statut"]]],["v1.8","2026-06-07",0,[["f","Photos stockées en ligne : fin de la mémoire saturée qui cassait la synchro PC / iPhone"],["f","Accès aux données sécurisé, clé de carte restreinte à ton site"]]],["v1.7","2026-06-06",0,[["f","Synchronisation fiable : un spot supprimé ne réapparaît plus"]]],["v1.6","2026-06-06",0,[["n","Onglet Profil : photo et réglages regroupés"]]],["v1.5","2026-06-06",0,[["n","Connexion par email et mot de passe"],["n","L'app devient 6flt Spots"]]],["v1.4","2026-06-06",0,[["n","Longs trajets jusqu'à 25 étapes"],["n","Types Musée, Circuit, Concession"],["n","Onglet Événements"]]],["v1.3","2026-06-06",1,[["n","Analyse automatique des virages d'une route"],["n","Filtres de la carte et suppression multiple dans la galerie"]]],["v1.2","2026-06-05",0,[["n","Tracé de routes sur la carte"],["n","Corbeille clients avec restauration"],["f","Routes en double et rendu des routes (v1.2.1)"]]],["v1.1","2026-06-05",0,[["n","Onglet Clients"],["n","Synchronisation en ligne des spots et clients"],["n","Écran de démarrage"]]],["v1.0","2026-06-04",0,[["n","Première version : carte des spots, galerie, Shotlist (conseil de spots selon la couleur de la voiture)"]]]];
+var CHANGELOG=[["v1.48","2026-09-29",0,[["n","Onglet Planning renommé Briefing"],["n","Briefing : ajouter des spots au parcours depuis le bloc Spots ou ses réglages, avec recherche"],["n","Timing lumière : étapes à ajouter (pause, prises roulantes, changement de lieu…) avec leur durée et leur place, et temps réglable spot par spot"],["n","Briefing : bloc Lien, un bouton vers une galerie, un moodboard ou un formulaire"],["f","Ton du document : messages d'erreur du lien client et description du calendrier au bon registre, Écris-moi dans le bloc Contact"],["f","Nouvelle checklist ajoutée à la main : la ligne sur la tenue suit le tutoiement ou le vouvoiement"]]],["v1.47","2026-09-28",0,[["n","Lien client : nom, prénom et signature au doigt avant de confirmer la séance"],["n","Signature visible dans le panneau de partage, dans le lien client et dans son PDF, figée avec le document accepté"],["n","Lien client : le bouton de confirmation indique ce qu'il manque au lieu de rester grisé"]]],["v1.46","2026-09-28",0,[["n","Profil : suivi des contrats en trois lignes, briefings sans réponse depuis 48 h, séances confirmées sans acompte, galeries à livrer"],["n","Toucher une ligne ouvre le briefing ou la fiche, avec le message de relance déjà rédigé"]]],["v1.45","2026-09-28",0,[["n","Lien client : bouton PDF pour garder le briefing lisible sans réseau le jour du shoot"],["n","Briefing : bloc Jour J, des consignes que le client ne voit qu'au moment où les adresses sont révélées"],["n","Lien client : bandeau à la révélation des adresses, qui mène aux consignes et rappelle le PDF"]]],["v1.44","2026-09-28",0,[["n","Notifications sur ton téléphone : briefing ouvert, séance confirmée, relance après 48 h, date toujours à fixer, rappel 24 h avant avec adresses révélées, galerie à livrer"],["n","Toucher une notification ouvre le bon briefing ou la bonne fiche, avec le message pour le client déjà rédigé"]]],["v1.43","2026-09-28",0,[["n","État de chaque shooting dans la fiche client : prévu, réalisé ou annulé, automatique d'après la date sinon"],["n","Briefing : date à définir, le document devient une proposition et le client te propose un jour"],["n","Briefing : tutoiement ou vouvoiement, au choix avec le gabarit"],["n","Briefing : couleur des titres et boutons au choix, reprise dans le lien client"],["f","Glisser une photo n'entoure plus que la zone photo"]]],["v1.42","2026-09-28",0,[["f","Photos des clients qui ne s'affichaient pas dans la liste"],["f","Client supprimé qui réapparaissait, renvoyé par un autre appareil"],["n","Contact client en cases séparées : téléphone, e-mail, Instagram, avec bouton pour appeler, écrire ou ouvrir le profil"],["n","Étapes du contrat marquables à la main quand l'app ne peut pas les deviner"],["n","Spots, clients, événements et filtres s'ouvrent en cartes flottantes, avec la même apparition que le profil"],["n","Sur ordinateur, glisser une photo sur un spot, un client ou un événement pour l'ajouter"]]],["v1.41","2026-09-27",0,[["n","Périmètre (ex Découverte) : réglages dans un bandeau en bas de carte, rayon au pincement dans le cercle ou avec + et -"],["n","Périmètre : spots à l'intérieur entourés, routes qui le traversent soulignées en blanc, liste des spots à la ronde"],["n","Critères de recherche de routes en boutons plutôt qu'en jauges"],["n","Profil en carte flottante à gauche, la carte reste visible autour"],["n","Filtres proposés au choix dans Profil, Carte, le panneau se réorganise sans trou"],["f","Briefing supprimé qui réapparaissait, renvoyé par un autre appareil qui en gardait une copie"],["n","Supprimer un briefing propose de retirer aussi la séance du planning"]]],["v1.40","2026-09-25",0,[["f","Boutons de la carte alignés en ligne quand la carte ne se chargeait pas"],["n","Découverte de routes : zone ronde posée au centre de la carte, rayon réglable en kilomètres et point orange à glisser pour la déplacer"],["n","Boutons de la carte regroupés en deux colonnes, une à gauche, une à droite"],["f","Boutons + et - de Mapbox retirés, ils étaient cachés derrière les autres"],["f","Panneaux Filtrer et Découverte plus compacts sur téléphone"]]],["v1.39","2026-09-25",0,[["n","Le briefing se gèle dès que le client accepte les conditions : plus aucune modification ne part dans son lien"],["n","Publier une nouvelle version annule la confirmation du client, qui doit accepter à nouveau"],["n","Mise à jour du lien en pause pendant que tu travailles, publication quand tu es prêt"],["n","Texte des conditions mémorisé avec le lien au moment de l'acceptation"]]],["v1.38","2026-09-23",0,[["n","Anneau d'avancement du contrat sur chaque fiche client et dans la liste : date, briefing, lien, accord, shooting, galerie"],["n","Statistiques : avancement des contrats étape par étape et valeur estimée du carnet"],["f","Numéro de version affiché dans Nouveautés remis à jour"]]],["v1.37","2026-09-23",0,[["n","Briefing : bloc L'essentiel (date, durée, secteur et tarif en tête de document)"],["n","Briefing : bloc Accord, conditions à accepter avant de confirmer"],["n","Séance offerte affichée dans la formule et dans l'essentiel"],["n","Lien client : confirmation verrouillée tant que les conditions ne sont pas acceptées, bouton daté, lien pour proposer une autre date"],["f","Lien client : message distinct entre perte de connexion et lien expiré"]]],["v1.36","2026-09-23",0,[["n","Profil réorganisé : accueil, objectifs, carte, apparence et données sur des pages séparées"],["n","Statistiques : santé des fiches, ajouts par mois, clients, liens partagés, photos, routes, types, heures de shoot"],["n","Page Nouveautés avec l'historique daté de toutes les versions"],["n","Filtre des fiches à compléter dans l'onglet Spots"]]],["v1.35","2026-09-23",0,[["n","Plusieurs photos d'un coup dans les spots, envoyées dans l'ordre choisi"],["n","Heure et affiche des événements, affiche en plein écran"],["f","Événement de la veille encore affiché comme à venir le soir"],["f","Date de création d'un événement perdue à l'édition"]]],["v1.34","2026-09-22",0,[["n","Téléchargement du briefing en PDF"],["n","Lien client interactif : adresse exacte révélée avant le shoot, ajout au calendrier"]]],["v1.33","2026-09-22",0,[["n","Briefings listés dans la fiche client, création directe depuis la fiche"],["n","Texte modifiable directement dans le briefing, zoom de l'éditeur"],["n","Changer la date du shoot dans le briefing met à jour le planning du client"],["n","Toucher le logo actualise l'app"]]],["v1.30","2026-09-22",0,[["n","Planning refait : briefings en rangées réordonnables (1 à 3 colonnes), blocs branchés sur tes spots et clients, gabarits, sauvegarde en ligne"]]],["v1.29","2026-09-20",0,[["n","Cartes Spots plus compactes, décor affiché sur la carte"],["f","Vignettes carrées du Planning déformées"]]],["v1.28","2026-09-20",0,[["n","Galerie et Shotlist fusionnées dans l'onglet Spots"],["n","Sélection multiple et glisser pour supprimer un spot"],["n","Inspirations déplacées vers le profil"]]],["v1.27","2026-09-20",0,[["n","Planning en éditeur grille aimantée, branché sur les spots et clients"]]],["v1.26","2026-09-20",0,[["n","Premier onglet Planning (document de briefing)"],["n","Associer des spots à un client en les touchant sur la carte"]]],["v1.24","2026-09",1,[["f","Boutons de la carte qui se chevauchaient sur mobile"],["f","Panneaux filtres, découverte et soleil qui restaient ouverts ensemble"],["n","Marqueurs réduits à 44 px sur mobile"]]],["v1.23","2026-07-21",0,[["n","Fréquentation des routes heure par heure"],["n","Découverte de routes dans une zone dessinée (OpenStreetMap), filtrées par sinuosité"]]],["v1.22","2026-07-17",0,[["n","Aperçu en direct de l'objet 3D avant de le poser"],["f","Objets 3D qui disparaissaient après une image"]]],["v1.21","2026-07-17",0,[["n","Bouton dédié pour placer un objet 3D"]]],["v1.20","2026-07-17",0,[["n","Comptes séparés : inscription, mot de passe oublié, données propres à chaque compte"],["n","Progression XP sauvegardée dans le compte"]]],["v1.18","2026-07-06",0,[["n","Mode soleil 3D : position du soleil et ombres portées"],["n","Objets 3D sur la carte (voiture, flèche, cube)"],["n","Vidéos courtes sur les spots (20 s max)"],["n","Retracer une route existante"],["n","Zoom et pincement dans la visionneuse, photos réorganisables par glisser"],["n","Progression : XP, niveaux, objectifs et titres"],["n","Historique de recherche et vue Street (Mapillary, repli Google)"]]],["v1.17","2026-06-27",0,[["f","Marqueurs qui glissaient au dézoom"]]],["v1.16","2026-06-27",0,[["f","Tentative de correction des marqueurs (non concluante)"]]],["v1.15","2026-06-27",0,[["n","Navigation entre les photos dans la visionneuse"]]],["v1.14","2026-06-08",0,[["n","Mini-calendrier dans la fiche client pour planifier les shoots"]]],["v1.13","2026-06-07",0,[["n","Planning mensuel de tous les shoots"]]],["v1.12","2026-06-07",0,[["n","Sélection de plusieurs clients et spot de compromis pour leurs voitures"],["f","Badges d'état restylés (v1.12.1)"]]],["v1.11","2026-06-07",0,[["n","États clients automatiques : prospect, planifié, réalisé, livré"],["n","Relance À livrer et accès direct aux spots conseillés pour une voiture"]]],["v1.10","2026-06-07",0,[["n","Shootings planifiés dans la fiche client"]]],["v1.9","2026-06-07",0,[["n","Plusieurs voitures par client avec couleur de carrosserie, offre et statut"]]],["v1.8","2026-06-07",0,[["f","Photos stockées en ligne : fin de la mémoire saturée qui cassait la synchro PC / iPhone"],["f","Accès aux données sécurisé, clé de carte restreinte à ton site"]]],["v1.7","2026-06-06",0,[["f","Synchronisation fiable : un spot supprimé ne réapparaît plus"]]],["v1.6","2026-06-06",0,[["n","Onglet Profil : photo et réglages regroupés"]]],["v1.5","2026-06-06",0,[["n","Connexion par email et mot de passe"],["n","L'app devient 6flt Spots"]]],["v1.4","2026-06-06",0,[["n","Longs trajets jusqu'à 25 étapes"],["n","Types Musée, Circuit, Concession"],["n","Onglet Événements"]]],["v1.3","2026-06-06",1,[["n","Analyse automatique des virages d'une route"],["n","Filtres de la carte et suppression multiple dans la galerie"]]],["v1.2","2026-06-05",0,[["n","Tracé de routes sur la carte"],["n","Corbeille clients avec restauration"],["f","Routes en double et rendu des routes (v1.2.1)"]]],["v1.1","2026-06-05",0,[["n","Onglet Clients"],["n","Synchronisation en ligne des spots et clients"],["n","Écran de démarrage"]]],["v1.0","2026-06-04",0,[["n","Première version : carte des spots, galerie, Shotlist (conseil de spots selon la couleur de la voiture)"]]]];
 var PF_MOIS=['janv.','févr.','mars','avr.','mai','juin','juil.','août','sept.','oct.','nov.','déc.'];
 var pfStack=['pf-hub'];
 var pfNewsShown=6;
@@ -5652,11 +5674,13 @@ var TYPES = {
   text:{name:'Texte', desc:'Paragraphe, titre ou note'},
   checklist:{name:'Préparation voiture', desc:'Checklist à cocher'},
   contact:{name:'Contact', desc:'Lien Instagram et signature'},
-  jourj:{name:'Jour J', desc:'Consignes affichées avec les adresses'}
+  jourj:{name:'Jour J', desc:'Consignes affichées avec les adresses'},
+  lien:{name:'Lien', desc:'Bouton vers une galerie, un moodboard ou un formulaire'}
 };
 I.jourj = '<svg class="bf-ic" viewBox="0 0 24 24"><path d="M12 21s7-6.2 7-11.5a7 7 0 00-14 0C5 14.8 12 21 12 21z"/><path d="M9.5 10l1.8 1.8L15 8"/></svg>';
+I.lien = I.link;
 var DATA_TYPES = ['resume','cover','client','rdv','map','spots','timing','pricing','accord'];
-var FREE_TYPES = ['jourj','photos','text','checklist','contact'];
+var FREE_TYPES = ['jourj','lien','photos','text','checklist','contact'];
 var LAYOUTS = ['1','1-1','1-1-1','2-1','1-2'];
 
 /* ---------- modele ---------- */
@@ -5678,9 +5702,10 @@ function defaults(t){
       {t:'Jantes et vitres nettoyées', on:true},
       {t:'Réservoir aux trois quarts minimum pour les prises en mouvement', on:true},
       {t:'Accessoires temporaires retirés (ticket de parking, support téléphone)', on:true},
-      {t:'Tenue sobre et dans des tons neutres si tu apparais sur les photos', on:true},
+      {t:TT('Tenue sobre et dans des tons neutres si tu apparais sur les photos', 'Tenue sobre et dans des tons neutres si vous apparaissez sur les photos'), on:true},
       {t:'Un second conducteur pour les prises roulantes', on:false}]};
     case 'contact': return {handle:'@_6flt_'};
+    case 'lien': return {url:''};
   }
   return {};
 }
@@ -5757,6 +5782,24 @@ function allBlocks(){ var out = []; if(doc) doc.rows.forEach(function(r){ r.slot
 function findRow(id){ return doc.rows.filter(function(r){ return r.id===id; })[0]; }
 function reId(row){ row.id = nid('r'); row.slots.forEach(function(b){ if(b) b.id = nid('b'); }); return row; }
 function perSpot(){ var t = allBlocks().filter(function(b){ return b.type==='timing'; })[0]; return t ? (+t.props.perSpot||25) : 25; }
+function timingBlock(){ return allBlocks().filter(function(b){ return b.type==='timing'; })[0] || null; }
+function spotMin(id){ var t = timingBlock(), m = t && t.props.spotMin ? Math.round(+t.props.spotMin[id]) : 0; return m>0 ? Math.min(m, 600) : perSpot(); }
+function spotMinCustom(id){ var t = timingBlock(), m = t && t.props.spotMin ? Math.round(+t.props.spotMin[id]) : 0; return m>0 ? Math.min(m, 600) : 0; }
+function stepsOf(){ var t = timingBlock(); return t && Array.isArray(t.props.steps) ? t.props.steps.filter(function(x){ return x && x.id; }) : []; }
+function stepMin(x){ var m = Math.round(+x.min); return m>0 ? Math.min(m, 600) : 0; }
+function stepAnchor(x, list){
+  if(!x.after || x.after==='a') return -1;
+  for(var i=0;i<list.length;i++) if(list[i].id===x.after) return i;
+  return list.length-1;
+}
+function linkUrl(p){
+  var u = String(p && p.url || '').trim(); if(!u) return '';
+  if(/^mailto:/i.test(u)) return /^mailto:[^\s@]+@[^\s@]+\.[^\s@]+$/i.test(u) ? u : '';
+  if(/^tel:/i.test(u)){ u = u.replace(/\s+/g, ''); return /^tel:\+?[0-9().-]{6,}$/i.test(u) ? u : ''; }
+  if(!/^https?:\/\//i.test(u)){ if(/^[a-z][a-z0-9+.-]*:/i.test(u)) return ''; u = 'https://'+u.replace(/^\/+/, ''); }
+  return /^https?:\/\/[^\s\/$.?#][^\s]*\.[^\s]{2,}$/i.test(u) ? u : '';
+}
+function linkShow(u){ var t = u.replace(/^(https?:\/\/)?(www\.)?/i, '').replace(/^(mailto:|tel:)/i, '').replace(/\/$/, ''); return t.length>56 ? t.slice(0, 55)+'…' : t; }
 function inView(){ var v = $('view-planning'); return v && v.classList.contains('active'); }
 function toast(m){ if(typeof showToast==='function') showToast(m); }
 
@@ -5810,17 +5853,24 @@ function legs(list){
 }
 function schedule(){
   var list = rs(), n = list.length; if(!n) return null;
-  var st = sunTimes(), L = legs(list), ps = perSpot(), starts = new Array(n), i, acc;
+  var st = sunTimes(), L = legs(list), starts = new Array(n), dur = new Array(n), i, acc, SA = {};
+  stepsOf().forEach(function(x){ var k = stepAnchor(x, list); (SA[k] = SA[k] || []).push(x); });
+  function sa(k){ return (SA[k]||[]).reduce(function(a, x){ return a + stepMin(x); }, 0); }
+  for(i=0;i<n;i++) dur[i] = spotMin(list[i].id);
   if(doc.timeMode==='sunset'){
-    starts[n-1] = st.sunset + 10 - ps;
-    for(i=n-2;i>=0;i--) starts[i] = starts[i+1] - L[i] - ps;
-    acc = starts[0] - 20;
+    starts[n-1] = st.sunset + 10 - dur[n-1];
+    for(i=n-2;i>=0;i--) starts[i] = starts[i+1] - L[i] - sa(i) - dur[i];
+    acc = starts[0] - sa(-1) - 20;
   } else {
     acc = doc.timeMode==='sunrise' ? st.sunrise - 30 : toMin(doc.startTime||'14:00');
-    starts[0] = acc + 20;
-    for(i=1;i<n;i++) starts[i] = starts[i-1] + ps + L[i-1];
+    starts[0] = acc + 20 + sa(-1);
+    for(i=1;i<n;i++) starts[i] = starts[i-1] + dur[i-1] + sa(i-1) + L[i-1];
   }
-  return {accueil:acc, starts:starts, fin:starts[n-1]+ps+5, sunset:st.sunset, sunrise:st.sunrise, legs:L, list:list};
+  var at = {};
+  function lay(k, t0){ var t = t0; (SA[k]||[]).forEach(function(x){ var m = stepMin(x); (at[k] = at[k] || []).push({st:x, start:t, min:m}); t += m; }); }
+  lay(-1, acc + 20);
+  for(i=0;i<n;i++) lay(i, starts[i] + dur[i]);
+  return {accueil:acc, starts:starts, dur:dur, steps:at, fin:starts[n-1]+dur[n-1]+sa(n-1)+5, sunset:st.sunset, sunrise:st.sunrise, legs:L, list:list};
 }
 function lightPhase(sc, t){
   if(t < sc.sunrise-5) return 'Heure bleue : ambiance froide, phares allumés.';
@@ -6042,7 +6092,7 @@ var JOURJ_VOUS = 'Rendez-vous au premier spot 10 minutes avant l\'heure, voiture
 /* ---------- textes modifiables ---------- */
 var TERMS_DEF = 'Livraison : galerie privée en ligne sous 5 à 7 jours\nDroits : usage personnel et réseaux sociaux inclus, usage commercial sur devis\nAnnulation sans frais jusqu\'à 48h avant, l\'acompte reste dû passé ce délai';
 var ACCORD_DEF = 'Tu reçois tes photos retouchées en pleine définition, libres de publication avec mention de mon compte.\nJ\'utilise ces photos sur mon portfolio et mes réseaux, en te mentionnant.\nSi tu ne peux plus venir, préviens-moi au moins 24h avant, on replace la séance sans frais. En cas de pluie, je te préviens la veille au soir et on décale.';
-var TX_TYPES = ['jourj','resume','cover','client','rdv','map','spots','timing','checklist','photos','pricing','accord','contact'];
+var TX_TYPES = ['jourj','lien','resume','cover','client','rdv','map','spots','timing','checklist','photos','pricing','accord','contact'];
 function fillTok(raw, b){
   var c = doc ? getClient(doc.clientId) : null, miss = false;
   var t = {prenom:firstName(c), nom:c ? (c.name||'') : '', voiture:carOf(c), date:doc && doc.date ? fdate(doc.date) : '', lieu:doc ? (doc.place||'') : '', ref:doc ? (doc.ref||'') : '', insta:b && b.props ? String(b.props.handle||'').replace(/^@/, '') : ''};
@@ -6135,14 +6185,14 @@ function blockBody(b){
     case 'map':
       list = rs();
       var hMap = ET(b, 'h', 'Le parcours', 'h2', 'bf-h');
-      if(!list.length) return hMap+'<div class="bf-map"><div class="bf-muted">Glisse des spots ici pour tracer le parcours</div></div>';
+      if(!list.length) return hMap+'<div class="bf-map"><div class="bf-muted">Glisse des spots ici pour tracer le parcours</div></div>'+(S.mode==='edit' ? '<button class="bf-addli bf-eo" data-act="spot-add">+ Ajouter un spot</button>' : '');
       var L = legs(list), tot = L.reduce(function(a,x){ return a+x; }, 0);
       return hMap+'<div class="bf-map"><img src="'+esc(mapUrl(list, p.route, S.mode==='a4'))+'" alt="" draggable="false" onerror="this.parentNode.classList.add(\'err\')"></div>'+
         '<div class="bf-mapcap"><span>'+list.length+' spot'+(list.length>1?'s':'')+(list.length>1 ? ', '+tot+' min de route au total' : '')+'</span><span>'+(doc.timeMode==='sunset'?'Dans l\'ordre du coucher de soleil':doc.timeMode==='sunrise'?'Dans l\'ordre du lever du soleil':'Dans l\'ordre de passage')+'</span></div>'+bnote(b);
     case 'spots':
       list = rs();
       var hSp = ET(b, 'h', 'Les spots', 'h2', 'bf-h');
-      if(!list.length) return hSp+'<div class="bf-muted">Aucun spot dans le parcours</div>';
+      if(!list.length) return hSp+'<div class="bf-muted">Aucun spot dans le parcours</div>'+(S.mode==='edit' ? '<button class="bf-addli bf-eo" data-act="spot-add">+ Ajouter un spot</button>' : '');
       sc = schedule();
       return hSp+list.map(function(s, k){
         var auto = sc ? lightPhase(sc, sc.starts[k]) : '', note = (doc.spotNotes && doc.spotNotes[s.id]) || auto;
@@ -6151,18 +6201,21 @@ function blockBody(b){
         return '<div class="bf-spot"><div class="bf-simg">'+spotImg(s)+'<b>'+(k+1)+'</b></div><div><p class="bf-sname">'+esc(s.name)+'</p>'+noteH+
           (tags.length ? '<div class="bf-tags">'+tags.map(function(t){ return '<span>'+esc(t)+'</span>'; }).join('')+'</div>' : '')+
           (p.travel && k>0 && sc ? '<p class="bf-sdist">'+sc.legs[k-1]+' min depuis le spot '+k+'</p>' : '')+'</div></div>';
-      }).join('')+bnote(b);
+      }).join('')+(S.mode==='edit' ? '<button class="bf-addli bf-eo" data-act="spot-add">+ Ajouter un spot</button>' : '')+bnote(b);
     case 'timing':
       sc = schedule();
       h = '<div class="bf-tlhead">'+ET(b, 'h', 'Le timing lumière', 'h2', 'bf-h')+'<span class="bf-sun">'+sunChip()+'</span></div>';
       if(!sc) return h + '<div class="bf-muted">Ajoute des spots au parcours pour calculer le timing</div>';
       var tk = function(m){ if(doc.date || doc.timeMode==='free') return fmt(m); var dm = m - sc.accueil; return dm<=0 ? 'Arrivée' : '+'+fmt(dm); };
-      h += '<div class="bf-tline"><div class="bf-tl"><p class="bf-tlt">'+tk(sc.accueil)+'</p>'+ET(b, 'a_t', 'Accueil', 'h3')+ET(b, 'a_d', 'Briefing rapide et point sur la voiture ensemble.', 'p', 'bf-tld', {ml:1})+'</div>';
+      var stepH = function(k){ return (sc.steps[k]||[]).map(function(x){
+        return '<div class="bf-tl bf-step"><p class="bf-tlt">'+tk(x.start)+(x.min ? '<span class="bf-tlmin"> · '+x.min+' min</span>' : '')+'</p><h3>'+esc(x.st.title||'Étape')+'</h3>'+(x.st.desc ? '<p class="bf-tld">'+esc(x.st.desc)+'</p>' : '')+'</div>'; }).join(''); };
+      h += '<div class="bf-tline"><div class="bf-tl"><p class="bf-tlt">'+tk(sc.accueil)+'</p>'+ET(b, 'a_t', 'Accueil', 'h3')+ET(b, 'a_d', 'Briefing rapide et point sur la voiture ensemble.', 'p', 'bf-tld', {ml:1})+'</div>'+stepH(-1);
       sc.list.forEach(function(s, k){
         if(k>0) h += '<p class="bf-trip">'+sc.legs[k-1]+' min de route</p>';
-        h += '<div class="bf-tl"><p class="bf-tlt">'+tk(sc.starts[k])+'</p><h3>Spot '+(k+1)+', '+esc(s.name)+'</h3>'+ET(b, 'sd_'+s.id, lightPhase(sc, sc.starts[k]), 'p', 'bf-tld', {ml:1})+'</div>';
+        h += '<div class="bf-tl"><p class="bf-tlt">'+tk(sc.starts[k])+(spotMinCustom(s.id) ? '<span class="bf-tlmin"> · '+sc.dur[k]+' min</span>' : '')+'</p><h3>Spot '+(k+1)+', '+esc(s.name)+'</h3>'+ET(b, 'sd_'+s.id, lightPhase(sc, sc.starts[k]), 'p', 'bf-tld', {ml:1})+'</div>'+stepH(k);
       });
-      return h + (tbd() && doc.timeMode!=='free' ? '<p class="bf-muted" style="margin:0 0 10px">Horaires exacts calés sur la lumière une fois la date fixée.</p>' : '') + '<div class="bf-tl"><p class="bf-tlt">'+tk(sc.fin)+'</p>'+ET(b, 'f_t', 'Fin de séance', 'h3')+ET(b, 'f_d', 'Debrief et prochaines étapes pour la livraison.', 'p', 'bf-tld', {ml:1})+'</div></div>'+bnote(b);
+      return h + (tbd() && doc.timeMode!=='free' ? '<p class="bf-muted" style="margin:0 0 10px">Horaires exacts calés sur la lumière une fois la date fixée.</p>' : '') + '<div class="bf-tl"><p class="bf-tlt">'+tk(sc.fin)+'</p>'+ET(b, 'f_t', 'Fin de séance', 'h3')+ET(b, 'f_d', 'Debrief et prochaines étapes pour la livraison.', 'p', 'bf-tld', {ml:1})+'</div></div>'+
+        (S.mode==='edit' ? '<button class="bf-addli bf-eo" data-act="step-add">+ Ajouter une étape</button>' : '')+bnote(b);
     case 'checklist':
       var lis = [];
       (p.items||[]).forEach(function(x, i){ if(!x.on) return; lis.push(S.mode==='edit' ? '<li class="bf-et" contenteditable="true" data-ci="'+i+'">'+esc(x.t)+'</li>' : '<li>'+esc(x.t)+'</li>'); });
@@ -6190,9 +6243,14 @@ function blockBody(b){
         '<div><span>'+(dep ? 'Solde à régler le jour J' : 'À régler le jour J')+'</span><span>'+(price!=null ? Math.max(0, price-(dep||0))+' €' : 'À définir')+'</span></div></div>';
       if(p.terms) h += ET(b, 'terms', TERMS_DEF, 'ul', 'bf-terms', {lines:1});
       return h + bnote(b);
+    case 'lien':
+      var lu = linkUrl(p);
+      return '<div class="bf-lien">'+ET(b, 'h', 'À consulter', 'h2', 'bf-h')+ET(b, 'd', '', 'p', 'bf-ld', {opt:1, ml:1, ph:'Ajouter une description…'})+
+        (lu ? ET(b, 'btn', 'Ouvrir le lien', 'a', 'bf-dbtn', {extra:' href="'+esc(lu)+'" target="_blank" rel="noopener"'})+'<p class="bf-lurl">'+esc(linkShow(lu))+'</p>'
+            : (S.mode==='edit' ? '<div class="bf-muted bf-eo">Colle l\'adresse du lien dans les réglages du bloc</div>' : ''))+'</div>'+bnote(b);
     case 'contact':
       var handle = String(p.handle||'').replace(/^@/, '');
-      return '<div class="bf-contact">'+ET(b, 'cta', tbd() ? TT('Une date qui t\'arrange ? Écris-moi sur Instagram, @{insta}', 'Une date qui vous arrange ? Écrivez-moi sur Instagram, @{insta}') : TT('Une question avant le jour J ? Écris sur Instagram, @{insta}', 'Une question avant le jour J ? Écrivez-moi sur Instagram, @{insta}'), 'a', 'bf-cta', {extra:' href="https://instagram.com/'+esc(handle)+'" target="_blank" rel="noopener"'})+ET(b, 'sign', '6flt Photographies, Grand Est et Luxembourg', 'span', 'bf-sign')+'</div>';
+      return '<div class="bf-contact">'+ET(b, 'cta', tbd() ? TT('Une date qui t\'arrange ? Écris-moi sur Instagram, @{insta}', 'Une date qui vous arrange ? Écrivez-moi sur Instagram, @{insta}') : TT('Une question avant le jour J ? Écris-moi sur Instagram, @{insta}', 'Une question avant le jour J ? Écrivez-moi sur Instagram, @{insta}'), 'a', 'bf-cta', {extra:' href="https://instagram.com/'+esc(handle)+'" target="_blank" rel="noopener"'})+ET(b, 'sign', '6flt Photographies, Grand Est et Luxembourg', 'span', 'bf-sign')+'</div>';
   }
   return '';
 }
@@ -6352,7 +6410,7 @@ function routeEditor(withNotes){
       (withNotes ? '<textarea class="bf-field" data-act="spotnote" data-id="'+esc(s.id)+'" rows="2" placeholder="Note pour le client (sinon, conseil lumière automatique)">'+esc((doc.spotNotes||{})[s.id]||'')+'</textarea>' : '')+'</div>';
   });
   if(!list.length) h += '<div class="bf-note">Aucun spot. Glisse-les depuis la liste de gauche.</div>';
-  return h + '</div><p class="bf-set-hint">Le parcours est partagé par la carte, les spots et le timing. Tes notes de repérage privées ne sont jamais affichées au client.</p>';
+  return h + '</div><button class="bf-sbtn" data-act="spot-add">+ Ajouter un spot</button><p class="bf-set-hint">Le parcours est partagé par la carte, les spots et le timing. Tes notes de repérage privées ne sont jamais affichées au client.</p>';
 }
 function dateField(){
   return '<div class="bf-set-label">Date</div><div class="bf-datebox"><input type="date" class="bf-field" data-act="doc" data-key="date" value="'+esc(doc.date||'')+'">'+
@@ -6371,6 +6429,34 @@ function docSettings(){
 function timeHint(){
   if(doc.timeMode==='free') return '<p class="bf-set-hint">Heure libre, choisie par toi.</p><button class="bf-sbtn" data-act="time-mode" data-val="sunset">Recaler sur le coucher du soleil</button>';
   return '<p class="bf-set-hint">Heure suggérée d\'après '+(doc.timeMode==='sunrise' ? 'le lever' : 'le coucher')+' du soleil et le parcours. Modifie-la pour passer en heure libre.</p>';
+}
+function linkNote(p){
+  var raw = String(p.url||'').trim();
+  if(!raw) return 'Une galerie, un moodboard, un formulaire ou une carte. Le lien s\'ouvre dans un nouvel onglet chez le client. Dans le PDF, l\'adresse s\'affiche sous le bouton.';
+  return linkUrl(p) ? 'Adresse reconnue. Le titre, la description et le texte du bouton se modifient directement dans le bloc.' : 'Adresse non reconnue : le bloc n\'apparaîtra pas chez le client. Commence par https://';
+}
+function spotMinHTML(){
+  var list = rs(); if(!list.length) return '';
+  return '<div class="bf-set-label">Temps par spot, à régler si besoin</div><div class="bf-rlist">'+list.map(function(s, k){
+    var c = spotMinCustom(s.id);
+    return '<div class="bf-ritem"><div class="bf-ritem-top"><span class="bf-rn">'+(k+1)+'</span><span class="bf-rname">'+esc(s.name)+'</span>'+
+      '<input type="number" inputmode="numeric" class="bf-field bf-mnum" min="5" max="240" step="5" data-act="spotmin" data-id="'+esc(s.id)+'" value="'+(c||'')+'" placeholder="'+perSpot()+'" aria-label="Minutes au spot '+(k+1)+'" style="width:72px;flex:none"><span class="bf-unit">min</span></div></div>';
+  }).join('')+'</div><p class="bf-set-hint">Vide : le temps par défaut s\'applique. Le PDF et le lien client suivent.</p>';
+}
+function stepsHTML(){
+  var list = rs(), h = '<div class="bf-set-label">Étapes ajoutées à la timeline</div>';
+  var steps = stepsOf();
+  if(!steps.length) h += '<div class="bf-note">Aucune. Ajoute une pause, un changement de lieu, une série de portraits ou de prises roulantes : les horaires suivants se décalent.</div>';
+  steps.forEach(function(x){
+    var eff = x.after==='a' ? 'a' : (list.some(function(s){ return s.id===x.after; }) ? x.after : (list.length ? list[list.length-1].id : 'a'));
+    h += '<div class="bf-ritem" data-step="'+esc(x.id)+'"><div class="bf-r2"><input class="bf-field" data-act="step" data-key="title" data-id="'+esc(x.id)+'" value="'+esc(x.title||'')+'" placeholder="Nom de l\'étape">'+
+      '<button class="bf-mini" data-act="step-del" data-id="'+esc(x.id)+'" title="Supprimer l\'étape" aria-label="Supprimer l\'étape">×</button></div>'+
+      '<div class="bf-r2"><select class="bf-field" data-act="step" data-key="after" data-id="'+esc(x.id)+'"><option value="a"'+(eff==='a' ? ' selected' : '')+'>Après l\'accueil</option>'+
+      list.map(function(s, k){ return '<option value="'+esc(s.id)+'"'+(eff===s.id ? ' selected' : '')+'>Après le spot '+(k+1)+', '+esc(s.name)+'</option>'; }).join('')+'</select>'+
+      '<input type="number" inputmode="numeric" class="bf-field bf-mnum" min="0" max="600" step="5" data-act="step" data-key="min" data-id="'+esc(x.id)+'" value="'+stepMin(x)+'" aria-label="Durée en minutes"><span class="bf-unit">min</span></div>'+
+      '<textarea class="bf-field" rows="2" data-act="step" data-key="desc" data-id="'+esc(x.id)+'" placeholder="Description pour le client (optionnelle)">'+esc(x.desc||'')+'</textarea></div>';
+  });
+  return h + '<button class="bf-sbtn" data-act="step-add">+ Ajouter une étape</button>';
 }
 function settingsHTML(b){
   var T = TYPES[b.type], p = b.props, sc = schedule(), c = getClient(doc.clientId), h = '', st;
@@ -6406,9 +6492,13 @@ function settingsHTML(b){
       st = sunTimes();
       h += '<div class="bf-set-label">Calage de la séance</div><div class="bf-seg bf-sm">'+[['sunset','Coucher'],['sunrise','Lever'],['free','Heure libre']].map(function(o){ return '<button data-act="time-mode" data-val="'+o[0]+'" class="'+(doc.timeMode===o[0] ? 'on' : '')+'">'+o[1]+'</button>'; }).join('')+'</div>'+
         (doc.timeMode==='free' ? '<div class="bf-set-label">Heure de début</div><input type="time" class="bf-field" data-act="rdv-time" value="'+esc(doc.startTime)+'">' : '')+
-        '<div class="bf-set-label">Temps par spot</div><div class="bf-range"><input type="range" min="15" max="60" step="5" data-act="prop" data-key="perSpot" value="'+(+p.perSpot||25)+'"><span id="bf-ps-val">'+(+p.perSpot||25)+' min</span></div>'+
+        '<div class="bf-set-label">Temps par spot (par défaut)</div><div class="bf-range"><input type="range" min="15" max="60" step="5" data-act="prop" data-key="perSpot" value="'+(+p.perSpot||25)+'"><span id="bf-ps-val">'+(+p.perSpot||25)+' min</span></div>'+
+        spotMinHTML()+stepsHTML()+
         (doc.date ? '<p class="bf-set-hint">Lever '+fmt(st.sunrise)+', coucher '+fmt(st.sunset)+', calculés pour le '+esc(fshort(doc.date))+' au premier spot du parcours. ' : '<p class="bf-set-hint">Date à définir : le client voit des horaires relatifs, recalés dès que tu fixes la date. ')+
-        (doc.timeMode==='sunset' ? 'Le dernier spot tombe sur le coucher, le reste se cale à rebours.' : doc.timeMode==='sunrise' ? 'Le premier spot commence juste avant le lever, le reste s\'enchaîne.' : 'Les spots s\'enchaînent depuis ton heure de début.')+' Trajets calculés par Mapbox.</p>'; break;
+        (doc.timeMode==='sunset' ? 'Le dernier spot tombe sur le coucher, le reste se cale à rebours : ajouter du temps ou une étape avant lui avance les spots précédents.' : doc.timeMode==='sunrise' ? 'Le premier spot commence juste avant le lever, le reste s\'enchaîne.' : 'Les spots s\'enchaînent depuis ton heure de début.')+' Trajets calculés par Mapbox.</p>'; break;
+    case 'lien':
+      h += '<div class="bf-set-label">Adresse du lien</div><input class="bf-field" data-act="prop" data-key="url" value="'+esc(p.url||'')+'" placeholder="https://…" autocomplete="off" autocapitalize="off" spellcheck="false">'+
+        '<p class="bf-set-hint" id="bf-url-note">'+linkNote(p)+'</p>'; break;
     case 'checklist':
       h += '<div class="bf-set-label">Éléments affichés</div>'+(p.items||[]).map(function(x, i){ return '<label class="bf-chk"><input type="checkbox" data-act="chk" data-i="'+i+'"'+(x.on ? ' checked' : '')+'><span>'+esc(x.t)+'</span><button class="bf-mini" data-act="chk-del" data-i="'+i+'" title="Supprimer" aria-label="Supprimer">×</button></label>'; }).join('')+
         '<input class="bf-field" id="bf-chk-new" placeholder="Ajouter un élément puis Entrée">'; break;
@@ -6466,6 +6556,47 @@ function setDateTbd(){
     c.shoots = c.shoots.filter(function(x){ return !x || x.date!==prev; }); clientsChanged();
   }
   commit(); renderAll(); toast('Date à définir : le client pourra te proposer un jour');
+}
+function addStep(){
+  var tb = timingBlock(); if(!tb) return;
+  var list = rs(), x = {id:nid('st'), title:'Nouvelle étape', desc:'', min:15, after:list.length ? list[list.length-1].id : 'a'};
+  tb.props.steps = (Array.isArray(tb.props.steps) ? tb.props.steps : []).concat([x]);
+  S.sel = tb.id; commit(); renderAll(); toast('Étape ajoutée, à régler dans le panneau de droite');
+  var inp = $('bf-panel').querySelector('[data-step="'+x.id+'"] input'); if(inp){ try{ inp.focus(); inp.select(); }catch(e){} }
+}
+function setStepField(id, key, v){
+  var tb = timingBlock(); if(!tb || !Array.isArray(tb.props.steps)) return;
+  var x = tb.props.steps.filter(function(y){ return y && y.id===id; })[0]; if(!x) return;
+  if(key==='min'){ var m = Math.round(+v); x.min = m>0 ? Math.min(m, 600) : 0; }
+  else if(key==='title' || key==='desc' || key==='after') x[key] = String(v);
+}
+function setSpotMin(id, v){
+  var tb = timingBlock(); if(!tb) return;
+  var m = Math.round(+v), o = tb.props.spotMin && typeof tb.props.spotMin==='object' ? tb.props.spotMin : {};
+  if(m>0) o[id] = Math.min(m, 600); else delete o[id];
+  if(Object.keys(o).length) tb.props.spotMin = o; else delete tb.props.spotMin;
+}
+var PK = {q:''};
+function openPick(){
+  if(!doc){ toast('Ouvre un briefing d\'abord'); return; }
+  PK.q = ''; var q = $('bf-pick-q'); q.value = '';
+  $('bf-pick').hidden = false; renderPick();
+  setTimeout(function(){ try{ q.focus(); }catch(e){} }, 40);
+}
+function closePick(){ $('bf-pick').hidden = true; }
+function renderPick(){
+  if(!doc) return;
+  var all = realSpots(), cc = getClient(doc.clientId), linked = cc && cc.spotIds ? cc.spotIds : [], q = PK.q.toLowerCase();
+  var list = all.filter(function(s){ return !q || (String(s.name||'')+' '+String(s.type||'')).toLowerCase().indexOf(q)>-1; });
+  list.sort(function(a, b){ var la = linked.indexOf(a.id)>-1 ? 0 : 1, lb = linked.indexOf(b.id)>-1 ? 0 : 1; return (la-lb) || String(a.name||'').localeCompare(String(b.name||''), 'fr'); });
+  var h = '';
+  list.forEach(function(s){
+    var pos = doc.route.indexOf(s.id);
+    h += '<div class="bf-item'+(pos>-1 ? ' is-in' : '')+'" tabindex="0" role="button" data-pk="'+esc(s.id)+'"><div class="bf-thumb">'+spotImg(s)+(pos>-1 ? '<span class="bf-inroute" title="Déjà dans le parcours">'+(pos+1)+'</span>' : '')+'</div>'+
+      '<div class="bf-cap"><div class="bf-ititle">'+esc(s.name||'Spot')+'</div><div class="bf-isub">'+esc((linked.indexOf(s.id)>-1 ? 'Du client, ' : '')+(s.type||'Spot'))+'</div></div></div>';
+  });
+  $('bf-pick-list').innerHTML = h || '<div class="bf-lempty">'+(all.length ? 'Aucun résultat' : 'Aucun spot enregistré')+'</div>';
+  var n = doc.route.length; $('bf-pick-hint').textContent = n+' spot'+(n>1 ? 's' : '')+' dans le parcours. Touche un spot pour l\'ajouter à la fin, tu peux ensuite l\'ordonner dans les réglages.';
 }
 function addToRoute(id){ if(doc.route.indexOf(id)<0){ doc.route.push(id); return true; } return false; }
 function removeRowIfVoid(row){ if(row.slots.every(function(s){ return !s; })){ var k = doc.rows.indexOf(row); if(k>-1) doc.rows.splice(k, 1); } }
@@ -6761,11 +6892,12 @@ function localIso(dateIso, min){ var d = new Date(dateIso+'T00:00:00'); d.setMin
 function whenLbl(m){ return m==='day' ? 'le jour J' : 'la veille'; }
 function staticRows(){
   var h = '';
+  function usable(b){ return b && TYPES[b.type] && !(b.type==='lien' && !linkUrl(b.props)); }
   doc.rows.forEach(function(row){
-    if(row.slots.every(function(x){ return !x; })) return;
+    if(!row.slots.some(usable)) return;
     h += '<div class="bf-row" data-layout="'+row.layout+'">';
     row.slots.forEach(function(b){
-      if(!b || !TYPES[b.type]){ h += '<div class="bf-slot"></div>'; return; }
+      if(!usable(b)){ h += '<div class="bf-slot"></div>'; return; }
       h += '<div class="bf-slot"><div class="bf-blk" data-type="'+b.type+'">'+blockBody(b)+'</div></div>';
     });
     h += '</div>';
@@ -7124,6 +7256,8 @@ function bind(){
     var f = findBlock(S.sel), act = a.dataset.act, i = +a.dataset.i;
     if(act==='desel'){ select(null); return; }
     if(act==='date-tbd'){ setDateTbd(); return; }
+    if(act==='spot-add'){ openPick(); return; }
+    if(act==='step-add'){ addStep(); return; }
     if(act==='tone'){ var nt = a.dataset.val==='vous' ? 'vous' : 'tu'; if((doc.tone||'tu')===nt) return; doc.tone = nt; toneRows(doc.rows, nt); commit(); renderAll(); toast(nt==='vous' ? 'Document au vouvoiement' : 'Document au tutoiement'); return; }
     if(act==='accent'){ doc.accent = a.dataset.val==='#e8571a' ? '' : a.dataset.val; commit(); renderAll(); return; }
     if(act==='blk-dup' || act==='blk-del'){ blockAct(act); return; }
@@ -7141,6 +7275,7 @@ function bind(){
       else return;
       doc.route = ids.concat(hidden);
     }
+    else if(act==='step-del'){ var tbd0 = timingBlock(); if(!tbd0) return; tbd0.props.steps = stepsOf().filter(function(y){ return y.id!==a.dataset.id; }); toast('Étape supprimée'); }
     else if(act==='photo-del'){ f.b.props.imgs.splice(i, 1); }
     else if(act==='chk-del'){ e.preventDefault(); f.b.props.items.splice(i, 1); }
     else if(act==='photo-import'){ $('bf-file').click(); return; }
@@ -7150,9 +7285,11 @@ function bind(){
   });
   panel.addEventListener('input', function(e){
     var a = e.target.closest('[data-act]'); if(!a || !doc) return; var f = findBlock(S.sel), act = a.dataset.act;
-    if(act==='prop' && f && a.type!=='checkbox'){ f.b.props[a.dataset.key] = a.type==='range' ? +a.value : a.value; if(a.type==='range') $('bf-ps-val').textContent = a.value+' min'; renderDoc(); }
+    if(act==='prop' && f && a.type!=='checkbox'){ f.b.props[a.dataset.key] = a.type==='range' ? +a.value : a.value; if(a.type==='range') $('bf-ps-val').textContent = a.value+' min'; if(f.b.type==='lien'){ var un = $('bf-url-note'); if(un) un.textContent = linkNote(f.b.props); } renderDoc(); }
     else if(act==='doc' && a.type!=='date'){ doc[a.dataset.key] = a.value; renderDoc(); }
     else if(act==='spotnote'){ doc.spotNotes[a.dataset.id] = a.value; renderDoc(); }
+    else if(act==='step'){ setStepField(a.dataset.id, a.dataset.key, a.value); renderDoc(); }
+    else if(act==='spotmin'){ setSpotMin(a.dataset.id, a.value); renderDoc(); }
     else if(act==='pack'){ var c = getClient(doc.clientId); if(c && c.offre){ PACKS[c.offre][a.dataset.key] = a.value; lsSet(LS.packs, PACKS); renderDoc(); } }
   });
   panel.addEventListener('change', function(e){
@@ -7160,6 +7297,7 @@ function bind(){
     if(act==='prop' && f){ if(a.type==='checkbox') f.b.props[a.dataset.key] = a.checked; commit(); renderDoc(); if(a.type==='checkbox') renderPanel(); return; }
     if(act==='doc'){ var dk = a.dataset.key, prev = doc[dk]; doc[dk] = a.value; if(dk==='date') linkShootDate(prev, a.value); if(dk==='place') linkShootPlace(); commit(); renderAll(); return; }
     if(act==='spotnote' || act==='pack'){ commit(); return; }
+    if(act==='step' || act==='spotmin'){ if(act==='step') setStepField(a.dataset.id, a.dataset.key, a.value); else setSpotMin(a.dataset.id, a.value); commit(); renderDoc(); return; }
     if(act==='client-set'){ setClient(a.value); commit(); renderAll(); c = getClient(a.value); toast(c ? 'Briefing lié à '+c.name : 'Client retiré du briefing'); return; }
     if(act==='offre'){ c = getClient(doc.clientId); if(c){ c.offre = a.value; if(typeof persistClients==='function') persistClients(); } commit(); renderAll(); toast('Formule mise à jour sur la fiche client'); return; }
     if(act==='chk' && f){ f.b.props.items[+a.dataset.i].on = a.checked; commit(); renderDoc(); return; }
@@ -7243,9 +7381,19 @@ function bind(){
   });
   $('bf-modal').addEventListener('keydown', function(e){ if(e.key==='Escape') closeModal(); if(e.key==='Enter' && e.target.closest('[data-mclient],[data-mtpl],[data-mday]')) e.target.click(); });
   $('bf-m-search').addEventListener('input', function(e){ M.q = e.target.value; renderModal(); });
+  $('bf-pick').addEventListener('click', function(e){
+    if(e.target.id==='bf-pick' || e.target.closest('[data-pkc]')){ closePick(); return; }
+    var it = e.target.closest('[data-pk]'); if(!it || !doc) return;
+    var id = it.dataset.pk;
+    if(doc.route.indexOf(id)>-1){ toast('Déjà dans le parcours'); return; }
+    addToRoute(id); commit(); renderAll(); renderPick();
+    var sp = getSpot(id); toast((sp ? sp.name : 'Spot')+' ajouté au parcours');
+  });
+  $('bf-pick').addEventListener('keydown', function(e){ if(e.key==='Escape'){ closePick(); return; } if(e.key==='Enter' && e.target.closest('[data-pk]')) e.target.click(); });
+  $('bf-pick-q').addEventListener('input', function(e){ PK.q = e.target.value; renderPick(); });
 
   document.addEventListener('keydown', function(e){
-    if(!inView() || !doc || !$('bf-modal').hidden) return;
+    if(!inView() || !doc || !$('bf-modal').hidden || !$('bf-pick').hidden) return;
     var tg = e.target, editing = tg.isContentEditable || /INPUT|TEXTAREA|SELECT/.test(tg.tagName), mod = e.ctrlKey || e.metaKey;
     if(mod && !e.altKey){
       var k = e.key, c = e.code;
@@ -7293,6 +7441,8 @@ function etWrite(el, b, v){
 function etCaretEnd(el){ try{ var r = document.createRange(), s = window.getSelection(); r.selectNodeContents(el); r.collapse(false); s.removeAllRanges(); s.addRange(r); }catch(e){} }
 function focusEt(bid, sel){ var n = $('bf-doc').querySelector('.bf-blk[data-id="'+bid+'"] '+sel); if(n){ n.focus(); etCaretEnd(n); } }
 function docAct(a){
+  if(a.dataset.act==='spot-add'){ openPick(); return; }
+  if(a.dataset.act==='step-add'){ addStep(); return; }
   if(a.dataset.act==='chk-add'){ var cb = etBlock(a); if(!cb) return; cb.props.items = cb.props.items||[]; cb.props.items.push({t:'', on:true}); commit(); renderDoc(); focusEt(cb.id, '[data-ci="'+(cb.props.items.length-1)+'"]'); return; }
   var act = a.dataset.act, rowEl = a.closest('.bf-row'), row = rowEl ? findRow(rowEl.dataset.row) : null;
   if(act==='new-doc'){ openModal(); return; }
@@ -9641,8 +9791,8 @@ function clearDiscovery(){
   function e(s){ return String(s==null?'':s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
   function msg(t, p){ root.innerHTML = '<div class="cv-msg"><b>'+t+'</b>'+(p||'')+'</div>'; }
   function fail(net){
-    if(net) msg('Connexion impossible', 'Vérifie ta connexion et recharge la page.<br>Ton briefing est toujours là.');
-    else msg('Ce lien n\'est plus disponible', 'Il a peut-être expiré ou été désactivé.<br>Contacte ton photographe pour en recevoir un nouveau.');
+    if(net) msg('Connexion impossible', 'Le briefing n\'a pas pu se charger. Il est toujours là : recharger la page suffit une fois le réseau revenu.');
+    else msg('Ce lien n\'est plus disponible', 'Il a peut-être expiré ou été désactivé.<br>Un nouveau lien peut être demandé au photographe.');
   }
   msg('Chargement du briefing…');
   if(!sb){ fail(true); return; }
@@ -9661,7 +9811,7 @@ function clearDiscovery(){
   function ics(d){
     var loc = d.revealed ? (d.place || '') : 'Lieu communiqué avant la séance';
     return ['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//6flt Photographies//Briefing//FR','BEGIN:VEVENT','UID:'+tok+'@6flt','DTSTAMP:'+icsDate(new Date().toISOString()),
-      'DTSTART:'+icsDate(d.start),'DTEND:'+icsDate(d.end),'SUMMARY:'+icsTx('Shooting photo 6flt'),'LOCATION:'+icsTx(loc),'DESCRIPTION:'+icsTx('Ton briefing : '+location.href),
+      'DTSTART:'+icsDate(d.start),'DTEND:'+icsDate(d.end),'SUMMARY:'+icsTx('Shooting photo 6flt'),'LOCATION:'+icsTx(loc),'DESCRIPTION:'+icsTx((d.tone==='vous' ? 'Votre' : 'Ton')+' briefing : '+location.href),
       'BEGIN:VALARM','ACTION:DISPLAY','DESCRIPTION:Shooting 6flt','TRIGGER:-PT3H','END:VALARM','END:VEVENT','END:VCALENDAR'].join('\r\n');
   }
   function navUrl(sp){
