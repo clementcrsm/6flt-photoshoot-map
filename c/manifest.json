@@ -1,0 +1,16 @@
+{
+  "name": "6flt Clients",
+  "short_name": "6flt Clients",
+  "description": "Suivez vos séances photo avec 6flt Photographies",
+  "start_url": "/6flt-photoshoot-map/c/",
+  "scope": "/6flt-photoshoot-map/c/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0e0f11",
+  "theme_color": "#0e0f11",
+  "icons": [
+    { "src": "icon-192.png?v=1.0", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png?v=1.0", "sizes": "512x512", "type": "image/png" },
+    { "src": "icon-512-maskable.png?v=1.0", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
