@@ -177,7 +177,7 @@ a{color:inherit}
 </div>
 
 <script>
-/* ===== 6flt Clients v1.0 ===== */
+/* ===== 6flt Clients v1.1 (v1.50 : galerie) ===== */
 var SUPABASE_URL = 'https://gpirhmddoeokakikbjkr.supabase.co';
 var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdwaXJobWRkb2Vva2FraWtiamtyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA2NDI3MzAsImV4cCI6MjA5NjIxODczMH0.LghihUJQCtYBIMsRGXrjh2k4IcVYnf5CyD4lzlQNv6w';
 var VAPID_PUBLIC = 'BOph3IRn1uPlXzoljifkGCP9HoQ1pWYS3V60bUbimAFwqO00QAEsUSx21LoVmgFb0Zzrc1DqSFAtHGs2UoNQbWU';
@@ -275,7 +275,8 @@ function renderList(){
     if(!c) return '<div class="card" data-tok="'+e(t.token)+'"><b>Chargement…</b><button class="rm" type="button" data-rm="'+e(t.token)+'">✕</button></div>';
     if(c.error) return '<div class="card" data-tok="'+e(t.token)+'"><b>Séance introuvable</b><span class="sub">Ce lien n\'est plus valide</span><button class="rm" type="button" data-rm="'+e(t.token)+'">✕</button></div>';
     var d = c.data || {}, badge = 'wait', label = 'En attente';
-    if(c.confirmed_at){ badge = 'ok'; label = 'Confirmée'; }
+    if(c.gallery_url){ badge = 'ok'; label = 'Galerie prête'; }
+    else if(c.confirmed_at){ badge = 'ok'; label = 'Confirmée'; }
     else if(d.tbd){ badge = 'tbd'; label = 'Date à fixer'; }
     var sub = d.start ? fdt(d.start, {day:'numeric', month:'long', hour:'2-digit', minute:'2-digit'}) : (d.tbd ? 'Date à définir' : '');
     return '<div class="card" data-tok="'+e(t.token)+'"><b>'+e(c.title || d.title || 'Briefing')+'</b>'+(sub ? '<span class="sub">'+e(sub)+'</span>' : '')+
@@ -427,6 +428,8 @@ function renderDetail(){
   var h = '<div class="cv-wrap">';
   h += '<button type="button" class="cv-back" onclick="closeDetail()">‹ Mes séances</button>';
   h += '<div class="cv-brand"><img src="icon-192.png?v=1.0" alt="">6flt Photographies, briefing de séance</div>';
+  if(D.gallery_url && /^https?:\/\//i.test(D.gallery_url))
+    h += '<div class="cv-banner cv-ok"><b>'+tv('Ta galerie est prête', 'Votre galerie est prête')+'</b><a href="'+e(D.gallery_url)+'" target="_blank" rel="noopener">'+tv('Voir mes photos', 'Voir vos photos')+' ›</a></div>';
   if(!rev){
     var at = D.reveal_at ? new Date(D.reveal_at) : null;
     if(!d.date || !at || at.getFullYear()>2900) h += '<div class="cv-banner"><b>Adresses des spots bientôt disponibles</b>Elles apparaîtront ici dès que la date de la séance sera fixée.</div>';
