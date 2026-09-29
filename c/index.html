@@ -212,10 +212,13 @@ a{color:inherit}
 
 /* ---- ajouts app clients : proposition de date, galerie/avis ---- */
 .cv-prop{margin-top:14px;display:flex;flex-direction:column;gap:8px}
-.cv-prop input,.cv-prop textarea{width:100%;box-sizing:border-box;background:var(--d-panel);border:1px solid var(--d-line);border-radius:10px;color:var(--d-text);font:14px 'Inter',sans-serif;padding:10px 12px}
-.cv-prop button{align-self:flex-start;background:var(--d-accent);color:#fff;border:none;border-radius:10px;padding:10px 16px;font-weight:700;font-size:13px;cursor:pointer}
+.cv-prop input,.cv-prop textarea{width:100%;box-sizing:border-box;background:var(--d-panel,#17181b);border:1px solid var(--d-line,rgba(255,255,255,.09));border-radius:10px;color:var(--d-text,#f3f2ee);font:14px 'Inter',sans-serif;padding:10px 12px}
+.cv-prop button{align-self:flex-start;background:var(--cv-accent,#e8571a);color:#fff;border:none;border-radius:10px;padding:10px 16px;font-weight:700;font-size:13px;cursor:pointer}
 .cv-prop button[disabled]{opacity:.5}
-.cv-prop-note{font-size:12.5px;color:var(--d-mute);margin-top:4px}
+.cv-prop-note{font-size:12.5px;color:var(--d-mute,#8b8a84);margin-top:4px}
+.cv-prop-wait{background:var(--d-panel,#17181b);border:1px solid var(--d-line,rgba(255,255,255,.09));border-left:3px solid var(--cv-accent,#e8571a);border-radius:10px;padding:11px 13px;font-size:13px;color:var(--d-mute,#8b8a84);line-height:1.45}
+.cv-prop-wait b{display:block;color:var(--d-text,#f3f2ee);font-size:14px;margin-bottom:2px}
+.cv-prop-no{margin:0;font-size:13px;font-weight:600;color:#f2a93b;line-height:1.4}
 .cv-gal{margin-top:16px;padding-top:16px;border-top:1px solid var(--d-line)}
 .cv-gal .btn{display:inline-flex;padding:12px 18px;background:var(--d-accent);color:#fff!important;border-radius:10px;font-weight:700;text-decoration:none;font-size:14px;margin-bottom:14px}
 .cv-stars{display:flex;gap:6px;margin-bottom:10px}
@@ -254,7 +257,7 @@ a{color:inherit}
 </div>
 
 <script>
-/* ===== 6flt Clients v1.4 (Spoties v1.54 : notif qui ouvre la bonne seance) ===== */
+/* ===== 6flt Clients v1.5 (Spoties v1.55 : reponse aux dates proposees) ===== */
 var SUPABASE_URL = 'https://gpirhmddoeokakikbjkr.supabase.co';
 var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdwaXJobWRkb2Vva2FraWtiamtyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA2NDI3MzAsImV4cCI6MjA5NjIxODczMH0.LghihUJQCtYBIMsRGXrjh2k4IcVYnf5CyD4lzlQNv6w';
 var VAPID_PUBLIC = 'BOph3IRn1uPlXzoljifkGCP9HoQ1pWYS3V60bUbimAFwqO00QAEsUSx21LoVmgFb0Zzrc1DqSFAtHGs2UoNQbWU';
@@ -642,6 +645,63 @@ function glMap(box, d, rev, ac){
     m.on('error', function(ev){ console.warn('carte', ev && ev.error); });
   }catch(err){ console.warn(err); box.className = 'bf-map'; box.innerHTML = fallback; }
 }
+/* v1.5 : proposition de date. Etat lu sur le serveur (en attente, refusee), l'appareil sert de repli hors ligne */
+function propKey(){ return '6fltc_proposed_' + DETAIL_TOK; }
+function propLocal(){
+  var v = null; try{ v = localStorage.getItem(propKey()); }catch(x){}
+  var m = String(v||'').match(/^(\d{4}-\d{2}-\d{2})(?: (\d{2}:\d{2}))?/);
+  return m ? {status:'pending', date:m[1], time:m[2]||''} : null;
+}
+function propDay(dt, tm){
+  var s = new Date(dt+'T12:00:00').toLocaleDateString('fr-FR', {weekday:'long', day:'numeric', month:'long'});
+  var t = String(tm||'').match(/^(\d{1,2}):(\d{2})/);
+  return s + (t ? ' à '+('0'+t[1]).slice(-2)+'h'+t[2] : '');
+}
+function renderProp(st, tv){
+  var box = document.getElementById('cv-prop'); if(!box) return;
+  var key = st ? st.status+'|'+st.date+'|'+(st.time||'') : 'none';
+  if(box.getAttribute('data-k')===key) return;
+  box.setAttribute('data-k', key);
+  var jump = document.getElementById('cv-prop-jump');
+  if(st && (st.status==='pending' || st.status==='accepted')){
+    box.innerHTML = '<div class="cv-prop-wait"><b>'+(st.status==='accepted' ? 'Date acceptée : ' : tv('Tu as proposé le ', 'Vous avez proposé le '))+e(propDay(st.date, st.time))+'</b>'+
+      (st.status==='accepted' ? tv('Ton briefing se met à jour.', 'Votre briefing se met à jour.') : 'En attente de la réponse du photographe.')+'</div>';
+    if(jump){ jump.textContent = st.status==='accepted' ? 'Date acceptée' : 'Date proposée, en attente'; jump.disabled = true; }
+    return;
+  }
+  var no = st && st.status==='declined' ? '<p class="cv-prop-no">'+e(propDay(st.date, '').replace(/^./, function(c){ return c.toUpperCase(); }))+' '+tv('ne sera pas possible. Propose une autre date :', 'ne sera pas possible. Proposez une autre date :')+'</p>' : '';
+  box.innerHTML = (no || '<label class="cv-sl">Proposer une date</label>')+
+    '<input type="date" id="cv-prop-date"><input type="time" id="cv-prop-time">'+
+    '<textarea id="cv-prop-note" rows="2" placeholder="Un mot pour préciser (optionnel)"></textarea>'+
+    '<button type="button" id="cv-prop-go">Envoyer la proposition</button>';
+  if(jump){ jump.textContent = 'Proposer une date'; jump.disabled = false; }
+  var go = document.getElementById('cv-prop-go'), tok = DETAIL_TOK;
+  go.onclick = function(){
+    var dt = document.getElementById('cv-prop-date').value, tm = document.getElementById('cv-prop-time').value, nt = document.getElementById('cv-prop-note').value.trim();
+    if(!dt){ alert(tv('Choisis une date', 'Choisissez une date')); return; }
+    go.disabled = true;
+    sb.rpc('propose_shared_date', {p_token:tok, p_date:dt, p_time:tm || null, p_note:nt || null}).then(function(r){
+      if(r.error || !r.data){ go.disabled = false; alert(tv('Envoi impossible, réessaie.', 'Envoi impossible, réessayez.')); return; }
+      try{ localStorage.setItem('6fltc_proposed_' + tok, dt+(tm ? ' '+tm.slice(0, 5) : '')); }catch(ex){}
+      if(DETAIL_TOK===tok) renderProp({status:'pending', date:dt, time:tm}, tv);
+    }, function(){ go.disabled = false; alert(tv('Envoi impossible, vérifie ta connexion.', 'Envoi impossible, vérifiez votre connexion.')); });
+  };
+}
+function propInit(tv){
+  var tok = DETAIL_TOK, jump = document.getElementById('cv-prop-jump');
+  if(jump) jump.onclick = function(){
+    var box = document.getElementById('cv-prop'); if(!box) return;
+    box.scrollIntoView({behavior:'smooth', block:'center'});
+    var di = document.getElementById('cv-prop-date'); if(di) setTimeout(function(){ try{ di.focus(); }catch(x){} }, 400);
+  };
+  renderProp(propLocal(), tv);
+  if(sb) sb.rpc('get_date_proposal', {p_token:tok}).then(function(r){
+    if(DETAIL_TOK!==tok || !r || r.error) return;
+    var d = r.data && r.data.status ? {status:r.data.status, date:String(r.data.date||'').slice(0, 10), time:String(r.data.time||'')} : null;
+    if(!d || d.status!=='pending'){ try{ localStorage.removeItem('6fltc_proposed_' + tok); }catch(x){} }
+    renderProp(d, tv);
+  }, function(){});
+}
 function renderDetail(){
   DETAIL_MAPS.forEach(function(m){ try{ m.remove(); }catch(x){} }); DETAIL_MAPS = [];
   var D = DETAIL_D, root = document.getElementById('cv-root'), d = D.data || {}, rev = !!D.revealed;
@@ -667,23 +727,12 @@ function renderDetail(){
   if(hd && !conf) h += tbdv ? '<p class="cv-alt">'+tv('La date se fixe ensemble.', 'La date se fixe ensemble.')+' <a href="https://instagram.com/'+e(hd)+'" target="_blank" rel="noopener">'+tv('Écris-moi le jour qui t\'arrange', 'Écrivez-moi le jour qui vous convient')+'</a></p>'
     : '<p class="cv-alt">'+tv('Cette date ne t\'arrange pas ?', 'Cette date ne vous convient pas ?')+' <a href="https://instagram.com/'+e(hd)+'" target="_blank" rel="noopener">'+tv('Écris-moi, on en trouve une autre', 'Écrivez-moi, on en trouve une autre')+'</a></p>';
 
-  /* proposition de date, cote app clients */
-  if(tbdv){
-    var propKey = '6fltc_proposed_' + DETAIL_TOK, already = null;
-    try{ already = localStorage.getItem(propKey); }catch(ex){}
-    if(already){
-      h += '<div class="cv-prop"><p class="cv-prop-note">'+tv('Date proposée, en attente de confirmation par le photographe.', 'Date proposée, en attente de confirmation par le photographe.')+'</p></div>';
-    } else {
-      h += '<div class="cv-prop"><label class="cv-sl">'+tv('Proposer une date', 'Proposer une date')+'</label>'+
-        '<input type="date" id="cv-prop-date"><input type="time" id="cv-prop-time">'+
-        '<textarea id="cv-prop-note" rows="2" placeholder="'+tv('Un mot pour préciser (optionnel)', 'Un mot pour préciser (optionnel)')+'"></textarea>'+
-        '<button type="button" id="cv-prop-go">'+tv('Envoyer la proposition', 'Envoyer la proposition')+'</button></div>';
-    }
-  }
+  /* proposition de date, cote app clients (v1.5 : la reponse du photographe s'affiche) */
+  if(tbdv) h += '<div class="cv-prop" id="cv-prop"></div>';
   h += '</div>'; /* fin cv-wrap partiel avant barre fixe */
   var confLabel = conf ? 'Séance confirmée'
     : (d.start ? 'Je confirme le '+fdt(d.start, {day:'numeric', month:'long'})+' à '+fdt(d.start, {hour:'2-digit', minute:'2-digit'}) : 'Je confirme');
-  var mainBtn = tbdv ? (hd ? '<a class="cv-main" href="https://instagram.com/'+e(hd)+'" target="_blank" rel="noopener">Choisir la date ensemble</a>' : '<button class="cv-main" disabled>Date à fixer ensemble</button>')
+  var mainBtn = tbdv ? '<button type="button" class="cv-main" id="cv-prop-jump">Proposer une date</button>'
     : '<button id="cv-conf" class="cv-main'+(conf ? ' cv-done' : '')+'"'+(conf ? ' disabled' : '')+'>'+e(confLabel)+'</button>';
   h += '<div class="cv-bar">'+mainBtn+
     '<div class="cv-sec">'+
@@ -804,17 +853,7 @@ function renderDetail(){
     }, function(){ cb.disabled = false; });
   };
 
-  var propGo = document.getElementById('cv-prop-go');
-  if(propGo) propGo.onclick = function(){
-    var dt = document.getElementById('cv-prop-date').value, tm = document.getElementById('cv-prop-time').value, nt = document.getElementById('cv-prop-note').value.trim();
-    if(!dt){ alert(tv('Choisis une date', 'Choisissez une date')); return; }
-    propGo.disabled = true;
-    sb.rpc('propose_shared_date', {p_token:DETAIL_TOK, p_date:dt, p_time:tm || null, p_note:nt || null}).then(function(r){
-      if(r.error || !r.data){ propGo.disabled = false; alert(tv('Envoi impossible, réessaie.', 'Envoi impossible, réessayez.')); return; }
-      try{ localStorage.setItem('6fltc_proposed_' + DETAIL_TOK, dt); }catch(ex){}
-      renderDetail();
-    }, function(){ propGo.disabled = false; });
-  };
+  if(tbdv) propInit(tv);
 
   var starWrap = document.getElementById('cv-stars'), reviewGo = document.getElementById('cv-review-go'), curStars = 0;
   if(starWrap) starWrap.querySelectorAll('.cv-star').forEach(function(btn){
