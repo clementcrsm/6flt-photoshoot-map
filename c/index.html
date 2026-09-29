@@ -63,6 +63,7 @@ a{color:inherit}
 .banner b{display:block;color:var(--text);font-size:13.5px;margin-bottom:2px}
 .banner button{background:var(--accent);color:#fff;border:none;border-radius:8px;padding:9px 13px;font-size:12.5px;font-weight:700;cursor:pointer;flex-shrink:0;white-space:nowrap}
 .banner.col{display:block}
+.push-err{display:block;margin-top:5px;color:#f29b9b;font-size:12px;line-height:1.35}
 .banner details{margin-top:8px}
 .banner summary{cursor:pointer;color:var(--accent);font-weight:700;font-size:13px;list-style:none;padding:4px 0}
 .banner summary::-webkit-details-marker{display:none}
@@ -249,7 +250,7 @@ a{color:inherit}
 </div>
 
 <script>
-/* ===== 6flt Clients v1.2.2 (Spoties v1.51.2 : guide d'installation visible) ===== */
+/* ===== 6flt Clients v1.2.3 (Spoties v1.51.3 : activation des notifications fiable) ===== */
 var SUPABASE_URL = 'https://gpirhmddoeokakikbjkr.supabase.co';
 var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdwaXJobWRkb2Vva2FraWtiamtyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA2NDI3MzAsImV4cCI6MjA5NjIxODczMH0.LghihUJQCtYBIMsRGXrjh2k4IcVYnf5CyD4lzlQNv6w';
 var VAPID_PUBLIC = 'BOph3IRn1uPlXzoljifkGCP9HoQ1pWYS3V60bUbimAFwqO00QAEsUSx21LoVmgFb0Zzrc1DqSFAtHGs2UoNQbWU';
@@ -406,30 +407,62 @@ function urlBase64ToUint8Array(base64String){
   for(var i=0;i<raw.length;i++) out[i] = raw.charCodeAt(i);
   return out;
 }
+// v1.2.3 : l'activation dit ce qui bloque, et reprend si l'abonnement n'est pas arrive au serveur
+var PUSH_STATE = {busy:false, need:false, ok:false, err:''};
+function swReady(ms){
+  return Promise.race([navigator.serviceWorker.ready, new Promise(function(res, rej){ setTimeout(function(){ rej(new Error('Le service de l\'app ne démarre pas, ferme et rouvre l\'app')); }, ms || 8000); })]);
+}
+function registerAllTokens(sub){
+  if(!sb) return Promise.reject(new Error('Connexion au serveur indisponible'));
+  var raw = sub.toJSON(), tokens = loadTokens();
+  if(!raw || !raw.endpoint || !raw.keys) return Promise.reject(new Error('Abonnement incomplet'));
+  return Promise.all(tokens.map(function(t){
+    return sb.rpc('client_register_push', {p_token:t.token, p_endpoint:raw.endpoint, p_p256dh:raw.keys.p256dh, p_auth:raw.keys.auth, p_ua:navigator.userAgent}).then(function(r){
+      if(r.error) throw new Error('Serveur : '+(r.error.message || 'erreur'));
+      return r.data;
+    });
+  }));
+}
 function notifBannerHTML(){
   if(!('Notification' in window)) return '';
-  if(Notification.permission==='granted') return '';
+  if(PUSH_STATE.busy) return '<div class="banner"><div><b>Activation en cours…</b>Quelques secondes.</div></div>';
   if(Notification.permission==='denied') return '<div class="banner"><div><b>Notifications désactivées</b>Réactive-les dans Réglages, Notifications, 6flt Clients.</div></div>';
-  return '<div class="banner"><div><b>Dernière étape</b>Active les notifications pour être prévenu de chaque étape de ta séance.</div><button class="js-enable-notif" type="button">Activer</button></div>';
+  if(Notification.permission==='granted' && !PUSH_STATE.need)
+    return PUSH_STATE.ok ? '<div class="banner"><div><b>Notifications activées</b>Une notification de test vient de partir.</div></div>' : '';
+  var err = PUSH_STATE.err ? '<span class="push-err">'+e(PUSH_STATE.err)+'</span>' : '';
+  var title = Notification.permission==='granted' ? 'Termine l\'activation' : 'Dernière étape';
+  return '<div class="banner"><div><b>'+title+'</b>Active les notifications pour être prévenu de chaque étape de ta séance.'+err+'</div><button class="js-enable-notif" type="button">'+(PUSH_STATE.err ? 'Réessayer' : 'Activer')+'</button></div>';
 }
 function enableNotifications(){
-  if(!('Notification' in window)){ alert('Notifications indisponibles sur ce téléphone.'); return; }
-  Notification.requestPermission().then(function(perm){
-    refreshHelpers();
-    if(perm!=='granted' || !('serviceWorker' in navigator)) return;
-    navigator.serviceWorker.ready.then(function(reg){
-      return reg.pushManager.getSubscription().then(function(sub){
-        if(sub) return sub;
-        return reg.pushManager.subscribe({userVisibleOnly:true, applicationServerKey:urlBase64ToUint8Array(VAPID_PUBLIC)});
-      });
-    }).then(function(sub){
-      var raw = sub.toJSON(), tokens = loadTokens();
-      if(!sb) return;
-      return Promise.all(tokens.map(function(t){
-        return sb.rpc('client_register_push', {p_token:t.token, p_endpoint:raw.endpoint, p_p256dh:raw.keys.p256dh, p_auth:raw.keys.auth, p_ua:navigator.userAgent});
-      }));
-    }).catch(function(err){ console.warn(err); });
+  if(!('Notification' in window) || !('serviceWorker' in navigator) || !('PushManager' in window)){
+    PUSH_STATE.need = true; PUSH_STATE.err = 'Notifications indisponibles ici : ouvre l\'app depuis son icône.'; refreshHelpers(); return;
+  }
+  // la demande part directement du toucher, sinon iOS la refuse
+  var pr;
+  try{ pr = Notification.requestPermission(); }catch(x){ pr = Promise.reject(x); }
+  PUSH_STATE.busy = true; PUSH_STATE.err = ''; refreshHelpers();
+  Promise.resolve(pr).then(function(perm){
+    if(perm!=='granted') throw new Error(perm==='denied' ? 'Autorisation refusée' : 'Autorisation non accordée');
+    return swReady(8000);
+  }).then(function(reg){
+    return reg.pushManager.getSubscription().then(function(s0){
+      return s0 || reg.pushManager.subscribe({userVisibleOnly:true, applicationServerKey:urlBase64ToUint8Array(VAPID_PUBLIC)});
+    });
+  }).then(registerAllTokens).then(function(){
+    PUSH_STATE.busy = false; PUSH_STATE.need = false; PUSH_STATE.ok = true; PUSH_STATE.err = ''; refreshHelpers();
+    var first = loadTokens()[0];
+    if(first && sb) sb.rpc('client_test_notify', {p_token:first.token}).then(function(){}, function(){});
+  }).catch(function(err){
+    PUSH_STATE.busy = false; PUSH_STATE.need = true; PUSH_STATE.err = (err && err.message) || String(err); refreshHelpers();
   });
+}
+// a chaque ouverture de l'app installee : l'abonnement est renvoye au serveur, ou redemande s'il manque
+function pushSync(){
+  if(!isStandalone() || !('Notification' in window) || Notification.permission!=='granted' || !('serviceWorker' in navigator)) return;
+  swReady(8000).then(function(reg){ return reg.pushManager.getSubscription(); }).then(function(sub){
+    if(!sub){ PUSH_STATE.need = true; refreshHelpers(); return; }
+    return registerAllTokens(sub);
+  }).catch(function(err){ PUSH_STATE.need = true; PUSH_STATE.err = (err && err.message) || ''; refreshHelpers(); });
 }
 function registerTokenForExistingPush(tok){
   if(!('Notification' in window) || Notification.permission!=='granted' || !('serviceWorker' in navigator) || !sb) return;
@@ -923,6 +956,7 @@ if('serviceWorker' in navigator){
     renderList();
     fresh.forEach(registerTokenForExistingPush);
     if(fresh.length===1) openDetail(fresh[0]);
+    pushSync();
     return;
   }
   // navigateur : le lien ouvre la seance, la liste et l'adresse gardent toutes les seances
