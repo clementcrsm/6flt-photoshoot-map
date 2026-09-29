@@ -823,6 +823,12 @@ nav{padding-top:env(safe-area-inset-top);height:calc(52px + env(safe-area-inset-
 .clink-prop-d{font-size:14px;font-weight:700;color:var(--text);margin-top:3px}
 .clink-prop-n{font-size:12px;color:var(--muted);margin-top:3px;line-height:1.4}
 .clink-prop .clink-btns{margin-top:8px}
+.clink-prop-o{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0;border-top:1px solid rgba(201,168,242,.18)}
+.clink-prop-h+.clink-prop-o{border-top:none;margin-top:2px}
+.clink-prop-o .clink-prop-d{margin-top:0;font-size:13.5px}
+.clink-ok{flex:none;background:var(--accent);border:1px solid var(--accent);border-radius:8px;color:#fff;font:700 12.5px 'Inter',sans-serif;padding:9px 14px;cursor:pointer}
+.clink-no{display:block;width:100%;margin-top:8px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font:600 12.5px 'Inter',sans-serif;padding:10px 6px;cursor:pointer}
+.clink-prop button[disabled]{opacity:.5}
 .clink-prop .clink-btns button[disabled]{opacity:.5}
 .client-docs-btn{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--surface2);border:1px solid var(--border);border-radius:9px;color:var(--text);font-family:'Inter',sans-serif;font-size:13px;font-weight:600;padding:11px 12px;cursor:pointer}
 .client-docs-btn:hover{border-color:var(--accent)}
@@ -1528,7 +1534,7 @@ body.panel-open #zone-dock,body.panel-open #view-map #discover-panel{display:non
 <body>
 <div id="splash">
   <img id="splash-logo" src="icon-512.png?v=1.51" alt="Spoties">
-  <div id="splash-credit">Créé par 6flt photographie et Claude<br><span style="opacity:.6">v1.56.1</span></div>
+  <div id="splash-credit">Créé par 6flt photographie et Claude<br><span style="opacity:.6">v1.57</span></div>
 </div>
 
 <div id="login-screen">
@@ -3522,13 +3528,16 @@ function renderClientLinks(fresh){
         '<em>'+(r.review_public ? 'Publication autorisée par le client' : 'Avis privé, à ne pas publier')+'</em></div>';
     }
     // v1.55 : date proposee par le client, a accepter ou refuser ici
-    var props = (DATE_PROPS[it.token] || []).map(function(p){
-      return '<div class="clink-prop"><div class="clink-prop-h">Date proposée par le client</div>'+
-        '<div class="clink-prop-d">'+escapeHtml(propLabel(p))+'</div>'+
-        (p.note ? '<div class="clink-prop-n">« '+escapeHtml(p.note)+' »</div>' : '')+
-        '<div class="clink-btns"><button type="button" class="pri" data-lact="accept" data-i="'+i+'" data-p="'+escapeHtml(p.id)+'">Accepter</button>'+
-        '<button type="button" data-lact="decline" data-i="'+i+'" data-p="'+escapeHtml(p.id)+'">Refuser</button></div></div>';
-    }).join('');
+    // v1.57 : jusqu'a 3 dates proposees d'un coup, une ligne par date, un seul refus pour toutes
+    var pl = DATE_PROPS[it.token] || [], props = '';
+    if(pl.length){
+      var note = pl.filter(function(p){ return p.note; }).map(function(p){ return p.note; })[0] || '';
+      props = '<div class="clink-prop"><div class="clink-prop-h">'+(pl.length>1 ? pl.length+' dates proposées par le client' : 'Date proposée par le client')+'</div>'+
+        pl.map(function(p){ return '<div class="clink-prop-o"><div class="clink-prop-d">'+escapeHtml(propLabel(p))+'</div>'+
+          '<button type="button" class="clink-ok" data-lact="accept" data-i="'+i+'" data-p="'+escapeHtml(p.id)+'">Accepter</button></div>'; }).join('')+
+        (note ? '<div class="clink-prop-n">« '+escapeHtml(note)+' »</div>' : '')+
+        '<button type="button" class="clink-no" data-lact="decline" data-i="'+i+'">'+(pl.length>1 ? 'Aucune ne me va' : 'Refuser')+'</button></div>';
+    }
     return '<div class="clink-item"><div class="clink-t">'+escapeHtml(it.title)+app+'</div><div class="clink-s">'+escapeHtml(it.when+(st.length ? ', '+st.join(', ') : ''))+'</div>'+rev+props+
       (props ? '' : '<button type="button" class="clink-main" data-lact="relance" data-i="'+i+'">'+RELANCE_LABEL[kind]+'</button>')+
       '<div class="clink-btns"><button type="button" data-lact="share" data-i="'+i+'">Partager le lien</button><button type="button" data-lact="copy" data-i="'+i+'">Copier le lien</button></div></div>';
@@ -3536,11 +3545,12 @@ function renderClientLinks(fresh){
   list.onclick = function(ev){
     var b = ev.target.closest('[data-lact]'); if(!b) return;
     var it = items[+b.getAttribute('data-i')]; if(!it) return;
-    if(b.getAttribute('data-lact')==='accept' || b.getAttribute('data-lact')==='decline'){
+    if(b.getAttribute('data-lact')==='accept'){
       var pid = b.getAttribute('data-p'), pr = (DATE_PROPS[it.token] || []).filter(function(x){ return x.id===pid; })[0];
-      if(pr) answerProp(it, pr, b.getAttribute('data-lact')==='accept', b);
+      if(pr) answerProp(it, pr, true, b);
       return;
     }
+    if(b.getAttribute('data-lact')==='decline'){ if((DATE_PROPS[it.token] || []).length) answerProp(it, null, false, b); return; }
     if(b.getAttribute('data-lact')==='relance'){
       var cr = clients.filter(function(x){ return x.id===currentClientId; })[0] || null;
       openRelanceCard({c:cr, token:it.token, text:relanceText(relanceKind(it, SHARE_CACHE && SHARE_CACHE[it.token]), {pre:cr ? String(cr.name||'').trim().split(/\s+/)[0] : '', vous:it.vous, dt:relanceDate(it.date), url:it.url})});
@@ -3573,7 +3583,7 @@ function renderClientLinks(fresh){
       if(!r || r.error) return;
       items.forEach(function(it){ delete DATE_PROPS[it.token]; });
       (r.data || []).filter(function(x){ return x && x.status==='pending' && x.token && x.id; })
-        .sort(function(a, b){ return String(b.created_at||'').localeCompare(String(a.created_at||'')); })
+        .sort(function(a, b){ return String(a.proposed_date||'').localeCompare(String(b.proposed_date||'')) || String(a.proposed_time||'').localeCompare(String(b.proposed_time||'')); })
         .forEach(function(x){ (DATE_PROPS[x.token] = DATE_PROPS[x.token] || []).push(x); });
       if(currentClientId===cid) renderClientLinks(true);
     }, function(){});
@@ -3591,24 +3601,27 @@ function propLabel(p){
 }
 function answerProp(it, p, accept, btn){
   var c = clients.filter(function(x){ return x.id===currentClientId; })[0] || null, cid = currentClientId;
+  var all = DATE_PROPS[it.token] || [];
+  if(!p) p = all[0]; if(!p) return;
   var pre = c ? String(c.name||'').trim().split(/\s+/)[0] : '', who = pre || 'ton client', lbl = propLabel(p).toLowerCase();
   var rdv = propTime(p.proposed_time) ? 'Rendez-vous à '+propTime(p.proposed_time).replace(':', 'h')+'.' : (PROP_RDV[p.proposed_time] || 'Horaire du briefing inchangé.');
   if(!confirm(accept ? 'Fixer la séance au '+lbl+' ?\n\n'+rdv+' Le briefing de '+who+' est mis à jour et la séance s\'ajoute à son planning.'
-                     : 'Refuser le '+lbl+' ?\n\n'+who.charAt(0).toUpperCase()+who.slice(1)+' pourra proposer une autre date dans son lien.')) return;
-  var btns = btn && btn.parentNode ? btn.parentNode.querySelectorAll('button') : [];
+                     : (all.length>1 ? 'Refuser ces '+all.length+' dates ?' : 'Refuser le '+lbl+' ?')+'\n\n'+who.charAt(0).toUpperCase()+who.slice(1)+' pourra proposer une autre date dans son lien.')) return;
+  var box = btn ? btn.closest('.clink-prop') : null, btns = box ? box.querySelectorAll('button') : [];
   var lock = function(on){ for(var k=0;k<btns.length;k++) btns[k].disabled = on; };
   lock(true);
-  var dropProp = function(){ DATE_PROPS[it.token] = (DATE_PROPS[it.token] || []).filter(function(x){ return accept ? false : x.id!==p.id; }); };
+  var dropProp = function(){ DATE_PROPS[it.token] = []; };
   // client avec l'app : la notif part toute seule. Sinon : message pret, a envoyer par SMS, e-mail ou Instagram
   var tell = function(kind, dt, card){
     if(!card && CLIENT_APP[it.token]===true){ showToast(kind==='datefixed' ? 'Séance fixée, '+who+' reçoit la notif dans son app' : who.charAt(0).toUpperCase()+who.slice(1)+' est prévenu dans son app'); return; }
     openRelanceCard({c:c, token:it.token, text:relanceText(kind, {pre:pre, vous:it.vous, dt:dt, url:it.url})});
   };
   if(!accept){
-    sb.rpc('owner_answer_date', {p_id:p.id, p_accept:false}).then(function(r){
+    var n = all.length;
+    sb.rpc('owner_answer_dates', {p_token:it.token, p_accept:null}).then(function(r){
       if(!r || r.error || !r.data){ lock(false); showToast('Réponse impossible, réessaie'); return; }
       dropProp(); if(currentClientId===cid) renderClientLinks(true);
-      tell('datedeclined', relanceDate(p.proposed_date));
+      tell(n>1 ? 'datesdeclined' : 'datedeclined', relanceDate(p.proposed_date));
     }, function(){ lock(false); showToast('Réponse impossible, vérifie ta connexion'); });
     return;
   }
@@ -3641,7 +3654,7 @@ function answerProp(it, p, accept, btn){
       try{ renderClients(); }catch(e){}
       try{ if(typeof planRender==='function') planRender(); }catch(e){}
     }
-    if(sb) sb.rpc('owner_answer_date', {p_id:p.id, p_accept:true}).then(function(){}, function(){});
+    if(sb) sb.rpc('owner_answer_dates', {p_token:it.token, p_accept:p.id}).then(function(){}, function(){});
     dropProp();
     if(currentClientId===cid){ renderClientLinks(true); try{ renderClientProgress(); }catch(e){} }
     if(!res.published){ showToast(res.locked ? 'Date fixée. Document confirmé : republie-le depuis l\'ordinateur' : 'Date fixée, lien pas encore à jour (connexion)'); return; }
@@ -4132,9 +4145,9 @@ document.addEventListener('click',function(e){
 });
 
 /* ===================== PROFIL v1.36 : accueil, statistiques, nouveautes ===================== */
-var APP_VERSION='v1.56.1';
+var APP_VERSION='v1.57';
 // historique reconstruit depuis les anciens index (date = date de livraison). [version, date, approximative, [[n|f, texte]]]
-var CHANGELOG=[["v1.56.1","2026-09-30",0,[["f","Lien client : tes propres ouvertures (aperçu du lien quand tu le colles dans une conversation, vérification) ne comptent plus et ne déclenchent plus la notif Briefing ouvert"]]],["v1.56","2026-09-30",0,[["n","6flt Clients : Proposer une date ouvre directement un calendrier, avec le moment de la journée (matin, après-midi, fin de journée) au lieu d'une heure"],["n","Un jour déjà refusé apparaît barré et ne peut plus être reproposé, une proposition identique n'est pas envoyée deux fois"],["n","Accepter une proposition cale le rendez-vous sur le lever ou le coucher du soleil selon le moment choisi, et l'heure calculée part dans le message au client"]]],["v1.55.1","2026-09-29",0,[["f","6flt Clients : le briefing s'affichait sans sa mise en page (textes bruts, photos géantes) depuis la v1.51, il retrouve le rendu de Spoties"],["f","Fiche client ouverte pendant le chargement : les liens clients et les dates proposées apparaissent dès qu'ils arrivent"]]],["v1.55","2026-09-29",0,[["n","Fiche client : la date proposée par le client s'affiche avec Accepter et Refuser"],["n","Accepter fixe la date du briefing, met à jour son lien et ajoute la séance au planning du client, sans passer par l'ordinateur"],["n","Le client est prévenu de ta réponse : notif dans son app, sinon message prêt à envoyer par SMS, e-mail ou Instagram"],["n","6flt Clients : le client voit si sa date est en attente ou refusée, et peut en proposer une autre"]]],["v1.54","2026-09-29",0,[["n","Fiche client : on voit si le client a installé l'app 6flt Clients"],["n","Relance en un geste depuis la fiche : message prêt selon l'étape (confirmation, date, rappel, avis) et envoi par notif dans son app, SMS, e-mail ou Instagram"],["n","Notifications du client : toucher une notif ouvre directement la bonne séance"],["f","Sur iPhone, les notifs d'un briefing ouvrent la fiche du client (l'éditeur n'existe que sur ordinateur)"]]],["v1.53","2026-09-29",0,[["n","Avis clients : note et commentaire dans la fiche client, avec l'accord ou non de les publier"],["n","Statistiques : note moyenne des avis clients"],["n","Notification à chaque nouvel avis, qui ouvre la fiche du client"],["f","Notifications envoyées aux clients : accents corrigés et tutoiement ou vouvoiement selon le briefing"]]],["v1.52","2026-09-29",0,[["n","Fiche client : liens clients partagés avec leur statut (ouvertures, confirmation, galerie), boutons Partager et Copier le lien, utilisables sur iPhone"]]],["v1.51.3","2026-09-29",0,[["f","6flt Clients : activation des notifications fiabilisée, la raison s'affiche si ça bloque et on peut réessayer"],["n","6flt Clients : notification de test envoyée dès l'activation, abonnement revérifié à chaque ouverture"]]],["v1.51.2","2026-09-29",0,[["f","6flt Clients : invitation à installer l'app bien plus visible, guide plein écran avec les vrais boutons à toucher et une flèche qui les montre"],["n","6flt Clients : le guide d'installation s'ouvre tout seul juste après la confirmation de la séance"]]],["v1.51.1","2026-09-29",0,[["f","6flt Clients : le panneau Ajouter une séance restait ouvert par-dessus la page et bloquait les boutons"]]],["v1.51","2026-09-29",0,[["n","Un seul lien client : le lien partagé ouvre directement l'app 6flt Clients, les liens déjà envoyés y sont renvoyés"],["n","6flt Clients : guide d'installation adapté au téléphone (Safari, Chrome, Instagram, Android) et bouton Installer sur Android"],["f","6flt Clients : la séance ouverte dans Safari se retrouve dans l'app une fois installée"],["f","Ouvertures du lien client : seules les vraies ouvertures sont comptées"]]],["v1.50","2026-09-29",0,[["n","Partage du briefing : champ Galerie, le lien s'ajoute au lien client sans nouvelle version ni nouvelle confirmation"],["n","Lien galerie recopié dans la fiche client, et envoyé au dernier briefing partagé quand tu le saisis dans la fiche"],["n","Lien client et app 6flt Clients : bandeau Ta galerie est prête"]]],["v1.49","2026-09-29",0,[["n","Lien client : bouton vers l'app 6flt Clients pour recevoir les notifications de la séance"]]],["v1.48","2026-09-29",0,[["n","Onglet Planning renommé Briefing"],["n","Briefing : ajouter des spots au parcours depuis le bloc Spots ou ses réglages, avec recherche"],["n","Timing lumière : étapes à ajouter (pause, prises roulantes, changement de lieu…) avec leur durée et leur place, et temps réglable spot par spot"],["n","Briefing : bloc Lien, un bouton vers une galerie, un moodboard ou un formulaire"],["f","Ton du document : messages d'erreur du lien client et description du calendrier au bon registre, Écris-moi dans le bloc Contact"],["f","Nouvelle checklist ajoutée à la main : la ligne sur la tenue suit le tutoiement ou le vouvoiement"]]],["v1.47","2026-09-28",0,[["n","Lien client : nom, prénom et signature au doigt avant de confirmer la séance"],["n","Signature visible dans le panneau de partage, dans le lien client et dans son PDF, figée avec le document accepté"],["n","Lien client : le bouton de confirmation indique ce qu'il manque au lieu de rester grisé"]]],["v1.46","2026-09-28",0,[["n","Profil : suivi des contrats en trois lignes, briefings sans réponse depuis 48 h, séances confirmées sans acompte, galeries à livrer"],["n","Toucher une ligne ouvre le briefing ou la fiche, avec le message de relance déjà rédigé"]]],["v1.45","2026-09-28",0,[["n","Lien client : bouton PDF pour garder le briefing lisible sans réseau le jour du shoot"],["n","Briefing : bloc Jour J, des consignes que le client ne voit qu'au moment où les adresses sont révélées"],["n","Lien client : bandeau à la révélation des adresses, qui mène aux consignes et rappelle le PDF"]]],["v1.44","2026-09-28",0,[["n","Notifications sur ton téléphone : briefing ouvert, séance confirmée, relance après 48 h, date toujours à fixer, rappel 24 h avant avec adresses révélées, galerie à livrer"],["n","Toucher une notification ouvre le bon briefing ou la bonne fiche, avec le message pour le client déjà rédigé"]]],["v1.43","2026-09-28",0,[["n","État de chaque shooting dans la fiche client : prévu, réalisé ou annulé, automatique d'après la date sinon"],["n","Briefing : date à définir, le document devient une proposition et le client te propose un jour"],["n","Briefing : tutoiement ou vouvoiement, au choix avec le gabarit"],["n","Briefing : couleur des titres et boutons au choix, reprise dans le lien client"],["f","Glisser une photo n'entoure plus que la zone photo"]]],["v1.42","2026-09-28",0,[["f","Photos des clients qui ne s'affichaient pas dans la liste"],["f","Client supprimé qui réapparaissait, renvoyé par un autre appareil"],["n","Contact client en cases séparées : téléphone, e-mail, Instagram, avec bouton pour appeler, écrire ou ouvrir le profil"],["n","Étapes du contrat marquables à la main quand l'app ne peut pas les deviner"],["n","Spots, clients, événements et filtres s'ouvrent en cartes flottantes, avec la même apparition que le profil"],["n","Sur ordinateur, glisser une photo sur un spot, un client ou un événement pour l'ajouter"]]],["v1.41","2026-09-27",0,[["n","Périmètre (ex Découverte) : réglages dans un bandeau en bas de carte, rayon au pincement dans le cercle ou avec + et -"],["n","Périmètre : spots à l'intérieur entourés, routes qui le traversent soulignées en blanc, liste des spots à la ronde"],["n","Critères de recherche de routes en boutons plutôt qu'en jauges"],["n","Profil en carte flottante à gauche, la carte reste visible autour"],["n","Filtres proposés au choix dans Profil, Carte, le panneau se réorganise sans trou"],["f","Briefing supprimé qui réapparaissait, renvoyé par un autre appareil qui en gardait une copie"],["n","Supprimer un briefing propose de retirer aussi la séance du planning"]]],["v1.40","2026-09-25",0,[["f","Boutons de la carte alignés en ligne quand la carte ne se chargeait pas"],["n","Découverte de routes : zone ronde posée au centre de la carte, rayon réglable en kilomètres et point orange à glisser pour la déplacer"],["n","Boutons de la carte regroupés en deux colonnes, une à gauche, une à droite"],["f","Boutons + et - de Mapbox retirés, ils étaient cachés derrière les autres"],["f","Panneaux Filtrer et Découverte plus compacts sur téléphone"]]],["v1.39","2026-09-25",0,[["n","Le briefing se gèle dès que le client accepte les conditions : plus aucune modification ne part dans son lien"],["n","Publier une nouvelle version annule la confirmation du client, qui doit accepter à nouveau"],["n","Mise à jour du lien en pause pendant que tu travailles, publication quand tu es prêt"],["n","Texte des conditions mémorisé avec le lien au moment de l'acceptation"]]],["v1.38","2026-09-23",0,[["n","Anneau d'avancement du contrat sur chaque fiche client et dans la liste : date, briefing, lien, accord, shooting, galerie"],["n","Statistiques : avancement des contrats étape par étape et valeur estimée du carnet"],["f","Numéro de version affiché dans Nouveautés remis à jour"]]],["v1.37","2026-09-23",0,[["n","Briefing : bloc L'essentiel (date, durée, secteur et tarif en tête de document)"],["n","Briefing : bloc Accord, conditions à accepter avant de confirmer"],["n","Séance offerte affichée dans la formule et dans l'essentiel"],["n","Lien client : confirmation verrouillée tant que les conditions ne sont pas acceptées, bouton daté, lien pour proposer une autre date"],["f","Lien client : message distinct entre perte de connexion et lien expiré"]]],["v1.36","2026-09-23",0,[["n","Profil réorganisé : accueil, objectifs, carte, apparence et données sur des pages séparées"],["n","Statistiques : santé des fiches, ajouts par mois, clients, liens partagés, photos, routes, types, heures de shoot"],["n","Page Nouveautés avec l'historique daté de toutes les versions"],["n","Filtre des fiches à compléter dans l'onglet Spots"]]],["v1.35","2026-09-23",0,[["n","Plusieurs photos d'un coup dans les spots, envoyées dans l'ordre choisi"],["n","Heure et affiche des événements, affiche en plein écran"],["f","Événement de la veille encore affiché comme à venir le soir"],["f","Date de création d'un événement perdue à l'édition"]]],["v1.34","2026-09-22",0,[["n","Téléchargement du briefing en PDF"],["n","Lien client interactif : adresse exacte révélée avant le shoot, ajout au calendrier"]]],["v1.33","2026-09-22",0,[["n","Briefings listés dans la fiche client, création directe depuis la fiche"],["n","Texte modifiable directement dans le briefing, zoom de l'éditeur"],["n","Changer la date du shoot dans le briefing met à jour le planning du client"],["n","Toucher le logo actualise l'app"]]],["v1.30","2026-09-22",0,[["n","Planning refait : briefings en rangées réordonnables (1 à 3 colonnes), blocs branchés sur tes spots et clients, gabarits, sauvegarde en ligne"]]],["v1.29","2026-09-20",0,[["n","Cartes Spots plus compactes, décor affiché sur la carte"],["f","Vignettes carrées du Planning déformées"]]],["v1.28","2026-09-20",0,[["n","Galerie et Shotlist fusionnées dans l'onglet Spots"],["n","Sélection multiple et glisser pour supprimer un spot"],["n","Inspirations déplacées vers le profil"]]],["v1.27","2026-09-20",0,[["n","Planning en éditeur grille aimantée, branché sur les spots et clients"]]],["v1.26","2026-09-20",0,[["n","Premier onglet Planning (document de briefing)"],["n","Associer des spots à un client en les touchant sur la carte"]]],["v1.24","2026-09",1,[["f","Boutons de la carte qui se chevauchaient sur mobile"],["f","Panneaux filtres, découverte et soleil qui restaient ouverts ensemble"],["n","Marqueurs réduits à 44 px sur mobile"]]],["v1.23","2026-07-21",0,[["n","Fréquentation des routes heure par heure"],["n","Découverte de routes dans une zone dessinée (OpenStreetMap), filtrées par sinuosité"]]],["v1.22","2026-07-17",0,[["n","Aperçu en direct de l'objet 3D avant de le poser"],["f","Objets 3D qui disparaissaient après une image"]]],["v1.21","2026-07-17",0,[["n","Bouton dédié pour placer un objet 3D"]]],["v1.20","2026-07-17",0,[["n","Comptes séparés : inscription, mot de passe oublié, données propres à chaque compte"],["n","Progression XP sauvegardée dans le compte"]]],["v1.18","2026-07-06",0,[["n","Mode soleil 3D : position du soleil et ombres portées"],["n","Objets 3D sur la carte (voiture, flèche, cube)"],["n","Vidéos courtes sur les spots (20 s max)"],["n","Retracer une route existante"],["n","Zoom et pincement dans la visionneuse, photos réorganisables par glisser"],["n","Progression : XP, niveaux, objectifs et titres"],["n","Historique de recherche et vue Street (Mapillary, repli Google)"]]],["v1.17","2026-06-27",0,[["f","Marqueurs qui glissaient au dézoom"]]],["v1.16","2026-06-27",0,[["f","Tentative de correction des marqueurs (non concluante)"]]],["v1.15","2026-06-27",0,[["n","Navigation entre les photos dans la visionneuse"]]],["v1.14","2026-06-08",0,[["n","Mini-calendrier dans la fiche client pour planifier les shoots"]]],["v1.13","2026-06-07",0,[["n","Planning mensuel de tous les shoots"]]],["v1.12","2026-06-07",0,[["n","Sélection de plusieurs clients et spot de compromis pour leurs voitures"],["f","Badges d'état restylés (v1.12.1)"]]],["v1.11","2026-06-07",0,[["n","États clients automatiques : prospect, planifié, réalisé, livré"],["n","Relance À livrer et accès direct aux spots conseillés pour une voiture"]]],["v1.10","2026-06-07",0,[["n","Shootings planifiés dans la fiche client"]]],["v1.9","2026-06-07",0,[["n","Plusieurs voitures par client avec couleur de carrosserie, offre et statut"]]],["v1.8","2026-06-07",0,[["f","Photos stockées en ligne : fin de la mémoire saturée qui cassait la synchro PC / iPhone"],["f","Accès aux données sécurisé, clé de carte restreinte à ton site"]]],["v1.7","2026-06-06",0,[["f","Synchronisation fiable : un spot supprimé ne réapparaît plus"]]],["v1.6","2026-06-06",0,[["n","Onglet Profil : photo et réglages regroupés"]]],["v1.5","2026-06-06",0,[["n","Connexion par email et mot de passe"],["n","L'app devient 6flt Spots"]]],["v1.4","2026-06-06",0,[["n","Longs trajets jusqu'à 25 étapes"],["n","Types Musée, Circuit, Concession"],["n","Onglet Événements"]]],["v1.3","2026-06-06",1,[["n","Analyse automatique des virages d'une route"],["n","Filtres de la carte et suppression multiple dans la galerie"]]],["v1.2","2026-06-05",0,[["n","Tracé de routes sur la carte"],["n","Corbeille clients avec restauration"],["f","Routes en double et rendu des routes (v1.2.1)"]]],["v1.1","2026-06-05",0,[["n","Onglet Clients"],["n","Synchronisation en ligne des spots et clients"],["n","Écran de démarrage"]]],["v1.0","2026-06-04",0,[["n","Première version : carte des spots, galerie, Shotlist (conseil de spots selon la couleur de la voiture)"]]]];
+var CHANGELOG=[["v1.57","2026-09-30",0,[["n","6flt Clients : chaque moment de la journée affiche ses heures pour le jour choisi, calculées sur la lumière et la durée du briefing"],["n","6flt Clients : jusqu'à 3 dates proposées en un seul envoi"],["n","Fiche client : les dates proposées sur une seule carte, Accepter sur la bonne, ou Aucune ne me va en un geste"],["f","Accepter une date depuis l'iPhone attend les vrais temps de trajet avant de publier le briefing"],["n","Les liens déjà envoyés avec une date à fixer sont mis à jour une fois, tout seuls, pour afficher les heures"]]],["v1.56.1","2026-09-30",0,[["f","Lien client : tes propres ouvertures (aperçu du lien quand tu le colles dans une conversation, vérification) ne comptent plus et ne déclenchent plus la notif Briefing ouvert"]]],["v1.56","2026-09-30",0,[["n","6flt Clients : Proposer une date ouvre directement un calendrier, avec le moment de la journée (matin, après-midi, fin de journée) au lieu d'une heure"],["n","Un jour déjà refusé apparaît barré et ne peut plus être reproposé, une proposition identique n'est pas envoyée deux fois"],["n","Accepter une proposition cale le rendez-vous sur le lever ou le coucher du soleil selon le moment choisi, et l'heure calculée part dans le message au client"]]],["v1.55.1","2026-09-29",0,[["f","6flt Clients : le briefing s'affichait sans sa mise en page (textes bruts, photos géantes) depuis la v1.51, il retrouve le rendu de Spoties"],["f","Fiche client ouverte pendant le chargement : les liens clients et les dates proposées apparaissent dès qu'ils arrivent"]]],["v1.55","2026-09-29",0,[["n","Fiche client : la date proposée par le client s'affiche avec Accepter et Refuser"],["n","Accepter fixe la date du briefing, met à jour son lien et ajoute la séance au planning du client, sans passer par l'ordinateur"],["n","Le client est prévenu de ta réponse : notif dans son app, sinon message prêt à envoyer par SMS, e-mail ou Instagram"],["n","6flt Clients : le client voit si sa date est en attente ou refusée, et peut en proposer une autre"]]],["v1.54","2026-09-29",0,[["n","Fiche client : on voit si le client a installé l'app 6flt Clients"],["n","Relance en un geste depuis la fiche : message prêt selon l'étape (confirmation, date, rappel, avis) et envoi par notif dans son app, SMS, e-mail ou Instagram"],["n","Notifications du client : toucher une notif ouvre directement la bonne séance"],["f","Sur iPhone, les notifs d'un briefing ouvrent la fiche du client (l'éditeur n'existe que sur ordinateur)"]]],["v1.53","2026-09-29",0,[["n","Avis clients : note et commentaire dans la fiche client, avec l'accord ou non de les publier"],["n","Statistiques : note moyenne des avis clients"],["n","Notification à chaque nouvel avis, qui ouvre la fiche du client"],["f","Notifications envoyées aux clients : accents corrigés et tutoiement ou vouvoiement selon le briefing"]]],["v1.52","2026-09-29",0,[["n","Fiche client : liens clients partagés avec leur statut (ouvertures, confirmation, galerie), boutons Partager et Copier le lien, utilisables sur iPhone"]]],["v1.51.3","2026-09-29",0,[["f","6flt Clients : activation des notifications fiabilisée, la raison s'affiche si ça bloque et on peut réessayer"],["n","6flt Clients : notification de test envoyée dès l'activation, abonnement revérifié à chaque ouverture"]]],["v1.51.2","2026-09-29",0,[["f","6flt Clients : invitation à installer l'app bien plus visible, guide plein écran avec les vrais boutons à toucher et une flèche qui les montre"],["n","6flt Clients : le guide d'installation s'ouvre tout seul juste après la confirmation de la séance"]]],["v1.51.1","2026-09-29",0,[["f","6flt Clients : le panneau Ajouter une séance restait ouvert par-dessus la page et bloquait les boutons"]]],["v1.51","2026-09-29",0,[["n","Un seul lien client : le lien partagé ouvre directement l'app 6flt Clients, les liens déjà envoyés y sont renvoyés"],["n","6flt Clients : guide d'installation adapté au téléphone (Safari, Chrome, Instagram, Android) et bouton Installer sur Android"],["f","6flt Clients : la séance ouverte dans Safari se retrouve dans l'app une fois installée"],["f","Ouvertures du lien client : seules les vraies ouvertures sont comptées"]]],["v1.50","2026-09-29",0,[["n","Partage du briefing : champ Galerie, le lien s'ajoute au lien client sans nouvelle version ni nouvelle confirmation"],["n","Lien galerie recopié dans la fiche client, et envoyé au dernier briefing partagé quand tu le saisis dans la fiche"],["n","Lien client et app 6flt Clients : bandeau Ta galerie est prête"]]],["v1.49","2026-09-29",0,[["n","Lien client : bouton vers l'app 6flt Clients pour recevoir les notifications de la séance"]]],["v1.48","2026-09-29",0,[["n","Onglet Planning renommé Briefing"],["n","Briefing : ajouter des spots au parcours depuis le bloc Spots ou ses réglages, avec recherche"],["n","Timing lumière : étapes à ajouter (pause, prises roulantes, changement de lieu…) avec leur durée et leur place, et temps réglable spot par spot"],["n","Briefing : bloc Lien, un bouton vers une galerie, un moodboard ou un formulaire"],["f","Ton du document : messages d'erreur du lien client et description du calendrier au bon registre, Écris-moi dans le bloc Contact"],["f","Nouvelle checklist ajoutée à la main : la ligne sur la tenue suit le tutoiement ou le vouvoiement"]]],["v1.47","2026-09-28",0,[["n","Lien client : nom, prénom et signature au doigt avant de confirmer la séance"],["n","Signature visible dans le panneau de partage, dans le lien client et dans son PDF, figée avec le document accepté"],["n","Lien client : le bouton de confirmation indique ce qu'il manque au lieu de rester grisé"]]],["v1.46","2026-09-28",0,[["n","Profil : suivi des contrats en trois lignes, briefings sans réponse depuis 48 h, séances confirmées sans acompte, galeries à livrer"],["n","Toucher une ligne ouvre le briefing ou la fiche, avec le message de relance déjà rédigé"]]],["v1.45","2026-09-28",0,[["n","Lien client : bouton PDF pour garder le briefing lisible sans réseau le jour du shoot"],["n","Briefing : bloc Jour J, des consignes que le client ne voit qu'au moment où les adresses sont révélées"],["n","Lien client : bandeau à la révélation des adresses, qui mène aux consignes et rappelle le PDF"]]],["v1.44","2026-09-28",0,[["n","Notifications sur ton téléphone : briefing ouvert, séance confirmée, relance après 48 h, date toujours à fixer, rappel 24 h avant avec adresses révélées, galerie à livrer"],["n","Toucher une notification ouvre le bon briefing ou la bonne fiche, avec le message pour le client déjà rédigé"]]],["v1.43","2026-09-28",0,[["n","État de chaque shooting dans la fiche client : prévu, réalisé ou annulé, automatique d'après la date sinon"],["n","Briefing : date à définir, le document devient une proposition et le client te propose un jour"],["n","Briefing : tutoiement ou vouvoiement, au choix avec le gabarit"],["n","Briefing : couleur des titres et boutons au choix, reprise dans le lien client"],["f","Glisser une photo n'entoure plus que la zone photo"]]],["v1.42","2026-09-28",0,[["f","Photos des clients qui ne s'affichaient pas dans la liste"],["f","Client supprimé qui réapparaissait, renvoyé par un autre appareil"],["n","Contact client en cases séparées : téléphone, e-mail, Instagram, avec bouton pour appeler, écrire ou ouvrir le profil"],["n","Étapes du contrat marquables à la main quand l'app ne peut pas les deviner"],["n","Spots, clients, événements et filtres s'ouvrent en cartes flottantes, avec la même apparition que le profil"],["n","Sur ordinateur, glisser une photo sur un spot, un client ou un événement pour l'ajouter"]]],["v1.41","2026-09-27",0,[["n","Périmètre (ex Découverte) : réglages dans un bandeau en bas de carte, rayon au pincement dans le cercle ou avec + et -"],["n","Périmètre : spots à l'intérieur entourés, routes qui le traversent soulignées en blanc, liste des spots à la ronde"],["n","Critères de recherche de routes en boutons plutôt qu'en jauges"],["n","Profil en carte flottante à gauche, la carte reste visible autour"],["n","Filtres proposés au choix dans Profil, Carte, le panneau se réorganise sans trou"],["f","Briefing supprimé qui réapparaissait, renvoyé par un autre appareil qui en gardait une copie"],["n","Supprimer un briefing propose de retirer aussi la séance du planning"]]],["v1.40","2026-09-25",0,[["f","Boutons de la carte alignés en ligne quand la carte ne se chargeait pas"],["n","Découverte de routes : zone ronde posée au centre de la carte, rayon réglable en kilomètres et point orange à glisser pour la déplacer"],["n","Boutons de la carte regroupés en deux colonnes, une à gauche, une à droite"],["f","Boutons + et - de Mapbox retirés, ils étaient cachés derrière les autres"],["f","Panneaux Filtrer et Découverte plus compacts sur téléphone"]]],["v1.39","2026-09-25",0,[["n","Le briefing se gèle dès que le client accepte les conditions : plus aucune modification ne part dans son lien"],["n","Publier une nouvelle version annule la confirmation du client, qui doit accepter à nouveau"],["n","Mise à jour du lien en pause pendant que tu travailles, publication quand tu es prêt"],["n","Texte des conditions mémorisé avec le lien au moment de l'acceptation"]]],["v1.38","2026-09-23",0,[["n","Anneau d'avancement du contrat sur chaque fiche client et dans la liste : date, briefing, lien, accord, shooting, galerie"],["n","Statistiques : avancement des contrats étape par étape et valeur estimée du carnet"],["f","Numéro de version affiché dans Nouveautés remis à jour"]]],["v1.37","2026-09-23",0,[["n","Briefing : bloc L'essentiel (date, durée, secteur et tarif en tête de document)"],["n","Briefing : bloc Accord, conditions à accepter avant de confirmer"],["n","Séance offerte affichée dans la formule et dans l'essentiel"],["n","Lien client : confirmation verrouillée tant que les conditions ne sont pas acceptées, bouton daté, lien pour proposer une autre date"],["f","Lien client : message distinct entre perte de connexion et lien expiré"]]],["v1.36","2026-09-23",0,[["n","Profil réorganisé : accueil, objectifs, carte, apparence et données sur des pages séparées"],["n","Statistiques : santé des fiches, ajouts par mois, clients, liens partagés, photos, routes, types, heures de shoot"],["n","Page Nouveautés avec l'historique daté de toutes les versions"],["n","Filtre des fiches à compléter dans l'onglet Spots"]]],["v1.35","2026-09-23",0,[["n","Plusieurs photos d'un coup dans les spots, envoyées dans l'ordre choisi"],["n","Heure et affiche des événements, affiche en plein écran"],["f","Événement de la veille encore affiché comme à venir le soir"],["f","Date de création d'un événement perdue à l'édition"]]],["v1.34","2026-09-22",0,[["n","Téléchargement du briefing en PDF"],["n","Lien client interactif : adresse exacte révélée avant le shoot, ajout au calendrier"]]],["v1.33","2026-09-22",0,[["n","Briefings listés dans la fiche client, création directe depuis la fiche"],["n","Texte modifiable directement dans le briefing, zoom de l'éditeur"],["n","Changer la date du shoot dans le briefing met à jour le planning du client"],["n","Toucher le logo actualise l'app"]]],["v1.30","2026-09-22",0,[["n","Planning refait : briefings en rangées réordonnables (1 à 3 colonnes), blocs branchés sur tes spots et clients, gabarits, sauvegarde en ligne"]]],["v1.29","2026-09-20",0,[["n","Cartes Spots plus compactes, décor affiché sur la carte"],["f","Vignettes carrées du Planning déformées"]]],["v1.28","2026-09-20",0,[["n","Galerie et Shotlist fusionnées dans l'onglet Spots"],["n","Sélection multiple et glisser pour supprimer un spot"],["n","Inspirations déplacées vers le profil"]]],["v1.27","2026-09-20",0,[["n","Planning en éditeur grille aimantée, branché sur les spots et clients"]]],["v1.26","2026-09-20",0,[["n","Premier onglet Planning (document de briefing)"],["n","Associer des spots à un client en les touchant sur la carte"]]],["v1.24","2026-09",1,[["f","Boutons de la carte qui se chevauchaient sur mobile"],["f","Panneaux filtres, découverte et soleil qui restaient ouverts ensemble"],["n","Marqueurs réduits à 44 px sur mobile"]]],["v1.23","2026-07-21",0,[["n","Fréquentation des routes heure par heure"],["n","Découverte de routes dans une zone dessinée (OpenStreetMap), filtrées par sinuosité"]]],["v1.22","2026-07-17",0,[["n","Aperçu en direct de l'objet 3D avant de le poser"],["f","Objets 3D qui disparaissaient après une image"]]],["v1.21","2026-07-17",0,[["n","Bouton dédié pour placer un objet 3D"]]],["v1.20","2026-07-17",0,[["n","Comptes séparés : inscription, mot de passe oublié, données propres à chaque compte"],["n","Progression XP sauvegardée dans le compte"]]],["v1.18","2026-07-06",0,[["n","Mode soleil 3D : position du soleil et ombres portées"],["n","Objets 3D sur la carte (voiture, flèche, cube)"],["n","Vidéos courtes sur les spots (20 s max)"],["n","Retracer une route existante"],["n","Zoom et pincement dans la visionneuse, photos réorganisables par glisser"],["n","Progression : XP, niveaux, objectifs et titres"],["n","Historique de recherche et vue Street (Mapillary, repli Google)"]]],["v1.17","2026-06-27",0,[["f","Marqueurs qui glissaient au dézoom"]]],["v1.16","2026-06-27",0,[["f","Tentative de correction des marqueurs (non concluante)"]]],["v1.15","2026-06-27",0,[["n","Navigation entre les photos dans la visionneuse"]]],["v1.14","2026-06-08",0,[["n","Mini-calendrier dans la fiche client pour planifier les shoots"]]],["v1.13","2026-06-07",0,[["n","Planning mensuel de tous les shoots"]]],["v1.12","2026-06-07",0,[["n","Sélection de plusieurs clients et spot de compromis pour leurs voitures"],["f","Badges d'état restylés (v1.12.1)"]]],["v1.11","2026-06-07",0,[["n","États clients automatiques : prospect, planifié, réalisé, livré"],["n","Relance À livrer et accès direct aux spots conseillés pour une voiture"]]],["v1.10","2026-06-07",0,[["n","Shootings planifiés dans la fiche client"]]],["v1.9","2026-06-07",0,[["n","Plusieurs voitures par client avec couleur de carrosserie, offre et statut"]]],["v1.8","2026-06-07",0,[["f","Photos stockées en ligne : fin de la mémoire saturée qui cassait la synchro PC / iPhone"],["f","Accès aux données sécurisé, clé de carte restreinte à ton site"]]],["v1.7","2026-06-06",0,[["f","Synchronisation fiable : un spot supprimé ne réapparaît plus"]]],["v1.6","2026-06-06",0,[["n","Onglet Profil : photo et réglages regroupés"]]],["v1.5","2026-06-06",0,[["n","Connexion par email et mot de passe"],["n","L'app devient 6flt Spots"]]],["v1.4","2026-06-06",0,[["n","Longs trajets jusqu'à 25 étapes"],["n","Types Musée, Circuit, Concession"],["n","Onglet Événements"]]],["v1.3","2026-06-06",1,[["n","Analyse automatique des virages d'une route"],["n","Filtres de la carte et suppression multiple dans la galerie"]]],["v1.2","2026-06-05",0,[["n","Tracé de routes sur la carte"],["n","Corbeille clients avec restauration"],["f","Routes en double et rendu des routes (v1.2.1)"]]],["v1.1","2026-06-05",0,[["n","Onglet Clients"],["n","Synchronisation en ligne des spots et clients"],["n","Écran de démarrage"]]],["v1.0","2026-06-04",0,[["n","Première version : carte des spots, galerie, Shotlist (conseil de spots selon la couleur de la voiture)"]]]];
 var PF_MOIS=['janv.','févr.','mars','avr.','mai','juin','juil.','août','sept.','oct.','nov.','déc.'];
 var pfStack=['pf-hub'];
 var pfNewsShown=6;
@@ -6190,6 +6203,7 @@ function loadCloud(){
     // v1.55.1 : fiche client ouverte avant la fin du chargement : ses liens clients (et dates proposees) apparaissent
     var cpn = document.getElementById('client-panel');
     if(cpn && cpn.classList.contains('open') && typeof window.renderClientLinks==='function') try{ window.renderClientLinks(); }catch(e){}
+    setTimeout(refreshTbdShares, 2500);
     if(up.length) sb.from('briefings').upsert(up.map(function(d){ return {id:d.id, user_id:currentUserId, client_id:d.clientId||null, title:d.title||'', status:d.status||'draft', data:d, updated_at:new Date(d.updatedAt||Date.now()).toISOString()}; })).then(function(){});
     if(doc && !saveT){ var fresh = briefings.filter(function(b){ return b.id===doc.id; })[0]; if(fresh && (fresh.updatedAt||0) > (doc.updatedAt||0)){ openDoc(fresh.id, true); return; } }
     if(!doc && briefings.length){ var cur = lsGet(LS.cur, null); openDoc(briefings.some(function(b){ return b.id===cur; }) ? cur : briefings[0].id, true); return; }
@@ -7125,6 +7139,11 @@ function buildShare(){
     var list = rs(), sc = schedule(), car = carColor(getClient(doc.clientId));
     var startMin = sc ? sc.accueil : toMin(doc.startTime||'14:00'), endMin = sc ? sc.fin : startMin + 120;
     var base = {title:docTitle(), date:doc.date||null, car:car, start:doc.date ? localIso(doc.date, startMin) : null, end:doc.date ? localIso(doc.date, endMin) : null, handle:'', tbd:!doc.date, tone:doc.tone==='vous' ? 'vous' : 'tu', accent:accentOf()||null};
+    // v1.57 : de quoi calculer les creneaux cote client (6flt Clients) pour n'importe quel jour :
+    // T = duree accueil -> fin, K = accueil -> fin du dernier spot (cale sur le coucher : fin du dernier spot = coucher + 10 min),
+    // position arrondie a 0,1 degre (environ 10 km), assez pour le lever et le coucher du soleil
+    var n0 = sc ? sc.list.length : 0, rp = list[0] ? list[0] : DEF_POS;
+    base.slots = {v:1, T:sc ? Math.round(sc.fin - sc.accueil) : 120, K:sc ? Math.round(sc.starts[n0-1] + sc.dur[n0-1] - sc.accueil) : 115, pm:'14:00', lat:Math.round(+rp.lat*10)/10, lng:Math.round(+rp.lng*10)/10};
     allBlocks().forEach(function(b){ if(b.type==='contact' && b.props.handle) base.handle = String(b.props.handle).replace(/^@/, ''); });
     var info = list.length>1 ? routeInfo(list) : null;
     out.html_exact = staticRows();
@@ -7752,6 +7771,52 @@ window.bfPushGallery = function(cid, url){
 };
 // v1.55 : fixe la date d'un briefing hors de l'editeur (date proposee par le client, acceptee depuis la fiche)
 // Enregistre le briefing et republie le lien client : le client recoit la notif "date fixee" si le briefing etait sans date.
+// v1.57 : attend les temps de trajet Mapbox (sur iPhone le cache est souvent vide) ; logique commune avec la republication.
+function waitRoute(bd){
+  var list = (Array.isArray(bd.route) ? bd.route : []).map(getSpot).filter(function(x){ return x && isFinite(+x.lat); });
+  if(list.length<2 || list.length>25) return Promise.resolve();
+  routeInfo(list);
+  var k = routeKey(list), t0 = Date.now();
+  return new Promise(function(done){ (function poll(){ var c = DIR[k]; if(!c || c.state!=='pending' || Date.now()-t0 > 4000) return done(); setTimeout(poll, 150); })(); });
+}
+function publishCopy(bid, mutate){
+  flushSave();
+  var src = briefings.filter(function(b){ return b && b.id===bid; })[0];
+  if(!src) return Promise.reject(new Error('briefing introuvable'));
+  var keep = doc, t = clone(src), pub = null, err = null, info = {oldDate:src.date || ''};
+  if(!t.spotNotes) t.spotNotes = {};
+  if(!t.photos) t.photos = [];
+  if(!Array.isArray(t.route)) t.route = [];
+  if(!Array.isArray(t.rows)) t.rows = [];
+  if(!t.timeMode) t.timeMode = 'sunset';
+  if(!t.startTime) t.startTime = '14:00';
+  mutate(t);
+  var sh = t.share, canPub = !!(sh && sh.token && !sh.revoked && !sh.locked);
+  // buildShare lit le document courant : on lui prete ce briefing le temps du calcul
+  doc = t;
+  try{ t.title = docTitle(); t.updatedAt = Date.now(); if(canPub) pub = buildShare(); }
+  catch(e){ err = e; }
+  finally{ doc = keep; }
+  if(err) return Promise.reject(err);
+  if(pub){ t.share.pending = false; t.share.sv = 1; }
+  briefings = briefings.map(function(b){ return b && b.id===bid ? t : b; });
+  briefings.sort(function(a, b){ return (b.updatedAt||0)-(a.updatedAt||0); });
+  saveLocal();
+  if(doc && doc.id===bid){ clearTimeout(saveT); saveT = null; clearTimeout(shareT); doc = clone(t); HIST = [JSON.stringify(doc)]; HP = 0; try{ renderAll(); }catch(e){} }
+  else if(S.inited) try{ renderList(); }catch(e){}
+  // heure du rendez-vous calculee (accueil), pour le planning et le message au client
+  var st0 = pub && pub.data_exact && pub.data_exact.start ? new Date(pub.data_exact.start) : null;
+  var res = {oldDate:info.oldDate, wasTbd:!info.oldDate, place:t.place||'', locked:!!(sh && sh.locked), published:false,
+    time:st0 && !isNaN(st0) ? ('0'+st0.getHours()).slice(-2)+':'+('0'+st0.getMinutes()).slice(-2) : (t.timeMode==='free' ? t.startTime : ''),
+    otherOnOld:!!info.oldDate && briefings.some(function(b){ return b && b.id!==bid && b.clientId===t.clientId && (b.shootDate||b.date)===info.oldDate; })};
+  if(!sb || !currentUserId) return Promise.resolve(res);
+  var now = new Date().toISOString();
+  var p1 = sb.from('briefings').upsert({id:t.id, user_id:currentUserId, client_id:t.clientId||null, title:t.title, status:t.status||'draft', data:t, updated_at:now})
+    .then(function(r){ if(r && r.error) console.warn('Supabase briefings:', r.error.message); }, function(){});
+  var p2 = pub ? sb.from('shared_briefings').upsert(Object.assign({token:sh.token, user_id:currentUserId, briefing_id:t.id, title:t.title, revoked:false, updated_at:now}, pub))
+    .then(function(r){ res.published = !(r && r.error); if(r && r.error) console.warn('Partage :', r.error.message); }, function(){}) : Promise.resolve();
+  return Promise.all([p1, p2]).then(function(){ return res; });
+}
 window.bfSetDate = function(bid, date, time){
   if(!/^\d{4}-\d{2}-\d{2}$/.test(String(date||''))) return Promise.reject(new Error('date invalide'));
   // heure precise (HH:MM) ou moment de la journee choisi par le client (v1.56)
@@ -7760,43 +7825,21 @@ window.bfSetDate = function(bid, date, time){
   else if(tx==='morning') mode = 'sunrise';
   else if(tx==='evening') mode = 'sunset';
   else if(tx==='afternoon'){ mode = 'free'; hm = '14:00'; }
-  flushSave();
   var src = briefings.filter(function(b){ return b && b.id===bid; })[0];
   if(!src) return Promise.reject(new Error('briefing introuvable'));
-  var keep = doc, t = clone(src), pub = null, err = null, oldDate = src.date || '';
-  if(!t.spotNotes) t.spotNotes = {};
-  if(!t.photos) t.photos = [];
-  if(!Array.isArray(t.route)) t.route = [];
-  if(!Array.isArray(t.rows)) t.rows = [];
-  if(!t.timeMode) t.timeMode = 'sunset';
-  if(!t.startTime) t.startTime = '14:00';
-  t.date = date; t.shootDate = date;
-  if(mode){ t.timeMode = mode; if(hm) t.startTime = hm; }
-  var sh = t.share, canPub = !!(sh && sh.token && !sh.revoked && !sh.locked);
-  // buildShare lit le document courant : on lui prete ce briefing le temps du calcul
-  doc = t;
-  try{ t.title = docTitle(); t.updatedAt = Date.now(); if(canPub) pub = buildShare(); }
-  catch(e){ err = e; }
-  finally{ doc = keep; }
-  if(err) return Promise.reject(err);
-  if(pub) t.share.pending = false;
-  briefings = briefings.map(function(b){ return b && b.id===bid ? t : b; });
-  briefings.sort(function(a, b){ return (b.updatedAt||0)-(a.updatedAt||0); });
-  saveLocal();
-  if(doc && doc.id===bid){ clearTimeout(saveT); saveT = null; clearTimeout(shareT); doc = clone(t); HIST = [JSON.stringify(doc)]; HP = 0; try{ renderAll(); }catch(e){} }
-  else if(S.inited) try{ renderList(); }catch(e){}
-  // heure du rendez-vous calculee (accueil), pour le planning et le message au client
-  var st0 = pub && pub.data_exact && pub.data_exact.start ? new Date(pub.data_exact.start) : null;
-  var res = {oldDate:oldDate, wasTbd:!oldDate, place:t.place||'', locked:!!(sh && sh.locked), published:false, time:st0 && !isNaN(st0) ? ('0'+st0.getHours()).slice(-2)+':'+('0'+st0.getMinutes()).slice(-2) : hm,
-    otherOnOld:!!oldDate && briefings.some(function(b){ return b && b.id!==bid && b.clientId===t.clientId && (b.shootDate||b.date)===oldDate; })};
-  if(!sb || !currentUserId) return Promise.resolve(res);
-  var now = new Date().toISOString();
-  var p1 = sb.from('briefings').upsert({id:t.id, user_id:currentUserId, client_id:t.clientId||null, title:t.title, status:t.status||'draft', data:t, updated_at:now})
-    .then(function(r){ if(r && r.error) console.warn('Supabase briefings:', r.error.message); }, function(){});
-  var p2 = pub ? sb.from('shared_briefings').upsert(Object.assign({token:sh.token, user_id:currentUserId, briefing_id:t.id, title:t.title, revoked:false, updated_at:now}, pub))
-    .then(function(r){ res.published = !(r && r.error); if(r && r.error) console.warn('Partage :', r.error.message); }, function(){}) : Promise.resolve();
-  return Promise.all([p1, p2]).then(function(){ return res; });
+  return waitRoute(src).then(function(){
+    return publishCopy(bid, function(t){ t.date = date; t.shootDate = date; if(mode){ t.timeMode = mode; if(hm) t.startTime = hm; } });
+  });
 };
+// v1.57 : liens "date a fixer" publies avant les creneaux calcules : republies une fois, en silence, pour que le client voie les heures
+var SLOTS_DONE = false;
+function refreshTbdShares(){
+  if(SLOTS_DONE || !sb || !currentUserId) return;
+  SLOTS_DONE = true;
+  briefings.filter(function(b){ return b && !b.date && b.share && b.share.token && !b.share.revoked && !b.share.locked && !b.share.hold && !(b.share.sv >= 1); })
+    .reduce(function(p, b){ return p.then(function(){ return waitRoute(b).then(function(){ return publishCopy(b.id, function(){}); }).catch(function(e){ console.warn('Republication :', e && e.message); }); }); }, Promise.resolve());
+}
+window.bfBoot = function(){ if(!S.cloud) loadCloud(); else setTimeout(refreshTbdShares, 500); };
 window.bfOpenDoc = function(id){ S.src = 'briefings'; S.mode = 'edit'; openDoc(id); };
 window.bfNewDocFor = function(cid){ openModal(); M.client = cid; renderModal(); };
 window.initPlanning = function(){
@@ -8472,6 +8515,8 @@ function relanceText(kind, o){
                                   : hi+'c\'est validé pour le '+dt+' ! Ton briefing est à jour, il reste juste à le confirmer en bas de la page : '+url;
   if(kind==='datedeclined') return v ? hi+'le '+dt+' ne sera pas possible de mon côté, désolé. Vous pouvez proposer une autre date directement dans votre briefing : '+url
                                      : hi+'le '+dt+' ne sera pas possible de mon côté, désolé. Tu peux proposer une autre date directement dans ton briefing : '+url;
+  if(kind==='datesdeclined') return v ? hi+'aucune de ces dates ne sera possible de mon côté, désolé. Vous pouvez en proposer d\'autres directement dans votre briefing : '+url
+                                      : hi+'aucune de ces dates ne sera possible de mon côté, désolé. Tu peux en proposer d\'autres directement dans ton briefing : '+url;
   if(kind==='avis') return v ? hi+'j\'espère que les photos vous plaisent ! Si vous avez 30 secondes, vous pouvez laisser un petit avis directement sur votre page : '+url+'\nMerci beaucoup !'
                              : hi+'j\'espère que les photos te plaisent ! Si tu as 30 secondes, tu peux laisser un petit avis directement sur ta page : '+url+'\nMerci beaucoup !';
   return v ? hi+'voici le lien de votre séance : '+url : hi+'voici le lien de ta séance : '+url;
@@ -8554,6 +8599,8 @@ function bootApp(){
   if(typeof syncLoadGameFromCloud==='function'){ syncLoadGameFromCloud(); }
   setTimeout(pushSync, 1500);
   setTimeout(function(){ ownerPing(true); }, 800);
+  // v1.57 : briefings charges au demarrage (liens a mettre a jour pour les creneaux du client)
+  setTimeout(function(){ if(typeof window.bfBoot==='function') try{ window.bfBoot(); }catch(e){ console.warn(e); } }, 3000);
   if(/[?&]go=/.test(location.search)){
     var goUrl = location.href;
     try{ history.replaceState(null, '', location.pathname); }catch(e){}

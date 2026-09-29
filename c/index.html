@@ -296,6 +296,8 @@ a{color:inherit}
 .cv-prop-note{font-size:12.5px;color:var(--d-mute,#8b8a84);margin-top:4px}
 .cv-prop-wait{background:var(--d-panel,#17181b);border:1px solid var(--d-line,rgba(255,255,255,.09));border-left:3px solid var(--cv-accent,#e8571a);border-radius:10px;padding:11px 13px;font-size:13px;color:var(--d-mute,#8b8a84);line-height:1.45}
 .cv-prop-wait b{display:block;color:var(--d-text,#f3f2ee);font-size:14px;margin-bottom:2px}
+.cv-prop-list{margin:4px 0 6px;padding-left:18px;color:var(--d-text,#f3f2ee);font-size:13px;line-height:1.5}
+.cv-prop-hr{display:block;color:var(--d-text,#f3f2ee);margin:2px 0 3px}
 .cv-prop-no{margin:0;font-size:13px;font-weight:600;color:#f2a93b;line-height:1.4}
 .cv-gal{margin-top:16px;padding-top:16px;border-top:1px solid var(--d-line)}
 .cv-gal .btn{display:inline-flex;padding:12px 18px;background:var(--d-accent);color:#fff!important;border-radius:10px;font-weight:700;text-decoration:none;font-size:14px;margin-bottom:14px}
@@ -325,10 +327,19 @@ a{color:inherit}
 #prop-sheet .ps-leg{margin:0;font-size:11.5px;color:#7a7d85}
 #prop-sheet .ps-lbl{font-size:12px;font-weight:600;color:#a5a49d;margin-top:4px}
 #prop-sheet .ps-chips{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
-#prop-sheet .ps-chips button{height:40px;border-radius:10px;border:1px solid #2a2d35;background:#1e2126;color:#f0ede8;font:600 13px 'Inter',sans-serif;cursor:pointer}
+#prop-sheet .ps-chips button{min-height:44px;border-radius:10px;border:1px solid #2a2d35;background:#1e2126;color:#f0ede8;font:600 13px 'Inter',sans-serif;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:6px 4px}
+#prop-sheet .ps-chips button span{font-size:11.5px;font-weight:500;color:#a5a49d}
+#prop-sheet .ps-chips button.on span{color:inherit;opacity:.85}
 #prop-sheet .ps-chips button.on{border-color:var(--ps-accent,#e8571a);color:var(--ps-accent,#e8571a);background:rgba(255,255,255,.03)}
 #prop-sheet .ps-note{width:100%;background:#1e2126;border:1px solid #2a2d35;border-radius:10px;color:#f0ede8;font:16px 'Inter',sans-serif;padding:10px 12px;resize:none}
-#prop-sheet .ps-go{min-height:50px;padding:12px 14px;line-height:1.25;border-radius:12px;border:none;background:var(--ps-accent,#e8571a);color:#fff;font:700 15px 'Inter',sans-serif;cursor:pointer}
+#prop-sheet .ps-sub{margin:-4px 0 0;font-size:12.5px;color:#a5a49d;line-height:1.4}
+#prop-sheet .ps-d.opt{box-shadow:inset 0 0 0 2px var(--ps-accent,#e8571a)}
+#prop-sheet .ps-hint{margin:0;font-size:11.5px;color:#7a7d85;line-height:1.4}
+#prop-sheet .ps-opts{display:flex;flex-direction:column;gap:6px}
+#prop-sheet .ps-opt{display:flex;align-items:center;justify-content:space-between;gap:8px;background:#1e2126;border:1px solid #2a2d35;border-radius:10px;padding:9px 10px 9px 12px;font-size:13px}
+#prop-sheet .ps-opt button{flex:none;width:28px;height:28px;border-radius:50%;border:1px solid #2a2d35;background:transparent;color:#a5a49d;cursor:pointer}
+#prop-sheet .ps-add{height:42px;border-radius:10px;border:1px dashed #3a3d45;background:transparent;color:#f0ede8;font:600 13px 'Inter',sans-serif;cursor:pointer}
+#prop-sheet .ps-go{position:sticky;bottom:0;box-shadow:0 -12px 18px #16181c;flex:none;min-height:50px;padding:12px 14px;line-height:1.25;border-radius:12px;border:none;background:var(--ps-accent,#e8571a);color:#fff;font:700 15px 'Inter',sans-serif;cursor:pointer}
 #prop-sheet .ps-go[disabled]{opacity:.4;cursor:default}
 </style>
 </head>
@@ -359,7 +370,7 @@ a{color:inherit}
 </div>
 
 <script>
-/* ===== 6flt Clients v1.6.1 (Spoties v1.56.1 : l'adresse ne porte plus toutes les seances de l'appareil) ===== */
+/* ===== 6flt Clients v1.7 (Spoties v1.57 : heures calculees, jusqu'a 3 dates) ===== */
 var SUPABASE_URL = 'https://gpirhmddoeokakikbjkr.supabase.co';
 var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdwaXJobWRkb2Vva2FraWtiamtyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA2NDI3MzAsImV4cCI6MjA5NjIxODczMH0.LghihUJQCtYBIMsRGXrjh2k4IcVYnf5CyD4lzlQNv6w';
 var VAPID_PUBLIC = 'BOph3IRn1uPlXzoljifkGCP9HoQ1pWYS3V60bUbimAFwqO00QAEsUSx21LoVmgFb0Zzrc1DqSFAtHGs2UoNQbWU';
@@ -754,14 +765,15 @@ function glMap(box, d, rev, ac){
   }catch(err){ console.warn(err); box.className = 'bf-map'; box.innerHTML = fallback; }
 }
 /* v1.5 : proposition de date. Etat lu sur le serveur (en attente, refusee), l'appareil sert de repli hors ligne.
-   v1.6 : le bouton du bas ouvre directement un calendrier ; moment de la journee au lieu d'une heure ; jour refuse barre */
+   v1.6 : le bouton du bas ouvre directement un calendrier ; moment de la journee au lieu d'une heure ; jour refuse barre.
+   v1.7 : heures calculees pour chaque moment (lumiere du jour choisi + duree du briefing), jusqu'a 3 dates en un envoi */
 var PROP_DECLINED = [], PROP_TV = function(a){ return a; };
 var PROP_MOMENTS = [['', 'Peu importe'], ['morning', 'Matin'], ['afternoon', 'Après-midi'], ['evening', 'Fin de journée']];
 function propKey(){ return '6fltc_proposed_' + DETAIL_TOK; }
 function propLocal(){
   var v = null; try{ v = localStorage.getItem(propKey()); }catch(x){}
-  var m = String(v||'').match(/^(\d{4}-\d{2}-\d{2})(?: (\S+))?/);
-  return m ? {status:'pending', date:m[1], time:m[2]||''} : null;
+  var list = String(v||'').split('|').map(function(x){ var m = x.match(/^(\d{4}-\d{2}-\d{2})(?: (\S+))?/); return m ? {date:m[1], time:m[2]||'', status:'pending'} : null; }).filter(Boolean);
+  return list.length ? {status:'pending', date:list[0].date, time:list[0].time, batch:list} : null;
 }
 function propMoment(tm){
   var t = String(tm||'').match(/^(\d{1,2}):(\d{2})/);
@@ -773,21 +785,68 @@ function propDay(dt, tm){
 }
 function capFirst(t){ return String(t).replace(/^./, function(c){ return c.toUpperCase(); }); }
 function isoDay(d){ return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2); }
+/* lever et coucher du soleil (meme calcul que Spoties), en minutes locales */
+function sunMin(dateISO, lat, lng, rise){
+  var p = String(dateISO||'').split('-').map(Number);
+  if(p.length<3 || !p[0]) return rise ? 7*60 : 19*60;
+  var rad = Math.PI/180, cur = Date.UTC(p[0], p[1]-1, p[2]), N = Math.round((cur - Date.UTC(p[0],0,1))/86400000)+1;
+  var lngH = lng/15, t = N + ((rise?6:18) - lngH)/24;
+  var Ma = 0.9856*t - 3.289;
+  var L = Ma + 1.916*Math.sin(Ma*rad) + 0.020*Math.sin(2*Ma*rad) + 282.634; L = ((L%360)+360)%360;
+  var RA = Math.atan(0.91764*Math.tan(L*rad))/rad; RA = ((RA%360)+360)%360;
+  RA = (RA + Math.floor(L/90)*90 - Math.floor(RA/90)*90)/15;
+  var sinDec = 0.39782*Math.sin(L*rad), cosDec = Math.cos(Math.asin(sinDec));
+  var cosH = (Math.cos(90.833*rad) - sinDec*Math.sin(lat*rad))/(cosDec*Math.cos(lat*rad));
+  if(cosH>1 || cosH<-1) return rise ? 7*60 : 19*60;
+  var H = (rise ? 360 - Math.acos(cosH)/rad : Math.acos(cosH)/rad)/15;
+  var T = H + RA - 0.06571*t - 6.622;
+  var UT = ((T - lngH)%24 + 24)%24;
+  var d = new Date(cur + UT*3600000);
+  return d.getHours()*60 + d.getMinutes();
+}
+/* creneau d'un moment pour un jour : [debut, fin] en minutes, arrondis a 5 min ; null si le briefing ne donne pas la duree */
+function propSlot(dt, tm){
+  var sl = DETAIL_D && DETAIL_D.data && DETAIL_D.data.slots;
+  if(!sl || !dt || !(sl.T > 0) || !isFinite(+sl.lat) || !isFinite(+sl.lng)) return null;
+  var st = null;
+  if(tm==='morning') st = sunMin(dt, +sl.lat, +sl.lng, true) - 30;
+  else if(tm==='evening') st = sunMin(dt, +sl.lat, +sl.lng, false) + 10 - (+sl.K || +sl.T);
+  else if(tm==='afternoon'){ var m = String(sl.pm||'14:00').match(/^(\d{1,2}):(\d{2})/); st = m ? +m[1]*60 + +m[2] : 840; }
+  if(st==null || !isFinite(st)) return null;
+  var r5 = function(x){ return Math.round(x/5)*5; };
+  return [r5(st), r5(st + +sl.T)];
+}
+function hm(x){ x = ((x%1440)+1440)%1440; return Math.floor(x/60)+'h'+('0'+(x%60)).slice(-2); }
+function propLine(o){
+  var sl = propSlot(o.date, o.time);
+  return capFirst(propDay(o.date, o.time)) + (sl ? ' (vers '+hm(sl[0])+')' : '');
+}
 function renderProp(st, tv){
   var box = document.getElementById('cv-prop'); if(!box) return;
-  var key = st ? st.status+'|'+st.date+'|'+(st.time||'') : 'none';
+  var batch = st ? (st.batch && st.batch.length ? st.batch : [{date:st.date, time:st.time, status:st.status}]) : [];
+  var key = st ? st.status+'|'+batch.map(function(o){ return o.date+' '+(o.time||'')+' '+(o.status||''); }).join(',') : 'none';
   if(box.getAttribute('data-k')===key) return;
   box.setAttribute('data-k', key);
   var jump = document.getElementById('cv-prop-jump');
   if(st && (st.status==='pending' || st.status==='accepted')){
-    box.innerHTML = '<div class="cv-prop-wait"><b>'+(st.status==='accepted' ? 'Date acceptée : ' : tv('Tu as proposé le ', 'Vous avez proposé le '))+e(propDay(st.date, st.time))+'</b>'+
+    var pend = batch.filter(function(o){ return (o.status||'pending')===st.status; });
+    if(!pend.length) pend = batch;
+    var head = st.status==='accepted' ? 'Date acceptée : '+propLine(pend[0])
+      : pend.length>1 ? tv('Tu as proposé '+pend.length+' dates', 'Vous avez proposé '+pend.length+' dates')
+      : tv('Tu as proposé le ', 'Vous avez proposé le ')+propDay(pend[0].date, pend[0].time);
+    var lines = st.status!=='accepted' && pend.length>1 ? '<ul class="cv-prop-list">'+pend.map(function(o){ return '<li>'+e(propLine(o))+'</li>'; }).join('')+'</ul>' : '';
+    var one = st.status!=='accepted' && pend.length===1 ? propSlot(pend[0].date, pend[0].time) : null;
+    box.innerHTML = '<div class="cv-prop-wait"><b>'+e(head)+'</b>'+lines+(one ? '<span class="cv-prop-hr">Rendez-vous vers '+hm(one[0])+', fin vers '+hm(one[1])+'.</span>' : '')+
       (st.status==='accepted' ? tv('Ton briefing se met à jour.', 'Votre briefing se met à jour.') : 'En attente de la réponse du photographe.')+'</div>';
-    if(jump){ jump.textContent = st.status==='accepted' ? 'Date acceptée' : 'Date proposée, en attente'; jump.disabled = true; }
+    if(jump){ jump.textContent = st.status==='accepted' ? 'Date acceptée' : (pend.length>1 ? 'Dates proposées, en attente' : 'Date proposée, en attente'); jump.disabled = true; }
     return;
   }
-  box.innerHTML = st && st.status==='declined'
-    ? '<p class="cv-prop-no">'+e(capFirst(propDay(st.date, '')))+' '+tv('ne sera pas possible. Choisis un autre jour avec le bouton en bas.', 'ne sera pas possible. Choisissez un autre jour avec le bouton en bas.')+'</p>'
-    : '';
+  if(st && st.status==='declined'){
+    var dec = batch.filter(function(o){ return o.status==='declined'; }); if(!dec.length) dec = batch;
+    box.innerHTML = dec.length>1
+      ? '<p class="cv-prop-no">'+tv('Ces dates ne seront pas possibles : ', 'Ces dates ne seront pas possibles : ')+e(dec.map(function(o){ return propDay(o.date, ''); }).join(', '))+'. '+tv('Choisis d\'autres jours avec le bouton en bas.', 'Choisissez d\'autres jours avec le bouton en bas.')+'</p>'
+      : '<p class="cv-prop-no">'+e(capFirst(propDay(dec[0].date, '')))+' '+tv('ne sera pas possible. Choisis un autre jour avec le bouton en bas.', 'ne sera pas possible. Choisissez un autre jour avec le bouton en bas.')+'</p>';
+  } else box.innerHTML = '';
   if(jump){ jump.textContent = st && st.status==='declined' ? 'Proposer une autre date' : 'Proposer une date'; jump.disabled = false; }
 }
 /* calendrier de proposition, en feuille par-dessus la page */
@@ -795,25 +854,31 @@ function closePropSheet(){ var el = document.getElementById('prop-sheet'); if(el
 function openPropSheet(){
   var tv = PROP_TV, tok = DETAIL_TOK; if(!tok) return;
   closePropSheet();
-  var today = new Date(); today.setHours(12, 0, 0, 0);
+  var MAX = 3, today = new Date(); today.setHours(12, 0, 0, 0);
   var first = new Date(today); first.setDate(first.getDate() + 1);
   var last = new Date(today); last.setMonth(last.getMonth() + 6);
   var minI = isoDay(first), maxI = isoDay(last);
-  var S = {y:first.getFullYear(), m:first.getMonth(), day:'', t:''};
+  var S = {y:first.getFullYear(), m:first.getMonth(), day:'', t:'', opts:[]};
   var ac = (DETAIL_D && DETAIL_D.data && /^#[0-9a-f]{6}$/i.test(DETAIL_D.data.accent||'')) ? DETAIL_D.data.accent : '#e8571a';
   var el = document.createElement('div'); el.id = 'prop-sheet'; el.style.setProperty('--ps-accent', ac);
   el.innerHTML = '<div class="ps-card" role="dialog" aria-label="Proposer une date">'+
     '<div class="ps-head"><b>Proposer une date</b><button type="button" class="ps-x" aria-label="Fermer">&#x2715;</button></div>'+
+    '<p class="ps-sub">'+tv('Jusqu\'à 3 options : plus tu en proposes, plus c\'est facile de caler la séance.', 'Jusqu\'à 3 options : plus vous en proposez, plus c\'est facile de caler la séance.')+'</p>'+
     '<div class="ps-mhead"><button type="button" class="ps-nav" data-m="-1" aria-label="Mois précédent">&#8249;</button><span class="ps-month"></span><button type="button" class="ps-nav" data-m="1" aria-label="Mois suivant">&#8250;</button></div>'+
     '<div class="ps-dow"><span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span><span>D</span></div>'+
     '<div class="ps-grid"></div>'+
     '<p class="ps-leg"'+(PROP_DECLINED.length ? '' : ' hidden')+'>'+tv('Jours barrés : déjà refusés pour ta séance.', 'Jours barrés : déjà refusés pour votre séance.')+'</p>'+
     '<div class="ps-lbl">Moment de la journée</div>'+
-    '<div class="ps-chips">'+PROP_MOMENTS.map(function(o){ return '<button type="button" data-t="'+o[0]+'"'+(o[0]==='' ? ' class="on"' : '')+'>'+o[1]+'</button>'; }).join('')+'</div>'+
+    '<div class="ps-chips"></div>'+
+    '<p class="ps-hint" hidden>'+tv('Heures calées sur la lumière du jour choisi. L\'heure exacte est confirmée dans ton briefing.', 'Heures calées sur la lumière du jour choisi. L\'heure exacte est confirmée dans votre briefing.')+'</p>'+
+    '<div class="ps-opts" hidden></div>'+
+    '<button type="button" class="ps-add" hidden>+ Ajouter une autre option</button>'+
     '<textarea class="ps-note" rows="2" maxlength="500" placeholder="Un mot pour préciser (optionnel)"></textarea>'+
-    '<button type="button" class="ps-go" disabled>'+tv('Choisis un jour', 'Choisissez un jour')+'</button></div>';
+    '<button type="button" class="ps-go" disabled></button></div>';
   document.body.appendChild(el);
-  var grid = el.querySelector('.ps-grid'), go = el.querySelector('.ps-go');
+  var grid = el.querySelector('.ps-grid'), go = el.querySelector('.ps-go'), add = el.querySelector('.ps-add');
+  function same(o){ return o.date===S.day && (o.time||'')===(S.t||''); }
+  function all(){ return S.opts.concat(S.day && !S.opts.some(same) ? [{date:S.day, time:S.t}] : []); }
   function paint(){
     var mo = new Date(S.y, S.m, 1, 12);
     el.querySelector('.ps-month').textContent = capFirst(mo.toLocaleDateString('fr-FR', {month:'long', year:'numeric'}));
@@ -824,11 +889,27 @@ function openPropSheet(){
     for(var d=1; d<=n; d++){
       var iso = S.y+'-'+('0'+(S.m+1)).slice(-2)+'-'+('0'+d).slice(-2);
       var no = PROP_DECLINED.indexOf(iso) > -1, off = iso < minI || iso > maxI || no;
-      h += '<button type="button" class="ps-d'+(no ? ' no' : '')+(iso===S.day ? ' on' : '')+'" data-d="'+iso+'"'+(off ? ' disabled' : '')+'>'+d+'</button>';
+      var picked = S.opts.some(function(o){ return o.date===iso; });
+      h += '<button type="button" class="ps-d'+(no ? ' no' : '')+(iso===S.day ? ' on' : '')+(picked ? ' opt' : '')+'" data-d="'+iso+'"'+(off ? ' disabled' : '')+'>'+d+'</button>';
     }
     grid.innerHTML = h;
-    go.disabled = !S.day;
-    go.textContent = S.day ? capFirst(tv('Proposer le ', 'Proposer le ')+propDay(S.day, S.t)) : tv('Choisis un jour', 'Choisissez un jour');
+    // moments, avec l'heure calculee pour le jour choisi
+    var withHr = false;
+    el.querySelector('.ps-chips').innerHTML = PROP_MOMENTS.map(function(o){
+      var sl = S.day && o[0] ? propSlot(S.day, o[0]) : null; if(sl) withHr = true;
+      return '<button type="button" data-t="'+o[0]+'" class="'+(o[0]===S.t ? 'on' : '')+'"><b>'+o[1]+'</b>'+(sl ? '<span>'+hm(sl[0])+' à '+hm(sl[1])+'</span>' : '')+'</button>';
+    }).join('');
+    el.querySelector('.ps-hint').hidden = !withHr;
+    // options deja ajoutees
+    var ob = el.querySelector('.ps-opts');
+    ob.hidden = !S.opts.length;
+    ob.innerHTML = S.opts.map(function(o, k){ return '<div class="ps-opt"><span>'+(k+1)+'. '+e(propLine(o))+'</span><button type="button" data-rm="'+k+'" aria-label="Retirer">&#x2715;</button></div>'; }).join('');
+    add.hidden = !S.day || S.opts.some(same) || S.opts.length >= MAX-1;
+    var list = all();
+    go.disabled = !list.length;
+    go.textContent = !list.length ? tv('Choisis un jour', 'Choisissez un jour')
+      : list.length===1 ? capFirst('Proposer le '+propDay(list[0].date, list[0].time))
+      : tv('Envoyer mes '+list.length+' options', 'Envoyer mes '+list.length+' options');
   }
   el.addEventListener('click', function(ev){
     if(ev.target===el || ev.target.closest('.ps-x')){ closePropSheet(); return; }
@@ -837,17 +918,22 @@ function openPropSheet(){
     var db = ev.target.closest('.ps-d');
     if(db && !db.disabled){ S.day = db.getAttribute('data-d'); paint(); return; }
     var cb = ev.target.closest('.ps-chips button');
-    if(cb){ S.t = cb.getAttribute('data-t'); el.querySelectorAll('.ps-chips button').forEach(function(x){ x.classList.toggle('on', x===cb); }); paint(); return; }
+    if(cb){ S.t = cb.getAttribute('data-t'); paint(); return; }
+    var rm = ev.target.closest('[data-rm]');
+    if(rm){ S.opts.splice(+rm.getAttribute('data-rm'), 1); paint(); return; }
+    if(ev.target.closest('.ps-add') && S.day && !S.opts.some(same) && S.opts.length < MAX-1){
+      S.opts.push({date:S.day, time:S.t}); S.day = ''; S.t = ''; paint(); return;
+    }
   });
   go.onclick = function(){
-    if(!S.day) return;
-    var nt = el.querySelector('.ps-note').value.trim(), dt = S.day, tm = S.t;
+    var list = all(); if(!list.length) return;
+    var nt = el.querySelector('.ps-note').value.trim();
     go.disabled = true; go.textContent = 'Envoi…';
-    sb.rpc('propose_shared_date', {p_token:tok, p_date:dt, p_time:tm || null, p_note:nt || null}).then(function(r){
-      if(r.error || !r.data){ paint(); alert(tv('Envoi impossible. Ce jour n\'est peut-être plus proposable, choisis-en un autre.', 'Envoi impossible. Ce jour n\'est peut-être plus proposable, choisissez-en un autre.')); return; }
-      try{ localStorage.setItem('6fltc_proposed_' + tok, dt+(tm ? ' '+tm : '')); }catch(ex){}
+    sb.rpc('propose_shared_dates', {p_token:tok, p_options:list.map(function(o){ return {date:o.date, time:o.time || null}; }), p_note:nt || null}).then(function(r){
+      if(r.error || !r.data){ paint(); alert(tv('Envoi impossible. Un de ces jours n\'est peut-être plus proposable, choisis-en un autre.', 'Envoi impossible. Un de ces jours n\'est peut-être plus proposable, choisissez-en un autre.')); return; }
+      try{ localStorage.setItem('6fltc_proposed_' + tok, list.map(function(o){ return o.date+(o.time ? ' '+o.time : ''); }).join('|')); }catch(ex){}
       closePropSheet();
-      if(DETAIL_TOK===tok) renderProp({status:'pending', date:dt, time:tm}, tv);
+      if(DETAIL_TOK===tok) renderProp({status:'pending', date:list[0].date, time:list[0].time, batch:list.map(function(o){ return {date:o.date, time:o.time, status:'pending'}; })}, tv);
     }, function(){ paint(); alert(tv('Envoi impossible, vérifie ta connexion.', 'Envoi impossible, vérifiez votre connexion.')); });
   };
   paint();
@@ -859,9 +945,13 @@ function propInit(tv){
   renderProp(propLocal(), tv);
   if(sb) sb.rpc('get_date_proposal', {p_token:tok}).then(function(r){
     if(DETAIL_TOK!==tok || !r || r.error) return;
-    var d = r.data && r.data.status ? {status:r.data.status, date:String(r.data.date||'').slice(0, 10), time:String(r.data.time||'')} : null;
-    PROP_DECLINED = (r.data && Array.isArray(r.data.declined) ? r.data.declined : []).map(function(x){ return String(x).slice(0, 10); });
-    if(!d || d.status!=='pending'){ try{ localStorage.removeItem('6fltc_proposed_' + tok); }catch(x){} }
+    var x = r.data, d = null;
+    if(x && x.status){
+      var bt = Array.isArray(x.batch) ? x.batch.map(function(o){ return {date:String(o.date||'').slice(0, 10), time:String(o.time||''), status:o.status}; }) : [];
+      d = {status:x.status, date:String(x.date||'').slice(0, 10), time:String(x.time||''), batch:bt};
+    }
+    PROP_DECLINED = (x && Array.isArray(x.declined) ? x.declined : []).map(function(y){ return String(y).slice(0, 10); });
+    if(!d || d.status!=='pending'){ try{ localStorage.removeItem('6fltc_proposed_' + tok); }catch(ex){} }
     renderProp(d, tv);
   }, function(){});
 }
