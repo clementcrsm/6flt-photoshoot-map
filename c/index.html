@@ -254,7 +254,7 @@ a{color:inherit}
 </div>
 
 <script>
-/* ===== 6flt Clients v1.3 (Spoties v1.53 : accord de publication des avis) ===== */
+/* ===== 6flt Clients v1.4 (Spoties v1.54 : notif qui ouvre la bonne seance) ===== */
 var SUPABASE_URL = 'https://gpirhmddoeokakikbjkr.supabase.co';
 var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdwaXJobWRkb2Vva2FraWtiamtyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA2NDI3MzAsImV4cCI6MjA5NjIxODczMH0.LghihUJQCtYBIMsRGXrjh2k4IcVYnf5CyD4lzlQNv6w';
 var VAPID_PUBLIC = 'BOph3IRn1uPlXzoljifkGCP9HoQ1pWYS3V60bUbimAFwqO00QAEsUSx21LoVmgFb0Zzrc1DqSFAtHGs2UoNQbWU';
@@ -940,13 +940,19 @@ function bfHtmlPdf(html, o){
 if('serviceWorker' in navigator){
   navigator.serviceWorker.register('./sw.js').catch(function(err){ console.warn(err); });
   navigator.serviceWorker.addEventListener('message', function(ev){
-    if(ev.data && ev.data.type==='notif-go'){ refreshHelpers(); }
+    if(ev.data && ev.data.type==='notif-go'){
+      var o = ''; try{ o = new URL(ev.data.url, location.href).searchParams.get('open') || ''; }catch(x){}
+      if(validToken(o) && hasToken(o)){ if(DETAIL_TOK===o) loadDetail(); else openDetail(o); }
+      else refreshHelpers();
+    }
   });
 }
 
 /* ===== demarrage (v1.2) ===== */
+function openParam(){ var o = ''; try{ o = new URLSearchParams(location.search).get('open') || ''; }catch(x){} return validToken(o) ? o : ''; }
+function hasToken(t){ return loadTokens().some(function(x){ return x.token===t; }); }
 (function start(){
-  var toks = urlTokens();
+  var toks = urlTokens(), openTok = openParam();
   if(isStandalone()){
     // app installee : les seances du lien d'installation sont importees une seule fois,
     // pour qu'une seance retiree de la liste ne revienne pas a chaque lancement
@@ -958,10 +964,12 @@ if('serviceWorker' in navigator){
       if(!loadTokens().some(function(x){ return x.token===t; })){ addTokenToStore(t); fresh.push(t); }
     });
     saveJSON('6fltc_imported', imported);
-    if(toks.length){ try{ history.replaceState(null, '', location.pathname); }catch(ex){} }
+    if(toks.length || openTok){ try{ history.replaceState(null, '', location.pathname); }catch(ex){} }
     renderList();
     fresh.forEach(registerTokenForExistingPush);
-    if(fresh.length===1) openDetail(fresh[0]);
+    // v1.2.4 : toucher une notif ouvre directement la seance concernee
+    if(openTok && hasToken(openTok)) openDetail(openTok);
+    else if(fresh.length===1) openDetail(fresh[0]);
     pushSync();
     return;
   }
@@ -970,6 +978,7 @@ if('serviceWorker' in navigator){
   syncUrl();
   renderList();
   if(toks.length===1) openDetail(toks[0]);
+  else if(!toks.length && openTok && hasToken(openTok)) openDetail(openTok);
 })();
 </script>
 </body>
