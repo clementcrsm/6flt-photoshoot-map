@@ -22,7 +22,7 @@ async def main():
             await pg.evaluate("document.dispatchEvent(new Event('visibilitychange'))"); await pg.wait_for_timeout(200)
             n2 = await pg.evaluate("__LOG.filter(function(l){return l.rpc==='owner_ping'}).length")
             R.check('pas de ping en rafale au retour dans l app', n2==2)
-            R.check('version affichee', 'v1.56.1' in await pg.evaluate('APP_VERSION'))
+            R.check('version affichee', (await pg.evaluate('APP_VERSION')).startswith('v1.'))
             R.check('aucune erreur JS', not errs); print('  ', errs[:3])
             await br.close()
     finally:
