@@ -359,7 +359,7 @@ a{color:inherit}
 </div>
 
 <script>
-/* ===== 6flt Clients v1.6 (Spoties v1.56 : calendrier de proposition de date) ===== */
+/* ===== 6flt Clients v1.6.1 (Spoties v1.56.1 : l'adresse ne porte plus toutes les seances de l'appareil) ===== */
 var SUPABASE_URL = 'https://gpirhmddoeokakikbjkr.supabase.co';
 var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdwaXJobWRkb2Vva2FraWtiamtyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA2NDI3MzAsImV4cCI6MjA5NjIxODczMH0.LghihUJQCtYBIMsRGXrjh2k4IcVYnf5CyD4lzlQNv6w';
 var VAPID_PUBLIC = 'BOph3IRn1uPlXzoljifkGCP9HoQ1pWYS3V60bUbimAFwqO00QAEsUSx21LoVmgFb0Zzrc1DqSFAtHGs2UoNQbWU';
@@ -386,11 +386,16 @@ function urlTokens(){
   }catch(e){}
   return out;
 }
-// dans Safari, l'adresse de la page porte toutes les seances : c'est elle qu'iOS reprend a l'installation
+// v1.6.1 (securite) : l'adresse de la page ne porte plus que la ou les seances du lien ouvert, jamais toute la liste
+// de l'appareil. Avant, recharger ou copier l'adresse donnait acces a toutes les seances deja ouvertes sur ce telephone.
+// L'app installee retrouve toujours toute la liste grace au manifest genere sur l'appareil (start_url), qui ne quitte pas le telephone.
+var URL_TOKS = null;
 function syncUrl(){
   if(isStandalone()) return;
   try{
-    var toks = loadTokens().map(function(x){ return x.token; }).filter(validToken);
+    if(URL_TOKS===null) URL_TOKS = urlTokens();
+    var stored = loadTokens().map(function(x){ return x.token; });
+    var toks = URL_TOKS.filter(function(t){ return validToken(t) && stored.indexOf(t) > -1; });
     history.replaceState(null, '', location.pathname + (toks.length ? '?b=' + toks.join(',') : ''));
   }catch(e){}
   if(window.__c6Manifest) window.__c6Manifest();
