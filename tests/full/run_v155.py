@@ -3,7 +3,7 @@ import asyncio, json, subprocess, sys, time, os
 from playwright.async_api import async_playwright
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-SP = '/tmp/claude-0/-home-claude-6flt-photoshoot-map/9499255e-8bc4-5735-8fe7-bc229bfbec37/scratchpad'
+SP = '/tmp/claude-0/-home-claude/ed6429f5-ef8b-5687-ab3f-2e22f0b7d269/scratchpad'
 FAKE_SB = open(HERE+'/fake_sb.js').read()
 FAKE_MB = open(HERE+'/fake_mapbox.js').read()
 ROWS = json.load(open(HERE+'/rows.json'))
@@ -82,7 +82,7 @@ async def main():
               var DB = window.__DB, bf = DB.briefings.filter(function(b){ return b.id==='bf_1'; })[0].data, sh = DB.shared_briefings[0];
               var ls = JSON.parse(localStorage.getItem('6flt_briefings')).filter(function(b){ return b.id==='bf_1'; })[0];
               var cl = JSON.parse(localStorage.getItem('6flt_clients'))[0];
-              var ans = window.__LOG.filter(function(l){ return l.rpc==='owner_answer_dates'; });
+              var ans = window.__LOG.filter(function(l){ return l.rpc==='owner_answer_dates2'; });
               return {date:bf.date, shootDate:bf.shootDate, tm:bf.timeMode, st:bf.startTime, title:bf.title, lsDate:ls.date,
                 pubStart:sh.data_public && sh.data_public.start, pubTbd:sh.data_public && sh.data_public.tbd, pubDate:sh.data_public && sh.data_public.date,
                 exStart:sh.data_exact && sh.data_exact.start, reveal:sh.reveal_at, hasHtml:!!sh.html_public && sh.html_public.length>500, zones:(sh.data_public && sh.data_public.zones||[]).length,
@@ -122,11 +122,15 @@ async def main():
             await pg.goto(BASE+'index.html?go=client:c1'); await pg.wait_for_timeout(3200)
             check('B. badge App installee', 'App installée' in await pg.evaluate("document.getElementById('client-links-list').textContent"))
             await pg.evaluate("window.__toasts=[]; var _st = showToast; showToast = function(m){ window.__toasts.push(typeof m!=='string' ? (typeof m)+' '+String(m)+' '+new Error().stack : m); _st(m); }; 0")
-            await pg.click('[data-lact="decline"]'); await pg.wait_for_timeout(600)
-            st = await pg.evaluate("""({ans:window.__LOG.filter(function(l){ return l.rpc==='owner_answer_dates'; }), bf:window.__DB.briefings[0].data.date, pub:window.__LOG.filter(function(l){ return l.t==='shared_briefings' && l.op==='upsert'; }).length,
+            await pg.click('[data-lact="decline"]'); await pg.wait_for_timeout(300)
+            sc = await pg.evaluate("(document.querySelector('.clink-scope')||{}).textContent||''")
+            check('B. v1.58 choix creneau ou journee affiche', 'Bloquer ce créneau seulement' in sc and 'Bloquer toute la journée' in sc)
+            await pg.screenshot(path=SP+'/v158_scope.png')
+            await pg.click('[data-lact="decline-moment"]'); await pg.wait_for_timeout(600)
+            st = await pg.evaluate("""({ans:window.__LOG.filter(function(l){ return l.rpc==='owner_answer_dates2'; }), bf:window.__DB.briefings[0].data.date, pub:window.__LOG.filter(function(l){ return l.t==='shared_briefings' && l.op==='upsert'; }).length,
                card:!!document.getElementById('ntf-ready'), toasts:window.__toasts, propLeft:document.querySelectorAll('.clink-prop').length, relance:(document.querySelector('.clink-main')||{}).textContent||''})""")
-            check('B. confirmation du refus', len(dialogs)==1 and 'Refuser le jeudi 15 octobre à 14h00' in dialogs[0] and 'Jeremy pourra proposer une autre date' in dialogs[0])
-            check('B. refus envoye au serveur (notif client cote serveur)', len(st['ans'])==1 and st['ans'][0]['a']['p_accept'] is None and st['ans'][0]['a']['p_token']=='TOKA')
+            check('B. pas de confirm en plus du choix', len(dialogs)==0)
+            check('B. refus du creneau seul envoye au serveur', len(st['ans'])==1 and st['ans'][0]['a']['p_accept'] is None and st['ans'][0]['a']['p_token']=='TOKA' and st['ans'][0]['a']['p_block']=='moment')
             check('B. briefing inchange, rien republie', st['bf']=='' and st['pub']==0)
             check('B. client avec app : pas de carte, toast', not st['card'] and 'Jeremy est prévenu dans son app' in st['toasts'])
             check('B. bouton de relance revenu (date a fixer)', st['propLeft']==0 and 'date' in st['relance'].lower())
@@ -199,7 +203,7 @@ async def main():
             await pg.evaluate("document.querySelector('.clink-prop').scrollIntoView({block:'center'})"); await pg.wait_for_timeout(150)
             await pg.screenshot(path=SP+'/v157_fiche3.png')
             await pg.click('.clink-prop [data-p="q1"]'); await pg.wait_for_timeout(1500)
-            st = await pg.evaluate("""({date:window.__DB.briefings[0].data.date, tm:window.__DB.briefings[0].data.timeMode, ans:window.__LOG.filter(function(l){ return l.rpc==='owner_answer_dates'; }),
+            st = await pg.evaluate("""({date:window.__DB.briefings[0].data.date, tm:window.__DB.briefings[0].data.timeMode, ans:window.__LOG.filter(function(l){ return l.rpc==='owner_answer_dates2'; }),
                left:document.querySelectorAll('.clink-prop').length, slots:window.__DB.shared_briefings[0].data_public.slots, start:window.__DB.shared_briefings[0].data_public.start,
                sv:window.__DB.briefings[0].data.share.sv})""")
             print('     ', st)
@@ -223,16 +227,40 @@ async def main():
             ctx, pg, errs, dialogs = await newpage(br, seed(props=P3, app=True))
             await pg.goto(BASE+'index.html?go=client:c1'); await pg.wait_for_timeout(3200)
             await pg.evaluate("window.__toasts=[]; var _st = showToast; showToast = function(m){ window.__toasts.push(m); _st(m); }; 0")
-            await pg.click('.clink-prop [data-lact="decline"]'); await pg.wait_for_timeout(600)
-            st = await pg.evaluate("({ans:window.__LOG.filter(function(l){ return l.rpc==='owner_answer_dates'; }), left:document.querySelectorAll('.clink-prop').length, toasts:window.__toasts})")
-            check('F2. confirmation pour les 3 dates, un seul appel serveur', len(dialogs)==1 and 'Refuser ces 3 dates' in dialogs[0] and len(st['ans'])==1 and st['ans'][0]['a']['p_accept'] is None)
+            await pg.click('.clink-prop [data-lact="decline"]'); await pg.wait_for_timeout(300)
+            await pg.click('[data-lact="decline-day"]'); await pg.wait_for_timeout(600)
+            st = await pg.evaluate("({ans:window.__LOG.filter(function(l){ return l.rpc==='owner_answer_dates2'; }), left:document.querySelectorAll('.clink-prop').length, toasts:window.__toasts})")
+            check('F2. 3 journees bloquees, un seul appel serveur', len(dialogs)==0 and len(st['ans'])==1 and st['ans'][0]['a']['p_accept'] is None and st['ans'][0]['a']['p_block']=='day')
             check('F2. carte retiree, client avec app prevenu', st['left']==0 and 'Jeremy est prévenu dans son app' in st['toasts'])
             await ctx.close()
             ctx, pg, errs, dialogs = await newpage(br, seed(props=P3))
             await pg.goto(BASE+'index.html?go=client:c1'); await pg.wait_for_timeout(3200)
-            await pg.click('.clink-prop [data-lact="decline"]'); await pg.wait_for_timeout(600)
+            await pg.click('.clink-prop [data-lact="decline"]'); await pg.wait_for_timeout(300)
+            await pg.click('[data-lact="decline-cancel"]'); await pg.wait_for_timeout(200)
+            check('F2. Annuler remet le bouton de refus', await pg.evaluate("!document.querySelector('.clink-scope') && !document.querySelector('.clink-prop [data-lact=\"decline\"]').hidden"))
+            await pg.click('.clink-prop [data-lact="decline"]'); await pg.wait_for_timeout(300)
+            await pg.click('[data-lact="decline-day"]'); await pg.wait_for_timeout(600)
             card = await pg.evaluate("(document.querySelector('#ntf-ready .ntf-txt')||{}).value||''")
             check('F2. client sans app : message pret pour toutes les dates', "aucune de ces dates ne sera possible" in card and 'c/?b=TOKA' in card)
+            await ctx.close()
+
+            # ---------- I. v1.58 : refus du creneau seul, client sans app ; acceptation d'une proposition modifiee ----------
+            ctx, pg, errs, dialogs = await newpage(br, seed())
+            await pg.goto(BASE+'index.html?go=client:c1'); await pg.wait_for_timeout(3200)
+            await pg.click('[data-lact="decline"]'); await pg.wait_for_timeout(300)
+            await pg.click('[data-lact="decline-moment"]'); await pg.wait_for_timeout(600)
+            card = await pg.evaluate("(document.querySelector('#ntf-ready .ntf-txt')||{}).value||''")
+            print('     ', card[:160])
+            check('I. message client : le creneau precis ne sera pas possible', 'jeudi 15 octobre à 14h00 ne sera pas possible' in card)
+            await ctx.close()
+            ctx, pg, errs, dialogs = await newpage(br, seed())
+            await pg.goto(BASE+'index.html?go=client:c1'); await pg.wait_for_timeout(3200)
+            await pg.evaluate("window.__toasts=[]; var _st = showToast; showToast = function(m){ window.__toasts.push(m); _st(m); }; window.__DB.date_proposals[0].status='declined'; 0")
+            await pg.click('[data-lact="accept"]'); await pg.wait_for_timeout(1200)
+            st = await pg.evaluate("({date:window.__DB.briefings[0].data.date, ans:window.__LOG.filter(function(l){ return l.rpc==='owner_answer_dates2'; }).length, toasts:window.__toasts})")
+            print('     ', st)
+            check('I. proposition modifiee entre-temps : date non fixee, toast', st['date']=='' and st['ans']==0 and any('modifié sa proposition' in t for t in st['toasts']))
+            check('I. aucune erreur JS', not errs)
             await ctx.close()
 
             # ---------- H. liens "date a fixer" deja envoyes : republies une fois avec les durees ----------
