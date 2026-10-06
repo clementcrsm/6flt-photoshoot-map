@@ -323,6 +323,10 @@ a{color:inherit}
 #prop-sheet .ps-d{height:42px;border-radius:10px;border:1px solid #2a2d35;background:#1e2126;color:#f0ede8;font:600 14px 'Inter',sans-serif;cursor:pointer;padding:0}
 #prop-sheet .ps-d[disabled]{background:transparent;border-color:transparent;color:#4a4d55;cursor:default}
 #prop-sheet .ps-d.no{text-decoration:line-through;color:#8a5a4a}
+#prop-sheet .ps-d.part{position:relative}
+#prop-sheet .ps-d.part::after{content:'';position:absolute;left:50%;bottom:5px;width:4px;height:4px;margin-left:-2px;border-radius:50%;background:#c98a5a}
+#prop-sheet .ps-chips button[disabled]{opacity:.4;cursor:default}
+#prop-sheet .ps-chips button[disabled] b{text-decoration:line-through}
 #prop-sheet .ps-d.on{background:var(--ps-accent,#e8571a);border-color:var(--ps-accent,#e8571a);color:#fff}
 #prop-sheet .ps-leg{margin:0;font-size:11.5px;color:#7a7d85}
 #prop-sheet .ps-lbl{font-size:12px;font-weight:600;color:#a5a49d;margin-top:4px}
@@ -370,7 +374,7 @@ a{color:inherit}
 </div>
 
 <script>
-/* ===== 6flt Clients v1.7 (Spoties v1.57 : heures calculees, jusqu'a 3 dates) ===== */
+/* ===== 6flt Clients v1.8 (Spoties v1.58 : creneau refuse seulement, proposition modifiable) ===== */
 var SUPABASE_URL = 'https://gpirhmddoeokakikbjkr.supabase.co';
 var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdwaXJobWRkb2Vva2FraWtiamtyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA2NDI3MzAsImV4cCI6MjA5NjIxODczMH0.LghihUJQCtYBIMsRGXrjh2k4IcVYnf5CyD4lzlQNv6w';
 var VAPID_PUBLIC = 'BOph3IRn1uPlXzoljifkGCP9HoQ1pWYS3V60bUbimAFwqO00QAEsUSx21LoVmgFb0Zzrc1DqSFAtHGs2UoNQbWU';
@@ -766,8 +770,10 @@ function glMap(box, d, rev, ac){
 }
 /* v1.5 : proposition de date. Etat lu sur le serveur (en attente, refusee), l'appareil sert de repli hors ligne.
    v1.6 : le bouton du bas ouvre directement un calendrier ; moment de la journee au lieu d'une heure ; jour refuse barre.
-   v1.7 : heures calculees pour chaque moment (lumiere du jour choisi + duree du briefing), jusqu'a 3 dates en un envoi */
-var PROP_DECLINED = [], PROP_TV = function(a){ return a; };
+   v1.7 : heures calculees pour chaque moment (lumiere du jour choisi + duree du briefing), jusqu'a 3 dates en un envoi
+   v1.8 : un creneau refuse ne bloque que ce moment du jour (PROP_BLOCKED) ; proposition modifiable tant que le photographe n'a pas repondu */
+var PROP_DECLINED = [], PROP_BLOCKED = [], PROP_PENDING = [], PROP_TV = function(a){ return a; };
+function propBlocked(dt, tm){ return !!tm && PROP_BLOCKED.some(function(b){ return b.date===dt && b.time===tm; }); }
 var PROP_MOMENTS = [['', 'Peu importe'], ['morning', 'Matin'], ['afternoon', 'Après-midi'], ['evening', 'Fin de journée']];
 function propKey(){ return '6fltc_proposed_' + DETAIL_TOK; }
 function propLocal(){
@@ -828,24 +834,32 @@ function renderProp(st, tv){
   if(box.getAttribute('data-k')===key) return;
   box.setAttribute('data-k', key);
   var jump = document.getElementById('cv-prop-jump');
+  PROP_PENDING = [];
   if(st && (st.status==='pending' || st.status==='accepted')){
     var pend = batch.filter(function(o){ return (o.status||'pending')===st.status; });
     if(!pend.length) pend = batch;
+    if(st.status==='pending') PROP_PENDING = pend.map(function(o){ return {date:o.date, time:o.time||''}; });
     var head = st.status==='accepted' ? 'Date acceptée : '+propLine(pend[0])
       : pend.length>1 ? tv('Tu as proposé '+pend.length+' dates', 'Vous avez proposé '+pend.length+' dates')
       : tv('Tu as proposé le ', 'Vous avez proposé le ')+propDay(pend[0].date, pend[0].time);
     var lines = st.status!=='accepted' && pend.length>1 ? '<ul class="cv-prop-list">'+pend.map(function(o){ return '<li>'+e(propLine(o))+'</li>'; }).join('')+'</ul>' : '';
     var one = st.status!=='accepted' && pend.length===1 ? propSlot(pend[0].date, pend[0].time) : null;
     box.innerHTML = '<div class="cv-prop-wait"><b>'+e(head)+'</b>'+lines+(one ? '<span class="cv-prop-hr">Rendez-vous vers '+hm(one[0])+', fin vers '+hm(one[1])+'.</span>' : '')+
-      (st.status==='accepted' ? tv('Ton briefing se met à jour.', 'Votre briefing se met à jour.') : 'En attente de la réponse du photographe.')+'</div>';
-    if(jump){ jump.textContent = st.status==='accepted' ? 'Date acceptée' : (pend.length>1 ? 'Dates proposées, en attente' : 'Date proposée, en attente'); jump.disabled = true; }
+      (st.status==='accepted' ? tv('Ton briefing se met à jour.', 'Votre briefing se met à jour.') : 'En attente de la réponse du photographe. '+tv('Tu t\'es trompé ? Tu peux encore la modifier.', 'Vous vous êtes trompé ? Vous pouvez encore la modifier.'))+'</div>';
+    if(jump){
+      if(st.status==='accepted'){ jump.textContent = 'Date acceptée'; jump.disabled = true; }
+      else { jump.textContent = 'Modifier ma proposition'; jump.disabled = false; }
+    }
     return;
   }
   if(st && st.status==='declined'){
-    var dec = batch.filter(function(o){ return o.status==='declined'; }); if(!dec.length) dec = batch;
+    var dec = batch.filter(function(o){ return o.status==='declined' && o.block!=='none'; }); if(!dec.length) dec = batch;
+    var dl = function(o){ return propDay(o.date, o.block==='moment' ? o.time : ''); };
+    var mo = dec.every(function(o){ return o.block==='moment'; });
     box.innerHTML = dec.length>1
-      ? '<p class="cv-prop-no">'+tv('Ces dates ne seront pas possibles : ', 'Ces dates ne seront pas possibles : ')+e(dec.map(function(o){ return propDay(o.date, ''); }).join(', '))+'. '+tv('Choisis d\'autres jours avec le bouton en bas.', 'Choisissez d\'autres jours avec le bouton en bas.')+'</p>'
-      : '<p class="cv-prop-no">'+e(capFirst(propDay(dec[0].date, '')))+' '+tv('ne sera pas possible. Choisis un autre jour avec le bouton en bas.', 'ne sera pas possible. Choisissez un autre jour avec le bouton en bas.')+'</p>';
+      ? '<p class="cv-prop-no">'+(mo ? 'Ces créneaux ne seront pas possibles : ' : 'Ces dates ne seront pas possibles : ')+e(dec.map(dl).join(', '))+'. '+tv('Choisis-en d\'autres avec le bouton en bas.', 'Choisissez-en d\'autres avec le bouton en bas.')+'</p>'
+      : '<p class="cv-prop-no">'+e(capFirst(dl(dec[0])))+' '+(mo ? tv('ne sera pas possible. Un autre moment de la journée ou un autre jour peut convenir, choisis avec le bouton en bas.', 'ne sera pas possible. Un autre moment de la journée ou un autre jour peut convenir, choisissez avec le bouton en bas.')
+        : tv('ne sera pas possible. Choisis un autre jour avec le bouton en bas.', 'ne sera pas possible. Choisissez un autre jour avec le bouton en bas.'))+'</p>';
   } else box.innerHTML = '';
   if(jump){ jump.textContent = st && st.status==='declined' ? 'Proposer une autre date' : 'Proposer une date'; jump.disabled = false; }
 }
@@ -853,26 +867,33 @@ function renderProp(st, tv){
 function closePropSheet(){ var el = document.getElementById('prop-sheet'); if(el) el.remove(); }
 function openPropSheet(){
   var tv = PROP_TV, tok = DETAIL_TOK; if(!tok) return;
+  var edit = PROP_PENDING.length > 0;
   closePropSheet();
   var MAX = 3, today = new Date(); today.setHours(12, 0, 0, 0);
   var first = new Date(today); first.setDate(first.getDate() + 1);
   var last = new Date(today); last.setMonth(last.getMonth() + 6);
   var minI = isoDay(first), maxI = isoDay(last);
   var S = {y:first.getFullYear(), m:first.getMonth(), day:'', t:'', opts:[]};
+  // v1.8 : modification d'une proposition en attente, on repart des dates deja proposees
+  if(edit){
+    S.opts = PROP_PENDING.filter(function(o){ return o.date >= minI && o.date <= maxI; }).slice(0, MAX).map(function(o){ return {date:o.date, time:o.time||''}; });
+    if(S.opts.length){ var f0 = S.opts[0].date.split('-'); S.y = +f0[0]; S.m = +f0[1]-1; }
+  }
   var ac = (DETAIL_D && DETAIL_D.data && /^#[0-9a-f]{6}$/i.test(DETAIL_D.data.accent||'')) ? DETAIL_D.data.accent : '#e8571a';
   var el = document.createElement('div'); el.id = 'prop-sheet'; el.style.setProperty('--ps-accent', ac);
   el.innerHTML = '<div class="ps-card" role="dialog" aria-label="Proposer une date">'+
-    '<div class="ps-head"><b>Proposer une date</b><button type="button" class="ps-x" aria-label="Fermer">&#x2715;</button></div>'+
-    '<p class="ps-sub">'+tv('Jusqu\'à 3 options : plus tu en proposes, plus c\'est facile de caler la séance.', 'Jusqu\'à 3 options : plus vous en proposez, plus c\'est facile de caler la séance.')+'</p>'+
+    '<div class="ps-head"><b>'+(edit ? 'Modifier ma proposition' : 'Proposer une date')+'</b><button type="button" class="ps-x" aria-label="Fermer">&#x2715;</button></div>'+
+    '<p class="ps-sub">'+(edit ? tv('Retire une date avec la croix, choisis-en une autre, puis envoie : ta nouvelle proposition remplace l\'ancienne.', 'Retirez une date avec la croix, choisissez-en une autre, puis envoyez : votre nouvelle proposition remplace l\'ancienne.')
+      : tv('Jusqu\'à 3 dates : plus tu en proposes, plus c\'est facile de caler la séance.', 'Jusqu\'à 3 dates : plus vous en proposez, plus c\'est facile de caler la séance.'))+'</p>'+
     '<div class="ps-mhead"><button type="button" class="ps-nav" data-m="-1" aria-label="Mois précédent">&#8249;</button><span class="ps-month"></span><button type="button" class="ps-nav" data-m="1" aria-label="Mois suivant">&#8250;</button></div>'+
     '<div class="ps-dow"><span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span><span>D</span></div>'+
     '<div class="ps-grid"></div>'+
-    '<p class="ps-leg"'+(PROP_DECLINED.length ? '' : ' hidden')+'>'+tv('Jours barrés : déjà refusés pour ta séance.', 'Jours barrés : déjà refusés pour votre séance.')+'</p>'+
+    '<p class="ps-leg"'+(PROP_DECLINED.length || PROP_BLOCKED.length ? '' : ' hidden')+'>'+(PROP_DECLINED.length ? tv('Jours barrés : déjà refusés pour ta séance. ', 'Jours barrés : déjà refusés pour votre séance. ') : '')+(PROP_BLOCKED.length ? 'Point sous un jour : un moment de ce jour n\'est plus possible.' : '')+'</p>'+
     '<div class="ps-lbl">Moment de la journée</div>'+
     '<div class="ps-chips"></div>'+
     '<p class="ps-hint" hidden>'+tv('Heures calées sur la lumière du jour choisi. L\'heure exacte est confirmée dans ton briefing.', 'Heures calées sur la lumière du jour choisi. L\'heure exacte est confirmée dans votre briefing.')+'</p>'+
     '<div class="ps-opts" hidden></div>'+
-    '<button type="button" class="ps-add" hidden>+ Ajouter une autre option</button>'+
+    '<button type="button" class="ps-add" hidden></button>'+
     '<textarea class="ps-note" rows="2" maxlength="500" placeholder="Un mot pour préciser (optionnel)"></textarea>'+
     '<button type="button" class="ps-go" disabled></button></div>';
   document.body.appendChild(el);
@@ -890,14 +911,16 @@ function openPropSheet(){
       var iso = S.y+'-'+('0'+(S.m+1)).slice(-2)+'-'+('0'+d).slice(-2);
       var no = PROP_DECLINED.indexOf(iso) > -1, off = iso < minI || iso > maxI || no;
       var picked = S.opts.some(function(o){ return o.date===iso; });
-      h += '<button type="button" class="ps-d'+(no ? ' no' : '')+(iso===S.day ? ' on' : '')+(picked ? ' opt' : '')+'" data-d="'+iso+'"'+(off ? ' disabled' : '')+'>'+d+'</button>';
+      var part = !no && PROP_BLOCKED.some(function(b){ return b.date===iso; });
+      h += '<button type="button" class="ps-d'+(no ? ' no' : '')+(part ? ' part' : '')+(iso===S.day ? ' on' : '')+(picked ? ' opt' : '')+'" data-d="'+iso+'"'+(off ? ' disabled' : '')+'>'+d+'</button>';
     }
     grid.innerHTML = h;
     // moments, avec l'heure calculee pour le jour choisi
     var withHr = false;
     el.querySelector('.ps-chips').innerHTML = PROP_MOMENTS.map(function(o){
-      var sl = S.day && o[0] ? propSlot(S.day, o[0]) : null; if(sl) withHr = true;
-      return '<button type="button" data-t="'+o[0]+'" class="'+(o[0]===S.t ? 'on' : '')+'"><b>'+o[1]+'</b>'+(sl ? '<span>'+hm(sl[0])+' à '+hm(sl[1])+'</span>' : '')+'</button>';
+      var bl = S.day && propBlocked(S.day, o[0]);
+      var sl = S.day && o[0] && !bl ? propSlot(S.day, o[0]) : null; if(sl) withHr = true;
+      return '<button type="button" data-t="'+o[0]+'" class="'+(o[0]===S.t ? 'on' : '')+'"'+(bl ? ' disabled' : '')+'><b>'+o[1]+'</b>'+(bl ? '<span>Pas possible</span>' : sl ? '<span>'+hm(sl[0])+' à '+hm(sl[1])+'</span>' : '')+'</button>';
     }).join('');
     el.querySelector('.ps-hint').hidden = !withHr;
     // options deja ajoutees
@@ -905,20 +928,22 @@ function openPropSheet(){
     ob.hidden = !S.opts.length;
     ob.innerHTML = S.opts.map(function(o, k){ return '<div class="ps-opt"><span>'+(k+1)+'. '+e(propLine(o))+'</span><button type="button" data-rm="'+k+'" aria-label="Retirer">&#x2715;</button></div>'; }).join('');
     add.hidden = !S.day || S.opts.some(same) || S.opts.length >= MAX-1;
+    add.textContent = '+ Proposer une '+(S.opts.length + 2)+'e date';
     var list = all();
     go.disabled = !list.length;
     go.textContent = !list.length ? tv('Choisis un jour', 'Choisissez un jour')
+      : edit ? (list.length===1 ? capFirst('Proposer plutôt le '+propDay(list[0].date, list[0].time)) : 'Envoyer mes '+list.length+' dates')
       : list.length===1 ? capFirst('Proposer le '+propDay(list[0].date, list[0].time))
-      : tv('Envoyer mes '+list.length+' options', 'Envoyer mes '+list.length+' options');
+      : 'Envoyer mes '+list.length+' dates';
   }
   el.addEventListener('click', function(ev){
     if(ev.target===el || ev.target.closest('.ps-x')){ closePropSheet(); return; }
     var nb = ev.target.closest('.ps-nav');
     if(nb && !nb.disabled){ S.m += +nb.getAttribute('data-m'); if(S.m<0){ S.m = 11; S.y--; } if(S.m>11){ S.m = 0; S.y++; } paint(); return; }
     var db = ev.target.closest('.ps-d');
-    if(db && !db.disabled){ S.day = db.getAttribute('data-d'); paint(); return; }
+    if(db && !db.disabled){ S.day = db.getAttribute('data-d'); if(propBlocked(S.day, S.t)) S.t = ''; paint(); return; }
     var cb = ev.target.closest('.ps-chips button');
-    if(cb){ S.t = cb.getAttribute('data-t'); paint(); return; }
+    if(cb && !cb.disabled){ S.t = cb.getAttribute('data-t'); paint(); return; }
     var rm = ev.target.closest('[data-rm]');
     if(rm){ S.opts.splice(+rm.getAttribute('data-rm'), 1); paint(); return; }
     if(ev.target.closest('.ps-add') && S.day && !S.opts.some(same) && S.opts.length < MAX-1){
@@ -929,7 +954,9 @@ function openPropSheet(){
     var list = all(); if(!list.length) return;
     var nt = el.querySelector('.ps-note').value.trim();
     go.disabled = true; go.textContent = 'Envoi…';
-    sb.rpc('propose_shared_dates', {p_token:tok, p_options:list.map(function(o){ return {date:o.date, time:o.time || null}; }), p_note:nt || null}).then(function(r){
+    var args = {p_token:tok, p_options:list.map(function(o){ return {date:o.date, time:o.time || null}; }), p_note:nt || null};
+    if(edit) args.p_replace = true;
+    sb.rpc('propose_shared_dates2', args).then(function(r){
       if(r.error || !r.data){ paint(); alert(tv('Envoi impossible. Un de ces jours n\'est peut-être plus proposable, choisis-en un autre.', 'Envoi impossible. Un de ces jours n\'est peut-être plus proposable, choisissez-en un autre.')); return; }
       try{ localStorage.setItem('6fltc_proposed_' + tok, list.map(function(o){ return o.date+(o.time ? ' '+o.time : ''); }).join('|')); }catch(ex){}
       closePropSheet();
@@ -940,17 +967,18 @@ function openPropSheet(){
 }
 function propInit(tv){
   var tok = DETAIL_TOK, jump = document.getElementById('cv-prop-jump');
-  PROP_TV = tv; PROP_DECLINED = [];
+  PROP_TV = tv; PROP_DECLINED = []; PROP_BLOCKED = []; PROP_PENDING = [];
   if(jump) jump.onclick = function(){ if(!jump.disabled) openPropSheet(); };
   renderProp(propLocal(), tv);
   if(sb) sb.rpc('get_date_proposal', {p_token:tok}).then(function(r){
     if(DETAIL_TOK!==tok || !r || r.error) return;
     var x = r.data, d = null;
     if(x && x.status){
-      var bt = Array.isArray(x.batch) ? x.batch.map(function(o){ return {date:String(o.date||'').slice(0, 10), time:String(o.time||''), status:o.status}; }) : [];
+      var bt = Array.isArray(x.batch) ? x.batch.map(function(o){ return {date:String(o.date||'').slice(0, 10), time:String(o.time||''), status:o.status, block:o.block||null}; }) : [];
       d = {status:x.status, date:String(x.date||'').slice(0, 10), time:String(x.time||''), batch:bt};
     }
     PROP_DECLINED = (x && Array.isArray(x.declined) ? x.declined : []).map(function(y){ return String(y).slice(0, 10); });
+    PROP_BLOCKED = (x && Array.isArray(x.blocked) ? x.blocked : []).map(function(y){ return {date:String(y && y.date || '').slice(0, 10), time:String(y && y.time || '')}; }).filter(function(y){ return y.date && y.time; });
     if(!d || d.status!=='pending'){ try{ localStorage.removeItem('6fltc_proposed_' + tok); }catch(ex){} }
     renderProp(d, tv);
   }, function(){});
