@@ -315,6 +315,44 @@ html.cv-desk #cv-root .cv-sec a,html.cv-desk #cv-root .cv-sec button{flex:none;p
 .cv-gal textarea{width:100%;box-sizing:border-box;background:var(--d-panel);border:1px solid var(--d-line);border-radius:10px;color:var(--d-text);font:14px 'Inter',sans-serif;padding:10px 12px}
 .cv-pub{display:flex;gap:8px;align-items:flex-start;font-size:12.5px;color:var(--d-dim);margin-top:8px;line-height:1.4;cursor:pointer}
 .cv-pub input{margin:2px 0 0;flex:none;width:16px;height:16px;accent-color:var(--d-accent)}
+/* ===== v1.9 : questionnaire de fin de shooting ===== */
+#sv-sheet{position:fixed;inset:0;z-index:450;background:#0e0e0e;color:#f2f2f2;overflow-y:auto;-webkit-overflow-scrolling:touch;font-family:'Inter',system-ui,sans-serif;line-height:1.5}
+#sv-sheet .sv-in{max-width:640px;margin:0 auto;padding:20px 16px calc(60px + env(safe-area-inset-bottom))}
+#sv-sheet .sv-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+#sv-sheet .sv-brand{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#8c8c8c}
+#sv-sheet .sv-x{width:36px;height:36px;border-radius:50%;border:1px solid #2a2a2a;background:#161616;color:#f2f2f2;font-size:14px;cursor:pointer}
+#sv-sheet h2{margin:0 0 8px;font-size:26px;line-height:1.15;font-weight:600}
+#sv-sheet .sv-intro{margin:0 0 20px;color:#8c8c8c;font-size:14px}
+#sv-sheet .sv-prog{height:3px;background:#2a2a2a;border-radius:3px;overflow:hidden}
+#sv-sheet .sv-bar{height:100%;width:0;background:#f2f2f2;transition:width .3s ease}
+#sv-sheet .sv-step{margin:10px 0 20px;font-size:13px;color:#8c8c8c}
+#sv-sheet .sv-sec{display:none}
+#sv-sheet .sv-sec.on{display:block}
+#sv-sheet .sv-q{background:#161616;border:1px solid #2a2a2a;border-radius:14px;padding:18px;margin:0 0 14px;min-width:0}
+#sv-sheet fieldset.sv-q{margin-left:0;margin-right:0}
+#sv-sheet .sv-q.bad{border-color:#e5776f}
+#sv-sheet .sv-q[hidden]{display:none}
+#sv-sheet .sv-t{display:block;padding:0;margin:0 0 4px;font-size:16px;font-weight:600}
+#sv-sheet .sv-req{color:#8c8c8c;margin-left:4px}
+#sv-sheet .sv-hint{margin:0 0 10px;font-size:13px;color:#8c8c8c}
+#sv-sheet .sv-opts{display:grid;gap:8px;margin-top:12px}
+#sv-sheet .sv-opt{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid #2a2a2a;border-radius:10px;cursor:pointer}
+#sv-sheet .sv-opt:has(input:checked){border-color:#f2f2f2;background:#1d1d1d}
+#sv-sheet .sv-opt input{accent-color:#f2f2f2;width:18px;height:18px;margin:0;flex:none}
+#sv-sheet .sv-rl{margin:14px 0 8px;font-size:14px}
+#sv-sheet .sv-pills{display:flex;gap:6px}
+#sv-sheet .sv-pill{position:relative;flex:1 1 0;min-width:0;cursor:pointer}
+#sv-sheet .sv-pill input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+#sv-sheet .sv-pill span{display:block;text-align:center;padding:10px 0;border:1px solid #2a2a2a;border-radius:10px;font-size:15px}
+#sv-sheet .sv-pill input:checked+span{background:#f2f2f2;color:#0e0e0e;border-color:#f2f2f2;font-weight:600}
+#sv-sheet .sv-ends{display:flex;justify-content:space-between;gap:12px;margin-top:6px;font-size:12px;color:#8c8c8c}
+#sv-sheet textarea,#sv-sheet input[type=text]{width:100%;box-sizing:border-box;margin-top:10px;padding:12px 14px;background:#101010;color:#f2f2f2;border:1px solid #2a2a2a;border-radius:10px;font:16px 'Inter',system-ui,sans-serif;resize:vertical}
+#sv-sheet .sv-nav{display:flex;justify-content:space-between;gap:12px;margin-top:22px}
+#sv-sheet .sv-nav button{font:600 15px 'Inter',system-ui,sans-serif;padding:13px 24px;border-radius:999px;border:1px solid #f2f2f2;background:#f2f2f2;color:#0e0e0e;cursor:pointer}
+#sv-sheet .sv-nav button.ghost{background:transparent;color:#f2f2f2;border-color:#2a2a2a}
+#sv-sheet .sv-nav button:disabled{opacity:.5}
+#sv-sheet .sv-err{min-height:22px;margin:12px 0 0;font-size:14px;color:#e5776f}
+@media (max-width:420px){#sv-sheet h2{font-size:23px}#sv-sheet .sv-pills{gap:4px}#sv-sheet .sv-pill span{font-size:14px}}
 /* ===== v1.6 : calendrier de proposition de date ===== */
 #prop-sheet{position:fixed;inset:0;z-index:400;background:rgba(0,0,0,.66);display:flex;align-items:flex-end;justify-content:center}
 #prop-sheet .ps-card{width:100%;max-width:560px;max-height:92vh;overflow-y:auto;background:#16181c;border-radius:18px 18px 0 0;padding:16px 16px calc(16px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:10px;color:#f0ede8;font-family:'Inter',sans-serif}
@@ -381,7 +419,7 @@ html.cv-desk #cv-root .cv-sec a,html.cv-desk #cv-root .cv-sec button{flex:none;p
 </div>
 
 <script>
-/* ===== 6flt Clients v1.8.1 (Spoties v1.58.1 : briefing en grand sur ordinateur) ===== */
+/* ===== 6flt Clients v1.9 (Spoties v1.60 : questionnaire de fin de shooting) ===== */
 var CV_DESK_MQ = window.matchMedia ? window.matchMedia('(min-width: 900px) and (hover: hover)') : null;
 function cvDesk(){ return !!(CV_DESK_MQ && CV_DESK_MQ.matches); }
 function cvDeskApply(){
@@ -999,6 +1037,132 @@ function propInit(tv){
     renderProp(d, tv);
   }, function(){});
 }
+/* ===== v1.9 : questionnaire de fin de shooting (ouvert par le photographe depuis Spoties) ===== */
+var SV_SECTIONS = [
+  {title:'La préparation', items:[
+    {id:'source', type:'radio', req:true, label:'Comment avez-vous connu 6flt Photographies ?', options:['Instagram','Bouche à oreille','Rassemblement ou événement','Autre']},
+    {id:'briefing_aide', type:'scale', req:true, label:'Le briefing vous a-t-il aidé à vous préparer ?', min:1, max:5, low:'Pas du tout', high:'Énormément'}
+  ]},
+  {title:'La séance', items:[
+    {id:'lieu', type:'scale', req:true, label:'Le lieu du shooting correspondait-il à vos attentes ?', min:1, max:5, low:'Pas du tout', high:'Tout à fait'},
+    {id:'seance', type:'matrix', req:true, label:'Votre ressenti pendant la séance', min:1, max:5, low:'Insatisfait', high:'Satisfait', rows:[['seance_accueil','Accueil et mise en confiance'],['seance_consignes','Clarté des consignes pour placer le véhicule'],['seance_duree','Durée de la séance']]}
+  ]},
+  {title:'Les photos', items:[
+    {id:'photos', type:'matrix', req:true, label:'Votre ressenti sur les photos', min:1, max:5, low:'Insatisfait', high:'Satisfait', rows:[['photos_qualite','Qualité et rendu des photos'],['photos_delai','Délai de livraison'],['photos_galerie','Facilité pour télécharger la galerie']]},
+    {id:'prevu_livre', type:'radio', req:true, label:'Le résultat final correspondait-il à ce qui avait été convenu avant le shooting ?', options:['Très en dessous','Un peu en dessous','Conforme','Un peu au-dessus','Très au-dessus']},
+    {id:'usage', type:'checkbox', req:true, label:'Que comptez-vous faire de ces photos ?', hint:'Plusieurs réponses possibles.', options:['Réseaux sociaux','Souvenir personnel','Vente du véhicule','Tirage ou impression','Autre']}
+  ]},
+  {title:'Votre avis global', items:[
+    {id:'prix', type:'radio', req:true, label:'Par rapport à ce que vous avez reçu, le tarif vous a semblé :', options:['Beaucoup trop élevé','Un peu élevé','Juste','Un peu bas','Très bas']},
+    {id:'recommandation', type:'scale', req:true, label:'Recommanderiez-vous 6flt Photographies à un proche ?', min:0, max:10, low:'Pas du tout', high:'Sans hésiter'},
+    {id:'reachat', type:'radio', req:true, label:'Referiez-vous un shooting avec 6flt ?', options:['Certainement pas','Probablement pas','Peut-être','Probablement','Certainement']},
+    {id:'point_fort', type:'textarea', label:'Si vous deviez retenir UN point fort de notre collaboration, ce serait quoi ?'},
+    {id:'amelioration', type:'textarea', label:'Qu\'est-ce qui pourrait être amélioré pour un prochain shooting ?'},
+    {id:'consentement', type:'radio', req:true, label:'M\'autorisez-vous à partager votre avis publiquement (site, réseaux sociaux) ?', options:['Oui, avec mon prénom','Oui, de manière anonyme','Non, je préfère que cela reste entre nous']},
+    {id:'prenom', type:'text', label:'Votre prénom', hint:'Facultatif. Nécessaire si vous acceptez la publication avec votre prénom.'}
+  ]}
+];
+function svOpen(tok, firstName, onDone){
+  var old = document.getElementById('sv-sheet'); if(old) old.remove();
+  var cur = 0, sheet = document.createElement('div'); sheet.id = 'sv-sheet';
+  sheet.innerHTML = '<div class="sv-in"><div class="sv-top"><span class="sv-brand">6flt Photographies</span><button type="button" class="sv-x" aria-label="Fermer">✕</button></div>'+
+    '<h2>Votre avis compte</h2><p class="sv-intro">Environ 3 minutes. Cela m\'aide à améliorer mon travail et mes services.</p>'+
+    '<div class="sv-prog"><div class="sv-bar"></div></div><p class="sv-step"></p><form novalidate autocomplete="off"></form><p class="sv-err" role="alert"></p>'+
+    '<div class="sv-nav"><button type="button" class="ghost sv-back">Retour</button><button type="button" class="sv-next">Suivant</button></div></div>';
+  var form = sheet.querySelector('form'), bar = sheet.querySelector('.sv-bar'), step = sheet.querySelector('.sv-step'), err = sheet.querySelector('.sv-err');
+  var back = sheet.querySelector('.sv-back'), next = sheet.querySelector('.sv-next');
+  function mk(tag, cls, txt){ var n = document.createElement(tag); if(cls) n.className = cls; if(txt!=null) n.textContent = txt; return n; }
+  function scale(name, min, max, low, high){
+    var box = mk('div'), pills = mk('div', 'sv-pills');
+    for(var i=min;i<=max;i++){
+      var lb = mk('label', 'sv-pill'), inp = document.createElement('input'); inp.type = 'radio'; inp.name = name; inp.value = String(i);
+      lb.appendChild(inp); lb.appendChild(mk('span', '', String(i))); pills.appendChild(lb);
+    }
+    var ends = mk('div', 'sv-ends'); ends.appendChild(mk('span', '', low)); ends.appendChild(mk('span', '', high));
+    box.appendChild(pills); box.appendChild(ends); return box;
+  }
+  function opts(it, type){
+    var box = mk('div', 'sv-opts');
+    it.options.forEach(function(o){
+      var lb = mk('label', 'sv-opt'), inp = document.createElement('input'); inp.type = type; inp.name = it.id; inp.value = o;
+      lb.appendChild(inp); lb.appendChild(mk('span', '', o)); box.appendChild(lb);
+    });
+    return box;
+  }
+  SV_SECTIONS.forEach(function(sec, si){
+    var node = mk('div', 'sv-sec'); node.setAttribute('data-i', si);
+    sec.items.forEach(function(it){
+      var fs = (it.type==='radio' || it.type==='checkbox' || it.type==='scale' || it.type==='matrix');
+      var w = mk(fs ? 'fieldset' : 'div', 'sv-q'); w.setAttribute('data-id', it.id);
+      var t = mk(fs ? 'legend' : 'label', 'sv-t', it.label); if(it.req) t.appendChild(mk('span', 'sv-req', '*')); w.appendChild(t);
+      if(it.hint) w.appendChild(mk('p', 'sv-hint', it.hint));
+      if(it.type==='radio') w.appendChild(opts(it, 'radio'));
+      if(it.type==='checkbox') w.appendChild(opts(it, 'checkbox'));
+      if(it.type==='scale'){ var sp = mk('div'); sp.style.height = '12px'; w.appendChild(sp); w.appendChild(scale(it.id, it.min, it.max, it.low, it.high)); }
+      if(it.type==='matrix') it.rows.forEach(function(r){ w.appendChild(mk('p', 'sv-rl', r[1])); w.appendChild(scale(r[0], it.min, it.max, it.low, it.high)); });
+      if(it.type==='textarea'){ var ta = document.createElement('textarea'); ta.name = it.id; ta.rows = 3; ta.maxLength = 1500; w.appendChild(ta); }
+      if(it.type==='text'){ var ti = document.createElement('input'); ti.type = 'text'; ti.name = it.id; ti.maxLength = 60; ti.value = firstName || ''; w.appendChild(ti); }
+      node.appendChild(w);
+    });
+    form.appendChild(node);
+  });
+  function val(name){ var c = form.querySelector('input[name="'+name+'"]:checked'); return c ? c.value : null; }
+  function done(it){
+    if(it.type==='radio' || it.type==='scale') return val(it.id)!==null;
+    if(it.type==='checkbox') return form.querySelectorAll('input[name="'+it.id+'"]:checked').length>0;
+    if(it.type==='matrix') return it.rows.every(function(r){ return val(r[0])!==null; });
+    var f = form.querySelector('[name="'+it.id+'"]'); return !!f && f.value.trim()!=='';
+  }
+  function check(si){
+    var first = null;
+    SV_SECTIONS[si].items.forEach(function(it){
+      var n = form.querySelector('.sv-q[data-id="'+it.id+'"]'); n.classList.remove('bad');
+      var need = it.req && !done(it);
+      if(it.id==='prenom' && val('consentement')==='Oui, avec mon prénom' && !done(it)) need = true;
+      if(need){ n.classList.add('bad'); if(!first) first = n; }
+    });
+    if(first){ err.textContent = 'Merci de répondre aux questions marquées d\'un astérisque.'; try{ first.scrollIntoView({behavior:'smooth', block:'center'}); }catch(x){} return false; }
+    err.textContent = ''; return true;
+  }
+  function show(i){
+    cur = i;
+    Array.prototype.forEach.call(form.querySelectorAll('.sv-sec'), function(s){ s.classList.toggle('on', +s.getAttribute('data-i')===i); });
+    bar.style.width = ((i+1)/SV_SECTIONS.length*100)+'%';
+    step.textContent = 'Étape '+(i+1)+' sur '+SV_SECTIONS.length+' : '+SV_SECTIONS[i].title;
+    back.style.visibility = i===0 ? 'hidden' : 'visible';
+    next.textContent = i===SV_SECTIONS.length-1 ? 'Envoyer' : 'Suivant';
+    sheet.scrollTop = 0;
+  }
+  function collect(){
+    var data = {}, multi = {};
+    SV_SECTIONS.forEach(function(s){ s.items.forEach(function(it){ if(it.type==='checkbox') multi[it.id] = 1; }); });
+    var seen = {};
+    Array.prototype.forEach.call(form.querySelectorAll('input,textarea'), function(f){
+      if(!f.name || seen[f.name]) return; seen[f.name] = 1;
+      if(multi[f.name]) data[f.name] = Array.prototype.map.call(form.querySelectorAll('input[name="'+f.name+'"]:checked'), function(c){ return c.value; });
+      else if(f.type==='radio'){ var v = val(f.name); if(v!==null) data[f.name] = v; }
+      else { var t = f.value.trim(); if(t) data[f.name] = t; }
+    });
+    return data;
+  }
+  function close(){ sheet.remove(); document.body.style.overflow = ''; }
+  sheet.querySelector('.sv-x').onclick = close;
+  back.onclick = function(){ if(cur>0) show(cur-1); };
+  form.addEventListener('change', function(){
+    err.textContent = '';
+    Array.prototype.forEach.call(form.querySelectorAll('.sv-q.bad'), function(q){ q.classList.remove('bad'); });
+  });
+  next.onclick = function(){
+    if(!check(cur)) return;
+    if(cur < SV_SECTIONS.length-1){ show(cur+1); return; }
+    next.disabled = true; next.textContent = 'Envoi...';
+    sb.rpc('submit_shared_survey', {p_token:tok, p_data:collect()}).then(function(r){
+      if(r.error || !r.data){ next.disabled = false; next.textContent = 'Envoyer'; err.textContent = 'L\'envoi a échoué. Vérifiez votre connexion et réessayez.'; return; }
+      close(); if(onDone) onDone();
+    }, function(){ next.disabled = false; next.textContent = 'Envoyer'; err.textContent = 'L\'envoi a échoué. Vérifiez votre connexion et réessayez.'; });
+  };
+  document.body.appendChild(sheet); document.body.style.overflow = 'hidden'; show(0);
+}
 function renderDetail(){
   DETAIL_MAPS.forEach(function(m){ try{ m.remove(); }catch(x){} }); DETAIL_MAPS = [];
   var D = DETAIL_D, root = document.getElementById('cv-root'), d = D.data || {}, rev = !!D.revealed;
@@ -1012,6 +1176,8 @@ function renderDetail(){
   h += '<div id="cv-install">'+helperBannerHTML()+'</div>';
   if(D.gallery_url && /^https?:\/\//i.test(D.gallery_url))
     h += '<div class="cv-banner cv-ok"><b>'+tv('Ta galerie est prête', 'Votre galerie est prête')+'</b><a href="'+e(D.gallery_url)+'" target="_blank" rel="noopener">'+tv('Voir mes photos', 'Voir vos photos')+' ›</a></div>';
+  if(D.gallery_url && D.survey_open_at && !D.review_submitted_at)
+    h += '<div class="cv-banner cv-ok"><b>'+tv('Ton avis compte', 'Votre avis compte')+'</b><a href="#" class="sv-go">'+tv('Répondre au questionnaire (3 min)', 'Répondre au questionnaire (3 min)')+' ›</a></div>';
   if(!rev){
     var at = D.reveal_at ? new Date(D.reveal_at) : null;
     if(!d.date || !at || at.getFullYear()>2900) h += '<div class="cv-banner"><b>Adresses des spots bientôt disponibles</b>Elles apparaîtront ici dès que la date de la séance sera fixée.</div>';
@@ -1048,12 +1214,8 @@ function renderDetail(){
     var galH = '<div class="cv-gal"><a class="btn" href="'+e(D.gallery_url)+'" target="_blank" rel="noopener">'+tv('Voir ma galerie', 'Voir ma galerie')+'</a>';
     if(D.review_submitted_at){
       galH += '<p class="cv-prop-note">'+tv('Merci pour ton avis !', 'Merci pour votre avis !')+'</p>';
-    } else {
-      galH += '<label class="cv-sl">'+tv('Une note pour le photographe ?', 'Une note pour le photographe ?')+'</label>'+
-        '<div class="cv-stars" id="cv-stars">'+[1,2,3,4,5].map(function(n){ return '<button type="button" class="cv-star" data-n="'+n+'">★</button>'; }).join('')+'</div>'+
-        '<textarea id="cv-review-text" rows="2" placeholder="'+tv('Un commentaire (optionnel)', 'Un commentaire (optionnel)')+'"></textarea>'+
-        '<label class="cv-pub"><input type="checkbox" id="cv-review-pub"> '+tv('J\'accepte que mon avis soit publié (Instagram, site de 6flt)', 'J\'accepte que mon avis soit publié (Instagram, site de 6flt)')+'</label>'+
-        '<button type="button" id="cv-review-go" class="cv-prop-btn" disabled style="margin-top:8px;background:var(--d-accent);color:#fff;border:none;border-radius:10px;padding:10px 16px;font-weight:700;font-size:13px;cursor:pointer">'+tv('Envoyer', 'Envoyer')+'</button>';
+    } else if(D.survey_open_at){
+      galH += '<button type="button" class="sv-go" style="background:var(--d-accent);color:#fff;border:none;border-radius:10px;padding:11px 16px;font-weight:700;font-size:14px;cursor:pointer">'+tv('Donner mon avis (3 min)', 'Donner mon avis (3 min)')+'</button>';
     }
     galH += '</div>';
     if(docEl) docEl.insertAdjacentHTML('beforeend', galH);
@@ -1151,6 +1313,14 @@ function renderDetail(){
   };
 
   if(tbdv) propInit(tv);
+
+  Array.prototype.forEach.call(root.querySelectorAll('.sv-go'), function(b){
+    b.onclick = function(ev){
+      ev.preventDefault();
+      var fn = String(D.signed_name || '').trim().split(/\s+/)[0] || '';
+      svOpen(DETAIL_TOK, fn, function(){ DETAIL_D.review_submitted_at = new Date().toISOString(); DETAIL_D.survey_submitted_at = DETAIL_D.review_submitted_at; renderDetail(); });
+    };
+  });
 
   var starWrap = document.getElementById('cv-stars'), reviewGo = document.getElementById('cv-review-go'), curStars = 0;
   if(starWrap) starWrap.querySelectorAll('.cv-star').forEach(function(btn){
