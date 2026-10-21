@@ -7330,7 +7330,7 @@ function shareSoon(){
 }
 function shareStats(){
   if(!shareOn() || !sb) return;
-  sb.from('shared_briefings').select('views,confirmed_at,reveal_at,signed_name,signature,gallery_url').eq('token', doc.share.token).maybeSingle().then(function(r){
+  sb.from('shared_briefings').select('views,confirmed_at,reveal_at,signed_name,signature,gallery_url,survey_open_at,review_submitted_at').eq('token', doc.share.token).maybeSingle().then(function(r){
     var el = $('bf-sh-stat'); if(!el) return;
     if(!r.data){ el.textContent = 'Statistiques indisponibles'; return; }
     var d = r.data, v = d.views||0, t = [];
@@ -7338,6 +7338,14 @@ function shareStats(){
     if(gIn && document.activeElement!==gIn) gIn.value = gUrl;
     if(gBtn) gBtn.textContent = gUrl ? 'Mettre à jour' : 'Envoyer';
     if(gHint && gUrl) gHint.textContent = 'Le client voit sa galerie dans son lien. Modifier le lien ne crée pas de nouvelle version.';
+    // v1.61 : questionnaire de fin de shooting, a envoyer une fois la galerie en ligne
+    var svBtn = $('bf-sh-svbtn'), svHint = $('bf-sh-svhint');
+    if(svBtn && svHint){
+      var svOpenNow = !!d.survey_open_at, svDone = !!d.review_submitted_at;
+      svBtn.style.display = (gUrl && !svOpenNow && !svDone) ? '' : 'none';
+      svHint.style.display = (gUrl && (svOpenNow || svDone)) ? '' : 'none';
+      svHint.textContent = svDone ? 'Questionnaire rempli par le client.' : 'Questionnaire ouvert dans le lien du client. Préviens-le avec Relancer dans sa fiche.';
+    }
     var wasLocked = !!doc.share.locked, nowLocked = !!d.confirmed_at;
     if(wasLocked !== nowLocked){ doc.share.locked = nowLocked; commit(); renderShare(); return; }
     doc.share.locked = nowLocked;
@@ -7370,6 +7378,7 @@ function renderShare(){
     '<div class="bf-set-label">Galerie</div>'+
     '<div class="bf-shlink"><input class="bf-field" id="bf-sh-gal" type="url" inputmode="url" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="Colle le lien de la galerie"><button class="bf-shghost" data-sact="gallery" id="bf-sh-galbtn">Envoyer</button></div>'+
     '<p class="bf-set-hint" id="bf-sh-galhint">Ajoutée à côté du document : pas de nouvelle version, la confirmation du client reste valable.</p>' +
+    '<button class="bf-shghost" data-sact="survey" id="bf-sh-svbtn" style="display:none;margin-top:8px">Envoyer le questionnaire</button><p class="bf-set-hint" id="bf-sh-svhint" style="display:none"></p>' +
     lockBox + (lock ? '' : seg) +
     '<button class="bf-shdanger" data-sact="revoke">Désactiver le lien</button>';
   shareStats();
@@ -7427,6 +7436,16 @@ function shareAct(e){
       var gc = getClient(doc.clientId);
       if(gc && String(gc.gallery||'').trim() !== gurl){ gc.gallery = gurl; clientsChanged(); }
       toast(gurl ? 'Galerie envoyée au client' : 'Galerie retirée du lien');
+      shareStats();
+    }, function(){ a.disabled = false; toast('Envoi impossible, réessaie'); });
+    return;
+  }
+  if(act==='survey'){
+    a.disabled = true;
+    sb.from('shared_briefings').update({survey_open_at:new Date().toISOString()}).eq('token', doc.share.token).then(function(r){
+      a.disabled = false;
+      if(r.error){ toast('Envoi impossible, réessaie'); return; }
+      toast('Questionnaire ouvert dans le lien du client');
       shareStats();
     }, function(){ a.disabled = false; toast('Envoi impossible, réessaie'); });
     return;
