@@ -315,22 +315,22 @@ html.cv-desk #cv-root .cv-sec a,html.cv-desk #cv-root .cv-sec button{flex:none;p
 .cv-gal textarea{width:100%;box-sizing:border-box;background:var(--d-panel);border:1px solid var(--d-line);border-radius:10px;color:var(--d-text);font:14px 'Inter',sans-serif;padding:10px 12px}
 .cv-pub{display:flex;gap:8px;align-items:flex-start;font-size:12.5px;color:var(--d-dim);margin-top:8px;line-height:1.4;cursor:pointer}
 .cv-pub input{margin:2px 0 0;flex:none;width:16px;height:16px;accent-color:var(--d-accent)}
-/* ===== v1.11.1 : frise de suivi apres shooting, etape en cours qui clignote, points de liaison ===== */
-.cv-fr{list-style:none;margin:10px 0 0;padding:0;font-size:14px}
-.cv-fr li{position:relative;display:flex;gap:10px;align-items:flex-start;padding:7px 8px;margin-bottom:14px;border-radius:10px;color:var(--d-mute,#8b8a84)}
-.cv-fr li:last-child{margin-bottom:0}
-.cv-fr li.done{color:var(--d-text,#f3f2ee)}
-.cv-fr li.now{color:var(--d-text,#f3f2ee);background:rgba(255,255,255,.07);box-shadow:inset 0 0 0 1px var(--cv-accent,#e8571a);font-size:15px}
-.cv-fr .mk{flex:none;width:18px;text-align:center;line-height:1.35}
-.cv-fr li.now .mk{color:var(--cv-accent,#e8571a);animation:cvblink 1.2s ease-in-out infinite}
-.cv-fr .lb{font-weight:600}
-.cv-fr li.now .lb{font-weight:800}
-.cv-fr .tag{display:inline-block;margin-left:6px;font-size:10.5px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--cv-accent,#e8571a);animation:cvblink 1.2s ease-in-out infinite}
-.cv-fr .sb{display:block;font-size:12.5px;color:var(--d-mute,#8b8a84);font-weight:400}
-.cv-fr li:not(:last-child)::after{content:"";position:absolute;left:16px;top:calc(100% + 1px);width:3px;height:12px;background:radial-gradient(circle,var(--d-mute,#8b8a84) 1.3px,transparent 1.6px) 0 0/3px 6px repeat-y;opacity:.7}
-.cv-fr li.done:not(:last-child)::after{background:radial-gradient(circle,var(--cv-accent,#e8571a) 1.3px,transparent 1.6px) 0 0/3px 6px repeat-y;opacity:1}
-@keyframes cvblink{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(1.3)}}
-@media (prefers-reduced-motion:reduce){.cv-fr li.now .mk,.cv-fr .tag{animation:none}}
+/* ===== v1.11.2 : frise verticale de suivi apres shooting ===== */
+.cv-fr{list-style:none;margin:14px 0 0;padding:0}
+.cv-fr li{position:relative;display:flex;gap:16px;align-items:flex-start;padding:0 0 22px;color:var(--d-text,#f3f2ee)}
+.cv-fr li:last-child{padding-bottom:0}
+.cv-fr .mk{flex:none;position:relative;width:16px;height:16px;margin-top:5px;border-radius:50%;background:#c9d0d8;box-sizing:border-box}
+.cv-fr li.done .mk{background:var(--cv-accent,#e8571a)}
+.cv-fr li.now .mk{background:transparent;margin:2px 0 0 -4px;width:24px;height:24px;border:0;box-shadow:none}
+.cv-fr li.now .mk::before{content:"";position:absolute;inset:0;border-radius:50%;border:2px solid var(--cv-accent,#e8571a)}
+.cv-fr li.now .mk::after{content:"";position:absolute;inset:5px;border-radius:50%;background:var(--cv-accent,#e8571a)}
+.cv-fr li.now{gap:12px}
+.cv-fr .lb{display:block;font-size:20px;font-weight:800;line-height:1.25}
+.cv-fr .sb{display:block;font-size:14.5px;font-weight:400;margin-top:2px}
+.cv-fr li::after{content:"";position:absolute;left:6px;top:26px;bottom:-1px;width:4px;background:repeating-linear-gradient(to bottom,#b9bfc6 0 4px,transparent 4px 8px)}
+.cv-fr li.now::after{top:30px;bottom:-3px}
+.cv-fr li:last-child::after{display:none}
+.cv-fr li.lk::after{background:repeating-linear-gradient(to bottom,var(--cv-accent,#e8571a) 0 4px,transparent 4px 8px)}
 /* ===== v1.9 : questionnaire de fin de shooting ===== */
 #sv-sheet{position:fixed;inset:0;z-index:450;background:#0e0e0e;color:#f2f2f2;overflow-y:auto;-webkit-overflow-scrolling:touch;font-family:'Inter',system-ui,sans-serif;line-height:1.5}
 #sv-sheet .sv-in{max-width:640px;margin:0 auto;padding:20px 16px calc(60px + env(safe-area-inset-bottom))}
@@ -435,7 +435,7 @@ html.cv-desk #cv-root .cv-sec a,html.cv-desk #cv-root .cv-sec button{flex:none;p
 </div>
 
 <script>
-/* ===== 6flt Clients v1.11.1 (Spoties v1.63.1 : frise animee) ===== */
+/* ===== 6flt Clients v1.11.2 (Spoties v1.63.2 : frise verticale) ===== */
 var CV_DESK_MQ = window.matchMedia ? window.matchMedia('(min-width: 900px) and (hover: hover)') : null;
 function cvDesk(){ return !!(CV_DESK_MQ && CV_DESK_MQ.matches); }
 function cvDeskApply(){
@@ -1200,7 +1200,8 @@ function cvProgressHTML(D, tv){
   var li = steps.map(function(x, i){
     var done = i===0 || (i===1 && st>=2), now = (i===1 && st===1) || (i===2 && st===2);
     var mark = done ? '✓' : now ? '●' : '○';
-    return '<li class="'+(done ? 'done' : now ? 'now' : '')+'"><span class="mk">'+mark+'</span><span><span class="lb">'+x[0]+'</span>'+(now ? '<span class="tag">'+tv('en cours', 'en cours')+'</span>' : '')+(x[1] ? '<span class="sb">'+x[1]+'</span>' : '')+'</span></li>';
+    var nx = steps[i+1] ? (i+1===1 ? st>=1 : i+1===2 ? st>=2 : false) : false;
+    return '<li class="'+(done ? 'done' : now ? 'now' : '')+(nx ? ' lk' : '')+'"><span class="mk"></span><span><span class="lb">'+x[0]+'</span>'+(x[1] ? '<span class="sb">'+x[1]+'</span>' : '')+'</span></li>';
   }).join('');
   var pct = (st===2 && kept && edited!=null) ? Math.max(0, Math.min(100, Math.round(edited/kept*100))) : null;
   return '<div class="cv-banner cv-ok"><b>'+tv('Ta séance a eu lieu', 'Votre séance a eu lieu')+'</b>'+tv('Tu seras prévenu ici dès que ta galerie est prête.', 'Vous serez prévenu ici dès que votre galerie est prête.')+
