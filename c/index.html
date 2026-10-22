@@ -419,7 +419,7 @@ html.cv-desk #cv-root .cv-sec a,html.cv-desk #cv-root .cv-sec button{flex:none;p
 </div>
 
 <script>
-/* ===== 6flt Clients v1.9 (Spoties v1.61 : questionnaire de fin de shooting) ===== */
+/* ===== 6flt Clients v1.10 (Spoties v1.62 : briefing adaptatif) ===== */
 var CV_DESK_MQ = window.matchMedia ? window.matchMedia('(min-width: 900px) and (hover: hover)') : null;
 function cvDesk(){ return !!(CV_DESK_MQ && CV_DESK_MQ.matches); }
 function cvDeskApply(){
@@ -674,7 +674,7 @@ function renderList(){
     if(c.error) return '<div class="card" data-tok="'+e(t.token)+'"><b>Séance introuvable</b><span class="sub">Ce lien n\'est plus valide</span><button class="rm" type="button" data-rm="'+e(t.token)+'">✕</button></div>';
     var d = c.data || {}, badge = 'wait', label = 'En attente';
     if(c.gallery_url){ badge = 'ok'; label = 'Galerie prête'; }
-    else if(c.confirmed_at){ badge = 'ok'; label = 'Confirmée'; }
+    else if(c.confirmed_at){ badge = 'ok'; label = (d.start && Date.now() >= new Date(d.start).getTime() + 4*3600000) ? 'Séance réalisée' : 'Confirmée'; }
     else if(d.tbd){ badge = 'tbd'; label = 'Date à fixer'; }
     var sub = d.start ? fdt(d.start, {day:'numeric', month:'long', hour:'2-digit', minute:'2-digit'}) : (d.tbd ? 'Date à définir' : '');
     return '<div class="card" data-tok="'+e(t.token)+'"><b>'+e(c.title || d.title || 'Briefing')+'</b>'+(sub ? '<span class="sub">'+e(sub)+'</span>' : '')+
@@ -1163,22 +1163,39 @@ function svOpen(tok, firstName, onDone){
   };
   document.body.appendChild(sheet); document.body.style.overflow = 'hidden'; show(0);
 }
+/* ===== v1.10 : le briefing s'adapte tout seul a l'etat du dossier (affichage seulement, le document gele n'est jamais reecrit) ===== */
+function cvPhase(D, d, conf){
+  var st = d.start ? new Date(d.start) : null, past = !!(st && !isNaN(st.getTime()) && Date.now() >= st.getTime() + 4*3600000);
+  if(D.review_submitted_at) return {k:'merci', past:true};
+  if(D.gallery_url) return {k:D.survey_open_at ? 'avis' : 'galerie', past:true};
+  if(past && conf) return {k:'apres', past:true};
+  if(conf) return {k:'avant', past:false};
+  return {k:d.tbd ? 'tbd' : 'confirmer', past:false};
+}
 function renderDetail(){
   DETAIL_MAPS.forEach(function(m){ try{ m.remove(); }catch(x){} }); DETAIL_MAPS = [];
   var D = DETAIL_D, root = document.getElementById('cv-root'), d = D.data || {}, rev = !!D.revealed;
   var conf = !!D.confirmed_at, hd = String(d.handle||'').replace(/^@/, '');
   var vous = d.tone==='vous', ac = /^#[0-9a-f]{6}$/i.test(d.accent||'') ? d.accent : '#e8571a', tbdv = !!d.tbd && !conf;
   function tv(a, b){ return vous ? b : a; }
+  var ph = cvPhase(D, d, conf), galOk = !!(D.gallery_url && /^https?:\/\//i.test(D.gallery_url));
   root.style.setProperty('--cv-accent', ac);
   var h = '<div class="cv-wrap">';
   h += '<button type="button" class="cv-back" onclick="closeDetail()">‹ Mes séances</button>';
   h += '<div class="cv-brand"><img src="icon-192.png?v=1.0" alt="">6flt Photographies, briefing de séance</div>';
   h += '<div id="cv-install">'+helperBannerHTML()+'</div>';
+  if(ph.k==='avant' && d.start){
+    var dl = Math.round((new Date(new Date(d.start).toDateString()) - new Date(new Date().toDateString())) / 864e5);
+    h += '<div class="cv-banner cv-ok"><b>'+tv('Séance confirmée', 'Séance confirmée')+'</b>'+e(fdt(d.start, {weekday:'long', day:'numeric', month:'long'}))+' à '+e(fdt(d.start, {hour:'2-digit', minute:'2-digit'}))+
+      (dl>1 ? ' ('+tv('dans', 'dans')+' '+dl+' jours)' : dl===1 ? ' ('+tv('demain', 'demain')+')' : dl===0 ? ' ('+tv('aujourd\'hui', 'aujourd\'hui')+')' : '')+'</div>';
+  }
+  if(ph.k==='apres')
+    h += '<div class="cv-banner cv-ok"><b>'+tv('Ta séance a eu lieu', 'Votre séance a eu lieu')+'</b>'+tv('Je trie et je retouche tes photos. Tu seras prévenu ici dès que ta galerie est prête.', 'Je trie et je retouche vos photos. Vous serez prévenu ici dès que votre galerie est prête.')+'</div>';
   if(D.gallery_url && /^https?:\/\//i.test(D.gallery_url))
     h += '<div class="cv-banner cv-ok"><b>'+tv('Ta galerie est prête', 'Votre galerie est prête')+'</b><a href="'+e(D.gallery_url)+'" target="_blank" rel="noopener">'+tv('Voir mes photos', 'Voir vos photos')+' ›</a></div>';
   if(D.gallery_url && D.survey_open_at && !D.review_submitted_at)
     h += '<div class="cv-banner cv-ok"><b>'+tv('Ton avis compte', 'Votre avis compte')+'</b><a href="#" class="sv-go">'+tv('Répondre au questionnaire (3 min)', 'Répondre au questionnaire (3 min)')+' ›</a></div>';
-  if(!rev){
+  if(!rev && !ph.past){
     var at = D.reveal_at ? new Date(D.reveal_at) : null;
     if(!d.date || !at || at.getFullYear()>2900) h += '<div class="cv-banner"><b>Adresses des spots bientôt disponibles</b>Elles apparaîtront ici dès que la date de la séance sera fixée.</div>';
     else h += '<div class="cv-banner"><b>Adresses exactes le '+e(fdt(D.reveal_at, {weekday:'long', day:'numeric', month:'long'}))+' à '+e(fdt(D.reveal_at, {hour:'2-digit', minute:'2-digit'}))+'</b>En attendant, la carte montre la zone de chaque spot. Révélation dans <span class="cv-count" id="cv-count"></span></div>';
@@ -1196,17 +1213,29 @@ function renderDetail(){
   var confLabel = conf ? 'Séance confirmée'
     : (d.start ? 'Je confirme le '+fdt(d.start, {day:'numeric', month:'long'})+' à '+fdt(d.start, {hour:'2-digit', minute:'2-digit'}) : 'Je confirme');
   var mainBtn = tbdv ? '<button type="button" class="cv-main" id="cv-prop-jump">Proposer une date</button>'
+    : galOk ? '<a class="cv-main" href="'+e(D.gallery_url)+'" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;text-decoration:none">'+tv('Voir ma galerie', 'Voir ma galerie')+'</a>'
+    : ph.k==='apres' ? '<button type="button" class="cv-main cv-done" disabled>Séance réalisée</button>'
     : '<button id="cv-conf" class="cv-main'+(conf ? ' cv-done' : '')+'"'+(conf ? ' disabled' : '')+'>'+e(confLabel)+'</button>';
   h += '<div class="cv-bar">'+mainBtn+
     '<div class="cv-sec">'+
-    (rev && d.spots && d.spots.length ? '<a href="'+e(navUrl(d.spots))+'" target="_blank" rel="noopener">Itinéraire</a>' : '<button disabled>Itinéraire'+(rev ? '' : ' bientôt')+'</button>')+
+    (ph.past ? '' : rev && d.spots && d.spots.length ? '<a href="'+e(navUrl(d.spots))+'" target="_blank" rel="noopener">Itinéraire</a>' : '<button disabled>Itinéraire'+(rev ? '' : ' bientôt')+'</button>')+
     '<button id="cv-pdf" type="button">PDF</button>'+
-    (d.start ? '<a href="data:text/calendar;charset=utf-8,'+encodeURIComponent(ics(Object.assign({revealed:rev}, d)))+'" download="shooting-6flt.ics">Calendrier</a>' : '')+
+    (d.start && !ph.past ? '<a href="data:text/calendar;charset=utf-8,'+encodeURIComponent(ics(Object.assign({revealed:rev}, d)))+'" download="shooting-6flt.ics">Calendrier</a>' : '')+
     (hd ? '<a href="https://instagram.com/'+e(hd)+'" target="_blank" rel="noopener">Écrire</a>' : '')+
     '</div></div>';
   root.innerHTML = h;
   root.querySelectorAll('.bf-blk[data-type="map"] .bf-map').forEach(function(box){ glMap(box, d, rev, ac); });
   var jb = root.querySelector('.bf-blk[data-type="jourj"]'); if(jb) jb.id = 'cv-jourj';
+  /* v1.10 : libelle de couverture, consignes du jour J et bloc galerie selon l'etat */
+  var kick = root.querySelector('.bf-doc .bf-kick');
+  if(kick){ var kt = kick.textContent.trim(); if(kt==='Proposition de séance' || kt==='Briefing shooting') kick.textContent = ph.k==='tbd' ? 'Proposition de séance' : ph.past ? 'Séance réalisée' : conf ? 'Séance confirmée' : 'Briefing shooting'; }
+  if(ph.past && jb) jb.style.display = 'none';
+  if(!D.gallery_url) Array.prototype.forEach.call(root.querySelectorAll('.bf-blk[data-type="lien"]'), function(lb){
+    var hh = lb.querySelector('.bf-h'), box = lb.querySelector('.bf-lien');
+    if(!hh || !box || !/galerie/i.test(hh.textContent)) return;
+    var ba = box.querySelector('.bf-dbtn'), bu = box.querySelector('.bf-lurl'); if(ba) ba.remove(); if(bu) bu.remove();
+    box.insertAdjacentHTML('beforeend', '<p style="color:var(--d-mute,#8b8a84);font-size:13px;margin:8px 0 0">'+tv('Ta galerie sera disponible ici après la séance et la retouche.', 'Votre galerie sera disponible ici après la séance et la retouche.')+'</p>');
+  });
 
   /* galerie et avis, ajoutes a la fin du document rendu */
   if(d && D.gallery_url){
