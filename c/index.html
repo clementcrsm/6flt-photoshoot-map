@@ -322,16 +322,15 @@ html.cv-desk #cv-root .cv-sec a,html.cv-desk #cv-root .cv-sec button{flex:none;p
 .cv-fr li.done,.cv-fr li.now{color:var(--d-text,#f3f2ee)}
 .cv-fr .mk{flex:none;position:relative;width:12px;height:12px;margin:5px 0 0 2px;border-radius:50%;box-sizing:border-box;border:1.5px solid rgba(255,255,255,.28)}
 .cv-fr li.done .mk{background:var(--cv-accent,#e8571a);border-color:var(--cv-accent,#e8571a)}
-.cv-fr li.now .mk{width:20px;height:20px;margin:1px -4px 0 -2px;border:1.5px solid var(--cv-accent,#e8571a)}
-.cv-fr li.now .mk::after{content:"";position:absolute;inset:4px;border-radius:50%;background:var(--cv-accent,#e8571a)}
+.cv-fr li.now .mk{width:14px;height:14px;margin:4px -1px 0 1px;background:var(--cv-accent,#e8571a);border-color:var(--cv-accent,#e8571a)}
 .cv-fr li.now .mk::before{content:"";position:absolute;inset:0;border-radius:50%;background:var(--cv-accent,#e8571a);opacity:0;animation:cvping 2s ease-out infinite;pointer-events:none}
-@keyframes cvping{0%{transform:scale(1);opacity:.55}100%{transform:scale(1.55);opacity:0}}
+@keyframes cvping{0%{transform:scale(1);opacity:.55}100%{transform:scale(2);opacity:0}}
 @media (prefers-reduced-motion:reduce){.cv-fr li.now .mk::before{animation:none}}
 .cv-fr .lb{display:block;font-size:17px;font-weight:600;line-height:1.3;letter-spacing:.01em}
 .cv-fr li.now .lb{font-weight:700}
 .cv-fr .sb{display:block;font-size:13px;font-weight:400;margin-top:3px;color:var(--d-mute,#8b8a84)}
 .cv-fr li::after{content:"";position:absolute;left:7px;top:22px;bottom:2px;width:2px;background:repeating-linear-gradient(to bottom,rgba(255,255,255,.25) 0 2px,transparent 2px 6px)}
-.cv-fr li.now::after{top:26px;bottom:-2px}
+.cv-fr li.now::after{top:24px;bottom:0}
 .cv-fr li:last-child::after{display:none}
 .cv-fr li.lk::after{background:repeating-linear-gradient(to bottom,var(--cv-accent,#e8571a) 0 2px,transparent 2px 6px)}
 /* ===== v1.9 : questionnaire de fin de shooting ===== */
@@ -438,7 +437,7 @@ html.cv-desk #cv-root .cv-sec a,html.cv-desk #cv-root .cv-sec button{flex:none;p
 </div>
 
 <script>
-/* ===== 6flt Clients v1.11.5 (Spoties v1.63.5 : halo) ===== */
+/* ===== 6flt Clients v1.11.6 (Spoties v1.63.6 : halo sans anneau) ===== */
 var CV_DESK_MQ = window.matchMedia ? window.matchMedia('(min-width: 900px) and (hover: hover)') : null;
 function cvDesk(){ return !!(CV_DESK_MQ && CV_DESK_MQ.matches); }
 function cvDeskApply(){

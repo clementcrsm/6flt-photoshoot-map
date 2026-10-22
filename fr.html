@@ -1,0 +1,38 @@
+<body style="background:#383838;color:#f3f2ee;font-family:sans-serif;width:390px;padding:20px"><style>:root{--cv-accent:#d2691e}/* ===== v1.11.3 : frise verticale epuree ===== */
+.cv-fr{list-style:none;margin:16px 0 4px;padding:0}
+.cv-fr li{position:relative;display:flex;gap:16px;align-items:flex-start;padding:0 0 26px;color:var(--d-mute,#8b8a84)}
+.cv-fr li:last-child{padding-bottom:0}
+.cv-fr li.done,.cv-fr li.now{color:var(--d-text,#f3f2ee)}
+.cv-fr .mk{flex:none;position:relative;width:12px;height:12px;margin:5px 0 0 2px;border-radius:50%;box-sizing:border-box;border:1.5px solid rgba(255,255,255,.28)}
+.cv-fr li.done .mk{background:var(--cv-accent,#e8571a);border-color:var(--cv-accent,#e8571a)}
+.cv-fr li.now .mk{width:14px;height:14px;margin:4px -1px 0 1px;background:var(--cv-accent,#e8571a);border-color:var(--cv-accent,#e8571a)}
+.cv-fr li.now .mk::before{content:"";position:absolute;inset:0;border-radius:50%;background:var(--cv-accent,#e8571a);opacity:0;animation:cvping 2s ease-out infinite;pointer-events:none}
+@keyframes cvping{0%{transform:scale(1);opacity:.55}100%{transform:scale(2);opacity:0}}
+@media (prefers-reduced-motion:reduce){.cv-fr li.now .mk::before{animation:none}}
+.cv-fr .lb{display:block;font-size:17px;font-weight:600;line-height:1.3;letter-spacing:.01em}
+.cv-fr li.now .lb{font-weight:700}
+.cv-fr .sb{display:block;font-size:13px;font-weight:400;margin-top:3px;color:var(--d-mute,#8b8a84)}
+.cv-fr li::after{content:"";position:absolute;left:7px;top:22px;bottom:2px;width:2px;background:repeating-linear-gradient(to bottom,rgba(255,255,255,.25) 0 2px,transparent 2px 6px)}
+.cv-fr li.now::after{top:24px;bottom:0}
+.cv-fr li:last-child::after{display:none}
+.cv-fr li.lk::after{background:repeating-linear-gradient(to bottom,var(--cv-accent,#e8571a) 0 2px,transparent 2px 6px)}
+</style><div id=o></div><script>var D={progress:{step:"retouche",shot:120,kept:48,edited:30}};function cvProgressHTML(D, tv){
+  var pg = D.progress || {}, st = pg.step === 'retouche' ? 2 : pg.step === 'tri' ? 1 : 0;
+  function n(v){ return v!=null && isFinite(+v) ? +v : null; }
+  var shot = n(pg.shot), kept = n(pg.kept), edited = n(pg.edited);
+  var steps = [['Séance réalisée', ''],
+    ['Tri', shot!=null && kept!=null ? kept+' photos gardées sur '+shot : kept!=null ? kept+' photos gardées' : shot!=null ? shot+' photos prises' : ''],
+    ['Retouche', edited!=null && kept ? edited+' retouchées sur '+kept : edited!=null ? edited+' retouchées' : ''],
+    ['Galerie', '']];
+  var li = steps.map(function(x, i){
+    var done = i===0 || (i===1 && st>=2), now = (i===1 && st===1) || (i===2 && st===2);
+    var mark = done ? '✓' : now ? '●' : '○';
+    var nx = steps[i+1] ? (i+1===1 ? st>=1 : i+1===2 ? st>=2 : false) : false;
+    return '<li class="'+(done ? 'done' : now ? 'now' : '')+(nx ? ' lk' : '')+'"><span class="mk"></span><span><span class="lb">'+x[0]+'</span>'+(x[1] ? '<span class="sb">'+x[1]+'</span>' : '')+'</span></li>';
+  }).join('');
+  var pct = (st===2 && kept && edited!=null) ? Math.max(0, Math.min(100, Math.round(edited/kept*100))) : null;
+  return '<div class="cv-banner cv-ok"><b>'+tv('Ta séance a eu lieu', 'Votre séance a eu lieu')+'</b>'+tv('Tu seras prévenu ici dès que ta galerie est prête.', 'Vous serez prévenu ici dès que votre galerie est prête.')+
+    '<ul class="cv-fr">'+li+'</ul>'+
+    (pct!=null ? '<div style="height:3px;background:rgba(255,255,255,.1);border-radius:3px;margin-top:14px;overflow:hidden"><div style="height:100%;width:'+pct+'%;background:var(--cv-accent,#e8571a)"></div></div>' : '')+'</div>';
+}
+document.getElementById("o").innerHTML=cvProgressHTML(D,function(a,b){return b});</script></body>
