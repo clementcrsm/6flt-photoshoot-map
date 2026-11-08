@@ -437,7 +437,7 @@ html.cv-desk #cv-root .cv-sec a,html.cv-desk #cv-root .cv-sec button{flex:none;p
 </div>
 
 <script>
-/* ===== 6flt Clients v1.11.6 (Spoties v1.63.6 : halo sans anneau) ===== */
+/* ===== 6flt Clients v1.12.0 (galerie envoyee avant la seance : simple lien, l'organisation continue) ===== */
 var CV_DESK_MQ = window.matchMedia ? window.matchMedia('(min-width: 900px) and (hover: hover)') : null;
 function cvDesk(){ return !!(CV_DESK_MQ && CV_DESK_MQ.matches); }
 function cvDeskApply(){
@@ -691,7 +691,7 @@ function renderList(){
     if(!c) return '<div class="card" data-tok="'+e(t.token)+'"><b>Chargement…</b><button class="rm" type="button" data-rm="'+e(t.token)+'">✕</button></div>';
     if(c.error) return '<div class="card" data-tok="'+e(t.token)+'"><b>Séance introuvable</b><span class="sub">Ce lien n\'est plus valide</span><button class="rm" type="button" data-rm="'+e(t.token)+'">✕</button></div>';
     var d = c.data || {}, badge = 'wait', label = 'En attente';
-    if(c.gallery_url){ badge = 'ok'; label = 'Galerie prête'; }
+    if(cvGalFinal(c, d)){ badge = 'ok'; label = 'Galerie prête'; }
     else if(c.confirmed_at){ badge = 'ok'; label = (d.start && Date.now() >= new Date(d.start).getTime() + 4*3600000) ? 'Séance réalisée' : 'Confirmée'; }
     else if(d.tbd){ badge = 'tbd'; label = 'Date à fixer'; }
     var sub = d.start ? fdt(d.start, {day:'numeric', month:'long', hour:'2-digit', minute:'2-digit'}) : (d.tbd ? 'Date à définir' : '');
@@ -1185,10 +1185,18 @@ function svOpen(tok, firstName, onDone){
 function cvPhase(D, d, conf){
   var st = d.start ? new Date(d.start) : null, past = !!(st && !isNaN(st.getTime()) && Date.now() >= st.getTime() + 4*3600000);
   if(D.review_submitted_at) return {k:'merci', past:true};
-  if(D.gallery_url) return {k:D.survey_open_at ? 'avis' : 'galerie', past:true};
+  // v1.12 : une galerie envoyee avant la fin de la seance (premiere galerie) ne termine pas le dossier
+  if(cvGalFinal(D, d)) return {k:D.survey_open_at ? 'avis' : 'galerie', past:true};
   if(past && conf) return {k:'apres', past:true};
   if(conf) return {k:'avant', past:false};
   return {k:d.tbd ? 'tbd' : 'confirmer', past:false};
+}
+/* v1.12 : galerie finale seulement si la seance est passee (ou questionnaire / avis deja lances) */
+function cvGalFinal(D, d){
+  if(!D || !D.gallery_url) return false;
+  if(D.survey_open_at || D.review_submitted_at) return true;
+  var st = d && d.start ? new Date(d.start) : null;
+  return !!(st && !isNaN(st.getTime()) && Date.now() >= st.getTime() + 4*3600000);
 }
 /* v1.11 : suivi apres le shooting, saisi par le photographe (tri, retouche, photos gardees et retouchees) */
 function cvProgressHTML(D, tv){
@@ -1216,7 +1224,7 @@ function renderDetail(){
   var conf = !!D.confirmed_at, hd = String(d.handle||'').replace(/^@/, '');
   var vous = d.tone==='vous', ac = /^#[0-9a-f]{6}$/i.test(d.accent||'') ? d.accent : '#e8571a', tbdv = !!d.tbd && !conf;
   function tv(a, b){ return vous ? b : a; }
-  var ph = cvPhase(D, d, conf), galOk = !!(D.gallery_url && /^https?:\/\//i.test(D.gallery_url));
+  var ph = cvPhase(D, d, conf), galOk = !!(D.gallery_url && /^https?:\/\//i.test(D.gallery_url)), galFin = galOk && cvGalFinal(D, d);
   root.style.setProperty('--cv-accent', ac);
   var h = '<div class="cv-wrap">';
   h += '<button type="button" class="cv-back" onclick="closeDetail()">‹ Mes séances</button>';
@@ -1228,8 +1236,10 @@ function renderDetail(){
       (dl>1 ? ' ('+tv('dans', 'dans')+' '+dl+' jours)' : dl===1 ? ' ('+tv('demain', 'demain')+')' : dl===0 ? ' ('+tv('aujourd\'hui', 'aujourd\'hui')+')' : '')+'</div>';
   }
   if(ph.k==='apres') h += cvProgressHTML(D, tv);
-  if(D.gallery_url && /^https?:\/\//i.test(D.gallery_url))
+  if(galFin)
     h += '<div class="cv-banner cv-ok"><b>'+tv('Ta galerie est prête', 'Votre galerie est prête')+'</b><a href="'+e(D.gallery_url)+'" target="_blank" rel="noopener">'+tv('Voir mes photos', 'Voir vos photos')+' ›</a></div>';
+  else if(galOk)
+    h += '<div class="cv-banner"><b>'+tv('Une première galerie est en ligne', 'Une première galerie est en ligne')+'</b><a href="'+e(D.gallery_url)+'" target="_blank" rel="noopener">'+tv('Voir les photos', 'Voir les photos')+' ›</a></div>';
   if(D.gallery_url && D.survey_open_at && !D.review_submitted_at)
     h += '<div class="cv-banner cv-ok"><b>'+tv('Ton avis compte', 'Votre avis compte')+'</b><a href="#" class="sv-go">'+tv('Répondre au questionnaire (3 min)', 'Répondre au questionnaire (3 min)')+' ›</a></div>';
   if(!rev && !ph.past){
@@ -1250,7 +1260,7 @@ function renderDetail(){
   var confLabel = conf ? 'Séance confirmée'
     : (d.start ? 'Je confirme le '+fdt(d.start, {day:'numeric', month:'long'})+' à '+fdt(d.start, {hour:'2-digit', minute:'2-digit'}) : 'Je confirme');
   var mainBtn = tbdv ? '<button type="button" class="cv-main" id="cv-prop-jump">Proposer une date</button>'
-    : galOk ? '<a class="cv-main" href="'+e(D.gallery_url)+'" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;text-decoration:none">'+tv('Voir ma galerie', 'Voir ma galerie')+'</a>'
+    : galFin ? '<a class="cv-main" href="'+e(D.gallery_url)+'" target="_blank" rel="noopener" style="display:flex;align-items:center;justify-content:center;text-decoration:none">'+tv('Voir ma galerie', 'Voir ma galerie')+'</a>'
     : ph.k==='apres' ? '<button type="button" class="cv-main cv-done" disabled>Séance réalisée</button>'
     : '<button id="cv-conf" class="cv-main'+(conf ? ' cv-done' : '')+'"'+(conf ? ' disabled' : '')+'>'+e(confLabel)+'</button>';
   h += '<div class="cv-bar">'+mainBtn+
@@ -1275,7 +1285,7 @@ function renderDetail(){
   });
 
   /* galerie et avis, ajoutes a la fin du document rendu */
-  if(d && D.gallery_url){
+  if(d && galFin){
     var docEl = root.querySelector('.bf-doc');
     var galH = '<div class="cv-gal"><a class="btn" href="'+e(D.gallery_url)+'" target="_blank" rel="noopener">'+tv('Voir ma galerie', 'Voir ma galerie')+'</a>';
     if(D.review_submitted_at){
